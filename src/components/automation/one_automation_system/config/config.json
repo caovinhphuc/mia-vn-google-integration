@@ -1,0 +1,52 @@
+{
+  "system": {
+    "one_url": "https://one.tga.com.vn/",
+    "login_timeout": 7,
+    "page_load_timeout": 5,
+    "implicit_wait": 5,
+    "retry_attempts": 2,
+    "retry_delay": 2
+  },
+  "credentials": {
+    "username": "${ONE_USERNAME}",
+    "password": "${ONE_PASSWORD}"
+  },
+  "schedule": {
+    "enabled": true,
+    "frequency": "daily",
+    "time": "08:00",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  "notifications": {
+    "email": {
+      "enabled": true,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "sender_email": "${SENDER_EMAIL}",
+      "sender_password": "${SENDER_PASSWORD}",
+      "recipients": ["admin@company.com"]
+    },
+    "webhook": {
+      "enabled": false,
+      "url": "${WEBHOOK_URL}"
+    }
+  },
+  "scraping": {
+    "max_pages": 5,
+    "max_orders": 100,
+    "delay_between_pages": 2
+  },
+  "data_processing": {
+    "data_dir": "data",
+    "export_format": ["csv", "excel", "json"],
+    "data_validation": true,
+    "backup_enabled": true,
+    "backup_retention_days": 30
+  },
+  "logging": {
+    "level": "INFO",
+    "file_rotation": true,
+    "max_file_size": "10MB",
+    "backup_count": 5
+  }
+}
