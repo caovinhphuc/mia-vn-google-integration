@@ -3,6 +3,6 @@ import App from './App';
 
 test('renders MIA Logistics app', () => {
   render(<App />);
-  const brandElement = screen.getByText(/MIA Logistics/i);
+  const brandElement = screen.getByText('MIA Logistics', { selector: '.brand-text' });
   expect(brandElement).toBeInTheDocument();
 });
