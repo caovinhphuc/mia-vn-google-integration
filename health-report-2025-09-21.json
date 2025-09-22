@@ -1,0 +1,76 @@
+{
+  "timestamp": "2025-09-21T21:12:00.043Z",
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "healthy",
+      "message": "All required files and directories present",
+      "details": null,
+      "timestamp": "2025-09-21T21:12:00.043Z"
+    },
+    "dependencies": {
+      "status": "healthy",
+      "message": "All critical dependencies present",
+      "details": null,
+      "timestamp": "2025-09-21T21:12:00.044Z"
+    },
+    "environment": {
+      "status": "warning",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null,
+      "timestamp": "2025-09-21T21:12:00.044Z"
+    },
+    "google-sheets": {
+      "status": "healthy",
+      "message": "Connected to Google Sheets: \"mia-logistics-final\"",
+      "details": {
+        "sheetId": "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As",
+        "title": "mia-logistics-final",
+        "sheetsCount": 17
+      },
+      "timestamp": "2025-09-21T21:12:01.932Z"
+    },
+    "google-drive": {
+      "status": "healthy",
+      "message": "Connected to Google Drive: mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com",
+      "details": {
+        "user": "mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com",
+        "email": "mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com"
+      },
+      "timestamp": "2025-09-21T21:12:02.498Z"
+    },
+    "email-service": {
+      "status": "error",
+      "message": "Email service connection failed: Missing credentials for \"PLAIN\"",
+      "details": {
+        "error": "Missing credentials for \"PLAIN\""
+      },
+      "timestamp": "2025-09-21T21:12:03.691Z"
+    },
+    "telegram-service": {
+      "status": "healthy",
+      "message": "Telegram bot connected: mia-logistics-manager",
+      "details": {
+        "botName": "mia-logistics-manager",
+        "username": "mia_logistics_manager_bot"
+      },
+      "timestamp": "2025-09-21T21:12:04.355Z"
+    }
+  },
+  "errors": [
+    {
+      "service": "email-service",
+      "message": "Email service connection failed: Missing credentials for \"PLAIN\"",
+      "details": {
+        "error": "Missing credentials for \"PLAIN\""
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "service": "environment",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null
+    }
+  ]
+}

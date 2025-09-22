@@ -1,70 +1,278 @@
-# Getting Started with Create React App
+# 🚀 MIA.vn Google Integration Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> **Nền tảng tích hợp và tự động hóa Google Services chuyên nghiệp**
 
-## Available Scripts
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/mia-vn/google-integration)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node.js-18.0+-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-19.1.1-blue.svg)](https://reactjs.org/)
 
-In the project directory, you can run:
+## 📋 Tổng Quan
 
-### `npm start`
+**MIA.vn Google Integration** là nền tảng tích hợp toàn diện cho các dịch vụ Google, cung cấp giao diện trực quan và tự động hóa quy trình làm việc.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### ✨ Tính Năng Chính
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 🔗 **Google Sheets Integration** - Quản lý và thao tác dữ liệu
+- 📁 **Google Drive Integration** - Quản lý file và thư mục
+- 🤖 **Google Apps Script** - Tự động hóa quy trình
+- 📱 **Telegram Bot** - Thông báo và điều khiển
+- 🎯 **Automation System** - Tự động hóa nâng cao
+- 📊 **AI Analytics** - Phân tích dữ liệu thông minh
 
-### `npm test`
+## 🚀 Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Cài Đặt
 
-### `npm run build`
+```bash
+# Clone repository
+git clone https://github.com/mia-vn/google-integration.git
+cd google-integration
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Cài đặt dependencies
+npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Cấu hình environment
+cp env.example .env
+nano .env
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Khởi Chạy
 
-### `npm run eject`
+```bash
+# Development
+npm start
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Production
+npm run build:prod
+./deploy-production.sh
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3. Truy Cập
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Frontend**: <http://localhost:3000>
+- **Backend**: <http://localhost:8000>
+- **Monitoring**: <http://localhost:8080>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📁 Cấu Trúc Dự Án
 
-## Learn More
+```
+mia-vn-google-integration/
+├── 📁 src/                    # Source code
+│   ├── 📁 components/         # React components
+│   ├── 📁 services/          # API services
+│   ├── 📁 store/             # Redux store
+│   └── 📁 utils/             # Utilities
+├── 📁 docs/                  # Documentation
+│   ├── 📁 guides/            # Hướng dẫn
+│   ├── 📁 archive/           # Lưu trữ
+│   └── 📁 summaries/         # Tóm tắt
+├── 📁 scripts/               # Build scripts
+├── 🐳 docker-compose.yml     # Docker services
+├── 🐳 Dockerfile            # Docker build
+└── 📄 package.json          # Dependencies
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛠️ Công Nghệ Sử Dụng
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Frontend
 
-### Code Splitting
+- **React 19.1.1** - UI Framework
+- **Redux** - State Management
+- **Ant Design** - UI Components
+- **React Router** - Navigation
+- **Recharts** - Data Visualization
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Backend
 
-### Analyzing the Bundle Size
+- **Node.js** - Runtime
+- **Express.js** - Web Framework
+- **Google APIs** - Google Services
+- **Python** - Automation Scripts
+- **Selenium** - Web Automation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### DevOps
 
-### Making a Progressive Web App
+- **Docker** - Containerization
+- **Nginx** - Web Server
+- **Redis** - Caching
+- **PM2** - Process Management
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📚 Documentation
 
-### Advanced Configuration
+### 📖 Hướng Dẫn
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- [🚀 Quick Start Guide](docs/guides/QUICK_START.md)
+- [🐳 Deployment Guide](docs/guides/DEPLOYMENT_GUIDE.md)
+- [⚙️ Environment Setup](doc/user-guide/02-Dependencies-Environment-Setup.md)
+- [🔧 Google Service Account](doc/user-guide/01-Google-Service-Account-Setup.md)
 
-### Deployment
+### 📊 Tài Liệu Kỹ Thuật
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- [🏗️ System Architecture](doc/architecture/SYSTEM_ARCHITECTURE.md)
+- [📋 API Reference](doc/user-guide/05-API-Reference-Best-Practices.md)
+- [🛠️ Development Roadmap](doc/user-guide/04-Development-Roadmap.md)
 
-### `npm run build` fails to minify
+## 🚀 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Docker (Recommended)
+
+```bash
+# Quick deployment
+./deploy-production.sh docker
+
+# Manual deployment
+docker-compose up -d
+```
+
+### Traditional
+
+```bash
+# System deployment
+./deploy-production.sh
+
+# Nginx + PM2
+sudo systemctl start nginx
+pm2 start ecosystem.config.js
+```
+
+## 🔧 Development
+
+### Scripts
+
+```bash
+# Development
+npm start                 # Start development server
+npm run dev              # Start with backend
+
+# Building
+npm run build            # Production build
+npm run build:prod       # Optimized build
+npm run analyze          # Bundle analysis
+
+# Testing
+npm test                 # Run tests
+npm run test:integration # Integration tests
+npm run health-check     # Health check
+
+# Deployment
+./deploy-production.sh   # Production deployment
+```
+
+### Environment Variables
+
+```bash
+# Google Services
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id
+REACT_APP_GOOGLE_DRIVE_FOLDER_ID=your_folder_id
+
+# API Configuration
+REACT_APP_API_URL=http://localhost:8000
+REACT_APP_API_TIMEOUT=30000
+
+# Features
+REACT_APP_FEATURE_GOOGLE_SHEETS=true
+REACT_APP_FEATURE_GOOGLE_DRIVE=true
+REACT_APP_FEATURE_AUTOMATION=true
+```
+
+## 📊 Monitoring
+
+### Health Checks
+
+```bash
+# Frontend
+curl http://localhost:3000/health
+
+# Backend
+curl http://localhost:8000/health
+
+# Monitoring Dashboard
+open http://localhost:8080
+```
+
+### Logs
+
+```bash
+# Docker logs
+docker-compose logs -f
+
+# Application logs
+tail -f logs/application.log
+
+# Nginx logs
+tail -f /var/log/nginx/access.log
+```
+
+## 🔒 Security
+
+### Production Security
+
+- ✅ **HTTPS Ready** - SSL/TLS configuration
+- ✅ **Security Headers** - XSS, CSRF protection
+- ✅ **Environment Security** - Secure env variables
+- ✅ **Access Control** - IP restrictions
+- ✅ **Input Validation** - XSS prevention
+
+### Security Checklist
+
+- [ ] Environment variables secured
+- [ ] HTTPS enabled
+- [ ] Security headers configured
+- [ ] Content Security Policy enabled
+- [ ] Rate limiting configured
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📞 Support
+
+### Getting Help
+
+1. **Check logs**: `tail -f logs/application.log`
+2. **Run health checks**: `curl http://localhost:3000/health`
+3. **Review documentation**: [docs/](docs/)
+4. **Check issues**: [GitHub Issues](https://github.com/mia-vn/google-integration/issues)
+5. **Contact support**: <support@mia-vn.com>
+
+### Useful Commands
+
+```bash
+# Quick status check
+docker-compose ps
+pm2 status
+sudo systemctl status nginx
+
+# View logs
+docker-compose logs -f
+pm2 logs
+tail -f /var/log/nginx/access.log
+
+# Restart services
+docker-compose restart
+pm2 restart all
+sudo systemctl restart nginx
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Google APIs** - For providing excellent APIs
+- **React Team** - For the amazing framework
+- **Ant Design** - For beautiful UI components
+- **Docker** - For containerization platform
+
+---
+
+**Made with ❤️ by MIA.vn Team**
+
+*Last Updated: $(date)*
+*Version: 1.0.0*
