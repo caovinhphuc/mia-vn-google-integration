@@ -34,13 +34,13 @@ echo ""
 # Check if GitHub CLI is available
 if command -v gh &> /dev/null; then
     log_info "GitHub CLI found. Using automated setup..."
-    
+
     # Check authentication
     if ! gh auth status &> /dev/null; then
         log_info "Authenticating with GitHub..."
         gh auth login
     fi
-    
+
     # Create repository
     log_info "Creating repository: mia-vn-google-integration"
     gh repo create mia-vn-google-integration \
@@ -49,12 +49,12 @@ if command -v gh &> /dev/null; then
         --source=. \
         --remote=origin \
         --push
-    
+
     log_info "✅ Repository created and code pushed successfully!"
-    
+
 else
     log_warn "GitHub CLI not found. Using manual setup..."
-    
+
     echo ""
     echo -e "${YELLOW}📝 Manual Setup Required:${NC}"
     echo ""
@@ -65,17 +65,17 @@ else
     echo "5. DO NOT check 'Initialize with README'"
     echo "6. Click 'Create repository'"
     echo ""
-    
+
     read -p "Press Enter after creating the repository..."
-    
+
     # Add remote and push
     log_info "Adding remote repository..."
     git remote remove origin 2>/dev/null || true
     git remote add origin https://github.com/caovinhphuc/mia-vn-google-integration.git
-    
+
     log_info "Pushing code to GitHub..."
     git push -u origin main
-    
+
     log_info "✅ Code pushed successfully!"
 fi
 
