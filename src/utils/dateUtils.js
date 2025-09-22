@@ -252,7 +252,7 @@ export const getBusinessDays = (startDate, endDate) => {
     if (current.day() !== 0 && current.day() !== 6) {
       count++;
     }
-    current.add(1, "day");
+    current = current.add(1, "day");
   }
 
   return count;
