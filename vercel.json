@@ -23,7 +23,8 @@
     "env": {
       "GENERATE_SOURCEMAP": "false",
       "INLINE_RUNTIME_CHUNK": "false",
-      "IMAGE_INLINE_SIZE_LIMIT": "0"
+      "IMAGE_INLINE_SIZE_LIMIT": "0",
+      "CI": "false"
     }
   },
   "headers": [
