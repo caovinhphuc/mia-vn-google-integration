@@ -1,0 +1,68 @@
+{
+  "timestamp": "2025-09-28T17:49:55.133Z",
+  "overall": "degraded",
+  "services": {
+    "file-system": {
+      "status": "healthy",
+      "message": "All required files and directories present",
+      "details": null,
+      "timestamp": "2025-09-28T17:49:55.134Z"
+    },
+    "dependencies": {
+      "status": "healthy",
+      "message": "All critical dependencies present",
+      "details": null,
+      "timestamp": "2025-09-28T17:49:55.134Z"
+    },
+    "environment": {
+      "status": "warning",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null,
+      "timestamp": "2025-09-28T17:49:55.134Z"
+    },
+    "google-sheets": {
+      "status": "healthy",
+      "message": "Connected to Google Sheets: \"mia-logistics-final\"",
+      "details": {
+        "sheetId": "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As",
+        "title": "mia-logistics-final",
+        "sheetsCount": 22
+      },
+      "timestamp": "2025-09-28T17:49:56.492Z"
+    },
+    "google-drive": {
+      "status": "healthy",
+      "message": "Connected to Google Drive: mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com",
+      "details": {
+        "user": "mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com",
+        "email": "mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com"
+      },
+      "timestamp": "2025-09-28T17:49:57.078Z"
+    },
+    "email-service": {
+      "status": "healthy",
+      "message": "SendGrid API connection successful",
+      "details": {
+        "service": "SendGrid"
+      },
+      "timestamp": "2025-09-28T17:49:57.628Z"
+    },
+    "telegram-service": {
+      "status": "healthy",
+      "message": "Telegram bot connected: mia-logistics-manager",
+      "details": {
+        "botName": "mia-logistics-manager",
+        "username": "mia_logistics_manager_bot"
+      },
+      "timestamp": "2025-09-28T17:49:58.257Z"
+    }
+  },
+  "errors": [],
+  "warnings": [
+    {
+      "service": "environment",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null
+    }
+  ]
+}

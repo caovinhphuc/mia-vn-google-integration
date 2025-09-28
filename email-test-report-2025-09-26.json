@@ -1,0 +1,50 @@
+{
+  "title": "Email Service Test Report",
+  "timestamp": "2025-09-26T03:20:40.541Z",
+  "summary": {
+    "total_tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "warnings": 0
+  },
+  "configuration": {
+    "sendgrid_api_key": "configured",
+    "sendgrid_from_email": "kho.1@mia.vn",
+    "smtp_host": "missing",
+    "smtp_user": "missing"
+  },
+  "results": [
+    {
+      "test": "environment-check",
+      "status": "success",
+      "message": "Email service configured: SendGrid API",
+      "details": {
+        "sendgrid": true,
+        "smtp": false,
+        "available_methods": [
+          "SendGrid API"
+        ]
+      },
+      "timestamp": "2025-09-26T03:20:39.043Z"
+    },
+    {
+      "test": "sendgrid-connection",
+      "status": "success",
+      "message": "SendGrid API connection successful",
+      "details": {},
+      "timestamp": "2025-09-26T03:20:39.723Z"
+    },
+    {
+      "test": "sendgrid-test-email",
+      "status": "success",
+      "message": "Test email đã được gửi thành công qua SendGrid",
+      "details": {
+        "message_id": "C9439zL_S8W8taVg1LyW7g",
+        "to": "kho.1@mia.vn",
+        "from": "kho.1@mia.vn",
+        "subject": "🧪 Test Email từ MIA Logistics System"
+      },
+      "timestamp": "2025-09-26T03:20:40.541Z"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# =============================================================================
+# ONE AUTOMATION SYSTEM - ENVIRONMENT CONFIGURATION
+# =============================================================================
+# Copy this file to .env and fill in your actual values
+# DO NOT commit .env file to version control
+
+# =============================================================================
+# ONE SYSTEM CREDENTIALS
+# =============================================================================
+ONE_USERNAME=your_username_here
+ONE_PASSWORD=your_password_here
+
+# =============================================================================
+# EMAIL CONFIGURATION
+# =============================================================================
+SENDER_EMAIL=your_email@gmail.com
+SENDER_PASSWORD=your_app_password_here
+
+# =============================================================================
+# SYSTEM SETTINGS
+# =============================================================================
+# Set to true to run browser in headless mode (no GUI)
+HEADLESS=true
+
+# Set to true to enable debug mode
+DEBUG=false
+
+# =============================================================================
+# OPTIONAL WEBHOOK SETTINGS
+# =============================================================================
+WEBHOOK_URL=https://your-webhook-url.com/notify
+
+# =============================================================================
+# SECURITY NOTES
+# =============================================================================
+# For Gmail, use App Password instead of regular password
+# Generate App Password: https://support.google.com/accounts/answer/185833
+#
+# Keep this file secure and never commit it to version control
+# Add .env to your .gitignore file

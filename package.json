@@ -1,0 +1,142 @@
+{
+  "name": "mia-vn-google-integration",
+  "version": "1.0.0",
+  "description": "MIA.vn Google Integration Platform - Comprehensive automation and data management system",
+  "private": true,
+  "homepage": ".",
+  "author": "MIA.vn Team",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "google-sheets",
+    "google-drive",
+    "automation",
+    "mia-vn"
+  ],
+  "dependencies": {
+    "@ant-design/icons": "^6.0.2",
+    "@craco/craco": "^7.1.0",
+    "@sendgrid/mail": "^8.1.6",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.27.4",
+    "assert": "^2.1.0",
+    "axios": "^1.12.2",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "chart.js": "^4.5.0",
+    "cors": "^2.8.5",
+    "crypto-browserify": "^3.12.1",
+    "dayjs": "^1.11.18",
+    "express": "^5.1.0",
+    "form-data": "^4.0.4",
+    "formidable": "^3.5.4",
+    "google-auth-library": "^10.3.0",
+    "googleapis": "^160.0.0",
+    "https-browserify": "^1.0.0",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.544.0",
+    "moment": "^2.30.1",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.6",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "querystring-es3": "^0.2.1",
+    "react": "^19.1.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^19.1.1",
+    "react-redux": "^9.1.2",
+    "react-router-dom": "^6.28.0",
+    "react-scripts": "5.0.1",
+    "recharts": "^3.2.1",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^3.1.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5",
+    "vm-browserify": "^1.1.2",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' craco build",
+    "build:prod": "NODE_OPTIONS='--max-old-space-size=4096' GENERATE_SOURCEMAP=false CI=false craco build",
+    "test": "craco test --coverage --watchAll=false",
+    "test:watch": "craco test",
+    "eject": "react-scripts eject",
+    "test:google": "node scripts/testGoogleConnection.js",
+    "test:telegram": "node scripts/testTelegramConnection.js",
+    "test:email": "node scripts/testEmailService.js",
+    "setup": "node scripts/setup.js",
+    "deploy": "node scripts/deploy.js",
+    "health-check": "node scripts/health-check.js",
+    "test:integration": "npm run test:google && npm run test:telegram && npm run test:email && npm run health-check",
+    "lint": "eslint src/ --ext .js,.jsx --fix",
+    "lint:check": "eslint src/ --ext .js,.jsx",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "clean": "rm -rf build node_modules package-lock.json",
+    "clean:build": "rm -rf build",
+    "dev": "concurrently \"npm start\" \"node server.js\"",
+    "analyze": "npm run build && npx bundle-analyzer build/static/js/*.js",
+    "precommit": "npm run lint && npm run test",
+    "prebuild": "npm run lint:check && npm run test",
+    "postbuild": "echo 'Build completed successfully!'",
+    "deploy:netlify": "npm run build:prod && netlify deploy --prod --dir=build",
+    "deploy:vercel": "npm run build:prod && vercel --prod",
+    "deploy:aws": "npm run build:prod && aws s3 sync build/ s3://your-bucket --delete",
+    "deploy:gcp": "npm run build:prod && gcloud app deploy",
+    "deploy:docker": "docker build -t mia-vn-integration . && docker run -p 3000:3000 mia-vn-integration",
+    "serve": "serve -s build -l 3000",
+    "preview": "npm run build && npm run serve"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "no-unused-vars": "warn",
+      "no-console": "warn",
+      "prefer-const": "error"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not ie <= 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "dotenv": "^17.2.2",
+    "eslint": "^8.0.0",
+    "http-proxy-middleware": "^3.0.5",
+    "prettier": "^3.0.0",
+    "serve": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mia-vn/google-integration.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mia-vn/google-integration/issues"
+  }
+}
