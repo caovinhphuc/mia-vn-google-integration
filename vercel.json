@@ -20,5 +20,12 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "CI": "false",
+      "GENERATE_SOURCEMAP": "false",
+      "NODE_OPTIONS": "--max-old-space-size=4096"
+    }
+  }
 }
