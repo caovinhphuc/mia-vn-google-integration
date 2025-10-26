@@ -1,6 +1,17 @@
 const webpack = require('webpack')
 
 module.exports = {
+  devServer: {
+    historyApiFallback: true,
+    port: 3000,
+    host: 'localhost',
+    hot: true,
+    open: false,
+    compress: true,
+    static: {
+      directory: require('path').join(__dirname, 'public'),
+    },
+  },
   webpack: {
     configure: (webpackConfig) => {
       // Suppress source map warnings for Google API packages
@@ -65,6 +76,9 @@ module.exports = {
         }),
         new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
           resource.request = resource.request.replace(/^node:/, '')
+        }),
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^node:/,
         }),
       ]
 

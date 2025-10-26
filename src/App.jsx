@@ -98,6 +98,21 @@ const ConfigPage = lazy(() => import('./components/automation/ConfigPageWrapper'
 // Authentication component - now using the professional LoginPage
 const AuthLogin = () => <LoginPage />
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, isLoading } = useAuth()
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" replace />
+  }
+
+  return children
+}
+
 // Home component
 const Home = () => (
   <div className="home-container">
@@ -243,73 +258,91 @@ function App() {
                     <Route
                       path="/dashboard"
                       element={
-                        <Layout>
-                          <LiveDashboard />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <LiveDashboard />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/ai-analytics"
                       element={
-                        <Layout>
-                          <AIDashboard />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <AIDashboard />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/google-sheets"
                       element={
-                        <Layout>
-                          <GoogleSheetsIntegration />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <GoogleSheetsIntegration />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/google-drive"
                       element={
-                        <Layout>
-                          <GoogleDriveIntegration />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <GoogleDriveIntegration />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/google-apps-script"
                       element={
-                        <Layout>
-                          <GoogleAppsScriptIntegration />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <GoogleAppsScriptIntegration />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/telegram"
                       element={
-                        <Layout>
-                          <TelegramIntegration />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <TelegramIntegration />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/automation"
                       element={
-                        <Layout>
-                          <AutomationDashboard />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <AutomationDashboard />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/automation/control"
                       element={
-                        <Layout>
-                          <AutomationPanel />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <AutomationPanel />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route
                       path="/automation/config"
                       element={
-                        <Layout>
-                          <ConfigPage />
-                        </Layout>
+                        <ProtectedRoute>
+                          <Layout>
+                            <ConfigPage />
+                          </Layout>
+                        </ProtectedRoute>
                       }
                     />
                     <Route path="*" element={<Navigate to="/" replace />} />

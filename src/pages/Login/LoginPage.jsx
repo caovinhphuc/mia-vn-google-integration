@@ -392,16 +392,16 @@ export default function LoginPage() {
   return (
     <div
       className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-200 ${isDarkMode
-          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900"
-          : "bg-gradient-to-br from-blue-50 via-white to-indigo-50"
+        ? "bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900"
+        : "bg-gradient-to-br from-blue-50 via-white to-indigo-50"
         }`}
     >
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleTheme}
         className={`fixed top-4 right-4 p-3 rounded-full transition-colors duration-200 ${isDarkMode
-            ? "bg-gray-800 hover:bg-gray-700 text-yellow-400"
-            : "bg-white hover:bg-gray-100 text-gray-600"
+          ? "bg-gray-800 hover:bg-gray-700 text-yellow-400"
+          : "bg-white hover:bg-gray-100 text-gray-600"
           } shadow-lg`}
         title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
       >
@@ -442,16 +442,16 @@ export default function LoginPage() {
         <div className="mb-6">
           <div
             className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors duration-200 ${connectionStatus === "connected"
+              ? isDarkMode
+                ? "bg-green-900/30 border-green-700 text-green-400"
+                : "bg-green-50 border-green-200 text-green-800"
+              : connectionStatus === "disconnected"
                 ? isDarkMode
-                  ? "bg-green-900/30 border-green-700 text-green-400"
-                  : "bg-green-50 border-green-200 text-green-800"
-                : connectionStatus === "disconnected"
-                  ? isDarkMode
-                    ? "bg-red-900/30 border-red-700 text-red-400"
-                    : "bg-red-50 border-red-200 text-red-800"
-                  : isDarkMode
-                    ? "bg-yellow-900/30 border-yellow-700 text-yellow-400"
-                    : "bg-yellow-50 border-yellow-200 text-yellow-800"
+                  ? "bg-red-900/30 border-red-700 text-red-400"
+                  : "bg-red-50 border-red-200 text-red-800"
+                : isDarkMode
+                  ? "bg-yellow-900/30 border-yellow-700 text-yellow-400"
+                  : "bg-yellow-50 border-yellow-200 text-yellow-800"
               }`}
             onClick={() => setShowConnectionDetails(!showConnectionDetails)}
           >
@@ -483,8 +483,8 @@ export default function LoginPage() {
           {showConnectionDetails && (
             <div
               className={`mt-2 p-3 border rounded-lg text-sm transition-colors duration-200 ${isDarkMode
-                  ? "bg-gray-800 border-gray-700"
-                  : "bg-gray-50 border-gray-200"
+                ? "bg-gray-800 border-gray-700"
+                : "bg-gray-50 border-gray-200"
                 }`}
             >
               <div className="flex items-center gap-2 mb-2">
@@ -524,8 +524,8 @@ export default function LoginPage() {
         {/* Login Form */}
         <div
           className={`p-8 rounded-2xl shadow-xl border transition-colors duration-200 ${isDarkMode
-              ? "bg-gray-800 border-gray-700"
-              : "bg-white border-gray-100"
+            ? "bg-gray-800 border-gray-700"
+            : "bg-white border-gray-100"
             }`}
         >
           <form onSubmit={handleLogin} className="space-y-6">
@@ -533,8 +533,8 @@ export default function LoginPage() {
             {error && (
               <div
                 className={`flex items-center gap-2 p-4 border rounded-lg transition-colors duration-200 ${isDarkMode
-                    ? "bg-red-900/30 border-red-700 text-red-400"
-                    : "bg-red-50 border-red-200 text-red-700"
+                  ? "bg-red-900/30 border-red-700 text-red-400"
+                  : "bg-red-50 border-red-200 text-red-700"
                   }`}
               >
                 <AlertTriangle className="w-5 h-5 flex-shrink-0" />
@@ -546,8 +546,8 @@ export default function LoginPage() {
             {isBlocked && (
               <div
                 className={`flex items-center gap-2 p-4 border rounded-lg transition-colors duration-200 ${isDarkMode
-                    ? "bg-orange-900/30 border-orange-700 text-orange-400"
-                    : "bg-orange-50 border-orange-200 text-orange-700"
+                  ? "bg-orange-900/30 border-orange-700 text-orange-400"
+                  : "bg-orange-50 border-orange-200 text-orange-700"
                   }`}
               >
                 <Clock className="w-5 h-5 flex-shrink-0" />
@@ -582,8 +582,8 @@ export default function LoginPage() {
                   value={credentials.username}
                   onChange={handleInputChange}
                   className={`block w-full pl-10 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400 disabled:bg-gray-800 disabled:cursor-not-allowed"
-                      : "border-gray-300 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400 disabled:bg-gray-800 disabled:cursor-not-allowed"
+                    : "border-gray-300 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     }`}
                   placeholder="Nhập tên đăng nhập"
                   autoComplete="username"
@@ -615,8 +615,8 @@ export default function LoginPage() {
                   value={credentials.password}
                   onChange={handleInputChange}
                   className={`block w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 ${isDarkMode
-                      ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400 disabled:bg-gray-800 disabled:cursor-not-allowed"
-                      : "border-gray-300 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400 disabled:bg-gray-800 disabled:cursor-not-allowed"
+                    : "border-gray-300 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     }`}
                   placeholder="Nhập mật khẩu"
                   autoComplete="current-password"
@@ -626,8 +626,8 @@ export default function LoginPage() {
                   disabled={isBlocked || isLoading}
                   onClick={() => setShowPassword(!showPassword)}
                   className={`absolute inset-y-0 right-0 pr-3 flex items-center disabled:cursor-not-allowed transition-colors duration-200 ${isDarkMode
-                      ? "text-gray-500 hover:text-gray-300"
-                      : "text-gray-400 hover:text-gray-600"
+                    ? "text-gray-500 hover:text-gray-300"
+                    : "text-gray-400 hover:text-gray-600"
                     }`}
                 >
                   {showPassword ? (
@@ -649,8 +649,8 @@ export default function LoginPage() {
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className={`h-4 w-4 text-blue-600 focus:ring-blue-500 rounded disabled:cursor-not-allowed ${isDarkMode
-                    ? "border-gray-600 bg-gray-700"
-                    : "border-gray-300 bg-white"
+                  ? "border-gray-600 bg-gray-700"
+                  : "border-gray-300 bg-white"
                   }`}
               />
               <label
@@ -668,10 +668,10 @@ export default function LoginPage() {
                 isBlocked || isLoading || connectionStatus !== "connected"
               }
               className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white transition-colors ${isBlocked || isLoading || connectionStatus !== "connected"
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : isDarkMode
-                    ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-400"
-                    : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
+                ? "bg-gray-400 cursor-not-allowed"
+                : isDarkMode
+                  ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-400"
+                  : "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
                 } focus:outline-none focus:ring-2 focus:ring-offset-2`}
             >
               {isLoading ? (
