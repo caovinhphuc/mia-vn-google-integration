@@ -1,21 +1,5 @@
 {
-<<<<<<< HEAD
-  "timestamp": "2026-01-22T17:27:21.093Z",
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-  "timestamp": "2026-01-21T13:49:58.313Z",
-=======
-  "timestamp": "2026-01-18T18:58:40.775Z",
->>>>>>> Stashed changes
-=======
-  "timestamp": "2026-01-18T18:58:40.775Z",
->>>>>>> Stashed changes
-=======
-  "timestamp": "2026-01-18T18:58:40.775Z",
->>>>>>> Stashed changes
->>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+  "timestamp": "2026-01-23T00:47:53.320Z",
   "project": "mia-logistics-469406",
   "results": [
     {
@@ -63,13 +47,7 @@
   "apisInCode": [
     "script.googleapis.com",
     "sheets.googleapis.com",
-<<<<<<< HEAD
     "drive.googleapis.com",
     "maps.googleapis.com"
   ]
 }
-=======
-    "drive.googleapis.com"
-  ]
-}
->>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1

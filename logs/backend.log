@@ -1,91 +1,14 @@
+node:internal/modules/cjs/loader:1210
+  throw err;
+  ^
 
-> react-oas-integration-backend@1.0.0 dev
-> nodemon src/server.js
+Error: Cannot find module '/Users/phuccao/Projects/__ARCHIVE__/React-OAS-Integration-v4.0/backend/server.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
+    at Module._load (node:internal/modules/cjs/loader:1038:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
 
-[33m[nodemon] 3.1.10[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
-[32m[nodemon] starting `node src/server.js`[39m
-🚀 Backend server running on port 3001
-📊 Health check: http://localhost:3001/health
-🌐 WebSocket server ready for connections
-<<<<<<< HEAD
-::1 - - [22/Jan/2026:17:36:15 +0000] "GET /login?returnUrl=%2Fgoogle-apps-script HTTP/1.1" 404 271 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/__ARCHIVE__/React-OAS-Integration-v4.0/backend/build/index.html'
-::1 - - [22/Jan/2026:17:42:52 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: zKnQ4GVPAQj3NrZWAAAB
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:42:52.825Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: zKnQ4GVPAQj3NrZWAAAB
-::1 - - [22/Jan/2026:17:42:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:42:55 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
-::1 - - [22/Jan/2026:17:42:55 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:42:55 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:42:55 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:43:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: Te772ADhnziOvZt5AAAD
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:43:12.319Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: Te772ADhnziOvZt5AAAD
-::1 - - [22/Jan/2026:17:43:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:43:18 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
-::1 - - [22/Jan/2026:17:43:18 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:43:18 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:43:18 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:44:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:44:07 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
-::1 - - [22/Jan/2026:17:44:07 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:44:07 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:44:07 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:44:10 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:44:10 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
-::1 - - [22/Jan/2026:17:44:10 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:44:10 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:44:10 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:44:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: 6tPRNJSrNarIQguSAAAF
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:44:15.743Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: 6tPRNJSrNarIQguSAAAF
-::1 - - [22/Jan/2026:17:44:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: zPimbrPcokCHMWjwAAAH
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:44:19.658Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: zPimbrPcokCHMWjwAAAH
-::1 - - [22/Jan/2026:17:44:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:17:45:13 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: HYlrPydmqDhx36fZAAAJ
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:45:13.980Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: HYlrPydmqDhx36fZAAAJ
-::1 - - [22/Jan/2026:17:45:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:45:18 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
-::1 - - [22/Jan/2026:17:45:18 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:45:18 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:45:18 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:46:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:17:46:54 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:17:47:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: G7bXT6_fSr4En0QoAAAL
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:47:47.192Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: G7bXT6_fSr4En0QoAAAL
-::1 - - [22/Jan/2026:17:47:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-::1 - - [22/Jan/2026:17:47:49 +0000] "GET /api/status HTTP/1.1" 200 92 "-" "-"
-::1 - - [22/Jan/2026:17:47:49 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
-::1 - - [22/Jan/2026:17:47:49 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
-::1 - - [22/Jan/2026:17:47:49 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
-::1 - - [22/Jan/2026:17:47:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
-Client connected: wH5Lh01DfM2eEz8IAAAN
-Data request received: { type: 'dashboard', timestamp: '2026-01-22T17:47:51.221Z' }
-AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
-Client disconnected: wH5Lh01DfM2eEz8IAAAN
-::1 - - [22/Jan/2026:17:47:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:17:47:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:17:49:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-=======
-::1 - - [22/Jan/2026:15:42:28 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-::1 - - [22/Jan/2026:15:42:28 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
->>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+Node.js v20.20.0

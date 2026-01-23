@@ -1,6 +1,6 @@
 # 🧪 Complete Test Guide - React OAS Integration v4.0
 
-> **Hướng dẫn testing đầy đủ và chi tiết**  
+> **Hướng dẫn testing đầy đủ và chi tiết**
 > **Ngày cập nhật**: 2025-01-27
 
 ---
@@ -387,5 +387,5 @@ npm run kill:port
 
 ---
 
-**Status**: ✅ Complete  
+**Status**: ✅ Complete
 **Last Updated**: 2025-01-27

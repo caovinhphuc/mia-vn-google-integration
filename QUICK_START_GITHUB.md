@@ -38,7 +38,7 @@ gh repo create React-OAS-Integration-v3.0 \
 # Hoặc thủ công:
 git add .
 git commit -m "feat: Initial commit - React OAS Integration v3.0"
-git remote add origin https://github.com/USERNAME/REPO_NAME.git
+git remote add origin https://github.com/caovinhphuc/mia-vn-google-integration.git
 git branch -M main
 git push -u origin main
 ```

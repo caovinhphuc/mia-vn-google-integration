@@ -139,11 +139,10 @@ After GitHub deployment:
 
 ```bash
 # Complete GitHub setup
-git remote add origin https://github.com/YOUR_USERNAME/react-google-integration.git
+git remote add origin https://github.com/caovinhphuc/react-google-integration.git
 git branch -M main
 git push -u origin main
 
-# Future updates
 git add .
 git commit -m "Your commit message"
 git push origin main

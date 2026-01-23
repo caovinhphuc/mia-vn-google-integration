@@ -1,24 +1,24 @@
 {
-  "timestamp": "2026-01-22T19:36:45.776Z",
+  "timestamp": "2026-01-23T00:41:30.414Z",
   "overall": "unhealthy",
   "services": {
     "file-system": {
-      "status": "healthy",
-      "message": "All required files and directories present",
+      "status": "error",
+      "message": "Missing files/directories: src/App.jsx, public",
       "details": null,
-      "timestamp": "2026-01-22T19:36:45.777Z"
+      "timestamp": "2026-01-23T00:41:30.415Z"
     },
     "dependencies": {
-      "status": "healthy",
-      "message": "All critical dependencies present",
+      "status": "warning",
+      "message": "Missing critical dependencies: react, google-auth-library",
       "details": null,
-      "timestamp": "2026-01-22T19:36:45.777Z"
+      "timestamp": "2026-01-23T00:41:30.415Z"
     },
     "environment": {
       "status": "warning",
       "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
       "details": null,
-      "timestamp": "2026-01-22T19:36:45.777Z"
+      "timestamp": "2026-01-23T00:41:30.415Z"
     },
     "google-sheets": {
       "status": "error",
@@ -27,7 +27,7 @@
         "error": "error:1E08010C:DECODER routines::unsupported",
         "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-01-22T19:36:46.116Z"
+      "timestamp": "2026-01-23T00:41:30.999Z"
     },
     "google-drive": {
       "status": "error",
@@ -36,7 +36,7 @@
         "error": "error:1E08010C:DECODER routines::unsupported",
         "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-01-22T19:36:46.117Z"
+      "timestamp": "2026-01-23T00:41:31.000Z"
     },
     "email-service": {
       "status": "warning",
@@ -45,18 +45,23 @@
         "sendgrid_configured": true,
         "smtp_configured": false
       },
-      "timestamp": "2026-01-22T19:36:46.777Z"
+      "timestamp": "2026-01-23T00:41:31.689Z"
     },
     "telegram-service": {
       "status": "error",
-      "message": "Telegram service connection failed: Request failed with status code 401",
+      "message": "Telegram service connection failed: Request failed with status code 404",
       "details": {
-        "error": "Request failed with status code 401"
+        "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-01-22T19:36:47.450Z"
+      "timestamp": "2026-01-23T00:41:32.366Z"
     }
   },
   "errors": [
+    {
+      "service": "file-system",
+      "message": "Missing files/directories: src/App.jsx, public",
+      "details": null
+    },
     {
       "service": "google-sheets",
       "message": "Google Sheets API connection failed: error:1E08010C:DECODER routines::unsupported",
@@ -75,13 +80,18 @@
     },
     {
       "service": "telegram-service",
-      "message": "Telegram service connection failed: Request failed with status code 401",
+      "message": "Telegram service connection failed: Request failed with status code 404",
       "details": {
-        "error": "Request failed with status code 401"
+        "error": "Request failed with status code 404"
       }
     }
   ],
   "warnings": [
+    {
+      "service": "dependencies",
+      "message": "Missing critical dependencies: react, google-auth-library",
+      "details": null
+    },
     {
       "service": "environment",
       "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
