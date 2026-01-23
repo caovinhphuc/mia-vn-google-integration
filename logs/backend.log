@@ -1,14 +1,17 @@
-node:internal/modules/cjs/loader:1210
-  throw err;
-  ^
 
-Error: Cannot find module '/Users/phuccao/Projects/__ARCHIVE__/React-OAS-Integration-v4.0/backend/server.js'
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
-    at Module._load (node:internal/modules/cjs/loader:1038:27)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
-    at node:internal/main/run_main_module:28:49 {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: []
-}
+> react-oas-integration-backend@1.0.0 dev
+> nodemon src/server.js
 
-Node.js v20.20.0
+[33m[nodemon] 3.1.10[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node src/server.js`[39m
+🚀 Backend server running on port 3001
+📊 Health check: http://localhost:3001/health
+🌐 WebSocket server ready for connections
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+🚀 Backend server running on port 3001
+📊 Health check: http://localhost:3001/health
+🌐 WebSocket server ready for connections
