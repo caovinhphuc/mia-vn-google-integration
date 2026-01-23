@@ -1,7 +1,7 @@
 # 📚 HƯỚNG DẪN SỬ DỤNG SCRIPTS - React OAS Integration v4.0
 
-> **Version**: 4.0  
-> **Ngày cập nhật**: 2025-01-27  
+> **Version**: 4.0
+> **Ngày cập nhật**: 2025-01-27
 > **Mục đích**: Hướng dẫn sử dụng các scripts trong dự án
 
 ---
@@ -24,8 +24,8 @@
 
 #### `setup.sh`
 
-**Mục đích**: Setup toàn bộ hệ thống  
-**Chạy từ**: Root directory  
+**Mục đích**: Setup toàn bộ hệ thống
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -43,8 +43,8 @@
 
 #### `setup_ide.sh`
 
-**Mục đích**: Setup IDE (VSCode, etc.)  
-**Chạy từ**: Root directory  
+**Mục đích**: Setup IDE (VSCode, etc.)
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -55,8 +55,8 @@
 
 #### `setup-https.sh`
 
-**Mục đích**: Setup HTTPS certificates  
-**Chạy từ**: Root directory  
+**Mục đích**: Setup HTTPS certificates
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -69,8 +69,8 @@
 
 #### `scripts/setup.sh`
 
-**Mục đích**: Setup script trong scripts folder  
-**Chạy từ**: Root directory  
+**Mục đích**: Setup script trong scripts folder
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -81,8 +81,8 @@
 
 #### `scripts/install.sh`
 
-**Mục đích**: Install dependencies  
-**Chạy từ**: Root directory  
+**Mục đích**: Install dependencies
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -93,8 +93,8 @@
 
 #### `scripts/verify-setup.sh`
 
-**Mục đích**: Verify setup đã đúng chưa  
-**Chạy từ**: Root directory  
+**Mục đích**: Verify setup đã đúng chưa
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -109,8 +109,8 @@
 
 #### `start_dev_servers.sh` ⭐ **KHUYẾN NGHỊ**
 
-**Mục đích**: Start tất cả development servers  
-**Chạy từ**: Root directory  
+**Mục đích**: Start tất cả development servers
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -135,8 +135,8 @@
 
 #### `deploy_platform.sh` ⭐ **KHUYẾN NGHỊ**
 
-**Mục đích**: Deploy platform với start/stop/restart  
-**Chạy từ**: Root directory  
+**Mục đích**: Deploy platform với start/stop/restart
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -154,8 +154,8 @@
 
 #### `start_ai_platform.sh` ⚠️ **CẦN CẬP NHẬT**
 
-**Mục đích**: Start AI platform (v3.0 - cần cập nhật)  
-**Chạy từ**: Root directory  
+**Mục đích**: Start AI platform (v3.0 - cần cập nhật)
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -168,8 +168,8 @@
 
 #### `start_data_flow.sh`
 
-**Mục đích**: Start data flow  
-**Chạy từ**: Root directory  
+**Mục đích**: Start data flow
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -182,8 +182,8 @@
 
 #### `scripts/start_all.sh`
 
-**Mục đích**: Start all services  
-**Chạy từ**: Root directory  
+**Mục đích**: Start all services
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -194,8 +194,8 @@
 
 #### `scripts/start_backend.sh` hoặc `scripts/start-backend.sh`
 
-**Mục đích**: Start backend only  
-**Chạy từ**: Root directory  
+**Mục đích**: Start backend only
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -210,8 +210,8 @@
 
 #### `scripts/stop_all.sh`
 
-**Mục đích**: Stop all services  
-**Chạy từ**: Root directory  
+**Mục đích**: Stop all services
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -226,8 +226,8 @@
 
 #### `deploy.sh` ⭐ **KHUYẾN NGHỊ**
 
-**Mục đích**: Deploy lên Netlify + Render  
-**Chạy từ**: Root directory  
+**Mục đích**: Deploy lên Netlify + Render
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -248,8 +248,8 @@
 
 #### `deploy-production.sh` ⭐ **KHUYẾN NGHỊ**
 
-**Mục đích**: Production deployment  
-**Chạy từ**: Root directory  
+**Mục đích**: Production deployment
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -268,8 +268,8 @@
 
 #### `quick-deploy.sh` ⭐ **KHUYẾN NGHỊ**
 
-**Mục đích**: Quick deploy lên Vercel + Railway  
-**Chạy từ**: Root directory  
+**Mục đích**: Quick deploy lên Vercel + Railway
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -284,8 +284,8 @@
 
 #### `deploy-vercel.sh` hoặc `deployVercel.sh`
 
-**Mục đích**: Deploy chỉ lên Vercel  
-**Chạy từ**: Root directory  
+**Mục đích**: Deploy chỉ lên Vercel
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -300,8 +300,8 @@
 
 #### `deployNetlify.sh`
 
-**Mục đích**: Deploy lên Netlify  
-**Chạy từ**: Root directory  
+**Mục đích**: Deploy lên Netlify
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -312,8 +312,8 @@
 
 #### `deployGCP.sh`
 
-**Mục đích**: Deploy lên Google Cloud Platform  
-**Chạy từ**: Root directory  
+**Mục đích**: Deploy lên Google Cloud Platform
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -324,8 +324,8 @@
 
 #### `serve-build.sh`
 
-**Mục đích**: Serve production build locally  
-**Chạy từ**: Root directory  
+**Mục đích**: Serve production build locally
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -342,8 +342,8 @@
 
 #### `scripts/fix-port-conflict.sh`
 
-**Mục đích**: Fix port conflicts  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix port conflicts
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -354,8 +354,8 @@
 
 #### `scripts/fix-chunk-errors.sh`
 
-**Mục đích**: Fix chunk errors  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix chunk errors
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -366,8 +366,8 @@
 
 #### `fix-chunk-error.sh` (Root level)
 
-**Mục đích**: Fix chunk error (singular)  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix chunk error (singular)
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -380,8 +380,8 @@
 
 #### `scripts/fix-api-connection.sh`
 
-**Mục đích**: Fix API connection issues  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix API connection issues
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -392,8 +392,8 @@
 
 #### `scripts/fix-automation-path.sh`
 
-**Mục đích**: Fix automation path issues  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix automation path issues
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -404,8 +404,8 @@
 
 #### `fix-branch-sync.sh`
 
-**Mục đích**: Fix branch sync issues  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix branch sync issues
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -416,8 +416,8 @@
 
 #### `fix-missing-files.sh`
 
-**Mục đích**: Fix missing files  
-**Chạy từ**: Root directory  
+**Mục đích**: Fix missing files
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -432,8 +432,8 @@
 
 #### `scripts/check-ports.sh`
 
-**Mục đích**: Check port availability  
-**Chạy từ**: Root directory  
+**Mục đích**: Check port availability
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -444,8 +444,8 @@
 
 #### `scripts/check-env.sh`
 
-**Mục đích**: Check environment variables  
-**Chạy từ**: Root directory  
+**Mục đích**: Check environment variables
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -458,8 +458,8 @@
 
 #### `scripts/check-backend.sh`
 
-**Mục đích**: Check backend health  
-**Chạy từ**: Root directory  
+**Mục đích**: Check backend health
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -470,8 +470,8 @@
 
 #### `scripts/kill-port.sh`
 
-**Mục đích**: Kill process on port  
-**Chạy từ**: Root directory  
+**Mục đích**: Kill process on port
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -482,8 +482,8 @@
 
 #### `verify_port_config.sh`
 
-**Mục đích**: Verify port configuration  
-**Chạy từ**: Root directory  
+**Mục đích**: Verify port configuration
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -494,8 +494,8 @@
 
 #### `securityAudit.sh`
 
-**Mục đích**: Security audit  
-**Chạy từ**: Root directory  
+**Mục đích**: Security audit
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -510,8 +510,8 @@
 
 #### `sync-to-main.sh`
 
-**Mục đích**: Sync branch to main  
-**Chạy từ**: Root directory  
+**Mục đích**: Sync branch to main
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -522,8 +522,8 @@
 
 #### `create-repo-and-push.sh`
 
-**Mục đích**: Create repo and push  
-**Chạy từ**: Root directory  
+**Mục đích**: Create repo and push
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -534,8 +534,8 @@
 
 #### `scripts/push_to_github.sh`
 
-**Mục đích**: Push to GitHub  
-**Chạy từ**: Root directory  
+**Mục đích**: Push to GitHub
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -546,8 +546,8 @@
 
 #### `scripts/prepare_github_repo.sh`
 
-**Mục đích**: Prepare GitHub repo  
-**Chạy từ**: Root directory  
+**Mục đích**: Prepare GitHub repo
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -558,8 +558,8 @@
 
 #### `scripts/setup-github.sh`
 
-**Mục đích**: Setup GitHub  
-**Chạy từ**: Root directory  
+**Mục đích**: Setup GitHub
+**Chạy từ**: Root directory
 **Cách dùng**:
 
 ```bash
@@ -576,8 +576,8 @@
 
 #### `automation/start.sh`
 
-**Mục đích**: Start automation  
-**Chạy từ**: Root directory hoặc `automation/`  
+**Mục đích**: Start automation
+**Chạy từ**: Root directory hoặc `automation/`
 **Cách dùng**:
 
 ```bash
@@ -590,8 +590,8 @@ cd automation && ./start.sh
 
 #### `automation/setup.sh`
 
-**Mục đích**: Setup automation  
-**Chạy từ**: Root directory hoặc `automation/`  
+**Mục đích**: Setup automation
+**Chạy từ**: Root directory hoặc `automation/`
 **Cách dùng**:
 
 ```bash
@@ -606,8 +606,8 @@ cd automation && ./setup.sh
 
 #### `ai-service/setup_venv.sh`
 
-**Mục đích**: Setup Python virtual environment  
-**Chạy từ**: Root directory hoặc `ai-service/`  
+**Mục đích**: Setup Python virtual environment
+**Chạy từ**: Root directory hoặc `ai-service/`
 **Cách dùng**:
 
 ```bash
@@ -622,8 +622,8 @@ cd ai-service && ./setup_venv.sh
 
 #### `mia-logistics-manager/start-mia.sh`
 
-**Mục đích**: Start MIA Logistics Manager  
-**Chạy từ**: Root directory hoặc `mia-logistics-manager/`  
+**Mục đích**: Start MIA Logistics Manager
+**Chạy từ**: Root directory hoặc `mia-logistics-manager/`
 **Cách dùng**:
 
 ```bash
@@ -638,8 +638,8 @@ cd mia-logistics-manager && ./start-mia.sh
 
 #### `google-sheets-project/start.sh`
 
-**Mục đích**: Start Google Sheets project  
-**Chạy từ**: Root directory hoặc `google-sheets-project/`  
+**Mục đích**: Start Google Sheets project
+**Chạy từ**: Root directory hoặc `google-sheets-project/`
 **Cách dùng**:
 
 ```bash
@@ -771,5 +771,5 @@ Một số scripts cần environment variables. Kiểm tra:
 
 ---
 
-**Last Updated**: 2025-01-27  
+**Last Updated**: 2025-01-27
 **Version**: 4.0
