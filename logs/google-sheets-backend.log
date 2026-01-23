@@ -1,4 +1,4 @@
-[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 observe env with Radar: https://dotenvx.com/radar
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
 🚀 Server running on port 3003
 📊 Google Sheets: Not configured
 📧 Email: Not configured
