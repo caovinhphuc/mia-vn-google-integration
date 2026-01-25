@@ -1,6 +1,5 @@
-[dotenv@17.2.2] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[dotenv@17.2.2] injecting env (0) from .env -- tip: 📡 auto-backup env with Radar: https://dotenvx.com/radar
 🚀 Server running on port 3003
 📊 Google Sheets: Not configured
 📧 Email: Not configured
 📱 Telegram: Not configured
-Running daily report...
