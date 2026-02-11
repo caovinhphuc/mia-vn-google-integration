@@ -1,21 +1,5 @@
 {
-  "folders": [
-    {
-      "name": "React-OAS-Integration-v4.0",
-      "path": "React-OAS-Integration-v4.0"
-    },
-    {
-      "name": "Frontend Projects",
-      "path": "frontend"
-    },
-    {
-      "name": "Fullstack Projects",
-      "path": "fullstack"
-    },
-    {
-      "path": "."
-    }
-  ],
+  "folders": [],
   "settings": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

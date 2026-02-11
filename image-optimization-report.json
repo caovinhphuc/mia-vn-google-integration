@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-02-11T20:31:44.790Z",
+  "totalImages": 2,
+  "totalSize": 15011,
+  "estimatedSavings": 6004.400000000001,
+  "images": [
+    {
+      "path": "public/logo192.png",
+      "original": 5347,
+      "optimized": 5347,
+      "saved": 0
+    },
+    {
+      "path": "public/logo512.png",
+      "original": 9664,
+      "optimized": 9664,
+      "saved": 0
+    }
+  ]
+}

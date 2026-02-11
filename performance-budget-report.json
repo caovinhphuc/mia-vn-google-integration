@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-02-11T20:31:30.919Z",
+  "budgets": {
+    "bundle": {
+      "javascript": 256000,
+      "css": 51200,
+      "images": 512000,
+      "fonts": 102400,
+      "total": 1048576
+    },
+    "metrics": {
+      "fcp": 1800,
+      "lcp": 2500,
+      "tti": 3800,
+      "cls": 0.1,
+      "tbt": 300,
+      "lighthouse": 90
+    },
+    "api": {
+      "responseTime": 500,
+      "errorRate": 1,
+      "cacheHitRate": 70
+    }
+  },
+  "results": {
+    "bundle": {
+      "passed": true
+    },
+    "lighthouse": {
+      "passed": true,
+      "skipped": true
+    },
+    "api": {
+      "passed": true,
+      "skipped": true
+    }
+  },
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "skipped": 2
+  }
+}

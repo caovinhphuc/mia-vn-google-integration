@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-01-22T18:49:03.823Z",
+  "timestamp": "2026-02-11T20:47:16.464Z",
   "envFile": "✅ Exists",
-  "dependencies": "❌ Missing",
+  "dependencies": "✅ Installed",
   "build": "❌ Not built",
   "services": {
-    "google": "❌ Not configured",
-    "email": "❌ Not configured",
-    "telegram": "❌ Not configured"
+    "google": "⚠️  Needs private key",
+    "email": "⚠️  Check API key",
+    "telegram": "⚠️  Check token"
   }
 }

@@ -1,0 +1,111 @@
+{
+  "timestamp": "2026-02-11T20:32:24.057Z",
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "healthy",
+      "message": "All required files and directories present",
+      "details": null,
+      "timestamp": "2026-02-11T20:32:24.058Z"
+    },
+    "dependencies": {
+      "status": "warning",
+      "message": "Missing critical dependencies: googleapis, google-auth-library",
+      "details": null,
+      "timestamp": "2026-02-11T20:32:24.058Z"
+    },
+    "environment": {
+      "status": "warning",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null,
+      "timestamp": "2026-02-11T20:32:24.058Z"
+    },
+    "google-sheets": {
+      "status": "error",
+      "message": "Google Sheets API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "details": {
+        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+        "code": "MODULE_NOT_FOUND"
+      },
+      "timestamp": "2026-02-11T20:32:24.058Z"
+    },
+    "google-drive": {
+      "status": "error",
+      "message": "Google Drive API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "details": {
+        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+        "code": "MODULE_NOT_FOUND"
+      },
+      "timestamp": "2026-02-11T20:32:24.058Z"
+    },
+    "email-service": {
+      "status": "warning",
+      "message": "No email service configured (neither SendGrid nor SMTP)",
+      "details": {
+        "sendgrid_configured": true,
+        "smtp_configured": false
+      },
+      "timestamp": "2026-02-11T20:32:24.702Z"
+    },
+    "telegram-service": {
+      "status": "error",
+      "message": "Telegram service connection failed: Request failed with status code 404",
+      "details": {
+        "error": "Request failed with status code 404"
+      },
+      "timestamp": "2026-02-11T20:32:25.343Z"
+    }
+  },
+  "errors": [
+    {
+      "service": "google-sheets",
+      "message": "Google Sheets API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "details": {
+        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+        "code": "MODULE_NOT_FOUND"
+      }
+    },
+    {
+      "service": "google-drive",
+      "message": "Google Drive API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "details": {
+        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+        "code": "MODULE_NOT_FOUND"
+      }
+    },
+    {
+      "service": "telegram-service",
+      "message": "Telegram service connection failed: Request failed with status code 404",
+      "details": {
+        "error": "Request failed with status code 404"
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "service": "dependencies",
+      "message": "Missing critical dependencies: googleapis, google-auth-library",
+      "details": null
+    },
+    {
+      "service": "environment",
+      "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
+      "details": null
+    },
+    {
+      "service": "email-service",
+      "message": "SendGrid API failed: Request failed with status code 401, trying SMTP fallback",
+      "details": {
+        "error": "Request failed with status code 401"
+      }
+    },
+    {
+      "service": "email-service",
+      "message": "No email service configured (neither SendGrid nor SMTP)",
+      "details": {
+        "sendgrid_configured": true,
+        "smtp_configured": false
+      }
+    }
+  ]
+}
