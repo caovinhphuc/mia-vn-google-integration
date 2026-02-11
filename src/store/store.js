@@ -1,14 +1,14 @@
-import { createStore, applyMiddleware, combineReducers } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { thunk } from "redux-thunk";
+import thunk from "redux-thunk";
 
 // Import reducers
-import authReducer from "./reducers/authReducer";
-import sheetsReducer from "./reducers/sheetsReducer";
-import driveReducer from "./reducers/driveReducer";
-import dashboardReducer from "./reducers/dashboardReducer";
 import alertsReducer from "./reducers/alertsReducer";
+import authReducer from "./reducers/authReducer";
+import dashboardReducer from "./reducers/dashboardReducer";
+import driveReducer from "./reducers/driveReducer";
+import sheetsReducer from "./reducers/sheetsReducer";
 
 // Persist config
 const persistConfig = {

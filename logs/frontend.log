@@ -3,16 +3,20 @@
 > react-scripts start
 
 [HPM] Proxy created: /  -> http://localhost:3002
-(node:53258) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:47871) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:53258) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:47871) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
-Failed to compile.
+Compiled successfully!
 
-Attempted import error: 'thunk' is not exported from 'redux-thunk' (imported as 'thunk').
-ERROR in ./src/store/store.js 35:67-72
-export 'thunk' (imported as 'thunk') was not found in 'redux-thunk' (possible exports: default)
+You can now view react-oas-integration in the browser.
 
-webpack compiled with 1 error
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.10.153:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
 No issues found.

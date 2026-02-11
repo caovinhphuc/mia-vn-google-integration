@@ -27,15 +27,11 @@
     "webpack-bundle-analyzer-deps": "webpack-bundle-analyzer build/static/js/main.*js --mode development"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.1.0",
     "@reduxjs/toolkit": "^1.9.7",
-    "antd": "^5.29.3",
     "axios": "^1.6.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
-    "google-auth-library": "^10.5.0",
-    "googleapis": "^171.4.0",
     "lucide-react": "^0.294.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.13",
