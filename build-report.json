@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-01-22T15:00:19.812Z",
-  "buildSize": 2580393,
+  "timestamp": "2026-02-11T22:36:04.611Z",
+  "buildSize": 15863830,
   "files": {
     "html": 3,
-    "css": 14,
-    "js": 40,
+    "css": 28,
+    "js": 79,
     "images": 2
   },
   "optimization": {

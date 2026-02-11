@@ -1,22 +1,38 @@
 {
-  "timestamp": "2026-02-11T20:32:02.729Z",
+  "timestamp": "2026-02-11T22:09:01.601Z",
   "logDir": "logs",
   "files": [
     {
       "file": "ai-service.log",
-      "totalLines": 1,
-      "errors": [
+      "totalLines": 5,
+      "errors": [],
+      "warnings": [],
+      "info": [
         {
           "line": 1,
-          "content": "ERROR:    Error loading ASGI app. Could not import module \"ai_service.main\"."
+          "content": "INFO:     Started server process [86782]"
+        },
+        {
+          "line": 2,
+          "content": "INFO:     Waiting for application startup."
+        },
+        {
+          "line": 3,
+          "content": "INFO:     Application startup complete."
+        },
+        {
+          "line": 4,
+          "content": "INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)"
+        },
+        {
+          "line": 5,
+          "content": "INFO:     127.0.0.1:63862 - \"GET /health HTTP/1.1\" 200 OK"
         }
       ],
-      "warnings": [],
-      "info": [],
       "timestamps": [],
-      "errorCount": 1,
+      "errorCount": 0,
       "warningCount": 0,
-      "infoCount": 0,
+      "infoCount": 5,
       "patterns": {}
     },
     {
@@ -91,7 +107,7 @@
     },
     {
       "file": "backend.log",
-      "totalLines": 3,
+      "totalLines": 10,
       "errors": [],
       "warnings": [],
       "info": [],
@@ -99,47 +115,34 @@
       "errorCount": 0,
       "warningCount": 0,
       "infoCount": 0,
-      "patterns": {}
+      "patterns": {
+        "connection": 1
+      }
     },
     {
       "file": "frontend.log",
-      "totalLines": 13,
-      "errors": [
-        {
-          "line": 9,
-          "content": "Attempted import error: 'thunk' is not exported from 'redux-thunk' (imported as 'thunk')."
-        },
-        {
-          "line": 10,
-          "content": "ERROR in ./src/store/store.js 35:67-72"
-        },
-        {
-          "line": 12,
-          "content": "webpack compiled with 1 error"
-        }
-      ],
+      "totalLines": 14,
+      "errors": [],
       "warnings": [
         {
-          "line": 4,
-          "content": "(node:53258) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
+          "line": 3,
+          "content": "(node:89572) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
         },
         {
-          "line": 5,
+          "line": 4,
           "content": "(Use `node --trace-deprecation ...` to show where the warning was created)"
         },
         {
-          "line": 6,
-          "content": "(node:53258) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
+          "line": 5,
+          "content": "(node:89572) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
         }
       ],
       "info": [],
       "timestamps": [],
-      "errorCount": 3,
+      "errorCount": 0,
       "warningCount": 3,
       "infoCount": 0,
-      "patterns": {
-        "failed": 1
-      }
+      "patterns": {}
     },
     {
       "file": "google-backend.log",
@@ -179,29 +182,12 @@
     },
     {
       "file": "google-sheets-frontend.log",
-      "totalLines": 69,
-      "errors": [
-        {
-          "line": 16,
-          "content": "Search for the keywords to learn more about each error."
-        },
-        {
-          "line": 61,
-          "content": "ERROR in [eslint] "
-        },
-        {
-          "line": 68,
-          "content": "Search for the keywords to learn more about each error."
-        },
-        {
-          "line": 69,
-          "content": "webpack compiled with 1 error and 1 warning"
-        }
-      ],
+      "totalLines": 15,
+      "errors": [],
       "warnings": [
         {
           "line": 4,
-          "content": "(node:30123) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
+          "content": "(node:85507) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
         },
         {
           "line": 5,
@@ -209,34 +195,16 @@
         },
         {
           "line": 6,
-          "content": "(node:30123) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
-        },
-        {
-          "line": 35,
-          "content": "WARNING in [eslint] "
+          "content": "(node:85507) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option."
         }
       ],
-      "info": [
-        {
-          "line": 20,
-          "content": "<w> More info: https://sass-lang.com/d/legacy-js-api"
-        },
-        {
-          "line": 25,
-          "content": "<w> More info and automated migrator: https://sass-lang.com/d/import"
-        },
-        {
-          "line": 31,
-          "content": "<w> More info and automated migrator: https://sass-lang.com/d/import"
-        }
-      ],
+      "info": [],
       "timestamps": [],
-      "errorCount": 4,
-      "warningCount": 4,
-      "infoCount": 3,
+      "errorCount": 0,
+      "warningCount": 3,
+      "infoCount": 0,
       "patterns": {
-        "failed": 1,
-        "api": 2
+        "failed": 1
       }
     },
     {
@@ -296,8 +264,8 @@
   ],
   "summary": {
     "totalFiles": 11,
-    "totalLines": 203,
-    "totalErrors": 9,
-    "totalWarnings": 14
+    "totalLines": 161,
+    "totalErrors": 1,
+    "totalWarnings": 13
   }
 }

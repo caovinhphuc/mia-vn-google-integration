@@ -38,7 +38,12 @@
     "kill:port": "lsof -i :$npm_config_port | grep LISTEN | awk '{print $2}' | xargs kill -9",
     "check:ports": "lsof -i :3000 -i :3001 -i :8000 | grep LISTEN",
     "check:backend": "curl -s http://localhost:3001/health || echo 'Backend not running'",
-    "verify:setup": "node scripts/verify-setup.js"
+    "verify:setup": "node scripts/verify-setup.js",
+    "perf:bundle": "node scripts/perf-bundle-analyzer.js",
+    "perf:lighthouse": "node scripts/performance-lighthouse.js",
+    "deploy:vercel": "vercel --prod",
+    "deploy:build": "npm run build:prod",
+    "deploy:serve": "npx serve -s build -l 3000"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
@@ -46,10 +51,12 @@
     "antd": "^5.29.3",
     "axios": "^1.6.0",
     "cors": "^2.8.6",
+    "dayjs": "^1.11.19",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "google-auth-library": "^10.5.0",
     "googleapis": "^171.4.0",
+    "lodash-es": "^4.17.23",
     "lucide-react": "^0.294.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.13",

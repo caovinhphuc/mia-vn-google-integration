@@ -1,32 +1,64 @@
 # 📊 Bundle Optimization Report
 
-**Generated:** 03:31:47 12/2/2026
+**Generated:** 05:08:28 12/2/2026
 
 ## 📦 Bundle Sizes
 
 | Type | Current | Budget | Status |
 |------|---------|--------|--------|
-| JavaScript | 0 Bytes | 250 KB | ✅ OK |
-| CSS | 0 Bytes | 50 KB | ✅ OK |
+| JavaScript | 2.48 MB | 250 KB | ❌ OVER |
+| CSS | 92.76 KB | 50 KB | ❌ OVER |
 | Images | 0 Bytes | 500 KB | ✅ OK |
-| Total | 0 Bytes | 1 MB | ✅ OK |
+| Total | 2.57 MB | 1 MB | ❌ OVER |
 
 ## 📁 Top Largest Files
 
 ```
-1. logo512.png - 9.44 KB
-2. logo192.png - 5.22 KB
-3. test-login.html - 5.2 KB
-4. favicon.ico - 1.46 KB
-5. login.html - 1.29 KB
-6. manifest.json - 795 Bytes
-7. browserconfig.xml - 391 Bytes
-8. lighthouse.yml - 154 Bytes
-9. _redirects - 24 Bytes
+1. static/js/main.ea399951.js - 680.09 KB
+2. static/js/986.2e1fe05c.chunk.js - 373.28 KB
+3. static/js/129.f66223c0.chunk.js - 237.41 KB
+4. static/js/849.01b14144.chunk.js - 165.46 KB
+5. static/js/856.e4a094d7.chunk.js - 118.94 KB
+6. static/js/255.6aa23a6b.chunk.js - 116.84 KB
+7. static/js/589.612f5eb4.chunk.js - 96.34 KB
+8. static/js/253.1664295f.chunk.js - 86.09 KB
+9. static/js/719.ca533d67.chunk.js - 50.1 KB
+10. static/css/main.8268259e.css - 40.73 KB
+11. static/js/701.bb3b4155.chunk.js - 39.78 KB
+12. static/js/396.1669e2e0.chunk.js - 39.03 KB
+13. static/js/752.2bf75df6.chunk.js - 36.72 KB
+14. static/js/google-drive.cd6935fa.chunk.js - 35.45 KB
+15. static/js/security.fc6724be.chunk.js - 33.46 KB
 ```
 
 ## 💡 Recommendations
 
+
+### 1. JavaScript bundle quá lớn [HIGH]
+
+- Đã có lazy loading trong App.jsx - cần cải thiện thêm
+- Kiểm tra dependencies lớn: antd, recharts, socket.io-client
+- Sử dụng dynamic imports cho các components không cần thiết ngay
+- Xóa unused imports và dependencies
+- Sử dụng tree-shaking để loại bỏ code không dùng
+- Code splitting theo routes thay vì chỉ components
+
+
+### 2. CSS bundle quá lớn [MEDIUM]
+
+- Import chỉ các component Ant Design cần thiết
+- Sử dụng CSS modules thay vì global CSS
+- Xóa unused CSS classes
+- Sử dụng PurgeCSS để loại bỏ CSS không dùng
+
+
+### 3. Tổng bundle size vượt quá budget [HIGH]
+
+- Sử dụng source-map-explorer để phân tích chi tiết
+- Chạy: npm run analyze:bundle
+- Tối ưu hóa images (WebP, compression)
+- Chỉ load libraries khi cần (lazy loading)
+- Enable gzip/brotli compression trên server
 
 
 ## 🚀 Next Steps

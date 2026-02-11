@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-23T00:47:53.320Z",
+  "timestamp": "2026-02-11T22:35:32.527Z",
   "project": "mia-logistics-469406",
   "results": [
     {
@@ -22,9 +22,8 @@
     },
     {
       "api": "Google Maps API",
-      "status": "unknown",
-      "required": false,
-      "error": "error:1E08010C:DECODER routines::unsupported"
+      "status": "not_used",
+      "required": false
     },
     {
       "api": "Drive Activity API",
@@ -47,7 +46,6 @@
   "apisInCode": [
     "script.googleapis.com",
     "sheets.googleapis.com",
-    "drive.googleapis.com",
-    "maps.googleapis.com"
+    "drive.googleapis.com"
   ]
 }

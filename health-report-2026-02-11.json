@@ -1,42 +1,42 @@
 {
-  "timestamp": "2026-02-11T20:32:24.057Z",
+  "timestamp": "2026-02-11T22:23:11.379Z",
   "overall": "unhealthy",
   "services": {
     "file-system": {
       "status": "healthy",
       "message": "All required files and directories present",
       "details": null,
-      "timestamp": "2026-02-11T20:32:24.058Z"
+      "timestamp": "2026-02-11T22:23:11.380Z"
     },
     "dependencies": {
-      "status": "warning",
-      "message": "Missing critical dependencies: googleapis, google-auth-library",
+      "status": "healthy",
+      "message": "All critical dependencies present",
       "details": null,
-      "timestamp": "2026-02-11T20:32:24.058Z"
+      "timestamp": "2026-02-11T22:23:11.380Z"
     },
     "environment": {
       "status": "warning",
       "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
       "details": null,
-      "timestamp": "2026-02-11T20:32:24.058Z"
+      "timestamp": "2026-02-11T22:23:11.380Z"
     },
     "google-sheets": {
       "status": "error",
-      "message": "Google Sheets API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "message": "Google Sheets API connection failed: error:1E08010C:DECODER routines::unsupported",
       "details": {
-        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
-        "code": "MODULE_NOT_FOUND"
+        "error": "error:1E08010C:DECODER routines::unsupported",
+        "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-02-11T20:32:24.058Z"
+      "timestamp": "2026-02-11T22:23:12.075Z"
     },
     "google-drive": {
       "status": "error",
-      "message": "Google Drive API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "message": "Google Drive API connection failed: error:1E08010C:DECODER routines::unsupported",
       "details": {
-        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
-        "code": "MODULE_NOT_FOUND"
+        "error": "error:1E08010C:DECODER routines::unsupported",
+        "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-02-11T20:32:24.058Z"
+      "timestamp": "2026-02-11T22:23:12.076Z"
     },
     "email-service": {
       "status": "warning",
@@ -45,7 +45,7 @@
         "sendgrid_configured": true,
         "smtp_configured": false
       },
-      "timestamp": "2026-02-11T20:32:24.702Z"
+      "timestamp": "2026-02-11T22:23:12.782Z"
     },
     "telegram-service": {
       "status": "error",
@@ -53,24 +53,24 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-11T20:32:25.343Z"
+      "timestamp": "2026-02-11T22:23:13.428Z"
     }
   },
   "errors": [
     {
       "service": "google-sheets",
-      "message": "Google Sheets API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "message": "Google Sheets API connection failed: error:1E08010C:DECODER routines::unsupported",
       "details": {
-        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
-        "code": "MODULE_NOT_FOUND"
+        "error": "error:1E08010C:DECODER routines::unsupported",
+        "code": "ERR_OSSL_UNSUPPORTED"
       }
     },
     {
       "service": "google-drive",
-      "message": "Google Drive API connection failed: Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
+      "message": "Google Drive API connection failed: error:1E08010C:DECODER routines::unsupported",
       "details": {
-        "error": "Cannot find module 'google-auth-library'\nRequire stack:\n- /Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/scripts/health-check.js",
-        "code": "MODULE_NOT_FOUND"
+        "error": "error:1E08010C:DECODER routines::unsupported",
+        "code": "ERR_OSSL_UNSUPPORTED"
       }
     },
     {
@@ -82,11 +82,6 @@
     }
   ],
   "warnings": [
-    {
-      "service": "dependencies",
-      "message": "Missing critical dependencies: googleapis, google-auth-library",
-      "details": null
-    },
     {
       "service": "environment",
       "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
