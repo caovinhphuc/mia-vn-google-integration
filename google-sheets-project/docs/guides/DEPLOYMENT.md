@@ -16,7 +16,7 @@
 npm install -g vercel
 
 # Deploy to Vercel
-vercel
+vercel deploy
 
 # Follow the prompts:
 # Set up and deploy: Y
@@ -24,6 +24,7 @@ vercel
 # Project name: react-google-integration
 # Directory: ./
 # Settings override: N
+# Production deployment: Y
 ```
 
 #### Netlify Deployment
@@ -93,12 +94,12 @@ CMD ["node", "server.js"]
 #### Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   frontend:
     build: .
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       - REACT_APP_API_BASE_URL=http://localhost:3001/api
     depends_on:
@@ -109,7 +110,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - '3001:3001'
+      - "3001:3001"
     environment:
       - PORT=3001
 ```
@@ -119,7 +120,6 @@ services:
 #### Render Deployment Steps
 
 1. **Connect GitHub Repository**
-
    - Go to [render.com](https://render.com)
    - Login with GitHub
    - "New +" → "Web Service"
@@ -194,23 +194,23 @@ REACT_APP_API_BASE_URL=https://your-backend-url.com/api
 
 ```javascript
 // Add to server.js for production
-const helmet = require('helmet')
-const rateLimit = require('express-rate-limit')
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
-app.use(helmet())
+app.use(helmet());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-})
-app.use('/api/', limiter)
+});
+app.use("/api/", limiter);
 
 // Production CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
   optionsSuccessStatus: 200,
-}
-app.use(cors(corsOptions))
+};
+app.use(cors(corsOptions));
 ```
 
 ### 6. 📊 Monitoring & Analytics
@@ -219,21 +219,21 @@ app.use(cors(corsOptions))
 
 ```javascript
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.json({
-    status: 'healthy',
+    status: "healthy",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     environment: process.env.NODE_ENV,
-  })
-})
+  });
+});
 
 // Request logging
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`)
-  next()
-})
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 ```
 
 ### 7. 🔄 CI/CD Pipeline
@@ -255,7 +255,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: "18"
       - name: Install dependencies
         run: npm install
       - name: Build
@@ -274,7 +274,7 @@ jobs:
       - name: Deploy to Railway
         uses: badsyntax/github-action-railway@v1
         with:
-          command: 'up'
+          command: "up"
           railway-token: ${{ secrets.RAILWAY_TOKEN }}
 ```
 
