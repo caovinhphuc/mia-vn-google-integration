@@ -1,11 +1,1 @@
-INFO:     Will watch for changes in these directories: ['/Users/phuccao/Archives/old-projects/React-OAS-Integration-v4.01212/React-OAS-Integration-v4.0/ai-service']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [47225] using WatchFiles
-INFO:     Started server process [47233]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [47233]
-INFO:     Stopping reloader process [47225]
+/opt/homebrew/opt/python@3.14/bin/python3.14: No module named uvicorn

@@ -2,39 +2,12 @@
 > react-oas-integration@3.0.0 start
 > react-scripts start
 
-(node:28181) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(node:32574) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:28181) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
-(node:28181) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:32574) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:32574) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
-Failed to compile.
-
-Module not found: Error: Can't resolve 'react-grid-layout' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-ERROR in ./src/components/analytics/AdvancedAnalyticsDashboard.jsx 16:0-65
-Module not found: Error: Can't resolve 'react-grid-layout' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-
-ERROR in ./src/components/analytics/AdvancedAnalyticsDashboard.jsx 17:0-40
-Module not found: Error: Can't resolve 'react-dnd' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-
-ERROR in ./src/components/analytics/AdvancedAnalyticsDashboard.jsx 18:0-55
-Module not found: Error: Can't resolve 'react-dnd-html5-backend' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-
-ERROR in ./src/components/analytics/AdvancedAnalyticsDashboard.jsx 25:0-42
-Module not found: Error: Can't resolve 'react-grid-layout/css/styles.css' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-
-ERROR in ./src/components/analytics/AdvancedAnalyticsDashboard.jsx 26:0-40
-Module not found: Error: Can't resolve 'react-resizable/css/styles.css' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
-
-ERROR in ./src/store/store.js 4:0-61
-Module not found: Error: Can't resolve 'redux-persist' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/store'
-
-ERROR in ./src/store/store.js 5:0-48
-Module not found: Error: Can't resolve 'redux-persist/lib/storage' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/store'
-
-webpack compiled with 7 errors
-No issues found.
-Compiling...
 Failed to compile.
 
 Module not found: Error: Can't resolve 'react-grid-layout' in '/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/src/components/analytics'
