@@ -247,11 +247,11 @@ REACT_APP_API_URL=http://localhost:8000
 
 ```javascript
 // Add to your app
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.status(200).json({
-    status: 'healthy',
+    status: "healthy",
     timestamp: new Date().toISOString(),
-    version: process.env.REACT_APP_VERSION
+    version: process.env.REACT_APP_VERSION,
   });
 });
 ```
