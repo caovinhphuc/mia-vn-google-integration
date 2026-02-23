@@ -87,3 +87,4 @@ src/services/ai/aiPredictiveService.js
 Search for the keywords to learn more about each error.
 
 webpack compiled with 1 error and 1 warning
+The build failed because the process exited too early. This probably means the system ran out of memory or someone called `kill -9` on the process.

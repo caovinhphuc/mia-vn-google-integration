@@ -1,11 +1,11 @@
 
 > react-oas-integration@3.0.0 start
-> react-scripts s HTTP  2/23/2026 11:17:26 AM ::1 GET /
- HTTP  2/23/2026 11:17:26 AM ::1 Returned 200 in 12 ms
-instead
+> react-scripts start
+
+(node:40674) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:32574) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
-(node:32574) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:40674) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:40674) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Failed to compile.
@@ -34,4 +34,3 @@ Module not found: Error: Can't resolve 'redux-persist/lib/storage' in '/Users/ph
 
 webpack compiled with 7 errors
 No issues found.
-The build failed because the process exited too early. This probably means the system ran out of memory or someone called `kill -9` on the process.
