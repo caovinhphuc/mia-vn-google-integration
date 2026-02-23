@@ -34,3 +34,4 @@ Module not found: Error: Can't resolve 'redux-persist/lib/storage' in '/Users/ph
 
 webpack compiled with 7 errors
 No issues found.
+The build failed because the process exited too early. This probably means the system ran out of memory or someone called `kill -9` on the process.
