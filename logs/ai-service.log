@@ -1,11 +1,5 @@
-INFO:     Will watch for changes in these directories: ['/Users/phuccao/workspace/archive/fullstack-old/React-OAS-Integration-v4.0/ai-service']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [40805] using WatchFiles
-INFO:     Started server process [40809]
+INFO:     Started server process [43488]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [40809]
-INFO:     Stopping reloader process [40805]
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53970 - "GET /health HTTP/1.1" 200 OK

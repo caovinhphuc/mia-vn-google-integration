@@ -3,88 +3,21 @@
 > react-scripts start
 
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
-(node:35368) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(node:43421) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:35368) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
-(node:35368) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:43421) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:43421) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
-Failed to compile.
+Compiled successfully!
 
-[eslint] 
-src/components/ai/EnhancedAIDashboard.jsx
-  Line 138:28:  'generateEnsemblePredictions' is not defined  no-undef
+You can now view react-google-sheets-project in the browser.
 
-src/services/ai/aiPredictiveService.js
-  Line 22:1:  Import in body of module; reorder to top  import/first
-  Line 23:1:  Import in body of module; reorder to top  import/first
-  Line 24:1:  Import in body of module; reorder to top  import/first
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.10.246:3000
 
-Search for the keywords to learn more about each error.
-LOG from ./node_modules/sass-loader/dist/cjs.js sass-loader ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[1].oneOf[8].use[3]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[4]!./src/pages/LoginPage.module.scss
-<w> Deprecation The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
-<w> 
-<w> More info: https://sass-lang.com/d/legacy-js-api
-<w> 
-<w> null
-<w> Deprecation Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
-<w> 
-<w> More info and automated migrator: https://sass-lang.com/d/import
-<w> 
-<w> src/pages/LoginPage.module.scss 2:9  root stylesheet
-<w> 
-<w> Deprecation Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
-<w> 
-<w> More info and automated migrator: https://sass-lang.com/d/import
-<w> 
-<w> src/pages/LoginPage.module.scss 3:9  root stylesheet
-<w>
+Note that the development build is not optimized.
+To create a production build, use npm run build.
 
-WARNING in [eslint] 
-src/components/ai/AIDashboard.jsx
-  Line 31:10:  'predictionService' is assigned a value but never used                                                                                                                                     no-unused-vars
-  Line 34:9:   The 'analyzeData' function makes the dependencies of useEffect Hook (at line 363) change on every render. To fix this, wrap the definition of 'analyzeData' in its own useCallback() Hook  react-hooks/exhaustive-deps
-
-src/components/ai/AIDemo.jsx
-  Line 24:6:  React Hook useEffect has a missing dependency: 'initializeAIServices'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-
-src/components/ai/EnhancedAIDashboard.jsx
-  Line 372:6:  React Hook useEffect has a missing dependency: 'runComprehensiveAnalysis'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
-
-src/services/ai/advancedMLService.js
-  Line 43:13:  'brain' is assigned a value but never used                        no-unused-vars
-  Line 371:1:  Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
-
-src/services/ai/aiInsightsService.js
-  Line 432:40:  'alerts' is assigned a value but never used                     no-unused-vars
-  Line 771:1:   Assign object to a variable before exporting as module default  import/no-anonymous-default-export
-
-src/services/ai/aiPredictiveService.js
-  Line 517:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
-
-src/services/ai/intelligentPatternRecognition.js
-  Line 394:11:  'sumYY' is assigned a value but never used                        no-unused-vars
-  Line 520:11:  'densityThreshold' is assigned a value but never used             no-unused-vars
-  Line 585:1:   Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
-
-src/services/ai/realTimeProcessor.js
-  Line 124:27:  'processor' is assigned a value but never used                    no-unused-vars
-  Line 513:1:   Assign instance to a variable before exporting as module default  import/no-anonymous-default-export
-
-src/utils/aiUtils.js
-  Line 248:5:  Expected a default case                                         default-case
-  Line 407:1:  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
-
-ERROR in [eslint] 
-src/components/ai/EnhancedAIDashboard.jsx
-  Line 138:28:  'generateEnsemblePredictions' is not defined  no-undef
-
-src/services/ai/aiPredictiveService.js
-  Line 22:1:  Import in body of module; reorder to top  import/first
-  Line 23:1:  Import in body of module; reorder to top  import/first
-  Line 24:1:  Import in body of module; reorder to top  import/first
-
-Search for the keywords to learn more about each error.
-
-webpack compiled with 1 error and 1 warning
+webpack compiled successfully
 The build failed because the process exited too early. This probably means the system ran out of memory or someone called `kill -9` on the process.
