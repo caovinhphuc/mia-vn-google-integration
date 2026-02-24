@@ -19,8 +19,8 @@ const testFiles = [
   },
   {
     name: "Google Sheets Service",
-    file: path.join(__dirname, "testGoogleSheets.js"),
-    type: "esm",
+    file: path.join(__dirname, "tests", "test_google_sheets.js"),
+    type: "commonjs",
   },
   {
     name: "Frontend API Connection",
@@ -53,22 +53,22 @@ const testFiles = [
 const rootTestFiles = [
   {
     name: "Complete System Test",
-    file: path.join(__dirname, "..", "complete_system_test.js"),
+    file: path.join(__dirname, "tests", "complete_system_test.js"),
     type: "commonjs",
   },
   {
     name: "End-to-End Test",
-    file: path.join(__dirname, "..", "end_to_end_test.js"),
+    file: path.join(__dirname, "tests", "end_to_end_test.js"),
     type: "commonjs",
   },
   {
     name: "Integration Test",
-    file: path.join(__dirname, "..", "integration_test.js"),
+    file: path.join(__dirname, "tests", "integration_test.js"),
     type: "commonjs",
   },
   {
     name: "Frontend Connection Test",
-    file: path.join(__dirname, "..", "frontend_connection_test.js"),
+    file: path.join(__dirname, "tests", "frontend_connection_test.js"),
     type: "commonjs",
   },
 ];
@@ -97,13 +97,9 @@ async function runTest(testConfig, index, total) {
       const success = code === 0;
 
       if (success) {
-        console.log(
-          `\n✅ ${testConfig.name} completed successfully (${duration}s)`
-        );
+        console.log(`\n✅ ${testConfig.name} completed successfully (${duration}s)`);
       } else {
-        console.log(
-          `\n❌ ${testConfig.name} failed with code ${code} (${duration}s)`
-        );
+        console.log(`\n❌ ${testConfig.name} failed with code ${code} (${duration}s)`);
       }
 
       resolve({
@@ -128,9 +124,7 @@ async function runTest(testConfig, index, total) {
 async function runAllTests() {
   console.log("\n📋 Test Plan:");
   const allTests = [...testFiles, ...rootTestFiles].filter(
-    (test) =>
-      fs.existsSync(test.file) ||
-      fs.existsSync(test.file.replace(".js", ".cjs"))
+    (test) => fs.existsSync(test.file) || fs.existsSync(test.file.replace(".js", ".cjs"))
   );
 
   allTests.forEach((test, index) => {
@@ -170,21 +164,13 @@ async function runAllTests() {
 
   console.log("\n📋 Detailed Results:");
   results.forEach((result, index) => {
-    const status = result.skipped
-      ? "⏭️  SKIPPED"
-      : result.success
-      ? "✅ PASSED"
-      : "❌ FAILED";
+    const status = result.skipped ? "⏭️  SKIPPED" : result.success ? "✅ PASSED" : "❌ FAILED";
     const duration = result.duration ? ` (${result.duration}s)` : "";
     console.log(`  ${index + 1}. ${status} - ${result.name}${duration}`);
   });
 
   // Save report to file
-  const reportPath = path.join(
-    __dirname,
-    "..",
-    `test-report-${Date.now()}.json`
-  );
+  const reportPath = path.join(__dirname, "..", `test-report-${Date.now()}.json`);
   const report = {
     timestamp: new Date().toISOString(),
     summary: {

@@ -7,7 +7,7 @@
 
     /* Modules */
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {

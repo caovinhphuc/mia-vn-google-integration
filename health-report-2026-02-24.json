@@ -1,24 +1,24 @@
 {
-  "timestamp": "2026-02-24T21:09:19.524Z",
+  "timestamp": "2026-02-24T21:22:09.626Z",
   "overall": "unhealthy",
   "services": {
     "file-system": {
       "status": "healthy",
       "message": "All required files and directories present",
       "details": null,
-      "timestamp": "2026-02-24T21:09:19.524Z"
+      "timestamp": "2026-02-24T21:22:09.626Z"
     },
     "dependencies": {
       "status": "healthy",
       "message": "All critical dependencies present",
       "details": null,
-      "timestamp": "2026-02-24T21:09:19.524Z"
+      "timestamp": "2026-02-24T21:22:09.626Z"
     },
     "environment": {
       "status": "warning",
       "message": "Missing optional environment variables: SMTP_USER, SMTP_PASS",
       "details": null,
-      "timestamp": "2026-02-24T21:09:19.524Z"
+      "timestamp": "2026-02-24T21:22:09.626Z"
     },
     "google-sheets": {
       "status": "error",
@@ -27,7 +27,7 @@
         "error": "error:1E08010C:DECODER routines::unsupported",
         "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-02-24T21:09:20.235Z"
+      "timestamp": "2026-02-24T21:22:10.260Z"
     },
     "google-drive": {
       "status": "error",
@@ -36,7 +36,7 @@
         "error": "error:1E08010C:DECODER routines::unsupported",
         "code": "ERR_OSSL_UNSUPPORTED"
       },
-      "timestamp": "2026-02-24T21:09:20.236Z"
+      "timestamp": "2026-02-24T21:22:10.261Z"
     },
     "email-service": {
       "status": "warning",
@@ -45,7 +45,7 @@
         "sendgrid_configured": true,
         "smtp_configured": false
       },
-      "timestamp": "2026-02-24T21:09:20.840Z"
+      "timestamp": "2026-02-24T21:22:10.980Z"
     },
     "telegram-service": {
       "status": "error",
@@ -53,7 +53,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T21:09:21.637Z"
+      "timestamp": "2026-02-24T21:22:11.668Z"
     }
   },
   "errors": [

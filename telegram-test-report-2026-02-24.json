@@ -1,6 +1,6 @@
 {
   "title": "Telegram Integration Test Report",
-  "timestamp": "2026-02-24T20:54:36.699Z",
+  "timestamp": "2026-02-24T21:26:54.502Z",
   "summary": {
     "total_tests": 6,
     "passed": 1,
@@ -20,7 +20,7 @@
       "details": {
         "required_count": 2
       },
-      "timestamp": "2026-02-24T20:54:32.397Z"
+      "timestamp": "2026-02-24T21:26:50.913Z"
     },
     {
       "test": "bot-info",
@@ -29,7 +29,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T20:54:33.270Z"
+      "timestamp": "2026-02-24T21:26:51.631Z"
     },
     {
       "test": "webhook-info",
@@ -38,7 +38,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T20:54:34.140Z"
+      "timestamp": "2026-02-24T21:26:52.401Z"
     },
     {
       "test": "chat-info",
@@ -47,7 +47,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T20:54:34.819Z"
+      "timestamp": "2026-02-24T21:26:53.088Z"
     },
     {
       "test": "send-message",
@@ -56,7 +56,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T20:54:35.572Z"
+      "timestamp": "2026-02-24T21:26:53.834Z"
     },
     {
       "test": "file-upload",
@@ -65,7 +65,7 @@
       "details": {
         "error": "Request failed with status code 404"
       },
-      "timestamp": "2026-02-24T20:54:36.698Z"
+      "timestamp": "2026-02-24T21:26:54.501Z"
     }
   ]
 }
