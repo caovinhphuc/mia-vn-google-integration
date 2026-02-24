@@ -31,6 +31,12 @@ print_warning() {
 
 # Get commit message from argument or use default
 COMMIT_MSG="${1:-🔧 Update: Auto commit and deploy}"
+COMMIT_CREATED=false
+COMMIT_SHA=""
+FRONTEND_DEPLOYED=false
+BACKEND_DEPLOYED=false
+FRONTEND_URL=""
+BACKEND_URL=""
 
 print "Bắt đầu quy trình commit và deploy..."
 
@@ -72,9 +78,12 @@ if ! git diff --quiet HEAD 2>/dev/null || ! git diff --cached --quiet 2>/dev/nul
         print_error "Commit thất bại"
         exit 1
     }
+    COMMIT_CREATED=true
+    COMMIT_SHA=$(git rev-parse --short HEAD)
     print_success "Đã commit thành công"
 else
     print "Không có thay đổi để commit"
+    COMMIT_SHA=$(git rev-parse --short HEAD)
 fi
 
 # Step 2: Get current branch
@@ -86,10 +95,10 @@ print "Đang pull latest changes từ remote..."
 if git fetch origin "$CURRENT_BRANCH" 2>/dev/null; then
     LOCAL=$(git rev-parse @)
     REMOTE=$(git rev-parse @{u} 2>/dev/null || echo "")
-    
+
     if [ -n "$REMOTE" ] && [ "$LOCAL" != "$REMOTE" ]; then
         print_warning "Local branch đang behind remote. Đang merge..."
-        
+
         # Try to merge
         if git pull --no-rebase origin "$CURRENT_BRANCH" 2>&1 | tee /tmp/git-pull.log; then
             print_success "Đã merge remote changes thành công"
@@ -138,9 +147,11 @@ rm -f /tmp/git-push.log
 
 # Step 4: Build Frontend
 print "Build frontend..."
-if npm run build 2>&1 | tail -20; then
+if BUILD_OUTPUT=$(npm run build 2>&1); then
+    echo "$BUILD_OUTPUT" | tail -20
     print_success "Frontend đã build thành công"
 else
+    echo "$BUILD_OUTPUT" | tail -30
     print_error "Build frontend thất bại"
     exit 1
 fi
@@ -150,10 +161,18 @@ print "Deploy frontend lên Vercel..."
 if command -v vercel &> /dev/null; then
     # Deploy từ thư mục gốc, Vercel sẽ tự động detect build output từ vercel.json
     # Vercel sẽ chỉ deploy các file cần thiết cho frontend
-    if vercel --prod --yes 2>&1 | tail -10; then
+    if VERCEL_OUTPUT=$(vercel --prod --yes 2>&1); then
+        echo "$VERCEL_OUTPUT" | tail -12
+        FRONTEND_DEPLOYED=true
+        FRONTEND_URL=$(echo "$VERCEL_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1 || true)
         print_success "Frontend đã deploy lên Vercel"
     else
-        print_warning "Vercel deploy có thể thất bại, kiểm tra logs trên"
+        echo "$VERCEL_OUTPUT" | tail -20
+        if echo "$VERCEL_OUTPUT" | grep -q "api-deployments-free-per-day"; then
+            print_warning "Vercel quota exceeded (free deployments/day). Chưa deploy mới được."
+        else
+            print_warning "Vercel deploy thất bại, kiểm tra logs trên"
+        fi
     fi
 else
     print_warning "Vercel CLI chưa cài đặt. Cài đặt: npm i -g vercel"
@@ -168,10 +187,14 @@ if command -v railway &> /dev/null; then
         print_error "Không tìm thấy thư mục backend"
         exit 1
     }
-    if railway up 2>&1 | tail -10; then
+    if RAILWAY_OUTPUT=$(railway up 2>&1); then
+        echo "$RAILWAY_OUTPUT" | tail -12
+        BACKEND_DEPLOYED=true
+        BACKEND_URL=$(echo "$RAILWAY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9./_-]+' | grep railway | tail -1 || true)
         print_success "Backend đã deploy lên Railway"
     else
-        print_warning "Railway deploy có thể thất bại, kiểm tra logs trên"
+        echo "$RAILWAY_OUTPUT" | tail -20
+        print_warning "Railway deploy thất bại, kiểm tra logs trên"
         print "Lưu ý: Nếu có nhiều services, chỉ định: railway up --service backend"
     fi
     cd ..
@@ -185,17 +208,37 @@ echo ""
 print_success "🎉 Hoàn tất!"
 echo ""
 echo "📋 Tóm tắt:"
-echo "   ✅ Đã commit: $COMMIT_MSG"
+if [ "$COMMIT_CREATED" = "true" ]; then
+    echo "   ✅ Đã commit: $COMMIT_MSG ($COMMIT_SHA)"
+else
+    echo "   ℹ️  Không có commit mới (HEAD: $COMMIT_SHA)"
+fi
 if [ "$SKIP_PUSH" != "true" ]; then
     echo "   ✅ Đã push lên GitHub"
 else
     echo "   ⚠️  Bỏ qua push (secret scanning)"
 fi
-echo "   ✅ Đã deploy frontend (Vercel)"
-echo "   ✅ Đã deploy backend (Railway)"
+if [ "$FRONTEND_DEPLOYED" = "true" ]; then
+    echo "   ✅ Đã deploy frontend (Vercel)"
+else
+    echo "   ⚠️  Frontend chưa deploy mới lên Vercel"
+fi
+if [ "$BACKEND_DEPLOYED" = "true" ]; then
+    echo "   ✅ Đã deploy backend (Railway)"
+else
+    echo "   ⚠️  Backend chưa deploy mới lên Railway"
+fi
 echo ""
 echo "🌐 Kiểm tra:"
-echo "   Frontend: https://mia-vn-google-integration.vercel.app"
-echo "   Backend:  https://mia-backend-production-7e56.up.railway.app/health"
+if [ -n "$FRONTEND_URL" ]; then
+    echo "   Frontend: $FRONTEND_URL"
+else
+    echo "   Frontend: (xem URL mới bằng: vercel ls)"
+fi
+if [ -n "$BACKEND_URL" ]; then
+    echo "   Backend:  $BACKEND_URL"
+else
+    echo "   Backend:  (xem URL mới bằng Railway dashboard/CLI)"
+fi
 echo ""
 
