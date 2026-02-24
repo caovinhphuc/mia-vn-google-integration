@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-02-24T20:53:35.985Z",
+  "summary": {
+    "total": 7,
+    "passed": 2,
+    "failed": 5,
+    "skipped": 0,
+    "totalTime": 7.45
+  },
+  "results": [
+    {
+      "name": "Google Sheets Connection",
+      "success": true,
+      "duration": 0.77,
+      "exitCode": 0
+    },
+    {
+      "name": "Google Sheets Service",
+      "success": false,
+      "duration": 0.09,
+      "exitCode": 1
+    },
+    {
+      "name": "Frontend API Connection",
+      "success": false,
+      "duration": 0.14,
+      "exitCode": 1
+    },
+    {
+      "name": "Email Service",
+      "success": false,
+      "duration": 0.11,
+      "exitCode": 1
+    },
+    {
+      "name": "Telegram Connection",
+      "success": false,
+      "duration": 0.12,
+      "exitCode": 1
+    },
+    {
+      "name": "Health Check",
+      "success": false,
+      "duration": 0.09,
+      "exitCode": 1
+    },
+    {
+      "name": "WebSocket Connection",
+      "success": true,
+      "duration": 3.12,
+      "exitCode": 0
+    }
+  ]
+}
