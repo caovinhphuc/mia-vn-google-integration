@@ -68,8 +68,11 @@
 # Deploy to Vercel
 vercel --prod
 
-# Hoặc sử dụng script
+# Hoặc sử dụng npm script
 npm run deploy:vercel
+
+# Hoặc chạy shell script trực tiếp
+./deploy-vercel.sh
 ```
 
 ### Manual Build & Serve
@@ -133,7 +136,7 @@ Sau khi build, check:
 
 ```bash
 # Kill all ports
-npm run kill:port
+npm run fix:ports
 
 # Format code
 npm run format
@@ -147,11 +150,11 @@ npm run build:prod
 # Validate everything
 npm run validate:full
 
-# Check tools
-npm run check:tools
+# Verify setup
+npm run verify:setup
 ```
 
 ---
 
-**Date**: December 25, 2025  
+**Date**: December 25, 2025
 **Status**: ✅ **Ready for Deployment**

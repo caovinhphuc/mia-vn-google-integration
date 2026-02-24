@@ -44,6 +44,42 @@ print_info() {
     echo -e "${BLUE}ℹ️${NC} $1"
 }
 
+is_placeholder_value() {
+    local value="$1"
+    if [ -z "$value" ]; then
+        return 0
+    fi
+
+    case "$value" in
+        *"YOUR_"*|*"REPLACE_"*|*"EXAMPLE"*|*"example"*|*"TODO"*|*"todo"*)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+extract_env_value() {
+    local file_path="$1"
+    local key="$2"
+
+    if [ ! -f "$file_path" ]; then
+        echo ""
+        return 0
+    fi
+
+    local line
+    line=$(grep -E "^[[:space:]]*${key}[[:space:]]*=" "$file_path" 2>/dev/null | tail -1)
+    if [ -z "$line" ]; then
+        echo ""
+        return 0
+    fi
+
+    local value
+    value=$(echo "$line" | sed -E "s/^[[:space:]]*${key}[[:space:]]*=[[:space:]]*//" | sed -E 's/^"(.*)"$/\1/' | sed -E "s/^'(.*)'$/\1/")
+    echo "$value"
+}
+
 # Counters
 TOTAL_CHECKS=0
 PASSED_CHECKS=0
@@ -54,9 +90,9 @@ check_service() {
     local name=$1
     local url=$2
     local port=$3
-    
+
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if command -v curl >/dev/null 2>&1; then
         if curl -f -s "$url" >/dev/null 2>&1; then
             print_success "$name (Port $port): Running"
@@ -84,9 +120,9 @@ check_service() {
 check_port() {
     local port=$1
     local name=$2
-    
+
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
         local pid=$(lsof -Pi :$port -sTCP:LISTEN -t | head -1)
         print_success "$name (Port $port): In use (PID: $pid)"
@@ -102,9 +138,9 @@ check_port() {
 check_command() {
     local cmd=$1
     local name=$2
-    
+
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if command -v "$cmd" >/dev/null 2>&1; then
         local version=$($cmd --version 2>/dev/null | head -1 || echo "installed")
         print_success "$name: $version"
@@ -120,9 +156,9 @@ check_command() {
 check_directory() {
     local dir=$1
     local name=$2
-    
+
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if [ -d "$dir" ]; then
         print_success "$name: Exists"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
@@ -137,9 +173,9 @@ check_directory() {
 check_file() {
     local file=$1
     local name=$2
-    
+
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if [ -f "$file" ]; then
         print_success "$name: Exists"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
@@ -199,16 +235,84 @@ echo ""
 print_section "Environment Variables"
 
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-if [ -f ".env" ]; then
-    print_success ".env file: Exists"
-    PASSED_CHECKS=$((PASSED_CHECKS + 1))
-    
-    # Check key variables
-    if grep -q "REACT_APP_GOOGLE_SHEET_ID" .env 2>/dev/null; then
-        print_success "Google Sheets ID: Configured"
+if [ -f ".env" ] || [ -f ".env.local" ] || [ -f "backend/.env" ] || [ -f "automation/.env" ]; then
+    if [ -f ".env" ] || [ -f ".env.local" ]; then
+        print_success ".env file: Exists"
     else
+        print_warning ".env file: Not found"
+        WARNING_CHECKS=$((WARNING_CHECKS + 1))
+    fi
+
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+
+    GOOGLE_SHEETS_ID=""
+
+    if [ -n "$REACT_APP_GOOGLE_SHEET_ID" ]; then
+        GOOGLE_SHEETS_ID="$REACT_APP_GOOGLE_SHEET_ID"
+    elif [ -n "$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" ]; then
+        GOOGLE_SHEETS_ID="$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID"
+    elif [ -n "$VITE_GOOGLE_SHEETS_SPREADSHEET_ID" ]; then
+        GOOGLE_SHEETS_ID="$VITE_GOOGLE_SHEETS_SPREADSHEET_ID"
+    elif [ -n "$GOOGLE_SHEET_ID" ]; then
+        GOOGLE_SHEETS_ID="$GOOGLE_SHEET_ID"
+    elif [ -n "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID="$GOOGLE_SHEETS_ID"
+    fi
+
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "REACT_APP_GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "GOOGLE_SHEETS_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "GOOGLE_SHEETS_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "REACT_APP_GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "GOOGLE_SHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "GOOGLE_SHEETS_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+    if [ -z "$GOOGLE_SHEETS_ID" ]; then
+        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
+    fi
+
+    if is_placeholder_value "$GOOGLE_SHEETS_ID"; then
         print_warning "Google Sheets ID: Not configured"
         WARNING_CHECKS=$((WARNING_CHECKS + 1))
+    else
+        print_success "Google Sheets ID: Configured"
     fi
 else
     print_warning ".env file: Not found"
@@ -221,7 +325,14 @@ echo ""
 print_section "Build Status"
 
 check_directory "build" "Frontend build"
-check_file "backend/node_modules/.bin/node" "Backend dependencies" || check_directory "backend/node_modules" "Backend node_modules"
+TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+if [ -d "backend/node_modules" ]; then
+    print_success "Backend dependencies: Installed"
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+else
+    print_warning "Backend dependencies: Not found"
+    WARNING_CHECKS=$((WARNING_CHECKS + 1))
+fi
 
 echo ""
 
