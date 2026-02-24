@@ -4,9 +4,7 @@ import { Suspense, lazy } from "react";
 import { Provider } from "react-redux";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Loading from "./components/Common/Loading";
-import Layout from "./components/layout/Layout";
 import { BRAND_CONFIG } from "./config/brand";
 import "./global.css"; /* ✅ Import global styles first */
 import { store } from "./store/store";
@@ -16,6 +14,10 @@ import { store } from "./store/store";
 
 // Authentication (load immediately)
 const Login = lazy(() => import("./components/auth/Login"));
+const Layout = lazy(() => import(/* webpackChunkName: "layout" */ "./components/layout/Layout"));
+const ProtectedRoute = lazy(
+  () => import(/* webpackChunkName: "auth-protected" */ "./components/auth/ProtectedRoute")
+);
 
 // Core Dashboard (high priority - preload)
 const LiveDashboard = lazy(
