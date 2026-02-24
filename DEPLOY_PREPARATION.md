@@ -135,23 +135,11 @@ Sau khi build, check:
 ## 🛠️ Useful Commands
 
 ```bash
-# Kill all ports
-npm run fix:ports
+# Run full pre-deploy flow (recommended)
+npm run deploy:prep
 
-# Format code
-npm run format
-
-# Fix linting
-npm run lint:fix
-
-# Build production
-npm run build:prod
-
-# Validate everything
-npm run validate:full
-
-# Verify setup
-npm run verify:setup
+# Hoặc chạy từng bước (không copy các dòng bắt đầu bằng # trong zsh)
+npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup
 ```
 
 ---

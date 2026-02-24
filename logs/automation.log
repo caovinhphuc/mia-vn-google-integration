@@ -1,17 +1,15 @@
-INFO:     Started server process [66208]
+INFO:     Started server process [75277]
 INFO:     Waiting for application startup.
-2026-02-25 05:13:30,300 - main - INFO - 🚀 Starting OneAutomation System...
+2026-02-25 05:22:45,732 - main - INFO - 🚀 Starting OneAutomation System...
 Credentials file not found: config/service_account.json
-2026-02-25 05:13:30,300 - main - INFO - ✅ Google Sheets service initialized
-2026-02-25 05:13:30,301 - main - INFO - ✅ Email service initialized
-2026-02-25 05:13:30,301 - main - INFO - ✅ Data processor initialized
-2026-02-25 05:13:30,301 - main - INFO - 🎉 OneAutomation System started successfully!
+2026-02-25 05:22:45,732 - main - INFO - ✅ Google Sheets service initialized
+2026-02-25 05:22:45,732 - main - INFO - ✅ Email service initialized
+2026-02-25 05:22:45,732 - main - INFO - ✅ Data processor initialized
+2026-02-25 05:22:45,732 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
-INFO:     127.0.0.1:51849 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51856 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51870 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51901 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51941 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51958 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51969 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-02-25 05:22:56,066 - main - INFO - 👋 Shutting down OneAutomation System...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [75277]
