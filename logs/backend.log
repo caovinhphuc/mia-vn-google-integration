@@ -2,7 +2,7 @@
 > react-oas-integration-backend@1.0.0 dev
 > nodemon src/server.js
 
-[33m[nodemon] 3.1.11[39m
+[33m[nodemon] 3.1.14[39m
 [33m[nodemon] to restart at any time, enter `rs`[39m
 [33m[nodemon] watching path(s): *.*[39m
 [33m[nodemon] watching extensions: js,mjs,cjs,json[39m
@@ -10,3 +10,15 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
+::1 - - [24/Feb/2026:19:41:30 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:30 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:31 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:31 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:32 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:32 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:36 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:36 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:19:41:38 +0000] "GET / HTTP/1.1" 404 256 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/work/oas-integration/v4/backend/build/index.html'
+SIGTERM received, shutting down gracefully
+SIGTERM received, shutting down gracefully

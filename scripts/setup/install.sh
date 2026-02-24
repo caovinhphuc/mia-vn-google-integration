@@ -41,7 +41,7 @@ check_version() {
     local cmd=$1
     local min_version=$2
     local current_version=$3
-    
+
     if [[ $(echo -e "$min_version\n$current_version" | sort -V | head -n1) != "$min_version" ]]; then
         return 1
     fi

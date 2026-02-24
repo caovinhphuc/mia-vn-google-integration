@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - core-js
+  - core-js-pure
+  - gl

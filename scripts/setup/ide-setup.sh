@@ -16,6 +16,39 @@ echo -e "${BLUE}🚀 Cài đặt Cấu hình IDE cho React-OAS-Integration-v4.0$
 echo "=================================================="
 echo ""
 
+# Tạo/Cập nhật cấu hình IDE cơ bản nếu thiếu
+echo -e "${BLUE}🛠️  Đồng bộ Cấu hình IDE...${NC}"
+
+mkdir -p .vscode .cursor
+
+if [ ! -f ".vscode/settings.json" ]; then
+    if [ -f ".cursor/settings.json" ]; then
+        cp .cursor/settings.json .vscode/settings.json
+        echo -e "   ${GREEN}✓${NC} Tạo .vscode/settings.json từ .cursor/settings.json"
+    else
+        cat > .vscode/settings.json << 'EOF'
+{}
+EOF
+        echo -e "   ${GREEN}✓${NC} Tạo .vscode/settings.json mặc định"
+    fi
+fi
+
+if [ ! -f ".vscode/extensions.json" ]; then
+    if [ -f ".cursor/extensions.json" ]; then
+        cp .cursor/extensions.json .vscode/extensions.json
+        echo -e "   ${GREEN}✓${NC} Tạo .vscode/extensions.json từ .cursor/extensions.json"
+    else
+        cat > .vscode/extensions.json << 'EOF'
+{
+  "recommendations": []
+}
+EOF
+        echo -e "   ${GREEN}✓${NC} Tạo .vscode/extensions.json mặc định"
+    fi
+fi
+
+echo ""
+
 # Kiểm tra VS Code
 if command -v code &> /dev/null; then
     echo -e "${GREEN}✅ VS Code đã được cài đặt${NC}"
@@ -46,6 +79,8 @@ echo ""
 if command -v code &> /dev/null; then
     echo -e "${BLUE}📦 Cài đặt VS Code Extensions...${NC}"
 
+    INSTALLED_EXTENSIONS=$(code --list-extensions 2>/dev/null || true)
+
     EXTENSIONS=(
         "esbenp.prettier-vscode"
         "dbaeumer.vscode-eslint"
@@ -69,13 +104,14 @@ if command -v code &> /dev/null; then
     SKIPPED=0
 
     for ext in "${EXTENSIONS[@]}"; do
-        if code --list-extensions | grep -q "^${ext}$"; then
+        if printf '%s\n' "$INSTALLED_EXTENSIONS" | grep -Fxq "$ext"; then
             echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
             ((SKIPPED++))
         else
             echo -e "   ${YELLOW}→${NC} Đang cài $ext..."
             if code --install-extension "$ext" &> /dev/null; then
                 echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
+                INSTALLED_EXTENSIONS=$(printf '%s\n%s\n' "$INSTALLED_EXTENSIONS" "$ext")
                 ((INSTALLED++))
             else
                 echo -e "   ${RED}✗${NC} $ext (lỗi)"

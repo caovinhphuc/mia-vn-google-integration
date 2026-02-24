@@ -6,8 +6,8 @@ import "@testing-library/jest-dom";
 import { TextDecoder, TextEncoder } from "util";
 
 // Polyfill for TextEncoder/TextDecoder (required by react-router v7)
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
+if (!global.TextEncoder) global.TextEncoder = TextEncoder;
+if (!global.TextDecoder) global.TextDecoder = TextDecoder;
 
 // Mock window.matchMedia - Required for Ant Design responsive features
 // Ant Design's responsiveObserver stores MediaQueryList objects and expects them to have specific properties
@@ -52,3 +52,17 @@ global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
 };
+
+const originalWarn = console.warn;
+
+beforeAll(() => {
+  jest.spyOn(console, "warn").mockImplementation((...args) => {
+    const full = args.map((a) => String(a ?? "")).join(" ");
+    if (full.includes("React Router Future Flag Warning")) return;
+    originalWarn(...args);
+  });
+});
+
+afterAll(() => {
+  console.warn.mockRestore?.();
+});

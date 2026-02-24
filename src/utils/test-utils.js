@@ -148,27 +148,36 @@ export const createMockStore = (initialState = {}) => {
 
   const listeners = [];
 
-  return {
+  const mockStore = {
     getState: () => state,
+
     dispatch: jest.fn((action) => {
-      // Simple reducer for testing
+      // thunk
       if (typeof action === "function") {
-        // Handle thunk
         return action(mockStore.dispatch, mockStore.getState);
       }
-      // Notify listeners
-      listeners.forEach((listener) => listener());
+
+      // (optional) allow tests to mutate state via a special action
+      if (action && action.type === "__SET_STATE__") {
+        state = { ...state, ...action.payload };
+      }
+
+      listeners.forEach((l) => l());
       return action;
     }),
+
     subscribe: jest.fn((listener) => {
       listeners.push(listener);
       return () => {
-        const index = listeners.indexOf(listener);
-        if (index > -1) listeners.splice(index, 1);
+        const idx = listeners.indexOf(listener);
+        if (idx > -1) listeners.splice(idx, 1);
       };
     }),
+
     replaceReducer: jest.fn(),
   };
+
+  return mockStore;
 };
 
 /**
