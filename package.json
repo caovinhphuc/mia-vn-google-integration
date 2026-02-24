@@ -45,7 +45,7 @@
     "check:backend": "curl -s http://localhost:3001/health || echo 'Backend not running'",
     "health-check": "node scripts/health-check.js",
     "health:full": "bash scripts/utils/comprehensive-health-check.sh",
-    "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && curl -fsS http://localhost:8000/health >/dev/null && curl -fsS http://localhost:8001/health >/dev/null && echo \"✅ All services healthy\" || (echo \"❌ Some services down\" && exit 1)'",
+    "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && curl -fsS http://localhost:8001/health >/dev/null && { curl -fsS http://localhost:8000/health >/dev/null && echo \"✅ All core services healthy (AI: up)\" || echo \"✅ All core services healthy (AI: optional/down)\"; } || (echo \"❌ Core services down\" && exit 1)'",
     "verify:setup": "node scripts/verify-setup.js",
     "perf:deps": "node scripts/analyze-bundle-deps.js",
     "perf:size": "node scripts/performance-budget.js",
