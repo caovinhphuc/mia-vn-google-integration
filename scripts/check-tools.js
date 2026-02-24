@@ -9,12 +9,17 @@
  */
 
 const { execSync } = require("child_process");
-const chalk = require("chalk") || {
-  green: (s) => s,
-  red: (s) => s,
-  gray: (s) => s,
-  yellow: (s) => s,
-};
+let chalk;
+try {
+  chalk = require("chalk");
+} catch (error) {
+  chalk = {
+    green: (s) => s,
+    red: (s) => s,
+    gray: (s) => s,
+    yellow: (s) => s,
+  };
+}
 
 const tools = {
   node: { desc: "JavaScript Runtime", required: true },
