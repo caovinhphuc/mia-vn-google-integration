@@ -31,8 +31,7 @@ const log = {
   warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
   error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
   step: (msg) => console.log(`${colors.cyan}🚀 ${msg}${colors.reset}`),
-  header: (msg) =>
-    console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
+  header: (msg) => console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
 };
 
 // Create readline interface for user input
@@ -71,9 +70,7 @@ const validateEnvironment = () => {
   log.step("Kiểm tra cấu hình environment...");
 
   if (!fileExists(".env")) {
-    log.error(
-      "File .env không tồn tại. Vui lòng tạo và cấu hình file .env trước khi deploy."
-    );
+    log.error("File .env không tồn tại. Vui lòng tạo và cấu hình file .env trước khi deploy.");
     return false;
   }
 
@@ -89,18 +86,12 @@ const validateEnvironment = () => {
 
   const missingVars = requiredVars.filter((varName) => {
     const regex = new RegExp(`^${varName}=`, "m");
-    return (
-      !regex.test(envContent) || envContent.match(regex)[0].includes("your-")
-    );
+    return !regex.test(envContent) || envContent.match(regex)[0].includes("your-");
   });
 
   if (missingVars.length > 0) {
-    log.error(
-      `Các biến môi trường sau chưa được cấu hình: ${missingVars.join(", ")}`
-    );
-    log.info(
-      "Vui lòng cập nhật file .env với thông tin thực tế trước khi deploy."
-    );
+    log.error(`Các biến môi trường sau chưa được cấu hình: ${missingVars.join(", ")}`);
+    log.info("Vui lòng cập nhật file .env với thông tin thực tế trước khi deploy.");
     return false;
   }
 
@@ -113,14 +104,10 @@ const runTests = async () => {
 
   // Run unit tests
   log.info("Chạy unit tests...");
-  const testResult = execCommand(
-    "npm test -- --watchAll=false --passWithNoTests"
-  );
+  const testResult = execCommand("npm test -- --watchAll=false --passWithNoTests");
   if (!testResult.success) {
     log.warning(`Unit tests có lỗi: ${testResult.error}`);
-    const continueDeploy = await askQuestion(
-      "Bạn có muốn tiếp tục deploy? (y/N): "
-    );
+    const continueDeploy = await askQuestion("Bạn có muốn tiếp tục deploy? (y/N): ");
     if (continueDeploy.toLowerCase() !== "y") {
       return false;
     }
@@ -131,14 +118,10 @@ const runTests = async () => {
   // Test Google connection
   if (fileExists("scripts/testGoogleConnection.js")) {
     log.info("Test kết nối Google APIs...");
-    const googleTestResult = execCommand(
-      "node scripts/testGoogleConnection.js"
-    );
+    const googleTestResult = execCommand("node scripts/testGoogleConnection.js");
     if (!googleTestResult.success) {
       log.warning(`Google APIs test thất bại: ${googleTestResult.error}`);
-      const continueDeploy = await askQuestion(
-        "Bạn có muốn tiếp tục deploy? (y/N): "
-      );
+      const continueDeploy = await askQuestion("Bạn có muốn tiếp tục deploy? (y/N): ");
       if (continueDeploy.toLowerCase() !== "y") {
         return false;
       }
@@ -185,9 +168,7 @@ const deployToNetlify = async () => {
   // Check if Netlify CLI is installed
   const netlifyCheck = execCommand("netlify --version");
   if (!netlifyCheck.success) {
-    log.error(
-      "Netlify CLI chưa được cài đặt. Vui lòng cài đặt: npm install -g netlify-cli"
-    );
+    log.error("Netlify CLI chưa được cài đặt. Vui lòng cài đặt: npm install -g netlify-cli");
     return false;
   }
 
@@ -208,14 +189,28 @@ const deployToVercel = async () => {
   // Check if Vercel CLI is installed
   const vercelCheck = execCommand("vercel --version");
   if (!vercelCheck.success) {
-    log.error(
-      "Vercel CLI chưa được cài đặt. Vui lòng cài đặt: npm install -g vercel"
-    );
+    log.error("Vercel CLI chưa được cài đặt. Vui lòng cài đặt: npm install -g vercel");
     return false;
   }
 
-  // Deploy to Vercel
-  const deployResult = execCommand("vercel --prod");
+  const vercelToken = process.env.VERCEL_TOKEN;
+
+  if (!vercelToken) {
+    const whoamiResult = execCommand("vercel whoami");
+    if (!whoamiResult.success) {
+      log.error(
+        "Vercel chưa đăng nhập. Chạy 'vercel login' hoặc set VERCEL_TOKEN để deploy non-interactive."
+      );
+      return false;
+    }
+  }
+
+  // Deploy to Vercel (non-interactive)
+  const deployCommand = vercelToken
+    ? `vercel --prod --yes --token ${vercelToken}`
+    : "vercel --prod --yes";
+
+  const deployResult = execCommand(deployCommand);
   if (!deployResult.success) {
     log.error(`Deploy Vercel thất bại: ${deployResult.error}`);
     return false;
@@ -243,17 +238,13 @@ const deployToAWS = async () => {
   }
 
   // Deploy to S3
-  const deployResult = execCommand(
-    `aws s3 sync build/ s3://${bucketName} --delete`
-  );
+  const deployResult = execCommand(`aws s3 sync build/ s3://${bucketName} --delete`);
   if (!deployResult.success) {
     log.error(`Deploy AWS S3 thất bại: ${deployResult.error}`);
     return false;
   }
 
-  log.success(
-    `Deploy AWS S3 thành công: https://${bucketName}.s3-website-us-east-1.amazonaws.com`
-  );
+  log.success(`Deploy AWS S3 thành công: https://${bucketName}.s3-website-us-east-1.amazonaws.com`);
   return true;
 };
 
@@ -263,9 +254,7 @@ const deployToGCP = async () => {
   // Check if gcloud CLI is installed
   const gcloudCheck = execCommand("gcloud --version");
   if (!gcloudCheck.success) {
-    log.error(
-      "Google Cloud CLI chưa được cài đặt. Vui lòng cài đặt gcloud CLI trước."
-    );
+    log.error("Google Cloud CLI chưa được cài đặt. Vui lòng cài đặt gcloud CLI trước.");
     return false;
   }
 

@@ -75,6 +75,11 @@ npm run deploy:vercel
 ./deploy-vercel.sh
 ```
 
+Lưu ý khi deploy bằng script tự động:
+
+- Nếu bị treo ở bước `Deploy lên Vercel...`, hãy login trước: `vercel login`
+- Hoặc dùng token non-interactive: `export VERCEL_TOKEN=your_token`
+
 ### Manual Build & Serve
 
 ```bash
