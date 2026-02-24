@@ -21,6 +21,7 @@
     "ai-service": "cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload",
     "vercel-build": "npm run build",
     "analyze": "node scripts/perf-bundle-analyzer.js",
+    "analyze:bundle": "npm run webpack-bundle-analyzer",
     "analyze-deps": "node scripts/analyze-bundle-deps.js",
     "test:frontend": "react-scripts test",
     "test:backend": "jest",
@@ -59,7 +60,18 @@
     "health:full": "bash scripts/utils/comprehensive-health-check.sh",
     "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && curl -fsS http://localhost:8001/health >/dev/null && { curl -fsS http://localhost:8000/health >/dev/null && echo \"✅ All core services healthy (AI: up)\" || echo \"✅ All core services healthy (AI: optional/down)\"; } || (echo \"❌ Core services down\" && exit 1)'",
     "verify:setup": "bash scripts/verify-setup.sh",
+    "bundle:stats": "node scripts/generate-bundle-stats.js",
+    "check:tools": "npm run tools:check",
     "deploy:prep": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
+    "cargo:check": "cargo --version || echo 'Cargo not found'",
+    "cargo:info": "node scripts/cargo-info.js",
+    "tools:check": "node scripts/check-tools.js",
+    "analyze:all": "npm run perf:bundle && npm run perf:deps && npm run perf:size && npm run cargo:info",
+    "analyze:full": "npm run analyze:all && npm run analyze:sourcemap",
+    "analyze:auto": "npm run analyze:all && npm run optimize:suggestions",
+    "optimize:bundle": "node scripts/optimize-bundle.js",
+    "optimize:suggestions": "node scripts/optimize-bundle.js",
+    "build:optimized": "node scripts/build-optimize.js",
     "perf:deps": "node scripts/analyze-bundle-deps.js",
     "perf:size": "node scripts/performance-budget.js",
     "perf:depcheck": "npx depcheck",
@@ -79,7 +91,7 @@
     "cors": "^2.8.6",
     "d3": "^7.9.0",
     "dayjs": "^1.11.19",
-    "dotenv": "^17.2.4",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "google-auth-library": "^10.5.0",
     "googleapis": "^171.4.0",
@@ -111,6 +123,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "ajv": "^8.17.1",
     "autoprefixer": "^10.4.24",
     "babel-loader": "^10.0.0",
     "babel-plugin-import": "^1.13.8",
@@ -162,5 +175,20 @@
     "dashboard"
   ],
   "author": "React OAS Team",
-  "license": "MIT"
+  "license": "MIT",
+  "_cargoIntegration": {
+    "status": "available",
+    "version": "check with: npm run cargo:info",
+    "futureUse": "WebAssembly modules for performance-critical operations",
+    "scripts": [
+      "cargo:check - Check if cargo is installed",
+      "cargo:info - Show detailed cargo information",
+      "tools:check - Check all development tools"
+    ]
+  },
+  "_performanceBudget": {
+    "javascript": "250KB",
+    "css": "50KB",
+    "total": "1MB"
+  }
 }

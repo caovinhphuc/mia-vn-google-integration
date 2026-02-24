@@ -23,7 +23,7 @@ npm run perf:bundle
 npm run bundle:stats
 
 # Phân tích visual ✅
-npm run analyze
+npm run analyze:bundle
 
 # Kiểm tra dependencies không dùng ✅
 npm run perf:deps
@@ -35,7 +35,7 @@ npm run perf:size
 npm run check:tools
 ```
 
-**Note**: Tất cả scripts đã được verified và working (Jan 2026)
+**Note**: Tất cả scripts đã được verified với command surface hiện tại (Feb 2026)
 
 ### 2. Hiểu Bundle Structure
 
@@ -218,7 +218,8 @@ function ImportCSV() {
 {
   "scripts": {
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "build:analyze": "npm run build -- --stats && webpack-bundle-analyzer build/bundle-stats.json"
+    "build:analyze": "GENERATE_SOURCEMAP=true react-scripts build && npm run analyze",
+    "analyze:bundle": "npm run webpack-bundle-analyzer"
   }
 }
 ```
@@ -356,7 +357,7 @@ npm run bundle:stats
 npm run perf:bundle
 
 # Visual bundle analyzer ✅
-npm run analyze
+npm run analyze:bundle
 
 # Dependency checker ✅
 npm run perf:deps
@@ -374,7 +375,7 @@ npm run analyze:all
 **Note**: Nếu gặp lỗi với source-map-explorer hoặc webpack-bundle-analyzer:
 
 - Đảm bảo đã build project: `npm run build`
-- Check build stats file: `build/bundle-stats.json`
+- Chạy qua npm script thay vì gọi binary trực tiếp: `npm run analyze:bundle`
 
 ### External Tools
 

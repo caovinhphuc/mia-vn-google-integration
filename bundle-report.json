@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-02-24T22:30:47.699Z",
+  "budget": {
+    "javascript": 256000,
+    "css": 51200,
+    "images": 512000,
+    "fonts": 102400,
+    "total": 1048576
+  },
+  "sizes": {
+    "javascript": {
+      "size": 0,
+      "budget": 256000,
+      "percentage": "0.0",
+      "status": true
+    },
+    "css": {
+      "size": 0,
+      "budget": 51200,
+      "percentage": "0.0",
+      "status": true
+    },
+    "images": {
+      "size": 15011,
+      "budget": 512000,
+      "percentage": "2.9",
+      "status": true
+    },
+    "fonts": {
+      "size": 0,
+      "budget": 102400,
+      "percentage": "0.0",
+      "status": true
+    },
+    "total": {
+      "size": 24521,
+      "budget": 1048576,
+      "percentage": "2.3",
+      "status": true
+    }
+  },
+  "largestFiles": [
+    {
+      "path": "logo512.png",
+      "size": 9664
+    },
+    {
+      "path": "logo192.png",
+      "size": 5347
+    }
+  ]
+}
