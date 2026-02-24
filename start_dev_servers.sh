@@ -211,6 +211,24 @@ start_automation() {
         pip install uvicorn fastapi > /dev/null 2>&1 || true
     fi
 
+    # Check if python-dotenv is available
+    if ! python -c "import dotenv" 2>/dev/null; then
+        print_warning "python-dotenv not found. Installing..."
+        pip install python-dotenv > /dev/null 2>&1 || true
+    fi
+
+    # Check Google Sheets dependencies
+    if ! python -c "import gspread" 2>/dev/null; then
+        print_warning "gspread not found. Installing Google Sheets dependencies..."
+        pip install gspread google-auth google-auth-oauthlib google-auth-httplib2 > /dev/null 2>&1 || true
+    fi
+
+    # Check data processing dependencies
+    if ! python -c "import pandas" 2>/dev/null; then
+        print_warning "pandas not found. Installing data processing dependencies..."
+        pip install pandas numpy openpyxl > /dev/null 2>&1 || true
+    fi
+
     # Start using uvicorn (FastAPI)
     print_status "Starting FastAPI automation service on port 8001..."
     python -m uvicorn main:app --host 0.0.0.0 --port 8001 > ../logs/automation.log 2>&1 &

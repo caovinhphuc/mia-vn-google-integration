@@ -131,6 +131,47 @@ if command -v python3 &> /dev/null; then
     PYTHON_VERSION=$(python3 --version)
     echo -e "${GREEN}✅ $PYTHON_VERSION${NC}"
     echo "   Path: $(which python3)"
+
+    # Chuẩn bị môi trường Python cho automation
+    echo -e "${BLUE}🧪 Chuẩn bị Python env cho Automation...${NC}"
+    AUTOMATION_DIR="one_automation_system"
+    AUTOMATION_VENV="$AUTOMATION_DIR/venv"
+    MINIMAL_REQUIREMENTS="$AUTOMATION_DIR/requirements-minimal.txt"
+
+    if [ -d "$AUTOMATION_DIR" ]; then
+        if [ ! -d "$AUTOMATION_VENV" ]; then
+            echo -e "   ${YELLOW}→${NC} Tạo virtual environment tại $AUTOMATION_VENV..."
+            python3 -m venv "$AUTOMATION_VENV"
+            echo -e "   ${GREEN}✓${NC} Đã tạo virtual environment"
+        else
+            echo -e "   ${GREEN}✓${NC} Đã có virtual environment"
+        fi
+
+        # shellcheck disable=SC1091
+        source "$AUTOMATION_VENV/bin/activate"
+
+        if ! pip install --upgrade pip &> /dev/null; then
+            echo -e "   ${YELLOW}⚠️${NC} Không thể nâng cấp pip (tiếp tục)"
+        fi
+
+        if [ -f "$MINIMAL_REQUIREMENTS" ]; then
+            echo -e "   ${YELLOW}→${NC} Cài dependencies tối thiểu từ $MINIMAL_REQUIREMENTS..."
+            if pip install -r "$MINIMAL_REQUIREMENTS" &> /dev/null; then
+                echo -e "   ${GREEN}✓${NC} Đã cài dependencies tối thiểu"
+            else
+                echo -e "   ${YELLOW}⚠️${NC} Cài requirements-minimal thất bại, cài gói cốt lõi..."
+                pip install uvicorn fastapi python-dotenv gspread google-auth google-auth-oauthlib google-auth-httplib2 pandas numpy openpyxl &> /dev/null || true
+            fi
+        else
+            echo -e "   ${YELLOW}→${NC} Không thấy requirements-minimal, cài gói cốt lõi..."
+            pip install uvicorn fastapi python-dotenv gspread google-auth google-auth-oauthlib google-auth-httplib2 pandas numpy openpyxl &> /dev/null || true
+        fi
+
+        deactivate 2>/dev/null || true
+        echo -e "   ${GREEN}✓${NC} Python env automation đã sẵn sàng"
+    else
+        echo -e "   ${YELLOW}⚠️${NC} Không tìm thấy thư mục $AUTOMATION_DIR, bỏ qua"
+    fi
 else
     echo -e "${RED}✗ Python3 chưa được cài đặt${NC}"
     echo "   Cài đặt: brew install python3"

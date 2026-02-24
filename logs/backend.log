@@ -1,24 +1,171 @@
 
-> react-oas-integration-backend@1.0.0 dev
-> nodemon src/server.js
+> react-oas-integration-backend@1.0.0 start
+> node src/server.js
 
-[33m[nodemon] 3.1.14[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
-[32m[nodemon] starting `node src/server.js`[39m
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-::1 - - [24/Feb/2026:19:41:30 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:30 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:31 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:31 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:32 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:32 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:36 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:36 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [24/Feb/2026:19:41:38 +0000] "GET / HTTP/1.1" 404 256 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/work/oas-integration/v4/backend/build/index.html'
-SIGTERM received, shutting down gracefully
-SIGTERM received, shutting down gracefully
+✅ User logged in: admin@mia.vn at 2026-02-24T20:06:22.531Z
+::1 - - [24/Feb/2026:20:06:22 +0000] "POST /api/auth/login HTTP/1.1" 200 333 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:22 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:22 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/inventory HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/inventory HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/dashboard HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/dashboard HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:25 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:26 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Drive credentials file found, will use mock data
+⚠️ Using mock data - Google Drive API not available
+::1 - - [24/Feb/2026:20:06:26 +0000] "GET /api/drive/files?pageSize=100 HTTP/1.1" 200 785 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Drive credentials file found, will use mock data
+⚠️ Using mock data - Google Drive API not available
+::1 - - [24/Feb/2026:20:06:26 +0000] "GET /api/drive/files?pageSize=100 HTTP/1.1" 200 785 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:27 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Sheets credentials file found, will use mock data
+⚠️ Using mock metadata - Google Sheets API not available
+::1 - - [24/Feb/2026:20:06:27 +0000] "GET /api/sheets/metadata HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Sheets credentials file found, will use mock data
+⚠️ Using mock metadata - Google Sheets API not available
+::1 - - [24/Feb/2026:20:06:27 +0000] "GET /api/sheets/metadata HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:28 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:28 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/dashboard HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/inventory HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/dashboard HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/inventory HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:33 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:34 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:51 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:53 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:53 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:53 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:06:54 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:07:05 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:07:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:07:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:07:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Sheets credentials file found, will use mock data
+⚠️ Using mock metadata - Google Sheets API not available
+::1 - - [24/Feb/2026:20:07:06 +0000] "GET /api/sheets/metadata HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+⚠️ No Google Sheets credentials file found, will use mock data
+⚠️ Using mock metadata - Google Sheets API not available
+::1 - - [24/Feb/2026:20:07:06 +0000] "GET /api/sheets/metadata HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:12:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:12:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:14:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: vKBvLD5lhXcxr1GKAAAB
+Client disconnected: vKBvLD5lhXcxr1GKAAAB
+::1 - - [24/Feb/2026:20:14:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:35 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: LYml7uKCWVtbXkrzAAAD
+Client disconnected: LYml7uKCWVtbXkrzAAAD
+::1 - - [24/Feb/2026:20:14:38 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: VL-FJQj8XHgy6lt9AAAF
+Client disconnected: VL-FJQj8XHgy6lt9AAAF
+::1 - - [24/Feb/2026:20:14:41 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:41 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: CfAIjFqMfGplNtaqAAAH
+Client disconnected: CfAIjFqMfGplNtaqAAAH
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:14:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: XuHio5bNFoFpEUPkAAAJ
+Client disconnected: XuHio5bNFoFpEUPkAAAJ
+::1 - - [24/Feb/2026:20:14:51 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:51 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: W53kz3kUI69S3O2GAAAL
+Client disconnected: W53kz3kUI69S3O2GAAAL
+::1 - - [24/Feb/2026:20:14:54 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 7dEjgeJ8XGKSYklLAAAN
+Client disconnected: 7dEjgeJ8XGKSYklLAAAN
+::1 - - [24/Feb/2026:20:14:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:14:57 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: QYd3qN_6BpDh1mrzAAAP
+Client disconnected: QYd3qN_6BpDh1mrzAAAP
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:02 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: nyk5gvAqY79uIRLUAAAR
+Client disconnected: nyk5gvAqY79uIRLUAAAR
+::1 - - [24/Feb/2026:20:15:05 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: I5n95EtCYMlsrEtvAAAT
+Client disconnected: I5n95EtCYMlsrEtvAAAT
+::1 - - [24/Feb/2026:20:15:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:08 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 2n8wp4BFc41qjo4IAAAV
+Client disconnected: 2n8wp4BFc41qjo4IAAAV
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:11 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:12 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: gpXXOpMsQK-mK9PEAAAX
+Client disconnected: gpXXOpMsQK-mK9PEAAAX
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [24/Feb/2026:20:15:22 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [24/Feb/2026:20:15:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 7Z0wND5iIN1ZZ2bPAAAZ
+Client disconnected: 7Z0wND5iIN1ZZ2bPAAAZ
+Client connected: xcSPTiZ6mINNDjt8AAAb
+Client disconnected: xcSPTiZ6mINNDjt8AAAb
+::1 - - [24/Feb/2026:20:17:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [24/Feb/2026:20:17:06 +0000] "GET /api/auth/verify HTTP/1.1" 304 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
