@@ -65,6 +65,7 @@
     "deploy:prep": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
     "cargo:check": "cargo --version || echo 'Cargo not found'",
     "cargo:info": "node scripts/cargo-info.js",
+    "cargo:optimize": "node scripts/cargo-optimize.js",
     "tools:check": "node scripts/check-tools.js",
     "analyze:all": "npm run perf:bundle && npm run perf:deps && npm run perf:size && npm run cargo:info",
     "analyze:full": "npm run analyze:all && npm run analyze:sourcemap",
@@ -183,6 +184,7 @@
     "scripts": [
       "cargo:check - Check if cargo is installed",
       "cargo:info - Show detailed cargo information",
+      "cargo:optimize - Audit Rust release optimization profile",
       "tools:check - Check all development tools"
     ]
   },
