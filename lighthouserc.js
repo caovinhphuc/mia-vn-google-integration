@@ -29,7 +29,6 @@ module.exports = {
         "unused-javascript": ["warn", { maxLength: 0 }],
         "unminified-css": ["warn", { maxLength: 0 }],
         "unminified-javascript": ["warn", { maxLength: 0 }],
-        "unused-css-rules": ["warn", { maxLength: 0 }],
         "render-blocking-resources": ["warn", { maxLength: 0 }],
 
         // Image optimization

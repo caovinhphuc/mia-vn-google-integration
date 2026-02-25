@@ -1,5 +1,9 @@
 {
   "version": 2,
+  "framework": "create-react-app",
+  "installCommand": "npm install",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "build",
   "builds": [
     {
       "src": "package.json",
