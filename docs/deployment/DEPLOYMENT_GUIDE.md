@@ -295,7 +295,6 @@ echo "✅ Deployed to AWS successfully!"
 ```bash
 #!/bin/bash
 # deploy-production.sh (verified working script)
-
 echo "🚀 Starting MIA.vn production deployment..."
 
 # Pre-deployment checks
@@ -338,7 +337,7 @@ echo "🏥 Running production health checks..."
 npm run health:full
 
 echo "✅ Deployment completed successfully!"
-echo "🌐 Application ready at: http://localhost:3004"
+echo "🌐 Application ready at: http://localhost:3004
 ```
 
 ### **Production Package.json Scripts**

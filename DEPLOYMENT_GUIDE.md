@@ -259,6 +259,7 @@ sudo apt-get install nginx
 
 ```bash
 # Clone và build
+
 git clone https://github.com/mia-vn/google-integration.git .
 npm install
 npm run build:prod
@@ -520,6 +521,8 @@ docker volume prune
 # Restart Docker
 sudo systemctl restart docker
 ```
+
+y
 
 #### 4. Nginx Issues
 
