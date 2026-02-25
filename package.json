@@ -138,5 +138,6 @@
   },
   "bugs": {
     "url": "https://github.com/mia-vn/google-integration/issues"
-  }
+  },
+  "packageManager": "pnpm@10.30.2"
 }

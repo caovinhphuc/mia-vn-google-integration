@@ -29,7 +29,7 @@ Hướng dẫn chi tiết deploy MIA.vn Google Integration Platform lên các pl
 
 ```bash
 # Clone repository
-git clone https://github.com/mia-vn/google-integration.git
+git clone https://github.com/caovinhphuc/mia-vngoogle-integration.git
 cd google-integration
 
 # Install dependencies
@@ -107,12 +107,12 @@ open http://localhost:8080
 
 ### Docker Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| frontend | 3000 | React frontend application |
-| backend | 8000 | Python automation backend |
+| Service    | Port | Description                |
+| ---------- | ---- | -------------------------- |
+| frontend   | 3000 | React frontend application |
+| backend    | 8000 | Python automation backend  |
 | monitoring | 8080 | Nginx monitoring dashboard |
-| redis | 6379 | Cache service (optional) |
+| redis      | 6379 | Cache service (optional)   |
 
 ### Docker Commands
 
