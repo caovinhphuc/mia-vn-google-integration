@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Layout.css";
 
@@ -55,30 +55,10 @@ const Layout = ({ children }) => {
       path: "/automation",
       icon: "🤖",
       label: "Automation",
-      description: "Tự động hóa quy trình",
-      children: [
-        {
-          path: "/automation",
-          icon: "📊",
-          label: "Dashboard",
-          description: "Tổng quan automation",
-        },
-        {
-          path: "/automation/control",
-          icon: "🎮",
-          label: "Control Panel",
-          description: "Điều khiển automation",
-        },
-        {
-          path: "/automation/config",
-          icon: "⚙️",
-          label: "Configuration",
-          description: "Cấu hình hệ thống",
-        },
-      ],
+      description: "Tự động hóa quy trình"
+
     },
   ];
-
   const isActive = (path) => {
     if (path === "/") {
       return location.pathname === "/";

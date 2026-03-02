@@ -92,8 +92,7 @@ const GoogleAppsScriptIntegration = lazy(
 )
 const TelegramIntegration = lazy(() => import('./components/telegram/TelegramIntegration'))
 const AutomationDashboard = lazy(() => import('./components/automation/AutomationDashboard'))
-const AutomationPanel = lazy(() => import('./components/automation/AutomationPanelWrapper'))
-const ConfigPage = lazy(() => import('./components/automation/ConfigPageWrapper'))
+
 
 // Authentication component - now using the professional LoginPage
 const AuthLogin = () => <LoginPage />
@@ -321,26 +320,6 @@ function App() {
                         <ProtectedRoute>
                           <Layout>
                             <AutomationDashboard />
-                          </Layout>
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/automation/control"
-                      element={
-                        <ProtectedRoute>
-                          <Layout>
-                            <AutomationPanel />
-                          </Layout>
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/automation/config"
-                      element={
-                        <ProtectedRoute>
-                          <Layout>
-                            <ConfigPage />
                           </Layout>
                         </ProtectedRoute>
                       }
