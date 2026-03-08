@@ -3,6 +3,9 @@
     {
       "path": "../../../../Documents/Projects/mia-vn",
     },
+    {
+      "path": ".",
+    },
   ],
   "settings": {
     "editor.formatOnSave": true,
