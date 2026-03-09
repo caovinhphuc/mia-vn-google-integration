@@ -1,6 +1,6 @@
 {
   "title": "Email Service Test Report",
-  "timestamp": "2026-03-09T02:15:57.975Z",
+  "timestamp": "2026-03-09T06:14:50.388Z",
   "summary": {
     "total_tests": 1,
     "passed": 0,
@@ -10,8 +10,8 @@
   "configuration": {
     "sendgrid_api_key": "missing",
     "sendgrid_from_email": "missing",
-    "smtp_host": "missing",
-    "smtp_user": "missing"
+    "smtp_host": "warehouse@mia.vn",
+    "smtp_user": "warehouse@mia.vn"
   },
   "results": [
     {
@@ -31,20 +31,12 @@
         ],
         "missing_smtp": [
           {
-            "key": "SMTP_HOST",
-            "description": "SMTP Host"
-          },
-          {
-            "key": "SMTP_USER",
-            "description": "SMTP Username"
-          },
-          {
             "key": "SMTP_PASS",
             "description": "SMTP Password"
           }
         ]
       },
-      "timestamp": "2026-03-09T02:15:57.974Z"
+      "timestamp": "2026-03-09T06:14:50.388Z"
     }
   ]
 }

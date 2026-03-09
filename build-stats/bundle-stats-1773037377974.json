@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-09T06:28:27.442Z",
+  "timestamp": "2026-03-09T06:22:57.974Z",
   "bundle": {
     "jsFiles": [
       {
@@ -316,7 +316,7 @@
       "chalk": "^5.6.2",
       "cors": "^2.8.6",
       "crypto-browserify": "^3.12.1",
-      "dayjs": "^1.11.19",
+      "dayjs": "^1.11.18",
       "express": "^5.2.1",
       "form-data": "^4.0.4",
       "google-auth-library": "^10.5.0",
