@@ -14,7 +14,7 @@
     "test:complete": "npm run test:ci && npm run test:scripts",
     "test:coverage": "CI=true react-scripts test --coverage --watchAll=false",
     "test:ci": "CI=true react-scripts test --watchAll=false",
-    "perf:check": "node scripts/performance-check.js",
+    "perf:check": "node scripts/performance-budget.js",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm run start\" \"npm run backend\" \"npm run ai-service\"",
     "backend": "cd backend && npm start",
@@ -37,9 +37,9 @@
     "test:api": "node scripts/test-api-endpoints.js",
     "test:automation": "node scripts/test-automation-system.js",
     "test:websocket": "node scripts/test-websocket.js",
-    "webpack-bundle-analyzer": "webpack-bundle-analyzer build/static/js/main.*js",
-    "webpack-bundle-analyzer-production": "webpack-bundle-analyzer build/static/js/main.*js --mode production",
-    "webpack-bundle-analyzer-deps": "webpack-bundle-analyzer build/static/js/main.*js --mode development",
+    "webpack-bundle-analyzer": "node scripts/perf-bundle-analyzer.js",
+    "webpack-bundle-analyzer-production": "node scripts/perf-bundle-analyzer.js",
+    "webpack-bundle-analyzer-deps": "node scripts/analyze-bundle-deps.js",
     "lint": "eslint src --ext .js,.jsx",
     "lint:check": "eslint src --ext .js,.jsx --max-warnings 0",
     "lint:fix": "eslint src --ext .js,.jsx --fix",
@@ -64,9 +64,22 @@
     "check:tools": "npm run tools:check",
     "deploy:prep": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
     "quick-start": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
+    "build:stats": "npm run bundle:stats",
+    "build:analyze": "npm run build:stats && npm run perf:bundle && npm run perf:deps && npm run perf:size && npm run cargo:info",
+    "build:analyze:full": "npm run build:analyze && npm run analyze:sourcemap",
+    "build:analyze:auto": "npm run build:analyze && npm run optimize:suggestions",
+    "build:analyze:bundle": "npm run build:analyze && npm run optimize:bundle",
+    "build:analyze:suggestions": "npm run build:analyze && npm run optimize:suggestions",
+    "build:analyze:optimize": "npm run build:analyze && npm run optimize:optimize",
+    "build:analyze:optimize:full": "npm run build:analyze && npm run optimize:optimize:full",
+    "build:analyze:optimize:auto": "npm run build:analyze && npm run optimize:optimize:auto",
+    "optimize:post-build": "npm run optimize:post-build",
     "docs:watch": "npm run docs:watch",
     "docs:generate": "npm run docs:generate",
     "stop": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
+    "perf:budget": "npm run perf:budget",
+    "analyze:deps": "npm run analyze:deps",
+    "start:ai-service": "npm run ai-service",
     "cargo:check": "cargo --version || echo 'Cargo not found'",
     "cargo:info": "node scripts/cargo-info.js",
     "cargo:optimize": "node scripts/cargo-optimize.js",
@@ -153,6 +166,7 @@
     "compression-webpack-plugin": "^11.1.0",
     "concurrently": "^8.0.0",
     "css-loader": "^7.1.3",
+    "cargo": "^1.10.0",
     "cssnano": "^7.1.2",
     "dotenv": "^17.2.2",
     "eslint": "^8.0.0",
@@ -212,7 +226,22 @@
       "cargo:info - Show detailed cargo information",
       "cargo:optimize - Audit Rust release optimization profile",
       "tools:check - Check all development tools"
-    ]
+    ],
+    "_cargoIntegration": {
+      "status": "available",
+      "version": "check with: npm run cargo:info",
+      "futureUse": "WebAssembly modules for performance-critical operations",
+      "scripts": [
+        "cargo:check - Check if cargo is installed",
+        "cargo:info - Show detailed cargo information",
+        "tools:check - Check all development tools"
+      ]
+    },
+    "_performanceBudget": {
+      "javascript": "250KB (current: ~2.3MB - needs optimization)",
+      "css": "50KB (current: ~80KB - acceptable)",
+      "total": "1MB (current: ~2.4MB - exceeds budget)"
+    }
   },
   "_performanceBudget": {
     "javascript": "250KB",
