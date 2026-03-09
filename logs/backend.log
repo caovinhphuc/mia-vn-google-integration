@@ -1,12 +1,7 @@
 
-> react-oas-integration-backend@1.0.0 dev
-> nodemon src/server.js
+> react-oas-integration-backend@1.0.0 start
+> node src/server.js
 
-[33m[nodemon] 3.1.14[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
-[32m[nodemon] starting `node src/server.js`[39m
 /Users/phuccao/Projects/React-OAS-Integration-v4.0/backend/node_modules/path-to-regexp/dist/index.js:153
             throw new PathError(`Unexpected ${token.type} at index ${token.index}, expected ${endType}`, str);
             ^
@@ -26,4 +21,3 @@ PathError [TypeError]: Unexpected ? at index 29, expected end: /api/sheets/metad
 }
 
 Node.js v18.20.8
-[31m[nodemon] app crashed - waiting for file changes before starting...[39m
