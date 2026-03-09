@@ -1,6 +1,7 @@
 ---
 name: workflow-claude-settings-agent
 description: Research agent that fetches Claude Code docs, reads the local settings report, and analyzes drift
+tools: WebFetch, Read, Glob, Grep
 model: opus
 color: yellow
 ---
