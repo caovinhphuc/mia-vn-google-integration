@@ -17,6 +17,7 @@
     "perf:check": "node scripts/performance-budget.js",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm run start\" \"npm run backend\" \"npm run ai-service\"",
+    "fix:git-push": "git add . && git commit -m 'fix: git push' && git push",
     "backend": "cd backend && npm start",
     "ai-service": "cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload",
     "vercel-build": "npm run build",

@@ -178,7 +178,7 @@ Total Checks: 20
 
 ```bash
 # Check if service is running
-lsof -i :3001
+lsof -i :3000
 
 # Start service
 ./start.sh
