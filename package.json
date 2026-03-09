@@ -52,7 +52,7 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\"",
     "serve:build": "npx serve -s build",
     "serve:deployed": "npx serve -s ~/Sites/mia-vn-integration",
-    "fix:ports": "lsof -i :3000,:3001,:8000 | grep LISTEN | awk '{print $2}' | xargs kill -9",
+    "fix:ports": "lsof -i :3000 -i :3001 -i :8000 2>/dev/null | grep LISTEN | awk '{print $2}' | xargs kill -9 2>/dev/null || true",
     "kill:port": "lsof -i :$npm_config_port | grep LISTEN | awk '{print $2}' | xargs kill -9",
     "check:ports": "lsof -i :3000 -i :3001 -i :8000 | grep LISTEN",
     "check:backend": "curl -s http://localhost:3001/health || echo 'Backend not running'",

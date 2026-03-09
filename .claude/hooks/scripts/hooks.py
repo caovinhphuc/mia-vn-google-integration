@@ -376,19 +376,18 @@ def get_sound_name(hook_data, agent_name=None):
     event_name = hook_data.get("hook_event_name", "")
     tool_name = hook_data.get("tool_name", "")
 
-    # If this is an agent hook, use agent-specific sounds
-    if agent_name:
-        return AGENT_HOOK_SOUND_MAP.get(event_name)
-
-    # Check if this is a PreToolUse event with Bash tool
+    # Check if this is a PreToolUse event with Bash tool (runs for both agent and main session)
     if event_name == "PreToolUse" and tool_name == "Bash":
         tool_input = hook_data.get("tool_input", {})
         command = tool_input.get("command", "")
 
-        # Check for special bash command patterns (e.g., git commit)
         special_sound = detect_bash_command_sound(command)
         if special_sound:
             return special_sound
+
+    # If this is an agent hook, use agent-specific sounds
+    if agent_name:
+        return AGENT_HOOK_SOUND_MAP.get(event_name)
 
     # Return the default sound for this hook event
     return HOOK_SOUND_MAP.get(event_name)
