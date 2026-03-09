@@ -1,6 +1,6 @@
 # 🧪 TESTING GUIDE - React OAS Integration v4.0
 
-> **Hướng dẫn testing đầy đủ và chi tiết**  
+> **Hướng dẫn testing đầy đủ và chi tiết**
 > **Ngày cập nhật**: 2025-01-27
 
 ## 📋 Tổng Quan
@@ -4180,7 +4180,7 @@ describe("Button Accessibility", () => {
 
 ## 🏆 Testing Success Stories
 
-### Before Testing:
+### Before Testing
 
 - ❌ Bugs found in production
 - ❌ Fear of refactoring
@@ -4188,7 +4188,7 @@ describe("Button Accessibility", () => {
 - ❌ Manual testing overhead
 - ❌ Low confidence in deployments
 
-### After Testing (80% Coverage):
+### After Testing (80% Coverage)
 
 - ✅ Bugs caught before production
 - ✅ Safe refactoring
