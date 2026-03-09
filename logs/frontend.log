@@ -1,9 +1,4 @@
-
-> react-oas-integration@3.0.0 start
-> react-scripts start
-
-(node:22109) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
-(Use `node --trace-deprecation ...` to show where the warning was created)
-(node:22109) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
-Starting the development server...
-
+ UPDATE  The latest version of `serve` is 14.2.6
+ INFO  Accepting connections at http://localhost:8080
+ HTTP  3/9/2026 7:06:46 AM ::1 GET /
+ HTTP  3/9/2026 7:06:46 AM ::1 Returned 200 in 52 ms

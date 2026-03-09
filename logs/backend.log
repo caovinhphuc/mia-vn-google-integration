@@ -1,12 +1,1 @@
-
-> react-oas-integration-backend@1.0.0 dev
-> nodemon src/server.js
-
-[33m[nodemon] 3.1.14[39m
-[33m[nodemon] to restart at any time, enter `rs`[39m
-[33m[nodemon] watching path(s): *.*[39m
-[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
-[32m[nodemon] starting `node src/server.js`[39m
-🚀 Backend server running on port 3001
-📊 Health check: http://localhost:3001/health
-🌐 WebSocket server ready for connections
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/phuccao/Projects/mia-vn/React-OAS-Integration-v4.0/automation_bridge.py': [Errno 2] No such file or directory
