@@ -54,7 +54,7 @@ After changes, verify:
 5. Any `goToSlide()` calls in the TOC point to correct slide numbers
 6. Level transition slides in `vibe-to-agentic-framework` match actual `<h1>` titles in `presentation/index.html`
 7. Agent identifiers are consistent across examples (use `frontend-engineer` / `backend-engineer`; do not introduce aliases like `frontend-eng`)
-8. Hook references remain canonical (`16 hook events`) in presentation-facing content
+8. Hook references remain canonical (`19 hook events`) in presentation-facing content
 9. Do not manually insert `.level-badge` or `.weight-badge` markup in slide HTML (badges are JS-injected)
 10. Settings precedence text must separate user-writable override order from enforced policy (`managed-settings.json`)
 11. If slide 32 is touched, ensure skill frontmatter coverage includes `context: fork`
@@ -97,7 +97,7 @@ If you encountered an edge case, discovered a new pattern, or found that the wor
 
 _Findings from previous executions are recorded here. Add new entries as bullet points._
 
-- Hook-event references drifted across files. Treat `16 hook events` as canonical and sync all docs in the same run.
+- Hook-event references drifted across files. Treat `19 hook events` as canonical and sync all docs in the same run.
 - Do not use shorthand agent names in examples (`frontend-eng`). Keep identifiers exactly aligned with agent definitions.
 - Never hardcode `.weight-badge` or `.level-badge` in slide HTML; badges are runtime-injected by JS.
 - Keep the framework skill name stable as `vibe-to-agentic-framework` to avoid broken skill references.

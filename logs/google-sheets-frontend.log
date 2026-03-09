@@ -2,49 +2,19 @@
 > react-google-sheets-project@1.0.0 start
 > react-scripts start
 
-(node:5018) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:8481) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:5018) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:8481) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
-Failed to compile.
+Compiled successfully!
 
-[eslint] Failed to load parser '@typescript-eslint/parser' declared in '.eslintrc.json » eslint-config-react-app#overrides[0]': Cannot find module 'typescript'
-Require stack:
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/convert.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/ast-converter.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/parser.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/index.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/parser/dist/parser.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/parser/dist/index.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
-LOG from ./node_modules/sass-loader/dist/cjs.js sass-loader ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[1].oneOf[8].use[3]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].oneOf[8].use[4]!./src/pages/LoginPage.module.scss
-<w> Deprecation The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
-<w> 
-<w> More info: https://sass-lang.com/d/legacy-js-api
-<w> 
-<w> null
-<w> Deprecation Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
-<w> 
-<w> More info and automated migrator: https://sass-lang.com/d/import
-<w> 
-<w> src/pages/LoginPage.module.scss 2:9  root stylesheet
-<w> 
-<w> Deprecation Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
-<w> 
-<w> More info and automated migrator: https://sass-lang.com/d/import
-<w> 
-<w> src/pages/LoginPage.module.scss 3:9  root stylesheet
-<w>
+You can now view react-google-sheets-project in the browser.
 
-ERROR in [eslint] Failed to load parser '@typescript-eslint/parser' declared in '.eslintrc.json » eslint-config-react-app#overrides[0]': Cannot find module 'typescript'
-Require stack:
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/convert.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/ast-converter.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/parser.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/typescript-estree/dist/index.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/parser/dist/parser.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@typescript-eslint/parser/dist/index.js
-- /Users/phuccao/Projects/React-OAS-Integration-v4.0/google-sheets-project/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.10.33:3000
 
-webpack compiled with 1 error
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
