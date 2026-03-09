@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-03-09T01:15:38.147Z",
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "error",
+      "message": "Missing files/directories: .env",
+      "details": null,
+      "timestamp": "2026-03-09T01:15:38.147Z"
+    },
+    "dependencies": {
+      "status": "healthy",
+      "message": "All critical dependencies present",
+      "details": null,
+      "timestamp": "2026-03-09T01:15:38.148Z"
+    },
+    "environment": {
+      "status": "error",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null,
+      "timestamp": "2026-03-09T01:15:38.148Z"
+    }
+  },
+  "errors": [
+    {
+      "service": "file-system",
+      "message": "Missing files/directories: .env",
+      "details": null
+    },
+    {
+      "service": "environment",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null
+    }
+  ],
+  "warnings": []
+}

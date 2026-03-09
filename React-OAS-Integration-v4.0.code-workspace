@@ -1,9 +1,5 @@
 {
-  "folders": [
-    {
-      "path": "../../../../Documents/Projects/mia-vn",
-    },
-  ],
+  "folders": [],
   "settings": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {

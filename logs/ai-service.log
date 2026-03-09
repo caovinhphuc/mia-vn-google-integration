@@ -1,10 +1,1 @@
-INFO:     Will watch for changes in these directories: ['/Users/phuccao/Projects/work/oas-integration/v4/ai-service']
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [75229] using WatchFiles
-INFO:     Started server process [75234]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [75234]
+nohup: uvicorn: No such file or directory
