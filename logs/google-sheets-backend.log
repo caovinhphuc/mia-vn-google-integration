@@ -1,5 +1,6 @@
-[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚡️ secrets for agents: https://dotenvx.com/as2
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
 🚀 Server running on port 3003
 📊 Google Sheets: Not configured
 📧 Email: Not configured
 📱 Telegram: Not configured
+Running daily report...

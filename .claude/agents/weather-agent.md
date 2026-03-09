@@ -14,20 +14,21 @@ hooks:
     - matcher: ".*"
       hooks:
         - type: command
-          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=voice-hook-agent
+          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=weather-agent
           timeout: 5000
           async: true
   PostToolUse:
     - matcher: ".*"
       hooks:
         - type: command
-          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=voice-hook-agent
+          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=weather-agent
           timeout: 5000
           async: true
   PostToolUseFailure:
-    - hooks:
+    - matcher: ".*"
+      hooks:
         - type: command
-          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=voice-hook-agent
+          command: python3 ${CLAUDE_PROJECT_DIR}/.claude/hooks/scripts/hooks.py  --agent=weather-agent
           timeout: 5000
           async: true
 ---
