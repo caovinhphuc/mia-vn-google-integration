@@ -31,7 +31,7 @@ Read ALL of the following:
 
 | File | What to check |
 |------|---------------|
-| `best-practice/claude-settings.md` | Settings Hierarchy table, Core Configuration tables, Permissions section (modes, tool syntax), Hook Events table (16 events), Hook Properties, Hook Matcher Patterns, Hook Exit Codes, Hook Environment Variables, MCP Settings table, Sandbox Settings table, Plugin Settings table, Model Aliases table, Model Environment Variables, Display Settings table, Status Line config, AWS & Cloud settings, Environment Variables table, Useful Commands table, Quick Reference example, Sources list |
+| `best-practice/claude-settings.md` | Settings Hierarchy table, Core Configuration tables, Permissions section (modes, tool syntax), Hook Events table (19 events), Hook Properties, Hook Matcher Patterns, Hook Exit Codes, Hook Environment Variables, MCP Settings table, Sandbox Settings table, Plugin Settings table, Model Aliases table, Model Environment Variables, Display Settings table, Status Line config, AWS & Cloud settings, Environment Variables table, Useful Commands table, Quick Reference example, Sources list |
 | `best-practice/claude-cli-startup-flags.md` | Environment Variables section — verify ownership boundary (startup-only vars stay here, `env`-configurable vars stay in settings report) |
 | `CLAUDE.md` | Configuration Hierarchy section, Hooks System section, any settings-related patterns |
 

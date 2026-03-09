@@ -1,10 +1,1 @@
-INFO:     Started server process [62600]
-INFO:     Waiting for application startup.
-2026-02-25 19:46:59,140 - main - INFO - 🚀 Starting OneAutomation System...
-Credentials file not found: config/service_account.json
-2026-02-25 19:46:59,140 - main - INFO - ✅ Google Sheets service initialized
-2026-02-25 19:46:59,140 - main - INFO - ✅ Email service initialized
-2026-02-25 19:46:59,140 - main - INFO - ✅ Data processor initialized
-2026-02-25 19:46:59,140 - main - INFO - 🎉 OneAutomation System started successfully!
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+./start_dev_servers.sh: line 234: python: command not found
