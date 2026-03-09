@@ -65,3 +65,26 @@ Compiling...
 Compiled successfully!
 webpack compiled successfully
 No issues found.
+Failed to compile.
+
+Error: ENOENT: no such file or directory, open '/Users/phuccao/Projects/React-OAS-Integration-v4.0/node_modules/react-is/index.js'
+LOG from webpack.FileSystemInfo
+<w> Managed item /Users/phuccao/Projects/React-OAS-Integration-v4.0/node_modules/react-is isn't a directory or doesn't contain a package.json (see snapshot.managedPaths option)
++ 8 hidden lines
+
+ERROR in ./node_modules/react-is/index.js
+Module build failed (from ./node_modules/react-scripts/node_modules/source-map-loader/dist/cjs.js):
+Error: ENOENT: no such file or directory, open '/Users/phuccao/Projects/React-OAS-Integration-v4.0/node_modules/react-is/index.js'
+
+webpack compiled with 1 error
+No issues found.
+Compiling...
+Failed to compile.
+
+Error: ENOENT: no such file or directory, open '/Users/phuccao/Projects/React-OAS-Integration-v4.0/node_modules/react-is/index.js'
+ERROR in ./node_modules/react-is/index.js
+Module build failed (from ./node_modules/react-scripts/node_modules/source-map-loader/dist/cjs.js):
+Error: ENOENT: no such file or directory, open '/Users/phuccao/Projects/React-OAS-Integration-v4.0/node_modules/react-is/index.js'
+
+webpack compiled with 1 error
+No issues found.
