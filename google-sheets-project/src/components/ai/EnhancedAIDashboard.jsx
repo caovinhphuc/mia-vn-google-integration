@@ -135,7 +135,7 @@ const EnhancedAIDashboard = () => {
         patternRecognition: patternResults,
         realTimeAnalytics: realTimeResults,
         aiInsights: aiInsightsResults,
-        predictions: await generateEnsemblePredictions(preparedData),
+        predictions: await advancedMLService.generateEnsemblePredictions(preparedData),
         analysisTime: Date.now() - startTime,
       })
 

@@ -5,6 +5,7 @@
 ### ❌ Lỗi: Tài liệu không nhất quán về Port Configuration
 
 **Triệu chứng:**
+
 - Một số tài liệu nói AI Service chạy trên port 8001
 - Một số tài liệu nói Automation Service chạy trên port 8002
 - `frontend_connection_test.js` test port 8001 cho Automation
@@ -12,6 +13,7 @@
 - **Confusion:** Có AI Service riêng biệt hay không?
 
 **Nguyên nhân:**
+
 - Tài liệu được tạo dựa trên giả định sai về kiến trúc
 - Không đồng bộ với code thực tế
 - Thiếu clarification về services nào là required vs optional
@@ -35,6 +37,7 @@ Port 8001 - Automation Service (FastAPI)  ⚠️ OPTIONAL
 **KHÔNG CÓ AI Service riêng biệt!**
 
 Hệ thống chỉ có:
+
 1. ✅ **Frontend** (Port 3000) - Required
 2. ✅ **Backend** (Port 3001) - Required
 3. ⚠️ **Automation Service** (Port 8001) - Optional (chỉ cho Google Sheets)
@@ -46,10 +49,12 @@ Hệ thống chỉ có:
 ### 1. START_HERE.md ✅
 
 **Thay đổi:**
-- ❌ "AI Service: http://localhost:8001"
-- ✅ "Automation: http://localhost:8001 (Optional)"
+
+- ❌ "AI Service: <http://localhost:8001>"
+- ✅ "Automation: <http://localhost:8001> (Optional)"
 
 **Sections cập nhật:**
+
 - Services list
 - Commands (removed start_ai_service.sh)
 - Stop commands (python.*ai_service → python.*uvicorn)
@@ -59,6 +64,7 @@ Hệ thống chỉ có:
 ### 2. QUICK_REFERENCE.md ✅
 
 **Thay đổi:**
+
 - Port table: Removed AI Service row, kept only Automation on 8001
 - Commands: Removed start_ai_service.sh
 - Health checks: AI Service → Automation (Optional)
@@ -69,6 +75,7 @@ Hệ thống chỉ có:
 ### 3. AUTOMATION_SETUP.md ✅
 
 **Thay đổi:**
+
 - Port 8002 → Port 8001 for Automation Service
 - Removed references to "AI Service" as separate service
 - Updated port table
@@ -79,12 +86,14 @@ Hệ thống chỉ có:
 ### 4. BACKEND_IMPROVEMENTS.md ⚠️
 
 **Status:** Không cần sửa
+
 - File này focus vào Backend API improvements
 - Không có thông tin sai về ports
 
 ### 5. CORS_FIX.md ⚠️
 
 **Status:** Không cần sửa
+
 - File này focus vào CORS configuration
 - Đã đúng về optional automation service
 
@@ -127,6 +136,7 @@ Port 8001 - Automation (Optional)
 
 **Before:** Không rõ services nào là required
 **After:**
+
 - ✅ Required: Frontend (3000), Backend (3001)
 - ⚠️ Optional: Automation (8001)
 
@@ -156,6 +166,7 @@ node frontend_connection_test.js
 ```
 
 **Expected output:**
+
 ```
 ✅ Backend Health: Connected
 ✅ Backend Status: Connected
@@ -183,11 +194,13 @@ grep -r "AI Service" *.md | grep -v "DOCUMENTATION_FIX"
 ### 1. Developer Confusion
 
 **Before:** Developers confused về:
+
 - "Tại sao test port 8001 nhưng doc nói 8002?"
 - "AI Service ở đâu?"
 - "Cần start bao nhiêu services?"
 
 **After:** Clear understanding:
+
 - 2 required services (Frontend, Backend)
 - 1 optional service (Automation on 8001)
 - No separate AI Service
@@ -201,6 +214,7 @@ grep -r "AI Service" *.md | grep -v "DOCUMENTATION_FIX"
 
 **Before:** Confusion về dependencies và startup
 **After:** Clear separation:
+
 - Core dependencies (required)
 - Automation dependencies (optional)
 
@@ -227,27 +241,30 @@ grep -r "AI Service" *.md | grep -v "DOCUMENTATION_FIX"
 
 ### Technical Guides (Reference)
 
-4. **BACKEND_IMPROVEMENTS.md** - Backend API changes
-5. **CORS_FIX.md** - CORS configuration
-6. **DOCUMENTATION_FIX_SUMMARY.md** - This file
+1. **BACKEND_IMPROVEMENTS.md** - Backend API changes
+2. **CORS_FIX.md** - CORS configuration
+3. **DOCUMENTATION_FIX_SUMMARY.md** - This file
 
 ---
 
 ## 🎉 Summary
 
 **Fixed:**
+
 - ❌ → ✅ Port configuration trong tất cả docs
 - ❌ → ✅ Removed confusion về "AI Service"
 - ❌ → ✅ Clarified required vs optional services
 - ❌ → ✅ Updated all commands và references
 
 **Result:**
+
 - ✅ Tài liệu nhất quán với code thực tế
 - ✅ Developers có thông tin chính xác
 - ✅ Testing process rõ ràng
 - ✅ Setup instructions đúng
 
 **Verification:**
+
 - ✅ `frontend_connection_test.js` test đúng port (8001)
 - ✅ `start_dev_servers.sh` chạy đúng services
 - ✅ Documentation phản ánh đúng kiến trúc
@@ -278,4 +295,3 @@ grep -r "AI Service" *.md | grep -v "DOCUMENTATION_FIX"
 **Status:** ✅ Documentation Synchronized with Code
 
 **Happy Coding! 🚀**
-

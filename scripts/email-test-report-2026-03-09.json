@@ -1,6 +1,10 @@
 {
   "title": "Email Service Test Report",
+<<<<<<< HEAD
   "timestamp": "2026-03-09T00:12:18.138Z",
+=======
+  "timestamp": "2026-03-09T02:39:27.311Z",
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
   "summary": {
     "total_tests": 1,
     "passed": 0,
@@ -44,7 +48,11 @@
           }
         ]
       },
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:12:18.138Z"
+=======
+      "timestamp": "2026-03-09T02:39:27.310Z"
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
     }
   ]
 }

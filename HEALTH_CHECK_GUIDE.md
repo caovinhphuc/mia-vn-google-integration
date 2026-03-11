@@ -1,6 +1,6 @@
 # 🏥 Health Check Guide
 
-> **React OAS Integration v4.0**  
+> **React OAS Integration v4.0**
 > **Ngày cập nhật**: 2025-01-27
 
 ---
@@ -140,7 +140,7 @@ curl http://localhost:8001/health
 
 ## 📊 OUTPUT FORMAT
 
-### Comprehensive Health Check Output:
+### Comprehensive Health Check Output
 
 ```
 ================================================================================
@@ -178,7 +178,7 @@ Total Checks: 20
 
 ```bash
 # Check if service is running
-lsof -i :3001
+lsof -i :3000
 
 # Start service
 ./start.sh
@@ -234,5 +234,5 @@ Health check reports are saved to:
 
 ---
 
-**Status**: ✅ Complete  
+**Status**: ✅ Complete
 **Last Updated**: 2025-01-27

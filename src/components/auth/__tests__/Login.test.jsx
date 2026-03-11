@@ -89,7 +89,7 @@ describe("Login Component", () => {
 
   describe("Rendering", () => {
     it("should render login form", () => {
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       expect(screen.getByText("🔐 Đăng nhập")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("your@email.com")).toBeInTheDocument();
@@ -125,7 +125,7 @@ describe("Login Component", () => {
   describe("Form Validation", () => {
     it("should show error when email is empty", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const submitButton = getLoginSubmitButton();
       await user.click(submitButton);
@@ -137,7 +137,7 @@ describe("Login Component", () => {
 
     it("should show error when password is empty", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       await user.type(emailInput, "test@example.com");
@@ -152,7 +152,7 @@ describe("Login Component", () => {
 
     it("should show error for invalid email format", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       await user.type(emailInput, "invalid-email");
@@ -171,7 +171,7 @@ describe("Login Component", () => {
 
     it("should show error for password too short", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       await user.type(emailInput, "test@example.com");
@@ -199,7 +199,7 @@ describe("Login Component", () => {
         sessionId: "mock-session",
       });
 
-      const { store, container } = renderWithProviders(<Login />, {
+      renderWithProviders(<Login />, {
         route: "/login",
       });
 
@@ -226,7 +226,7 @@ describe("Login Component", () => {
         sessionId: "mock-session-id",
       });
 
-      const { container } = renderWithProviders(<Login />, {
+      renderWithProviders(<Login />, {
         route: "/login",
       });
 
@@ -262,7 +262,7 @@ describe("Login Component", () => {
         sessionId: "mock-session",
       });
 
-      const { store, container } = renderWithProviders(<Login />, {
+      const { store } = renderWithProviders(<Login />, {
         route: "/login",
       });
 
@@ -287,7 +287,7 @@ describe("Login Component", () => {
       const user = userEvent.setup();
       loginUser.mockRejectedValue(new Error("Invalid credentials"));
 
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       const passwordInputs = screen.getAllByPlaceholderText("••••••••");
@@ -311,7 +311,7 @@ describe("Login Component", () => {
         email: "test@example.com",
       });
 
-      const { container } = renderWithProviders(<Login />, {
+      renderWithProviders(<Login />, {
         route: "/login",
       });
 
@@ -348,7 +348,7 @@ describe("Login Component", () => {
         },
       });
 
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       // Switch to register mode
       const registerLink = screen.getByText("Đăng ký ngay");
@@ -383,7 +383,7 @@ describe("Login Component", () => {
 
     it("should show error when passwords do not match", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       // Switch to register mode
       const registerLink = screen.getByText("Đăng ký ngay");
@@ -469,7 +469,7 @@ describe("Login Component", () => {
           )
       );
 
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       const passwordInputs = screen.getAllByPlaceholderText("••••••••");
@@ -495,7 +495,7 @@ describe("Login Component", () => {
       const user = userEvent.setup();
       loginUser.mockRejectedValue(new Error("Email hoặc mật khẩu không đúng"));
 
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       const passwordInputs = screen.getAllByPlaceholderText("••••••••");
@@ -515,7 +515,7 @@ describe("Login Component", () => {
       const user = userEvent.setup();
       loginUser.mockRejectedValue(new Error("Login failed"));
 
-      const { container } = renderWithProviders(<Login />);
+      renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");
       const passwordInputs = screen.getAllByPlaceholderText("••••••••");

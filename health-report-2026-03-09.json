@@ -1,24 +1,40 @@
 {
+<<<<<<< HEAD
   "timestamp": "2026-03-09T00:14:09.141Z",
+=======
+  "timestamp": "2026-03-09T04:11:00.798Z",
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
   "overall": "unhealthy",
   "services": {
     "file-system": {
       "status": "healthy",
       "message": "All required files and directories present",
       "details": null,
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.141Z"
+=======
+      "timestamp": "2026-03-09T04:11:00.798Z"
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
     },
     "dependencies": {
       "status": "healthy",
       "message": "All critical dependencies present",
       "details": null,
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.141Z"
+=======
+      "timestamp": "2026-03-09T04:11:00.799Z"
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
     },
     "environment": {
       "status": "error",
       "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
       "details": null,
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.142Z"
+=======
+      "timestamp": "2026-03-09T04:11:00.799Z"
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
     }
   },
   "errors": [

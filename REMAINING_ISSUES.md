@@ -20,11 +20,13 @@
 **Status:** 🔴 **NEEDS FIX** (Required endpoint missing)
 
 **Problem:**
+
 - Backend không có endpoint `/api/reports`
 - Test expect endpoint này tồn tại
 - HTTP 404 = endpoint not found
 
 **Impact:** Medium
+
 - Core API functionality
 - Frontend có thể cần endpoint này
 
@@ -134,16 +136,19 @@ const endpoints = [
 **Status:** 🟡 **OPTIONAL** (Not required for core functionality)
 
 **Problem:**
+
 - AI Service không chạy trên port 8001
 - Hoặc không có AI Service trong architecture hiện tại
 - ECONNREFUSED = service not running
 
 **Impact:** Low
+
 - Optional features
 - System works 100% without them
 - Can be added later if needed
 
 **Current Architecture:**
+
 ```
 Port 3000 - Frontend (React)        ✅ REQUIRED
 Port 3001 - Backend (Node.js)       ✅ REQUIRED
@@ -185,6 +190,7 @@ const endpoints = [
 If you actually need AI Service functionality:
 
 1. **Create AI Service:**
+
 ```python
 # ai-service/main.py
 from fastapi import FastAPI
@@ -218,7 +224,8 @@ async def get_insights():
     }
 ```
 
-2. **Start AI Service:**
+1. **Start AI Service:**
+
 ```bash
 cd ai-service
 python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
@@ -242,6 +249,7 @@ python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
 ### Phase 1: Quick Fixes (15 minutes)
 
 1. **Add Backend Reports Endpoint**
+
    ```bash
    # Edit backend/server.js
    # Add the reports endpoints shown above
@@ -249,12 +257,14 @@ python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
    ```
 
 2. **Update Test to Mark AI Services as Optional**
+
    ```bash
    # Edit frontend_connection_test.js
    # Mark AI endpoints as required: false
    ```
 
 **Expected Result:**
+
 ```
 ✅ Backend Health: Connected
 ✅ Backend Reports: Connected
@@ -268,6 +278,7 @@ API Connectivity: 2/2 required ✅ (3 optional skipped)
 ### Phase 2: Optional Enhancements (Later)
 
 Only if you need AI/Automation features:
+
 1. Create AI Service
 2. Implement AI endpoints
 3. Update tests to expect AI Service
@@ -362,6 +373,7 @@ node frontend_connection_test.js
 ```
 
 **Expected Output:**
+
 ```
 🔗 Testing API Connectivity...
 ✅ Backend Health: Connected
@@ -381,6 +393,7 @@ API Connectivity: 2/2 required ✅
 ## 📈 Expected Test Results After Fixes
 
 ### Before Fixes
+
 ```
 API Connectivity: 1/5 ✅
   Backend Health: ✅
@@ -393,6 +406,7 @@ API Connectivity: 1/5 ✅
 ```
 
 ### After Fixes
+
 ```
 API Connectivity: 2/2 required ✅ (3 optional skipped)
   Backend Health: ✅
@@ -411,12 +425,14 @@ API Connectivity: 2/2 required ✅ (3 optional skipped)
 ### 1. Core vs Optional Services
 
 **Core (Required):**
+
 - ✅ Frontend (Port 3000)
 - ✅ Backend (Port 3001)
 - ✅ Backend Health endpoint
 - ✅ Backend Reports endpoint
 
 **Optional:**
+
 - ⚠️ AI Service (Port 8001)
 - ⚠️ Automation Service (Google Sheets)
 - ⚠️ AI Insights features
@@ -424,12 +440,14 @@ API Connectivity: 2/2 required ✅ (3 optional skipped)
 ### 2. Test Strategy
 
 **Good Test Design:**
+
 - Distinguish required vs optional
 - Clear error messages
 - Actionable suggestions
 - Don't fail on optional features
 
 **Current Issue:**
+
 - All endpoints treated as required
 - Optional services cause test failures
 - No distinction in reporting
@@ -437,6 +455,7 @@ API Connectivity: 2/2 required ✅ (3 optional skipped)
 ### 3. Architecture Clarity
 
 **Current System:**
+
 ```
 Frontend ←→ Backend (Core functionality)
               ↓
@@ -444,6 +463,7 @@ Frontend ←→ Backend (Core functionality)
 ```
 
 **Not:**
+
 ```
 Frontend ←→ Backend ←→ AI Service (All required)
 ```
@@ -476,6 +496,7 @@ Frontend ←→ Backend ←→ AI Service (All required)
 ---
 
 **Next Steps:**
+
 1. Read this document
 2. Implement backend reports endpoint
 3. Update test configuration
@@ -489,4 +510,3 @@ Frontend ←→ Backend ←→ AI Service (All required)
 **Status:** 📋 Action Plan Ready
 
 **Let's fix these! 🚀**
-

@@ -3,6 +3,10 @@
  * MIA.vn Google Integration Platform
  */
 
+import { SLR } from 'ml-regression'
+import * as stats from 'simple-statistics'
+import { AIDataProcessor, AIStatsAnalyzer, AI_CONFIG } from '../../utils/aiUtils'
+
 // Lazy-load heavy ML libraries to keep initial bundle light
 let _tfPromise = null
 const getTF = async () => {
@@ -19,9 +23,6 @@ const getBrain = async () => {
   }
   return _brainPromise
 }
-import { SLR } from 'ml-regression'
-import * as stats from 'simple-statistics'
-import { AIDataProcessor, AIStatsAnalyzer, AI_CONFIG } from '../../utils/aiUtils'
 
 /**
  * Time Series Prediction Service

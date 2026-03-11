@@ -3,6 +3,7 @@
 ## 📋 Vấn đề
 
 File `.env` đã cấu hình sai:
+
 ```bash
 PORT=3001  # ❌ Sai - Trùng với Backend port
 ```
@@ -12,11 +13,13 @@ PORT=3001  # ❌ Sai - Trùng với Backend port
 ## ✅ Giải pháp
 
 ### 1. Sửa file `.env`
+
 ```bash
 PORT=3000  # ✅ Đúng - Frontend port
 ```
 
 ### 2. Cấu hình đúng
+
 ```bash
 # Frontend
 PORT=3000
@@ -33,8 +36,8 @@ REACT_APP_AI_SERVICE_URL=http://localhost:8000
 
 | Service  | Port | Status | URL |
 |----------|------|--------|-----|
-| Frontend | 3000 | ✅ Running | http://localhost:3000 |
-| Backend  | 3001 | ✅ Running | http://localhost:3001 |
+| Frontend | 3000 | ✅ Running | <http://localhost:3000> |
+| Backend  | 3001 | ✅ Running | <http://localhost:3001> |
 
 ## 🎯 Khởi động lại services
 
@@ -53,17 +56,20 @@ sleep 3 && npm start > logs/frontend.log 2>&1 &
 ## ⚠️ Warning về Ant Design
 
 Warning này không ảnh hưởng đến chức năng:
+
 ```
 Warning: [antd: message] Static function can not consume context like dynamic theme.
 Please use 'App' component instead.
 ```
 
 **Giải thích:**
+
 - Ant Design khuyến nghị sử dụng `message` API thông qua `App` component
 - Hiện tại code đang dùng static function `message.warning()`
 - Chức năng vẫn hoạt động bình thường, chỉ là best practice warning
 
 **Cách fix (nếu cần):**
+
 ```jsx
 // Thay vì
 import { message } from 'antd';
@@ -94,4 +100,3 @@ Password: admin123
 
 **Ngày fix:** 2025-12-11
 **Status:** ✅ RESOLVED
-

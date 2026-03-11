@@ -1,19 +1,31 @@
 # 📊 Bundle Optimization Report
 
+<<<<<<< HEAD
 **Generated:** 12:51:45 9/3/2026
+=======
+**Generated:** 10:51:21 9/3/2026
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
 
 ## 📦 Bundle Sizes
 
 | Type | Current | Budget | Status |
 |------|---------|--------|--------|
+<<<<<<< HEAD
 | JavaScript | 2.33 MB | 250 KB | ❌ OVER |
 | CSS | 91.75 KB | 50 KB | ❌ OVER |
 | Images | 0 Bytes | 500 KB | ✅ OK |
 | Total | 2.42 MB | 1 MB | ❌ OVER |
+=======
+| JavaScript | 12.11 MB | 250 KB | ❌ OVER |
+| CSS | 260.76 KB | 50 KB | ❌ OVER |
+| Images | 0 Bytes | 500 KB | ✅ OK |
+| Total | 12.36 MB | 1 MB | ❌ OVER |
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
 
 ## 📁 Top Largest Files
 
 ```
+<<<<<<< HEAD
 1. static/js/main.6faea64a.js - 487.86 KB
 2. static/js/714.a5ffbd00.chunk.js - 367.41 KB
 3. static/js/849.2d41bf25.chunk.js - 163.5 KB
@@ -29,6 +41,23 @@
 13. static/js/698.34c37918.chunk.js - 36.73 KB
 14. static/js/665.bdfc0c2e.chunk.js - 34.89 KB
 15. static/js/581.076fa26b.chunk.js - 34.62 KB
+=======
+1. static/js/main.f6e2ce51.js.map - 2.13 MB
+2. static/js/262.cb599712.chunk.js.map - 1.79 MB
+3. static/js/1.f8a9cff9.chunk.js.map - 719.27 KB
+4. static/js/241.33143390.chunk.js.map - 545.17 KB
+5. static/js/158.4963b69a.chunk.js.map - 530.88 KB
+6. static/js/main.f6e2ce51.js - 487.91 KB
+7. static/js/628.06bb62c4.chunk.js.map - 453.05 KB
+8. static/js/717.409fbac8.chunk.js.map - 416.02 KB
+9. static/js/609.bb607d44.chunk.js.map - 386.92 KB
+10. static/js/262.cb599712.chunk.js - 367.51 KB
+11. static/js/856.1edc4b32.chunk.js.map - 343.59 KB
+12. static/js/866.14cb65f1.chunk.js.map - 220.75 KB
+13. static/js/148.95df94d0.chunk.js.map - 175.21 KB
+14. static/js/1.f8a9cff9.chunk.js - 163.55 KB
+15. static/js/581.361accce.chunk.js.map - 143.68 KB
+>>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
 ```
 
 ## 💡 Recommendations

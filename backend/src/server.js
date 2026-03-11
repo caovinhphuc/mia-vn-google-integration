@@ -1066,9 +1066,9 @@ app.post("/api/sheets/append", async (req, res) => {
 });
 
 // Get sheet metadata
-app.get("/api/sheets/metadata/:sheetId?", async (req, res) => {
+async function sheetMetadataHandler(req, res) {
   try {
-    const { sheetId } = req.params;
+    const sheetId = req.params.sheetId || req.query.sheetId;
     const spreadsheetId = sheetId || DEFAULT_SPREADSHEET_ID;
 
     // Initialize Google Sheets API
@@ -1149,7 +1149,9 @@ app.get("/api/sheets/metadata/:sheetId?", async (req, res) => {
       error: `Lỗi khi lấy metadata của sheet: ${error.message}`,
     });
   }
-});
+}
+app.get("/api/sheets/metadata/:sheetId", sheetMetadataHandler);
+app.get("/api/sheets/metadata", sheetMetadataHandler);
 
 // Clear sheet data
 app.delete("/api/sheets/clear", async (req, res) => {
@@ -1326,7 +1328,7 @@ app.post("/api/sheets/create", async (req, res) => {
 // Serve React app for all non-API routes
 // IMPORTANT: This must be LAST, after all API routes
 // ============================================
-app.get("*", (req, res) => {
+app.get("/{*path}", (req, res) => {
   // Only serve React app for non-API routes
   if (!req.path.startsWith("/api")) {
     res.sendFile(path.join(__dirname, "../build/index.html"));
