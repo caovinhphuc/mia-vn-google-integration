@@ -1,3 +1,4 @@
 # Temporarily disabled to allow commits during deployment
+# npm run validate:full
 # CI=true npm test -- --passWithNoTests || true
 exit 0

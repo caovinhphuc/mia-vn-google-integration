@@ -9,10 +9,12 @@ MIA Logistics Manager uses GitHub Actions for continuous integration and deploym
 ### 1. Main Deployment Workflow (`.github/workflows/deploy.yml`)
 
 **Triggers:**
+
 - Push to main branch
 - Pull requests to main branch
 
 **Jobs:**
+
 - **test**: Run tests, linting, and build
 - **security-audit**: Security scanning and dependency checks
 - **deploy-staging**: Deploy to staging environment
@@ -21,11 +23,13 @@ MIA Logistics Manager uses GitHub Actions for continuous integration and deploym
 ### 2. Security Workflow (`.github/workflows/security.yml`)
 
 **Triggers:**
+
 - Daily at 2 AM
 - Push to main branch
 - Pull requests to main branch
 
 **Features:**
+
 - npm audit
 - Snyk security scanning
 - CodeQL analysis
@@ -34,10 +38,12 @@ MIA Logistics Manager uses GitHub Actions for continuous integration and deploym
 ### 3. Performance Workflow (`.github/workflows/performance.yml`)
 
 **Triggers:**
+
 - Daily at 4 AM
 - Push to main branch
 
 **Features:**
+
 - Lighthouse CI
 - Bundle size analysis
 - Performance metrics
@@ -45,10 +51,12 @@ MIA Logistics Manager uses GitHub Actions for continuous integration and deploym
 ### 4. Docker Workflow (`.github/workflows/docker.yml`)
 
 **Triggers:**
+
 - Push to main branch
 - Version tags
 
 **Features:**
+
 - Multi-platform Docker builds
 - Container registry push
 - Build caching
@@ -83,12 +91,14 @@ SLACK_WEBHOOK_URL
 ## Deployment Process
 
 ### Staging Deployment
+
 1. Code is pushed to main branch
 2. Tests and security scans run
 3. If successful, deploy to staging
 4. Staging URL is available for testing
 
 ### Production Deployment
+
 1. After staging deployment succeeds
 2. Build optimized production bundle
 3. Deploy to production
@@ -97,11 +107,13 @@ SLACK_WEBHOOK_URL
 ## Local Development
 
 ### Prerequisites
+
 - Node.js 16+
 - npm 8+
 - Git
 
 ### Setup
+
 ```bash
 # Clone repository
 git clone <repository-url>
@@ -118,6 +130,7 @@ npm start
 ```
 
 ### Testing
+
 ```bash
 # Run tests
 npm test
@@ -135,16 +148,19 @@ npm run build
 ## Monitoring
 
 ### Performance Monitoring
+
 - Lighthouse CI runs daily
 - Bundle size analysis
 - Core Web Vitals tracking
 
 ### Security Monitoring
+
 - Daily security scans
 - Dependency vulnerability checks
 - Secret detection
 
 ### Deployment Monitoring
+
 - Deployment success/failure notifications
 - Build time tracking
 - Error logging

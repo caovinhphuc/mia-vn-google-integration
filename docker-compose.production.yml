@@ -54,7 +54,7 @@ services:
   # MIA Logistics Frontend
   mia-logistics-frontend:
     build:
-      context: ./shared
+      context: ./shared-md
       dockerfile: Dockerfile.frontend
     container_name: react-oas-mia-frontend
     ports:

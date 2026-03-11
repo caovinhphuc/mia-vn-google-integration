@@ -2,9 +2,15 @@
 > react-oas-integration-backend@1.0.0 start
 > node src/server.js
 
+<<<<<<< HEAD
 node:events:486
       throw er; // Unhandled 'error' event
       ^
+=======
+/Users/phuccao/Projects/React-OAS-Integration-v4.0/backend/node_modules/path-to-regexp/dist/index.js:153
+            throw new PathError(`Unexpected ${token.type} at index ${token.index}, expected ${endType}`, str);
+            ^
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
 
 Error: listen EADDRINUSE: address already in use :::3001
     at Server.setupListenHandle [as _listen2] (node:net:1948:16)
@@ -27,4 +33,8 @@ Emitted 'error' event on Server instance at:
   port: 3001
 }
 
+<<<<<<< HEAD
 Node.js v24.14.0
+=======
+Node.js v18.20.8
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1

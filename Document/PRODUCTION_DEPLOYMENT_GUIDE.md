@@ -305,7 +305,7 @@ git push origin main   # Trigger CI/CD
 # Check port usage
 sudo lsof -i :3001
 sudo lsof -i :8001
-sudo lsof -i :80
+sudo lsof -i :8080
 
 # Kill processes if needed
 sudo pkill -f "node.*3001"
@@ -410,7 +410,7 @@ curl http://localhost:8001/metrics
 
 ---
 
-## 🎉 Production Ready!
+## 🎉 Production Ready
 
 **Your React OAS Integration system is now fully optimized and ready for production deployment.**
 

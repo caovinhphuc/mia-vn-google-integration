@@ -2,17 +2,28 @@
 > react-oas-integration@3.0.0 start
 > react-scripts start
 
+<<<<<<< HEAD
 (node:67112) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 (node:67112) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+=======
+(node:47318) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:47318) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
 Starting the development server...
 
 Compiled successfully!
 
 You can now view react-oas-integration in the browser.
 
+<<<<<<< HEAD
   Local:            http://localhost:3000
   On Your Network:  http://192.168.10.33:3000
+=======
+  Local:            http://localhost:3001
+  On Your Network:  http://192.168.10.33:3001
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
 
 Note that the development build is not optimized.
 To create a production build, use npm run build.

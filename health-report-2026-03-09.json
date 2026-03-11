@@ -1,9 +1,13 @@
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "timestamp": "2026-03-09T00:14:09.141Z",
 =======
   "timestamp": "2026-03-09T04:11:00.798Z",
 >>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
+=======
+  "timestamp": "2026-03-09T07:36:43.361Z",
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
   "overall": "unhealthy",
   "services": {
     "file-system": {
@@ -11,30 +15,42 @@
       "message": "All required files and directories present",
       "details": null,
 <<<<<<< HEAD
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.141Z"
 =======
       "timestamp": "2026-03-09T04:11:00.798Z"
 >>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
+=======
+      "timestamp": "2026-03-09T07:36:43.361Z"
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
     },
     "dependencies": {
       "status": "healthy",
       "message": "All critical dependencies present",
       "details": null,
 <<<<<<< HEAD
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.141Z"
 =======
       "timestamp": "2026-03-09T04:11:00.799Z"
 >>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
+=======
+      "timestamp": "2026-03-09T07:36:43.361Z"
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
     },
     "environment": {
       "status": "error",
       "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
       "details": null,
 <<<<<<< HEAD
+<<<<<<< HEAD
       "timestamp": "2026-03-09T00:14:09.142Z"
 =======
       "timestamp": "2026-03-09T04:11:00.799Z"
 >>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
+=======
+      "timestamp": "2026-03-09T07:36:43.361Z"
+>>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
     }
   },
   "errors": [
