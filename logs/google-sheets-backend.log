@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-[dotenv@17.3.1] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
-=======
-[dotenv@17.3.1] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
->>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
+[dotenv@17.3.1] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
 🚀 Server running on port 3003
 📊 Google Sheets: Not configured
 📧 Email: Not configured

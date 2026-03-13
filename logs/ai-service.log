@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-/Users/phuccao/Projects/mia-vn/React-OAS-Integration-v4.0/ai-venv/bin/python3: No module named uvicorn
-=======
-/Users/phuccao/Projects/React-OAS-Integration-v4.0/ai-venv/bin/python3: No module named uvicorn
->>>>>>> ef2dde8f182317c6e4d39ac53da23e9c128672cc
-=======
-INFO:     Started server process [75096]
+INFO:     Started server process [14186]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:50345 - "GET /health HTTP/1.1" 200 OK
->>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
+INFO:     127.0.0.1:52967 - "GET /health HTTP/1.1" 200 OK

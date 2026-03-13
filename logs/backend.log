@@ -1,40 +1,18 @@
 
-> react-oas-integration-backend@1.0.0 start
-> node src/server.js
+> react-oas-integration-backend@1.0.0 dev
+> nodemon src/server.js
 
-<<<<<<< HEAD
-node:events:486
-      throw er; // Unhandled 'error' event
-      ^
-=======
-/Users/phuccao/Projects/React-OAS-Integration-v4.0/backend/node_modules/path-to-regexp/dist/index.js:153
-            throw new PathError(`Unexpected ${token.type} at index ${token.index}, expected ${endType}`, str);
-            ^
->>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
-
-Error: listen EADDRINUSE: address already in use :::3001
-    at Server.setupListenHandle [as _listen2] (node:net:1948:16)
-    at listenInCluster (node:net:2005:12)
-    at Server.listen (node:net:2110:7)
-    at Object.<anonymous> (/Users/phuccao/Projects/mia-vn/React-OAS-Integration-v4.0/backend/src/server.js:1345:8)
-    at Module._compile (node:internal/modules/cjs/loader:1812:14)
-    at Object..js (node:internal/modules/cjs/loader:1943:10)
-    at Module.load (node:internal/modules/cjs/loader:1533:32)
-    at Module._load (node:internal/modules/cjs/loader:1335:12)
-    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
-Emitted 'error' event on Server instance at:
-    at emitErrorNT (node:net:1984:8)
-    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
-  code: 'EADDRINUSE',
-  errno: -48,
-  syscall: 'listen',
-  address: '::',
-  port: 3001
-}
-
-<<<<<<< HEAD
-Node.js v24.14.0
-=======
-Node.js v18.20.8
->>>>>>> ff8d1e0935a84f955cbe40d61625e05cdf7815e1
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node src/server.js`[39m
+🚀 Backend server running on port 3001
+📊 Health check: http://localhost:3001/health
+🌐 WebSocket server ready for connections
+::1 - - [13/Mar/2026:14:33:26 +0000] "GET /api/auth/verify HTTP/1.1" 401 51 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+::1 - - [13/Mar/2026:14:33:26 +0000] "GET /api/auth/verify HTTP/1.1" 401 51 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+User logged out
+::1 - - [13/Mar/2026:14:33:26 +0000] "POST /api/auth/logout HTTP/1.1" 200 55 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
+User logged out
+::1 - - [13/Mar/2026:14:33:26 +0000] "POST /api/auth/logout HTTP/1.1" 200 55 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
