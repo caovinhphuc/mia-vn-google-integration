@@ -10,9 +10,3 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-::1 - - [13/Mar/2026:14:33:26 +0000] "GET /api/auth/verify HTTP/1.1" 401 51 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-::1 - - [13/Mar/2026:14:33:26 +0000] "GET /api/auth/verify HTTP/1.1" 401 51 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-User logged out
-::1 - - [13/Mar/2026:14:33:26 +0000] "POST /api/auth/logout HTTP/1.1" 200 55 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
-User logged out
-::1 - - [13/Mar/2026:14:33:26 +0000] "POST /api/auth/logout HTTP/1.1" 200 55 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"
