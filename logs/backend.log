@@ -10,3 +10,5 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
+::1 - - [13/Mar/2026:14:50:41 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m
