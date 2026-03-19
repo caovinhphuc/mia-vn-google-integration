@@ -1,0 +1,37 @@
+
+🔧 Development Tools Check:
+
+============================================================
+
+✅ node         - JavaScript Runtime
+   v20.17.0
+   [REQUIRED]
+
+✅ npm          - Package Manager
+   10.8.2
+   [REQUIRED]
+
+⚪ cargo        - Rust Package Manager
+   Not found (optional)
+   [OPTIONAL]
+
+⚪ rustc        - Rust Compiler
+   Not found (optional)
+   [OPTIONAL]
+
+✅ python3      - Python Runtime
+   Python 3.14.3
+   [REQUIRED]
+
+✅ pip3         - Python Package Manager
+   pip 26.0 from /opt/homebrew/lib/python3.14/site-packages/pip (python 3.14)
+   [REQUIRED]
+
+✅ git          - Version Control
+   git version 2.53.0
+   [REQUIRED]
+
+============================================================
+
+✅ All required tools are installed!
+
