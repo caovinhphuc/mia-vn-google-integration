@@ -235,6 +235,91 @@ npm run validate:full
 | `npm run pre-commit`    | Run lint-staged manually    |
 | `npm run check:tools`   | Check all dev tools         |
 
+## 🧩 VS Code / Cursor Extensions
+
+Được cài đặt tự động qua `scripts/setup/ide-setup.sh`:
+
+| Extension ID                                 | Mô tả                                  |
+| -------------------------------------------- | -------------------------------------- |
+| `esbenp.prettier-vscode`                     | Prettier – Code formatter              |
+| `dbaeumer.vscode-eslint`                     | ESLint – Linting JavaScript/TypeScript |
+| `eamodio.gitlens`                            | GitLens – Git supercharged             |
+| `ms-vscode.vscode-typescript-next`           | TypeScript Nightly                     |
+| `bradlc.vscode-tailwindcss`                  | Tailwind CSS IntelliSense              |
+| `ms-python.python`                           | Python language support                |
+| `ms-toolsai.jupyter`                         | Jupyter Notebook                       |
+| `Prisma.prisma`                              | Prisma ORM support                     |
+| `GraphQL.vscode-graphql`                     | GraphQL language support               |
+| `pkief.material-icon-theme`                  | Material Icon Theme                    |
+| `styled-components.vscode-styled-components` | Styled Components syntax highlighting  |
+| `csstools.postcss`                           | PostCSS language support               |
+| `formulahendry.code-runner`                  | Code Runner                            |
+| `ms-python.black-formatter`                  | Black – Python formatter               |
+| `ms-python.flake8`                           | Flake8 – Python linter                 |
+| `ms-python.isort`                            | isort – Python import sorter           |
+
+### Cài đặt extensions (tự động)
+
+```bash
+bash scripts/setup/ide-setup.sh
+```
+
+### Cài đặt thủ công (ví dụ với VS Code)
+
+```bash
+code --install-extension esbenp.prettier-vscode
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension eamodio.gitlens
+# ... (xem danh sách đầy đủ bên trên)
+```
+
+---
+
+## 🐍 Python Libraries (Automation)
+
+Được cài đặt vào virtual environment `one_automation_system/venv/` qua `scripts/setup/ide-setup.sh`:
+
+### Core packages
+
+| Package                | Mô tả                          |
+| ---------------------- | ------------------------------ |
+| `uvicorn`              | ASGI server cho FastAPI        |
+| `fastapi`              | Web framework hiệu năng cao    |
+| `python-dotenv`        | Đọc biến môi trường từ `.env`  |
+| `gspread`              | Google Sheets API client       |
+| `google-auth`          | Google authentication          |
+| `google-auth-oauthlib` | OAuth2 flow cho Google APIs    |
+| `google-auth-httplib2` | HTTP transport cho Google auth |
+| `pandas`               | Xử lý và phân tích dữ liệu     |
+| `numpy`                | Tính toán số học               |
+| `openpyxl`             | Đọc/ghi file Excel (.xlsx)     |
+
+### Khởi tạo môi trường Python thủ công
+
+```bash
+cd one_automation_system
+python3 -m venv venv
+source venv/bin/activate
+
+# Nếu có file requirements-minimal.txt
+pip install -r requirements-minimal.txt
+
+# Hoặc cài thủ công
+pip install uvicorn fastapi python-dotenv gspread \
+    google-auth google-auth-oauthlib google-auth-httplib2 \
+    pandas numpy openpyxl
+```
+
+### Python formatter / linter (VS Code extensions)
+
+| Tool   | Extension                   | Chức năng                  |
+| ------ | --------------------------- | -------------------------- |
+| Black  | `ms-python.black-formatter` | Format code Python tự động |
+| Flake8 | `ms-python.flake8`          | Kiểm tra style PEP8        |
+| isort  | `ms-python.isort`           | Sắp xếp thứ tự import      |
+
+---
+
 ## ✅ Checklist
 
 - [x] ESLint configured
@@ -245,9 +330,12 @@ npm run validate:full
 - [x] Scripts added to package.json
 - [x] Configuration files created
 - [x] Pre-commit hook tested (run after first commit)
+- [x] VS Code / Cursor extensions documented
+- [x] Python automation libraries documented
 
 ---
 
 **Date**: December 25, 2025
+**Updated**: March 17, 2026
 **Status**: ✅ **Complete**
-**Tools**: ESLint, Prettier, Husky, lint-staged, TypeScript
+**Tools**: ESLint, Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (FastAPI / Google APIs)

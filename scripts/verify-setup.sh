@@ -12,9 +12,9 @@ echo -e "${CYAN}🔍 Verifying Setup${NC}"
 echo "=================="
 echo ""
 
-# Check current directory
+# Check current directory (workspace root = folder chứa package.json)
 CURRENT_DIR=$(pwd)
-EXPECTED_DIR="/Users/phuccao/Projects/React-OAS-Integration-v3.0/-React-OAS-Integration-v3.0"
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]:-.}")/.." && pwd)"
 
 echo -e "${BLUE}Current directory:${NC}"
 echo "  $CURRENT_DIR"
@@ -25,11 +25,10 @@ if [ ! -f "package.json" ]; then
   echo -e "${RED}❌ package.json not found!${NC}"
   echo ""
   echo -e "${YELLOW}💡 Solution:${NC}"
-  echo "  1. Navigate to the project root:"
-  echo -e "     ${CYAN}cd /Users/phuccao/Projects/React-OAS-Integration-v3.0/-React-OAS-Integration-v3.0${NC}"
+  echo "  1. Mở terminal tại workspace root (thư mục chứa package.json):"
+  echo -e "     ${CYAN}cd \"$PROJECT_ROOT\"${NC}"
   echo ""
-  echo "  2. Or if you're in parent directory:"
-  echo -e "     ${CYAN}cd -React-OAS-Integration-v3.0${NC}"
+  echo "  2. Hoặc từ Cursor: Terminal → New Terminal (mặc định mở tại workspaceFolder)"
   exit 1
 fi
 
@@ -63,14 +62,14 @@ if [ ${#MISSING_SCRIPTS[@]} -gt 0 ]; then
   echo -e "${RED}❌ Some scripts are missing!${NC}"
   echo ""
   echo -e "${YELLOW}💡 Solutions:${NC}"
-  echo "  1. Ensure you're in the correct directory:"
-  echo -e "     ${CYAN}cd /Users/phuccao/Projects/React-OAS-Integration-v3.0/-React-OAS-Integration-v3.0${NC}"
+  echo "  1. Đảm bảo đang ở workspace root:"
+  echo -e "     ${CYAN}cd \"$PROJECT_ROOT\"${NC}"
   echo ""
-  echo "  2. Verify package.json has the scripts:"
+  echo "  2. Kiểm tra package.json có scripts:"
   echo -e "     ${CYAN}grep -E 'test:websocket|check:backend' package.json${NC}"
   echo ""
-  echo "  3. Clear npm cache and reload:"
-  echo -e "     ${CYAN}npm cache clean --force${NC}"
+  echo "  3. Cài lại dependencies:"
+  echo -e "     ${CYAN}npm install && npm run verify:setup${NC}"
   exit 1
 else
   echo -e "${GREEN}✅ All required scripts are available!${NC}"

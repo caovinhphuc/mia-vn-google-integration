@@ -106,10 +106,10 @@
     "deploy:serve": "npx serve -s build -l 3000"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.1.0",
+    "@ant-design/icons": "^6.0.2",
     "@reduxjs/toolkit": "^2.11.2",
     "ajv": "^8.18.0",
-    "antd": "^5.29.3",
+    "antd": "^5.27.4",
     "assert": "^2.1.0",
     "axios": "^1.12.2",
     "browserify-zlib": "^0.2.0",
@@ -122,7 +122,7 @@
     "dayjs": "^1.11.20",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "google-auth-library": "^10.6.2",
+    "google-auth-library": "^10.5.0",
     "googleapis": "^171.4.0",
     "lodash-es": "^4.17.23",
     "lucide-react": "^0.294.0",

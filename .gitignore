@@ -167,3 +167,8 @@ firestore-debug.log
 # TypeScript
 *.tsbuildinfo
 .env*.local
+
+# logs
+logs/
+*.log
+

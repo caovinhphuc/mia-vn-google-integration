@@ -1,18 +1,35 @@
 #!/bin/bash
 
-# 🚀 Script Cài đặt IDE cho React-OAS-Integration-v4.0
+# 🚀 Script Cài đặt / Cập nhật IDE cho react-oas-inntegration-x
 # Hỗ trợ VS Code và Cursor trên Mac
 
 set -e
+
+# Tìm project root (thư mục chứa package.json) và chuyển vào đó
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR"
+while [ -n "$PROJECT_ROOT" ] && [ ! -f "$PROJECT_ROOT/package.json" ]; do
+    [ "$PROJECT_ROOT" = "$(dirname "$PROJECT_ROOT")" ] && break
+    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
+done
+if [ ! -f "${PROJECT_ROOT}/package.json" ]; then
+    echo "Không tìm thấy package.json. Chạy từ thư mục gốc project."
+    exit 1
+fi
+cd "$PROJECT_ROOT"
 
 # Colors
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🚀 Cài đặt Cấu hình IDE cho React-OAS-Integration-v4.0${NC}"
+PROJECT_NAME="react-oas-inntegration-x"
+WORKSPACE_FILE="React-OAS-Integration-v4.0.code-workspace"
+
+echo -e "${BLUE}🚀 Cài đặt / Cập nhật Cấu hình IDE — ${PROJECT_NAME}${NC}"
 echo "=================================================="
 echo ""
 
@@ -179,12 +196,17 @@ fi
 
 echo ""
 
-# Kiểm tra Node.js
+# Kiểm tra Node.js & .nvmrc
 echo -e "${BLUE}📦 Kiểm tra Node.js...${NC}"
 if command -v node &> /dev/null; then
     NODE_VERSION=$(node --version)
     echo -e "${GREEN}✅ Node.js $NODE_VERSION${NC}"
     echo "   Path: $(which node)"
+
+    if [ -f ".nvmrc" ]; then
+        NVMRC_VERSION=$(cat .nvmrc | tr -d '[:space:]')
+        echo -e "   ${CYAN}ℹ️  .nvmrc: Node $NVMRC_VERSION (chạy \`nvm use\` để đồng bộ)${NC}"
+    fi
 
     if command -v npm &> /dev/null; then
         NPM_VERSION=$(npm --version)
@@ -192,7 +214,7 @@ if command -v node &> /dev/null; then
     fi
 else
     echo -e "${RED}✗ Node.js chưa được cài đặt${NC}"
-    echo "   Cài đặt: brew install node"
+    echo "   Cài đặt: brew install node hoặc nvm install"
 fi
 
 echo ""
@@ -233,7 +255,7 @@ REQUIRED_FILES=(
     ".cursor/settings.json"
     ".cursor/extensions.json"
     ".editorconfig"
-    "React-OAS-Integration-v4.0.code-workspace"
+    "$WORKSPACE_FILE"
 )
 
 for file in "${REQUIRED_FILES[@]}"; do
@@ -254,14 +276,14 @@ echo ""
 
 if command -v code &> /dev/null; then
     echo -e "${BLUE}VS Code:${NC}"
-    echo "  code React-OAS-Integration-v4.0.code-workspace"
+    echo "  code $WORKSPACE_FILE"
     echo "  hoặc: code ."
     echo ""
 fi
 
 if command -v cursor &> /dev/null; then
     echo -e "${BLUE}Cursor:${NC}"
-    echo "  cursor React-OAS-Integration-v4.0.code-workspace"
+    echo "  cursor $WORKSPACE_FILE"
     echo "  hoặc: cursor ."
     echo ""
 fi
@@ -269,5 +291,6 @@ fi
 echo "=================================================="
 echo -e "${GREEN}✨ Hoàn tất!${NC}"
 echo ""
-echo "📚 Xem thêm hướng dẫn tại: README_SETUP.md"
+echo "📚 Cài đặt lại môi trường: ENV_SETUP.md"
+echo "   Kiểm tra nhanh: npm run tools:check && npm run verify:setup"
 echo ""

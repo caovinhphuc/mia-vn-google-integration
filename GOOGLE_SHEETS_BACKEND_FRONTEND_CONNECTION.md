@@ -4,7 +4,7 @@
 
 ## 📊 Kiến Trúc
 
-```
+```text
 Frontend (React)
     ↓ (HTTP API calls)
 Backend Node.js (Express)
@@ -87,7 +87,7 @@ Component sử dụng `googleSheetsApiService` để:
 - Service Account credentials từ file JSON
 - Lazy initialization với `initGoogleSheets()`
 
-### Credentials Paths (tự động tìm):
+### Credentials Paths (tự động tìm)
 
 1. `GOOGLE_APPLICATION_CREDENTIALS` (env var)
 2. `GOOGLE_SERVICE_ACCOUNT_KEY_PATH` (env var)
@@ -112,7 +112,7 @@ Component sử dụng `googleSheetsApiService` để:
 
 ## ✅ Trạng Thái Hiện Tại
 
-### Hoạt Động:
+### Hoạt Động
 
 - ✅ Backend có endpoints Google Sheets
 - ✅ Backend tích hợp Google Sheets API
@@ -120,7 +120,7 @@ Component sử dụng `googleSheetsApiService` để:
 - ✅ Frontend component sử dụng service
 - ✅ Kết nối Backend ↔ Frontend
 
-### Đã Cải Thiện:
+### Đã Cải Thiện
 
 - ✅ Backend sử dụng real Google Sheets API (thay vì mock)
 - ✅ Fallback về mock data nếu API không khả dụng
@@ -128,14 +128,14 @@ Component sử dụng `googleSheetsApiService` để:
 
 ## 🔧 Configuration
 
-### Backend (.env hoặc environment variables):
+### Backend (.env hoặc environment variables)
 
 ```bash
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
 GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
 ```
 
-### Frontend (optional, nếu cần):
+### Frontend (optional, nếu cần)
 
 ```bash
 REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As

@@ -126,10 +126,10 @@
 
 **Output**:
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:3001
-- AI Service: http://localhost:8000
-- Automation: http://localhost:8001
+- Frontend: <http://localhost:3000>
+- Backend: <http://localhost:3001>
+- AI Service: <http://localhost:8000>
+- Automation: <http://localhost:8001>
 
 ---
 
@@ -741,7 +741,7 @@ Một số scripts cần environment variables. Kiểm tra:
 
 ## 📝 RECOMMENDATIONS
 
-### Scripts nên sử dụng (Khuyến nghị):
+### Scripts nên sử dụng (Khuyến nghị)
 
 1. **Setup**: `./setup.sh`
 2. **Start**: `./start_dev_servers.sh` hoặc `./deploy_platform.sh start`
@@ -749,12 +749,12 @@ Một số scripts cần environment variables. Kiểm tra:
 4. **Production**: `./deploy-production.sh`
 5. **Troubleshooting**: `./scripts/check-ports.sh`, `./scripts/fix-port-conflict.sh`
 
-### Scripts cần cập nhật:
+### Scripts cần cập nhật
 
 1. `start_ai_platform.sh` - Cần cập nhật từ v3.0 → v4.0
 2. Các scripts trùng lặp - Nên gộp lại
 
-### Scripts có thể xóa:
+### Scripts có thể xóa
 
 1. `scripts/check-env copy.sh`
 2. `scripts/setup-github copy.sh`

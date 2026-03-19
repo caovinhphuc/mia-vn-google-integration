@@ -5,11 +5,9 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-
   // AI/Code completion settings
   "cursor.ai.enabled": true,
   "cursor.ai.autoComplete": true,
-
   // File paths
   "files.exclude": {
     "**/__pycache__": true,
@@ -24,37 +22,25 @@
     "**/lighthouse-reports": true,
     "**/*.log": true
   },
-
   // Search exclude
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
     "**/build": true,
-    "**/__pycache__": true,
-    "**/.venv": true,
-    "**/venv": true,
     "**/lighthouse-reports": true,
     "**/backup_markdown": true
   },
-
   // Python paths
   "python.analysis.extraPaths": [
     "./automation",
     "./ai-service",
     "./one_automation_system"
   ],
-
-  // Terminal
-  "terminal.integrated.cwd": "${workspaceFolder}",
-
   // Multi-root workspace support
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
-    "**/__pycache__/**": true,
-    "**/.venv/**": true,
-    "**/venv/**": true,
     "**/dist/**": true,
     "**/build/**": true
   }

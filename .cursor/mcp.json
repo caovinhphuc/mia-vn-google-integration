@@ -2,7 +2,10 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp"]
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
     },
     "reddit-mcp-server": {
       "type": "http",
@@ -14,11 +17,17 @@
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
     },
     "deepwiki": {
       "command": "npx",
-      "args": ["-y", "deepwiki-mcp"]
+      "args": [
+        "-y",
+        "deepwiki-mcp"
+      ]
     }
   }
 }

@@ -1,10 +1,26 @@
 {
   "folders": [
     {
-      "path": "../../../../Documents/Projects/mia-vn",
-    },
+      "name": "react-oas-inntegration-x",
+      "path": "."
+    }
   ],
   "settings": {
+    "json.schemas": [
+      {
+        "fileMatch": [
+          "/*.code-workspace"
+        ],
+        "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json"
+      }
+    ],
+    "cSpell.words": [
+      "inntegration"
+    ],
+    "cSpell.enabled": false,
+    "[markdown]": {
+      "cSpell.enabled": false
+    },
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
@@ -29,7 +45,11 @@
       "**/.venv": true,
       "**/venv": true,
     },
-    "terminal.integrated.cwd": "${workspaceFolder:React-OAS-Integration-v4.0}",
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.env.osx": {
+      "NODE_OPTIONS": ""
+    }
   },
   "extensions": {
     "recommendations": [
