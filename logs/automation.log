@@ -14,3 +14,8 @@ Credentials file not found: config/service_account.json
 2026-03-19 09:47:37,649 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2026-03-19 09:49:39,798 - main - INFO - 👋 Shutting down OneAutomation System...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [57004]

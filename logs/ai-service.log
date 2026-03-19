@@ -1,1 +1,1 @@
-/Users/phuccao/Projects/personal/react-oas-inntegration-x/ai-venv/bin/python3: No module named uvicorn
+ERROR:    Error loading ASGI app. Could not import module "ai_service.main".
