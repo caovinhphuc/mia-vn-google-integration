@@ -1,7 +1,14 @@
+node:internal/modules/cjs/loader:1228
+  throw err;
+  ^
 
-> react-oas-integration-backend@1.0.0 start
-> node src/server.js
+Error: Cannot find module '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/server.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Module._load (node:internal/modules/cjs/loader:1051:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
 
-🚀 Backend server running on port 3001
-📊 Health check: http://localhost:3001/health
-🌐 WebSocket server ready for connections
+Node.js v20.17.0
