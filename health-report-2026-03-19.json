@@ -1,24 +1,24 @@
 {
-  "timestamp": "2026-03-19T05:47:48.915Z",
+  "timestamp": "2026-03-19T07:30:58.893Z",
   "overall": "unhealthy",
   "services": {
     "file-system": {
       "status": "healthy",
       "message": "All required files and directories present",
       "details": null,
-      "timestamp": "2026-03-19T05:47:48.916Z"
+      "timestamp": "2026-03-19T07:30:58.894Z"
     },
     "dependencies": {
       "status": "healthy",
       "message": "All critical dependencies present",
       "details": null,
-      "timestamp": "2026-03-19T05:47:48.916Z"
+      "timestamp": "2026-03-19T07:30:58.894Z"
     },
     "environment": {
       "status": "error",
       "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
       "details": null,
-      "timestamp": "2026-03-19T05:47:48.916Z"
+      "timestamp": "2026-03-19T07:30:58.894Z"
     }
   },
   "errors": [
