@@ -212,7 +212,7 @@ function ImportCSV() {
 
 ### 5. Webpack Optimization
 
-#### In `package.json`:
+#### In `package.json`
 
 ```json
 {
@@ -224,7 +224,7 @@ function ImportCSV() {
 }
 ```
 
-#### Environment Variables:
+#### Environment Variables
 
 ```bash
 # Disable source maps in production
@@ -279,7 +279,7 @@ npm run analyze
 Performance audit:
 
 ```bash
-npx lighthouse https://your-app.com --view
+npx lighthouse /Users/phuccao/Projects/personal/react-oas-inntegration-x/public/index.html --view
 ```
 
 ---
@@ -308,6 +308,7 @@ npx lighthouse https://your-app.com --view
    ```
 
 4. ✅ **Install dayjs** (Completed - v1.11.19)
+
    ```bash
    npm install dayjs  # Already installed
    ```
