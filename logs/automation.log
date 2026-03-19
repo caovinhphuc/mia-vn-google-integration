@@ -4,13 +4,13 @@
   warnings.warn(eol_message.format("3.9"), FutureWarning)
 /Users/phuccao/Projects/personal/react-oas-inntegration-x/one_automation_system/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
-INFO:     Started server process [6940]
+INFO:     Started server process [57004]
 INFO:     Waiting for application startup.
-2026-03-18 00:57:41,289 - main - INFO - 🚀 Starting OneAutomation System...
+2026-03-19 09:47:37,649 - main - INFO - 🚀 Starting OneAutomation System...
 Credentials file not found: config/service_account.json
-2026-03-18 00:57:41,289 - main - INFO - ✅ Google Sheets service initialized
-2026-03-18 00:57:41,290 - main - INFO - ✅ Email service initialized
-2026-03-18 00:57:41,290 - main - INFO - ✅ Data processor initialized
-2026-03-18 00:57:41,290 - main - INFO - 🎉 OneAutomation System started successfully!
+2026-03-19 09:47:37,649 - main - INFO - ✅ Google Sheets service initialized
+2026-03-19 09:47:37,649 - main - INFO - ✅ Email service initialized
+2026-03-19 09:47:37,649 - main - INFO - ✅ Data processor initialized
+2026-03-19 09:47:37,649 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
