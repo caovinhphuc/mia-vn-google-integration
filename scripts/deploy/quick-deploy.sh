@@ -45,9 +45,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
-# Railway: khi project có nhiều service, bắt buộc chỉ định tên (khớp tab Services trên Dashboard).
-# Đổi nếu service của bạn không tên "backend", ví dụ: RAILWAY_SERVICE=api ./scripts/deploy/quick-deploy.sh
-RAILWAY_SERVICE="${RAILWAY_SERVICE:-backend}"
+# Railway: chỉ thêm --service khi bạn đặt RAILWAY_SERVICE (tên khớp tab Services trên Dashboard).
+# Không đặt → chạy `railway up` (ổn khi project chỉ có 1 service).
+# Ví dụ: RAILWAY_SERVICE="mia-backend" ./quick-deploy.sh "msg"
+RAILWAY_SERVICE="${RAILWAY_SERVICE:-}"
 
 # Step 0: Check environment variables (optional)
 if [ -f "scripts/utils/check-env.sh" ]; then
@@ -191,7 +192,12 @@ if command -v railway &> /dev/null; then
         print_error "Không tìm thấy thư mục backend"
         exit 1
     }
-    if RAILWAY_OUTPUT=$(railway up --service "$RAILWAY_SERVICE" 2>&1); then
+    if [ -n "$RAILWAY_SERVICE" ]; then
+        RW_CMD=(railway up --service "$RAILWAY_SERVICE")
+    else
+        RW_CMD=(railway up)
+    fi
+    if RAILWAY_OUTPUT=$("${RW_CMD[@]}" 2>&1); then
         echo "$RAILWAY_OUTPUT" | tail -12
         BACKEND_DEPLOYED=true
         BACKEND_URL=$(echo "$RAILWAY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9./_-]+' | grep railway | tail -1 || true)
@@ -207,11 +213,16 @@ if command -v railway &> /dev/null; then
             print "  Hoặc deploy từ Railway Dashboard (GitHub connect) — không cần CLI."
         fi
         if echo "$RAILWAY_OUTPUT" | grep -qi 'Multiple services found'; then
-            echo -e "${CYAN}🚀${NC} → Đang dùng: railway up --service ${RAILWAY_SERVICE}"
-            print "  Nếu sai tên service: Railway Dashboard → Services → copy tên service."
-            print "  Chạy lại: RAILWAY_SERVICE=ten-dung ./quick-deploy.sh \"msg\""
+            echo -e "${CYAN}🚀${NC} → Project có nhiều service — cần chỉ định tên."
+            print "  Railway Dashboard → Services → copy **đúng** tên service (vd. mia-backend, api)."
+            print "  Chạy lại: RAILWAY_SERVICE=ten-chinh-xac ./quick-deploy.sh \"msg\""
         fi
-        print "Mặc định service: backend (đổi bằng biến RAILWAY_SERVICE)."
+        if echo "$RAILWAY_OUTPUT" | grep -qiE 'Service not found|service not found'; then
+            echo -e "${CYAN}🚀${NC} → Tên service sai hoặc biến RAILWAY_SERVICE không khớp project."
+            print "  Bỏ --service: unset RAILWAY_SERVICE rồi chạy lại (khi chỉ còn 1 service)."
+            print "  Hoặc: RAILWAY_SERVICE=<tên-trên-Dashboard> ./quick-deploy.sh \"msg\""
+        fi
+        print "Gợi ý: không đặt RAILWAY_SERVICE nếu project chỉ 1 service; có nhiều service thì bắt buộc đặt."
     fi
     cd ..
 else
