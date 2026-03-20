@@ -1,108 +1,90 @@
 # 🛠️ Development Tools Setup - Complete
 
-## ✅ Đã Cài Đặt
+## ✅ Đã cài đặt (đồng bộ `package.json`)
 
-### 1. Linting Tools
+**Phiên bản cụ thể:** xem trực tiếp trong `package.json` / chạy `npm ls eslint prettier husky lint-staged typescript`.
 
-```json
-{
-  "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-react": "^7.34.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-jsx-a11y": "^6.9.0",
-    "eslint-plugin-import": "^2.29.1",
-    "@typescript-eslint/parser": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^7.2.0"
-  }
-}
-```
+### Linting
 
-### 2. Formatting Tools
+- **ESLint** thực tế đến từ chuỗi **Create React App** (`eslint-config-react-app`, `react-scripts`) — kiểm tra: `npm ls eslint` / `npx eslint -v`.
+- Trường **`eslintDependencies`** trong `package.json` chỉ là **ghi chú nội bộ** (npm **không** cài gói từ key này).
 
-```json
-{
-  "devDependencies": {
-    "prettier": "^3.2.5"
-  }
-}
-```
+### Formatting
 
-**Configuration**: `.prettierrc.json` và `.prettierignore`
+- **Prettier** (`devDependencies`, ~3.8.x tại thời điểm cập nhật tài liệu).
+- File: `.prettierrc.json`, `.prettierignore`.
 
-### 3. Git Hooks (Pre-commit)
+### Git hooks
 
-```json
-{
-  "devDependencies": {
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2"
-  }
-}
-```
+- **Husky** + **lint-staged** (`devDependencies`).
+- `npm install` / `npm run prepare` → **`husky`** (Husky 9+ — `husky install` đã deprecated).
+- Cấu hình staged files: `.lintstagedrc.json`.
 
-**Configuration**: `.lintstagedrc.json`
+### TypeScript
 
-### 4. Type Definitions
-
-```json
-{
-  "devDependencies": {
-    "@types/node": "^20.11.30"
-  }
-}
-```
+- Gói **`typescript`** trong `devDependencies` (4.9.x) — `npm run type:check` / `type:watch` dùng `tsconfig.json`.
+- **Không** có `@types/node` khai báo riêng ở root `package.json` (có thể vẫn có qua dependency gián tiếp).
 
 ## 📋 Scripts Mới
+
+> **Zsh / copy-paste:** Đừng copy cả phần `# ...` **cùng dòng** với lệnh (vd. `eslint ... # Lint`). Nếu shell không bật `setopt interactivecomments`, ký tự `#` có thể bị coi là đối số → lỗi ESLint _pattern "#"_ hoặc _unknown file attribute_.  
+> An toàn: chỉ copy lệnh, hoặc dùng khối bên dưới (ghi chú ở **dòng riêng**).
 
 ### Linting
 
 ```bash
-npm run lint          # Lint code
-npm run lint:check    # Lint check (strict, fails on warnings)
-npm run lint:fix      # Auto-fix linting issues
+# Lint code
+npm run lint
+# Strict: fail nếu có warning
+npm run lint:check
+# Auto-fix
+npm run lint:fix
 ```
 
 ### Formatting
 
 ```bash
-npm run format        # Format code
-npm run format:check  # Check formatting
+# Format
+npm run format
+# Kiểm tra không ghi file
+npm run format:check
 ```
 
 ### Type Checking
 
 ```bash
-npm run type:check    # TypeScript type check
-npm run type:watch    # TypeScript watch mode
+npm run type:check
+npm run type:watch
 ```
 
 ### Validation & Quality
 
 ```bash
-npm run validate      # Run lint, format check, and tests
-npm run validate:full # Full validation including build
-npm run pre-commit    # Run lint-staged (auto on git commit)
+# lint:check + format:check + type:check + test:ci
+npm run validate
+# Thêm build production
+npm run validate:full
+# Giống hook commit (lint-staged)
+npm run pre-commit
 ```
 
 ### Combined Scripts
 
 ```bash
-npm run analyze:all   # Run all analysis tools
-npm run check:tools   # Check all development tools
+npm run analyze:all
+npm run check:tools
 ```
 
 ## 🎯 Workflow
 
 ### Pre-commit Hook (Automatic)
 
-Khi commit code, Husky sẽ tự động:
+Khi **commit**, Husky chạy **lint-staged** trên file **đang staged** (`git add`):
 
-1. Chạy ESLint và auto-fix
-2. Format code với Prettier
-3. Chỉ commit files đã được lint và format
+1. **`.husky/pre-commit`** gọi `npx lint-staged` (giống `npm run pre-commit`).
+2. ESLint `--fix` + `npx prettier --write` theo `.lintstagedrc.json`.
+3. Bỏ qua khi cần: `git commit -n` hoặc `HUSKY=0 git commit ...`
+4. Thử tay: `git add <file>` rồi `npm run pre-commit`
 
 ### Manual Workflow
 
@@ -127,31 +109,22 @@ npm run validate:full
 
 ### `.prettierrc.json`
 
-```json
-{
-  "semi": true,
-  "trailingComma": "es5",
-  "singleQuote": false,
-  "printWidth": 100,
-  "tabWidth": 2,
-  "useTabs": false,
-  "arrowParens": "always",
-  "endOfLine": "lf"
-}
-```
+Các key chính: `semi`, `trailingComma`, `singleQuote`, `printWidth: 100`, `tabWidth: 2`, `endOfLine`, `bracketSpacing`, `proseWrap`, … — **đầy đủ xem file trong repo** (đã mở rộng so với bản rút gọn cũ).
 
 ### `.lintstagedrc.json`
 
 ```json
 {
-  "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
-  "*.{json,css,scss,md}": ["prettier --write"]
+  "*.{js,jsx,ts,tsx}": ["eslint --fix", "npx prettier --write"],
+  "*.{json,css,scss,md}": ["npx prettier --write"]
 }
 ```
 
 ### `.eslintrc.json`
 
-Đã có sẵn với `eslint-config-react-app`
+- `extends`: `react-app`, `react-app/jest`, `plugin:prettier/recommended`
+- `plugins`: `prettier`
+- Rule tùy chỉnh: cảnh báo **`import *` từ `@ant-design/icons`** (tree-shaking); `prettier/prettier` với `endOfLine: "auto"`; override cho `*.ts` / `*.tsx`
 
 ## 🚀 CI/CD Integration
 
@@ -170,8 +143,8 @@ npm run validate:full
 - name: Test
   run: npm run test:ci
 
-- name: Build
-  run: npm run build
+- name: Build (production, no sourcemap mặc định)
+  run: npm run build:prod
 ```
 
 ## 📊 Quality Checks
@@ -223,21 +196,21 @@ npm run validate:full
 
 ## 📚 Useful Commands Reference
 
-| Command                 | Description                 |
-| ----------------------- | --------------------------- |
-| `npm run lint`          | Lint all code               |
-| `npm run lint:fix`      | Auto-fix linting issues     |
-| `npm run format`        | Format all code             |
-| `npm run format:check`  | Check formatting            |
-| `npm run type:check`    | TypeScript type check       |
-| `npm run validate`      | Run lint, format, and tests |
-| `npm run validate:full` | Full validation + build     |
-| `npm run pre-commit`    | Run lint-staged manually    |
-| `npm run check:tools`   | Check all dev tools         |
+| Command                               | Description                                      |
+| ------------------------------------- | ------------------------------------------------ |
+| `npm run lint`                        | Lint all code                                    |
+| `npm run lint:fix`                    | Auto-fix linting issues                          |
+| `npm run format`                      | Format all code                                  |
+| `npm run format:check`                | Check formatting                                 |
+| `npm run type:check`                  | TypeScript type check                            |
+| `npm run validate`                    | lint:check + format:check + type:check + test:ci |
+| `npm run validate:full`               | Full validation + build                          |
+| `npm run pre-commit`                  | Run lint-staged manually                         |
+| `npm run check:tools` / `tools:check` | Kiểm tra Node, npm, Python, git, …               |
 
 ## 🧩 VS Code / Cursor Extensions
 
-Được cài đặt tự động qua `scripts/setup/ide-setup.sh`:
+`scripts/setup/ide-setup.sh` **cài extension qua CLI `code`** khi máy có **VS Code**. **Cursor** không được script gọi `cursor --install-extension` — mở Extensions trong Cursor và cài theo danh sách dưới (hoặc dùng recommendations trong workspace).
 
 | Extension ID                                 | Mô tả                                  |
 | -------------------------------------------- | -------------------------------------- |
@@ -326,7 +299,7 @@ pip install uvicorn fastapi python-dotenv gspread \
 - [x] Prettier configured
 - [x] Husky installed
 - [x] lint-staged configured
-- [x] Type definitions added
+- [x] TypeScript (`tsc`) cho type-check
 - [x] Scripts added to package.json
 - [x] Configuration files created
 - [x] Pre-commit hook tested (run after first commit)
@@ -335,7 +308,8 @@ pip install uvicorn fastapi python-dotenv gspread \
 
 ---
 
-**Date**: December 25, 2025
-**Updated**: March 17, 2026
-**Status**: ✅ **Complete**
-**Tools**: ESLint, Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (FastAPI / Google APIs)
+**Date**: December 25, 2025  
+**Updated**: March 18, 2026 — đồng bộ `package.json`, `.lintstagedrc.json`, `.eslintrc.json`, Husky/lint-staged, VS Code vs Cursor  
+**Status**: ✅ **Complete**  
+**Tools**: ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (`one_automation_system/venv`)  
+**Môi trường tổng quát:** [ENV_SETUP.md](./ENV_SETUP.md)

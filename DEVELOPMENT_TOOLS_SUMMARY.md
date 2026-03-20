@@ -4,70 +4,69 @@
 
 ### 1. Linting & Formatting
 
-**Dependencies**:
+**Stack (phiên bản cụ thể: `package.json` + `npm ls`)**:
 
-- ✅ `eslint@^8.57.0` - Linter chính
-- ✅ `prettier@^3.2.5` - Code formatter
-- ✅ `eslint-plugin-prettier@^5.1.3` - ESLint + Prettier integration
-- ✅ `eslint-config-prettier@^9.1.0` - Disable ESLint rules that conflict with Prettier
-- ✅ `eslint-plugin-react@^7.34.0` - React ESLint rules
-- ✅ `eslint-plugin-react-hooks@^4.6.0` - React Hooks linting
-- ✅ `eslint-plugin-jsx-a11y@^6.9.0` - Accessibility linting
-- ✅ `eslint-plugin-import@^2.29.1` - Import/export linting
+- ✅ **ESLint** — thực tế qua **Create React App** / `eslint-config-react-app` (`react-scripts`)
+- ✅ **Prettier** — `devDependencies` (~3.8.x tại thời điểm cập nhật doc)
+- ✅ **eslint-config-prettier**, **eslint-plugin-prettier** — tích hợp với `.eslintrc.json` (`plugin:prettier/recommended`)
+- ℹ️ Khối **`eslintDependencies`** trong `package.json` chỉ là ghi chú — npm **không** cài từ key đó
 
 **Configuration Files**:
 
-- ✅ `.eslintrc.json` - ESLint configuration (already exists)
-- ✅ `.prettierrc.json` - Prettier configuration (new)
-- ✅ `.prettierignore` - Prettier ignore patterns (new)
+- ✅ `.eslintrc.json` — extends `react-app`, `react-app/jest`, Prettier; rule cảnh báo `import *` `@ant-design/icons`
+- ✅ `.prettierrc.json` — `printWidth: 100`, v.v. (đầy đủ xem file trong repo)
+- ✅ `.prettierignore`
 
 ### 2. Git Hooks (Pre-commit)
 
-**Dependencies**:
+**Dependencies** (`devDependencies` — xem version trong `package.json`):
 
-- ✅ `husky@^9.0.11` - Git hooks manager
-- ✅ `lint-staged@^15.2.2` - Run linters on staged files
+- ✅ **Husky** — `npm run prepare` → `husky` (v9+, không dùng `husky install`)
+- ✅ **lint-staged** — chỉ chạy trên file **đã `git add`**
 
 **Configuration Files**:
 
-- ✅ `.lintstagedrc.json` - lint-staged configuration (new)
+- ✅ `.lintstagedrc.json` — `eslint --fix` + `npx prettier --write`
 
-### 3. Type Definitions
+### 3. TypeScript
 
 **Dependencies**:
 
-- ✅ `@types/node@^20.11.30` - Node.js type definitions
+- ✅ `typescript` (devDependencies) — `npm run type:check` / `tsconfig.json`
+- ℹ️ Root `package.json` **không** khai báo `@types/node` trực tiếp (có thể transitive)
 
 ## 📋 Scripts Mới Đã Thêm
+
+> **Zsh:** Tránh copy `lệnh  # ghi chú` một dòng — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) (mục Scripts).
 
 ### Linting
 
 ```bash
-npm run lint          # Lint code
-npm run lint:check    # Lint check (strict mode)
-npm run lint:fix      # Auto-fix linting issues
+npm run lint
+npm run lint:check
+npm run lint:fix
 ```
 
 ### Formatting
 
 ```bash
-npm run format        # Format code
-npm run format:check  # Check formatting
+npm run format
+npm run format:check
 ```
 
 ### Type Checking
 
 ```bash
-npm run type:check    # TypeScript type check (if tsconfig.json exists)
-npm run type:watch    # TypeScript watch mode
+npm run type:check
+npm run type:watch
 ```
 
 ### Validation
 
 ```bash
-npm run validate      # Run lint, format check, and tests
-npm run validate:full # Full validation including build
-npm run pre-commit    # Run lint-staged manually
+npm run validate
+npm run validate:full
+npm run pre-commit
 ```
 
 ## 🚀 Usage
@@ -90,16 +89,18 @@ npm run validate:full
 
 ### Pre-commit Hook
 
-Khi commit code, Husky sẽ tự động:
+Khi **commit**, Husky chạy **lint-staged** trên file **staged** (`git add`):
 
-1. Chạy ESLint với auto-fix
-2. Format code với Prettier
-3. Chỉ commit files đã được lint và format
+1. **`.husky/pre-commit`** → `npx lint-staged`
+2. `eslint --fix` + `npx prettier --write` (theo `.lintstagedrc.json`)
+3. `npm run pre-commit` thủ công: chưa `git add` → _No staged files_
+4. Bỏ qua hook: `git commit -n` hoặc `HUSKY=0 git commit ...`
 
 **Setup Husky** (already completed):
 
 ```bash
-npm run prepare  # ✅ Đã chạy
+# Husky (thường chạy qua npm postinstall / prepare)
+npm run prepare
 ```
 
 **Verify Hook hoạt động**:
@@ -115,18 +116,7 @@ git commit -m "Test commit"
 
 ### `.prettierrc.json`
 
-```json
-{
-  "semi": true,
-  "trailingComma": "es5",
-  "singleQuote": false,
-  "printWidth": 100,
-  "tabWidth": 2,
-  "useTabs": false,
-  "arrowParens": "always",
-  "endOfLine": "lf"
-}
-```
+Đồng bộ với file trong repo (`bracketSpacing`, `proseWrap`, …). Không nhân bản JSON ở đây để tránh lệch — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) hoặc mở `.prettierrc.json`.
 
 ### `.lintstagedrc.json`
 
@@ -157,24 +147,30 @@ package-lock.json
 - [x] Prettier configured
 - [x] Husky installed and configured
 - [x] lint-staged configured with npx prettier
-- [x] Type definitions added
+- [x] TypeScript (`type:check` / `tsconfig.json`)
 - [x] Scripts added to package.json
 - [x] Configuration files created
 - [x] Husky pre-commit hook tested and verified
 - [x] Git remote origin configured
-- [x] Successfully pushed to GitHub
+- [x] Remote `origin` (tuỳ máy — xem mục Troubleshooting nếu thiếu)
 
 ## 📚 Quick Reference
 
-| Command                 | Description        |
-| ----------------------- | ------------------ |
-| `npm run lint`          | Lint all code      |
-| `npm run lint:fix`      | Auto-fix linting   |
-| `npm run format`        | Format all code    |
-| `npm run format:check`  | Check formatting   |
-| `npm run type:check`    | TypeScript check   |
-| `npm run validate`      | Full validation    |
-| `npm run validate:full` | Validation + build |
+| Command                                       | Mô tả                                                    |
+| --------------------------------------------- | -------------------------------------------------------- |
+| `npm run lint`                                | ESLint `src` (`.js`, `.jsx`)                             |
+| `npm run lint:check`                          | Giống trên, `--max-warnings 0` (strict)                  |
+| `npm run lint:fix`                            | ESLint + auto-fix                                        |
+| `npm run format`                              | Prettier ghi `src/**/*.{js,jsx,json,css,md}`             |
+| `npm run format:check`                        | Prettier chỉ kiểm tra, không sửa file                    |
+| `npm run type:check`                          | `tsc --noEmit`                                           |
+| `npm run type:watch`                          | `tsc --noEmit --watch`                                   |
+| `npm run validate`                            | `lint:check` + `format:check` + `type:check` + `test:ci` |
+| `npm run validate:full`                       | `validate` + `build:prod`                                |
+| `npm run pre-commit`                          | `lint-staged` (cần `git add` trước)                      |
+| `npm run check:tools` / `npm run tools:check` | Kiểm tra Node, npm, Python, git, …                       |
+
+**Môi trường & cài đặt đầy đủ:** [ENV_SETUP.md](./ENV_SETUP.md) · **Chi tiết công cụ:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)
 
 ## 🔧 Troubleshooting
 
@@ -189,6 +185,7 @@ package-lock.json
 **Problem**: `fatal: 'origin' does not appear to be a git repository`
 
 **Solution**:
+
 ```bash
 git remote add origin https://github.com/caovinhphuc/React-OAS-Integration-v4.0.git
 git remote -v  # Verify
@@ -199,6 +196,7 @@ git remote -v  # Verify
 **Problem**: `Updates were rejected because the tip of your current branch is behind`
 
 **Solution**:
+
 ```bash
 git pull origin main --no-rebase
 # Resolve conflicts if any
@@ -209,6 +207,7 @@ git push origin main
 
 ---
 
-**Date**: January 21, 2026
-**Status**: ✅ **Complete & Verified**
-**Last Updated**: Fixed prettier permissions, configured git remote, successfully tested pre-commit hooks
+**Date**: January 21, 2026  
+**Updated**: March 18, 2026 — bảng Quick Reference + stack đồng bộ `package.json` / `.lintstagedrc.json`  
+**Status**: ✅ **Complete**  
+**Chi tiết:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)

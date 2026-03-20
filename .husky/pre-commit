@@ -1,4 +1,3 @@
-# Temporarily disabled to allow commits during deployment
-# npm run validate:full
-# CI=true npm test -- --passWithNoTests || true
-exit 0
+# ESLint + Prettier trên file staged (.lintstagedrc.json)
+# Bỏ qua hook: git commit -n  hoặc  HUSKY=0 git commit ...
+npx lint-staged
