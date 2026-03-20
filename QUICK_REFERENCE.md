@@ -10,6 +10,20 @@
 | npm scripts, WebSocket, test, `dev`       | [QUICK_SCRIPTS_REFERENCE.md](./QUICK_SCRIPTS_REFERENCE.md)     |
 | Cài đặt môi trường, `.env`                | [ENV_SETUP.md](./ENV_SETUP.md)                                 |
 
+## Canonical commands (team)
+
+| Tác vụ                   | Lệnh                             |
+| ------------------------ | -------------------------------- |
+| Setup                    | `./setup.sh`                     |
+| Start all services       | `./start.sh`                     |
+| Dev stack qua npm        | `npm run dev`                    |
+| Stop nhanh (clear ports) | `npm run fix:ports`              |
+| Check ports              | `npm run check:ports`            |
+| Check backend            | `npm run check:backend`          |
+| Deploy prep              | `npm run deploy:prep`            |
+| Deploy Vercel            | `npm run deploy:vercel`          |
+| Wrapper guard            | `npm run scripts:guard-wrappers` |
+
 ## Port & dịch vụ
 
 Chi tiết: [PORT_CLARIFICATION.md](./PORT_CLARIFICATION.md) — tra `grep -r "port" QUICK_REFERENCE.md PORT_CLARIFICATION.md` từ root repo.

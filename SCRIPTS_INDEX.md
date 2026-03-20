@@ -18,6 +18,9 @@
 
 # Stop ports nhanh
 npm run fix:ports
+
+# Guard root wrappers trước khi push
+npm run scripts:guard-wrappers
 ```
 
 ### Deployment
