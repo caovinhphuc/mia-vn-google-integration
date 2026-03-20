@@ -4,18 +4,18 @@
   warnings.warn(eol_message.format("3.9"), FutureWarning)
 /Users/phuccao/Projects/personal/react-oas-inntegration-x/one_automation_system/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
-INFO:     Started server process [42459]
+INFO:     Started server process [80974]
 INFO:     Waiting for application startup.
-2026-03-20 20:14:00,951 - main - INFO - 🚀 Starting OneAutomation System...
+2026-03-21 02:04:10,802 - main - INFO - 🚀 Starting OneAutomation System...
 Credentials file not found: config/service_account.json
-2026-03-20 20:14:00,951 - main - INFO - ✅ Google Sheets service initialized
-2026-03-20 20:14:00,951 - main - INFO - ✅ Email service initialized
-2026-03-20 20:14:00,951 - main - INFO - ✅ Data processor initialized
-2026-03-20 20:14:00,951 - main - INFO - 🎉 OneAutomation System started successfully!
+2026-03-21 02:04:10,802 - main - INFO - ✅ Google Sheets service initialized
+2026-03-21 02:04:10,802 - main - INFO - ✅ Email service initialized
+2026-03-21 02:04:10,802 - main - INFO - ✅ Data processor initialized
+2026-03-21 02:04:10,802 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
-2026-03-20 20:14:24,531 - main - INFO - 👋 Shutting down OneAutomation System...
+2026-03-21 02:04:50,856 - main - INFO - 👋 Shutting down OneAutomation System...
 INFO:     Application shutdown complete.
-INFO:     Finished server process [42459]
+INFO:     Finished server process [80974]
