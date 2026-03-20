@@ -45,6 +45,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
+# Railway: khi project có nhiều service, bắt buộc chỉ định tên (khớp tab Services trên Dashboard).
+# Đổi nếu service của bạn không tên "backend", ví dụ: RAILWAY_SERVICE=api ./scripts/deploy/quick-deploy.sh
+RAILWAY_SERVICE="${RAILWAY_SERVICE:-backend}"
+
 # Step 0: Check environment variables (optional)
 if [ -f "scripts/utils/check-env.sh" ]; then
     print "Kiểm tra environment variables..."
@@ -187,7 +191,7 @@ if command -v railway &> /dev/null; then
         print_error "Không tìm thấy thư mục backend"
         exit 1
     }
-    if RAILWAY_OUTPUT=$(railway up 2>&1); then
+    if RAILWAY_OUTPUT=$(railway up --service "$RAILWAY_SERVICE" 2>&1); then
         echo "$RAILWAY_OUTPUT" | tail -12
         BACKEND_DEPLOYED=true
         BACKEND_URL=$(echo "$RAILWAY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9./_-]+' | grep railway | tail -1 || true)
@@ -199,10 +203,15 @@ if command -v railway &> /dev/null; then
             echo -e "${CYAN}🚀${NC} → Nguyên nhân: chưa railway link trong thư mục backend."
             print "  1. railway login"
             print "  2. cd backend && railway link   (chọn đúng project/service)"
-            print "  3. railway up   hoặc chạy lại quick-deploy"
+            print "  3. railway up --service <tên>   hoặc chạy lại quick-deploy"
             print "  Hoặc deploy từ Railway Dashboard (GitHub connect) — không cần CLI."
         fi
-        print "Lưu ý: Nếu có nhiều services, chỉ định: railway up --service <tên-service>"
+        if echo "$RAILWAY_OUTPUT" | grep -qi 'Multiple services found'; then
+            echo -e "${CYAN}🚀${NC} → Đang dùng: railway up --service ${RAILWAY_SERVICE}"
+            print "  Nếu sai tên service: Railway Dashboard → Services → copy tên service."
+            print "  Chạy lại: RAILWAY_SERVICE=ten-dung ./quick-deploy.sh \"msg\""
+        fi
+        print "Mặc định service: backend (đổi bằng biến RAILWAY_SERVICE)."
     fi
     cd ..
 else

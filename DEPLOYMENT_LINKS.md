@@ -1,6 +1,6 @@
 # 🌐 Deployment Links - React OAS Integration v4.0
 
-> Refreshed: 2026-03-20. Ưu tiên command canonical qua npm scripts và root wrappers.
+> Refreshed: 2026-03-21. Ưu tiên command canonical qua npm scripts và root wrappers.
 
 ## 📍 Thông Tin Repository
 
@@ -52,16 +52,43 @@ README/badge trong repo: cập nhật link production trong [`README.md`](./READ
 
 ## 🚂 Railway (Backend)
 
-### URLs
+### URLs (production — **không** có `:8080`)
 
-- **Production URL**: `https://mia-backend-production-7e56.up.railway.app`
-- **Health Check**: `https://mia-backend-production-7e56.up.railway.app/health`
-- **Railway Dashboard**: `https://railway.app/dashboard`
+| Mục                               | URL                                                         |
+| --------------------------------- | ----------------------------------------------------------- |
+| **Public API (ví dụ trong repo)** | `https://mia-backend-production-7e56.up.railway.app`        |
+| **Health**                        | `https://mia-backend-production-7e56.up.railway.app/health` |
+| **Dashboard**                     | https://railway.app/dashboard                               |
 
-### Lưu Ý
+> **Xác minh URL đang chạy:** trong thư mục đã `railway link`, chạy `cd backend && railway domain` (hoặc xem tab **Settings → Networking** của service). Nếu Railway đổi domain, sửa bảng trên + env Vercel bên dưới.
 
-- Railway project chưa được link trong local (cần chạy `railway link`)
-- URL được hardcode trong script `scripts/deploy/quick-deploy.sh`
+### Log `port 8080` — khác gì URL public?
+
+- Trong container Railway thường đặt **`PORT=8080`** (hoặc giá trị khác). Log kiểu `http://localhost:8080/health` là **bên trong container**.
+- Trình duyệt / Vercel chỉ dùng **`https://…up.railway.app`** (cổng 443, HTTPS). **Không** thêm `:8080` vào `REACT_APP_API_URL`.
+
+### Đồng bộ frontend (Vercel) → backend này
+
+Đặt trong **Vercel → Environment Variables → Production**, rồi **Redeploy**:
+
+| Biến                     | Ví dụ (khớp URL public ở trên)                           |
+| ------------------------ | -------------------------------------------------------- |
+| `REACT_APP_API_URL`      | `https://mia-backend-production-7e56.up.railway.app`     |
+| `REACT_APP_API_BASE_URL` | `https://mia-backend-production-7e56.up.railway.app/api` |
+
+(`getGoogleProxyApiBase()` trong `src/utils/apiBase.js` cần base kết thúc một segment `/api` cho route Sheets/Drive.)
+
+### Quick deploy + nhiều service Railway
+
+Script `scripts/deploy/quick-deploy.sh` gọi:
+
+`railway up --service "${RAILWAY_SERVICE:-backend}"`
+
+- Tên service phải **trùng** tên trên Railway Dashboard (tab **Services**).
+- Nếu không phải `backend`:  
+  `RAILWAY_SERVICE=ten-service-dung ./quick-deploy.sh "message"`
+
+Lần đầu trên máy: `railway login` → `cd backend && railway link`.
 
 ---
 
@@ -120,7 +147,8 @@ railway domain
 
 Cần cấu hình trong Vercel Dashboard:
 
-- `REACT_APP_API_URL` - Backend API URL
+- `REACT_APP_API_URL` — origin backend public (HTTPS, **không** `:8080`)
+- `REACT_APP_API_BASE_URL` — thường `…/api` cho proxy Sheets/Drive (xem bảng Railway ở trên)
 - `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID`
 - `REACT_APP_GOOGLE_DRIVE_FOLDER_ID`
 
@@ -128,7 +156,7 @@ Cần cấu hình trong Vercel Dashboard:
 
 Cần cấu hình trong Railway Dashboard:
 
-- `PORT` - Port cho backend
+- `PORT` — Railway thường gán sẵn (vd `8080` trong log); **không** đưa số port vào URL frontend
 - `DATABASE_URL` - Database connection string
 - Các biến môi trường khác từ `.env`
 
