@@ -8,6 +8,9 @@ const { spawn } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
+/** Luôn chạy child process từ project root để dotenv đọc .env và path tới package.json/src đúng */
+const PROJECT_ROOT = path.join(__dirname, "..");
+
 console.log("🧪 Test All - Comprehensive Test Runner");
 console.log("=".repeat(70));
 
@@ -25,11 +28,6 @@ const testFiles = [
   {
     name: "Frontend API Connection",
     file: path.join(__dirname, "test_frontend_api_connection.js"),
-    type: "commonjs",
-  },
-  {
-    name: "Email Service",
-    file: path.join(__dirname, "testEmailService.js"),
     type: "commonjs",
   },
   {
@@ -87,7 +85,7 @@ async function runTest(testConfig, index, total) {
 
     const startTime = Date.now();
     const nodeProcess = spawn("node", [testConfig.file], {
-      cwd: path.dirname(testConfig.file),
+      cwd: PROJECT_ROOT,
       stdio: "inherit",
       shell: true,
     });

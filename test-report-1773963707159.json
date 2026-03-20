@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-03-19T23:41:47.159Z",
+  "summary": {
+    "total": 10,
+    "passed": 8,
+    "failed": 2,
+    "skipped": 0,
+    "totalTime": 40.43
+  },
+  "results": [
+    {
+      "name": "Google Sheets Connection",
+      "success": true,
+      "duration": 2.48,
+      "exitCode": 0
+    },
+    {
+      "name": "Google Sheets Service",
+      "success": true,
+      "duration": 2.61,
+      "exitCode": 0
+    },
+    {
+      "name": "Frontend API Connection",
+      "success": true,
+      "duration": 0.12,
+      "exitCode": 0
+    },
+    {
+      "name": "Telegram Connection",
+      "success": false,
+      "duration": 0.17,
+      "exitCode": 1
+    },
+    {
+      "name": "Health Check",
+      "success": false,
+      "duration": 1.8,
+      "exitCode": 1
+    },
+    {
+      "name": "WebSocket Connection",
+      "success": true,
+      "duration": 3.12,
+      "exitCode": 0
+    },
+    {
+      "name": "Complete System Test",
+      "success": true,
+      "duration": 12.17,
+      "exitCode": 0
+    },
+    {
+      "name": "End-to-End Test",
+      "success": true,
+      "duration": 8.13,
+      "exitCode": 0
+    },
+    {
+      "name": "Integration Test",
+      "success": true,
+      "duration": 0.21,
+      "exitCode": 0
+    },
+    {
+      "name": "Frontend Connection Test",
+      "success": true,
+      "duration": 5.1,
+      "exitCode": 0
+    }
+  ]
+}

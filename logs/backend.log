@@ -1,14 +1,804 @@
-node:internal/modules/cjs/loader:1228
-  throw err;
-  ^
 
-Error: Cannot find module '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/server.js'
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1225:15)
-    at Module._load (node:internal/modules/cjs/loader:1051:27)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:174:12)
-    at node:internal/main/run_main_module:28:49 {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: []
-}
+> react-oas-integration-backend@1.0.0 start
+> node src/server.js
 
-Node.js v20.17.0
+🚀 Backend server running on port 3001
+📊 Health check: http://localhost:3001/health
+🌐 WebSocket server ready for connections
+::1 - - [19/Mar/2026:20:17:54 +0000] "GET /manifest.json HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:55 +0000] "GET /static/js/vendors-node_modules_antd_es_dropdown_dropdown_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:55 +0000] "GET /static/js/src_services_securityService_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:55 +0000] "GET /manifest.json HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:55 +0000] "GET /favicon.ico HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:57 +0000] "GET /static/js/vendors-node_modules_ant-design_icons-svg_es_asn_EditOutlined_js-node_modules_antd_es_card_in-d4918d.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:57 +0000] "GET /static/js/vendors-node_modules_antd_es_spin_index_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:57 +0000] "GET /static/js/vendors-node_modules_antd_es_statistic_index_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:57 +0000] "GET /static/js/vendors-node_modules_ant-design_icons_es_icons_DashboardOutlined_js-node_modules_ant-design_i-c319a0.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:17:57 +0000] "GET /static/js/dashboard.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+::1 - - [19/Mar/2026:20:19:28 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:19:28 +0000] "GET /api/status HTTP/1.1" 200 93 "-" "-"
+::1 - - [19/Mar/2026:20:19:28 +0000] "GET /api/orders HTTP/1.1" 404 71 "-" "-"
+::1 - - [19/Mar/2026:20:19:28 +0000] "GET /api/analytics HTTP/1.1" 404 74 "-" "-"
+::1 - - [19/Mar/2026:20:19:28 +0000] "GET /api/statistics HTTP/1.1" 404 75 "-" "-"
+::1 - - [19/Mar/2026:20:25:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: -qsVq41fmMDyX0WMAAAB
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T20:25:32.665Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: -qsVq41fmMDyX0WMAAAB
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:25:35 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: gc4JyMJX1Tv5sKGPAAAD
+Client disconnected: gc4JyMJX1Tv5sKGPAAAD
+::1 - - [19/Mar/2026:20:25:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:40 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: BR3tAOI2q7xPu47IAAAF
+Client disconnected: BR3tAOI2q7xPu47IAAAF
+::1 - - [19/Mar/2026:20:25:43 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 57qpsDRWCetLCfRrAAAH
+Client disconnected: 57qpsDRWCetLCfRrAAAH
+::1 - - [19/Mar/2026:20:25:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:46 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: m39Npy4yKvUYU3hzAAAJ
+Client disconnected: m39Npy4yKvUYU3hzAAAJ
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:50 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: cOMP0PS6TIjtl3xvAAAL
+Client disconnected: cOMP0PS6TIjtl3xvAAAL
+::1 - - [19/Mar/2026:20:25:53 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: bdvhZlLFwDAV-EbpAAAN
+Client disconnected: bdvhZlLFwDAV-EbpAAAN
+::1 - - [19/Mar/2026:20:25:56 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:56 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 0wOiwnA-HNDmWYhsAAAP
+Client disconnected: 0wOiwnA-HNDmWYhsAAAP
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:25:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:26:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:26:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: iC9APhTHWzSLQpCXAAAR
+Client disconnected: iC9APhTHWzSLQpCXAAAR
+::1 - - [19/Mar/2026:20:26:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:26:00 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:26:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: iZlMA7AbFjacUQVYAAAT
+Client disconnected: iZlMA7AbFjacUQVYAAAT
+::1 - - [19/Mar/2026:20:33:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: -61vW2SIisyNUnXLAAAV
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T20:33:58.394Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: -61vW2SIisyNUnXLAAAV
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:34:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: PXV2UDCpHbzYba8aAAAX
+Client disconnected: PXV2UDCpHbzYba8aAAAX
+::1 - - [19/Mar/2026:20:34:06 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:06 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: suwZJ_7WsDaYaVqgAAAZ
+Client disconnected: suwZJ_7WsDaYaVqgAAAZ
+::1 - - [19/Mar/2026:20:34:09 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: duyuFh7zcF9A-0bWAAAb
+Client disconnected: duyuFh7zcF9A-0bWAAAb
+::1 - - [19/Mar/2026:20:34:12 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:12 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: HkKzp6f72DiIL9MwAAAd
+Client disconnected: HkKzp6f72DiIL9MwAAAd
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:16 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 0awCv0PyLj6y6M7TAAAf
+Client disconnected: 0awCv0PyLj6y6M7TAAAf
+::1 - - [19/Mar/2026:20:34:19 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: EtuXPHkHJM4z3V6wAAAh
+Client disconnected: EtuXPHkHJM4z3V6wAAAh
+::1 - - [19/Mar/2026:20:34:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:22 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: lQBpBdFDb0zQ0eZMAAAj
+Client disconnected: lQBpBdFDb0zQ0eZMAAAj
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:25 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: MAp6YpHzUs64E3ZaAAAl
+Client disconnected: MAp6YpHzUs64E3ZaAAAl
+::1 - - [19/Mar/2026:20:34:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:34:26 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:34:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 5IgVKDdDB3tOD3ojAAAn
+Client disconnected: 5IgVKDdDB3tOD3ojAAAn
+::1 - - [19/Mar/2026:20:36:12 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: asL5D3mjCFgiyEIBAAAp
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T20:36:12.801Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: asL5D3mjCFgiyEIBAAAp
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:36:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: Fl07XSqo0viLEXhlAAAr
+Client disconnected: Fl07XSqo0viLEXhlAAAr
+::1 - - [19/Mar/2026:20:36:20 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:20 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: Xw3DWOYXWYibObd7AAAt
+Client disconnected: Xw3DWOYXWYibObd7AAAt
+::1 - - [19/Mar/2026:20:36:23 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: kZzogQN54T_Mz4XwAAAv
+Client disconnected: kZzogQN54T_Mz4XwAAAv
+::1 - - [19/Mar/2026:20:36:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:26 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 0bKkBABqR9qYtkKkAAAx
+Client disconnected: 0bKkBABqR9qYtkKkAAAx
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:30 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: PSySNFYO5rwLD3R2AAAz
+Client disconnected: PSySNFYO5rwLD3R2AAAz
+::1 - - [19/Mar/2026:20:36:33 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 1dySVcU4egvbGY5IAAA1
+Client disconnected: 1dySVcU4egvbGY5IAAA1
+::1 - - [19/Mar/2026:20:36:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: D6JOSleyaDaqKy49AAA3
+Client disconnected: D6JOSleyaDaqKy49AAA3
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: MLRxeH8J38v3eTmaAAA5
+Client disconnected: MLRxeH8J38v3eTmaAAA5
+::1 - - [19/Mar/2026:20:36:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:36:40 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:36:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: erol4joPWPIFmirHAAA7
+Client disconnected: erol4joPWPIFmirHAAA7
+::1 - - [19/Mar/2026:20:49:52 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: BKsEJPNItC27K6C7AAA9
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T20:49:52.639Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: BKsEJPNItC27K6C7AAA9
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:49:55 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 2KXxRF4rXToa978EAAA_
+Client disconnected: 2KXxRF4rXToa978EAAA_
+::1 - - [19/Mar/2026:20:50:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:00 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 55Aop2c7lT0E1bCuAABB
+Client disconnected: 55Aop2c7lT0E1bCuAABB
+::1 - - [19/Mar/2026:20:50:03 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: Kv4UI3OkZjLk949uAABD
+Client disconnected: Kv4UI3OkZjLk949uAABD
+::1 - - [19/Mar/2026:20:50:06 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:06 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: LioSXnaFTIDIIvK8AABF
+Client disconnected: LioSXnaFTIDIIvK8AABF
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:09 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:10 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:10 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: x5v_e7VTt7RKYIdYAABH
+Client disconnected: x5v_e7VTt7RKYIdYAABH
+::1 - - [19/Mar/2026:20:50:13 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: I6ryTCpLyF6r0Mt-AABJ
+Client disconnected: I6ryTCpLyF6r0Mt-AABJ
+::1 - - [19/Mar/2026:20:50:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:16 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: -FYzZPF3tILTaGMFAABL
+Client disconnected: -FYzZPF3tILTaGMFAABL
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:20 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:20 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: vG-EbxAkP0rPOTDZAABN
+Client disconnected: vG-EbxAkP0rPOTDZAABN
+::1 - - [19/Mar/2026:20:50:20 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:50:20 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:50:20 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: kz0p5zBFI5W84RQ_AABP
+Client disconnected: kz0p5zBFI5W84RQ_AABP
+::1 - - [19/Mar/2026:20:55:49 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: Ua35Fhn0u_VqZsUiAABR
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T20:55:50.454Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: Ua35Fhn0u_VqZsUiAABR
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:55:53 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: abAPlRXFL9jlAEdjAABT
+Client disconnected: abAPlRXFL9jlAEdjAABT
+::1 - - [19/Mar/2026:20:55:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:55:58 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: RvaVBrKPuM5AtoUEAABV
+Client disconnected: RvaVBrKPuM5AtoUEAABV
+::1 - - [19/Mar/2026:20:56:01 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: gFAxvBUWtfilV7-zAABX
+Client disconnected: gFAxvBUWtfilV7-zAABX
+::1 - - [19/Mar/2026:20:56:04 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:04 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 6aju2OifB86UXbynAABZ
+Client disconnected: 6aju2OifB86UXbynAABZ
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:08 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: nQT_dkdDShPjm8eqAABb
+Client disconnected: nQT_dkdDShPjm8eqAABb
+::1 - - [19/Mar/2026:20:56:11 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: fFvtwAAZVlsRBQOpAABd
+Client disconnected: fFvtwAAZVlsRBQOpAABd
+::1 - - [19/Mar/2026:20:56:14 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:14 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: u0d9rI22GSAccYHDAABf
+Client disconnected: u0d9rI22GSAccYHDAABf
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: rsnB5fnY5gpK4-sKAABh
+Client disconnected: rsnB5fnY5gpK4-sKAABh
+::1 - - [19/Mar/2026:20:56:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:20:56:18 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:20:56:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: GglmUQ9J4c-BHqYYAABj
+Client disconnected: GglmUQ9J4c-BHqYYAABj
+::1 - - [19/Mar/2026:21:02:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: frqCJW3hcizTMCEKAABl
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:02:32.936Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: frqCJW3hcizTMCEKAABl
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:02:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: ArD73F9w3JY3YzwoAABn
+Client disconnected: ArD73F9w3JY3YzwoAABn
+::1 - - [19/Mar/2026:21:02:41 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:41 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: HaaK--PvsH43Au-FAABp
+Client disconnected: HaaK--PvsH43Au-FAABp
+::1 - - [19/Mar/2026:21:02:44 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: uGd4J4UdTmV4S87mAABr
+Client disconnected: uGd4J4UdTmV4S87mAABr
+::1 - - [19/Mar/2026:21:02:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:47 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: w99eSZR9ju0bEXtcAABt
+Client disconnected: w99eSZR9ju0bEXtcAABt
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:50 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: QVacO482o8xq29aDAABv
+Client disconnected: QVacO482o8xq29aDAABv
+::1 - - [19/Mar/2026:21:02:53 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: mdb8ZRcQETEG26jpAABx
+Client disconnected: mdb8ZRcQETEG26jpAABx
+::1 - - [19/Mar/2026:21:02:56 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:56 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: OAbVeHkwrnhHK8wtAABz
+Client disconnected: OAbVeHkwrnhHK8wtAABz
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:02:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:03:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:03:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 3ukGeyWsbQtgbZbRAAB1
+Client disconnected: 3ukGeyWsbQtgbZbRAAB1
+::1 - - [19/Mar/2026:21:03:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:03:01 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:03:01 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: HyrXXYDQyuEVv_bVAAB3
+Client disconnected: HyrXXYDQyuEVv_bVAAB3
+::1 - - [19/Mar/2026:21:07:15 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: RGemFXYl4qyC9FY4AAB5
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:07:15.847Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: RGemFXYl4qyC9FY4AAB5
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:18 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:19 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:07:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: w8dWoNM5jiT8i3qmAAB7
+Client disconnected: w8dWoNM5jiT8i3qmAAB7
+::1 - - [19/Mar/2026:21:07:24 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:24 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: arS_1zHEoWv7wrtLAAB9
+Client disconnected: arS_1zHEoWv7wrtLAAB9
+::1 - - [19/Mar/2026:21:07:27 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: fh4Yc5Aq-73RWK-fAAB_
+Client disconnected: fh4Yc5Aq-73RWK-fAAB_
+::1 - - [19/Mar/2026:21:07:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:30 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 6qaXyhFtkqTzHCirAACB
+Client disconnected: 6qaXyhFtkqTzHCirAACB
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:33 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 08_TeRSetlgqYXvzAACD
+Client disconnected: 08_TeRSetlgqYXvzAACD
+::1 - - [19/Mar/2026:21:07:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: LaYqxy4q41mO1PStAACF
+Client disconnected: LaYqxy4q41mO1PStAACF
+::1 - - [19/Mar/2026:21:07:39 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:39 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: pOTcStyC462GydBVAACH
+Client disconnected: pOTcStyC462GydBVAACH
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:43 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:43 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: v_8-yKGb5EiC9n2jAACJ
+Client disconnected: v_8-yKGb5EiC9n2jAACJ
+::1 - - [19/Mar/2026:21:07:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:07:44 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:07:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: tvWUCXvjz1555CjhAACL
+Client disconnected: tvWUCXvjz1555CjhAACL
+::1 - - [19/Mar/2026:21:08:30 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: Ni5_rlumdGe-X_NpAACN
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:08:30.591Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: Ni5_rlumdGe-X_NpAACN
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:08:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: uM2aU3rS3Vhc0w8mAACP
+Client disconnected: uM2aU3rS3Vhc0w8mAACP
+::1 - - [19/Mar/2026:21:08:38 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:38 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: -MMFgqFAZg4Gy0lYAACR
+Client disconnected: -MMFgqFAZg4Gy0lYAACR
+::1 - - [19/Mar/2026:21:08:41 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: FKiraduG3V6q3n-uAACT
+Client disconnected: FKiraduG3V6q3n-uAACT
+::1 - - [19/Mar/2026:21:08:44 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:44 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: Z29SdxqdIV7vYPTbAACV
+Client disconnected: Z29SdxqdIV7vYPTbAACV
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:48 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:48 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: E7EVCpLtftOp1oofAACX
+Client disconnected: E7EVCpLtftOp1oofAACX
+::1 - - [19/Mar/2026:21:08:51 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: SoVl-RDlLfy6kwlyAACZ
+Client disconnected: SoVl-RDlLfy6kwlyAACZ
+::1 - - [19/Mar/2026:21:08:54 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:54 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: ex2VfUZkIsVA3uYUAACb
+Client disconnected: ex2VfUZkIsVA3uYUAACb
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:57 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: _eagPn8dLzGJWI5tAACd
+Client disconnected: _eagPn8dLzGJWI5tAACd
+::1 - - [19/Mar/2026:21:08:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:08:58 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:08:58 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 72XmxSYIfBNFZgJ2AACf
+Client disconnected: 72XmxSYIfBNFZgJ2AACf
+::1 - - [19/Mar/2026:21:16:42 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: -8BmLfq8a0_ghCDKAACh
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:16:43.077Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: -8BmLfq8a0_ghCDKAACh
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:16:46 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: uSb8BL8ALNDp7BXrAACj
+Client disconnected: uSb8BL8ALNDp7BXrAACj
+::1 - - [19/Mar/2026:21:16:51 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:16:51 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 6nNveYvz-wqOQFYaAACl
+Client disconnected: 6nNveYvz-wqOQFYaAACl
+::1 - - [19/Mar/2026:21:16:54 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: JmHkmUH10GwmoCA_AACn
+Client disconnected: JmHkmUH10GwmoCA_AACn
+::1 - - [19/Mar/2026:21:17:04 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: T6cUkB52vrbkVcejAACp
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:17:05.447Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: T6cUkB52vrbkVcejAACp
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:17:08 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: Jos-4t7Ya7NnfpmKAACr
+Client disconnected: Jos-4t7Ya7NnfpmKAACr
+::1 - - [19/Mar/2026:21:17:13 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:13 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: rVR2iHgTcbSdvBrTAACt
+Client disconnected: rVR2iHgTcbSdvBrTAACt
+::1 - - [19/Mar/2026:21:17:16 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: NG869pmIkArgeV8EAACv
+Client disconnected: NG869pmIkArgeV8EAACv
+::1 - - [19/Mar/2026:21:17:19 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:19 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 3eUxjZ6x8lw3A27cAACx
+Client disconnected: 3eUxjZ6x8lw3A27cAACx
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:22 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:23 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:23 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: NK-RYuN18Z9sNHR7AACz
+Client disconnected: NK-RYuN18Z9sNHR7AACz
+::1 - - [19/Mar/2026:21:17:26 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: FDVIhu_V-q4HVz_OAAC1
+Client disconnected: FDVIhu_V-q4HVz_OAAC1
+::1 - - [19/Mar/2026:21:17:29 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:29 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: Vhz7wjIowKW7IwV0AAC3
+Client disconnected: Vhz7wjIowKW7IwV0AAC3
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: 6DHohSx6r_00WrwMAAC5
+Client disconnected: 6DHohSx6r_00WrwMAAC5
+::1 - - [19/Mar/2026:21:17:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:17:33 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:17:33 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: cuHRFTLH6dlba8BeAAC7
+Client disconnected: cuHRFTLH6dlba8BeAAC7
+::1 - - [19/Mar/2026:21:20:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: C93CId8HpkFcfNHXAAC9
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:20:59.809Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: C93CId8HpkFcfNHXAAC9
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:21:02 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: wvg1MoC3UChsqqAzAAC_
+Client disconnected: wvg1MoC3UChsqqAzAAC_
+::1 - - [19/Mar/2026:21:21:07 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:07 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: wwoCBbdoB_BkFnZrAADB
+Client disconnected: wwoCBbdoB_BkFnZrAADB
+::1 - - [19/Mar/2026:21:21:10 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: WqtXY1GmmuiXVrUoAADD
+Client disconnected: WqtXY1GmmuiXVrUoAADD
+::1 - - [19/Mar/2026:21:21:13 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:13 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: jT7l-P7iAB6MuTRlAADF
+Client disconnected: jT7l-P7iAB6MuTRlAADF
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:16 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:17 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:17 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: 2ZUfDfVuSMtJ_ZRsAADH
+Client disconnected: 2ZUfDfVuSMtJ_ZRsAADH
+::1 - - [19/Mar/2026:21:21:20 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: cvnTzOvkeFQyiBl_AADJ
+Client disconnected: cvnTzOvkeFQyiBl_AADJ
+::1 - - [19/Mar/2026:21:21:23 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:23 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: HmrHBCaeEOjP9bgUAADL
+Client disconnected: HmrHBCaeEOjP9bgUAADL
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:26 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:27 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:27 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: Lc6APqZ_yFpmRS66AADN
+Client disconnected: Lc6APqZ_yFpmRS66AADN
+::1 - - [19/Mar/2026:21:21:27 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:21:27 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:21:27 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: EBynrVE3PFD0fbiGAADP
+Client disconnected: EBynrVE3PFD0fbiGAADP
+::1 - - [19/Mar/2026:21:26:32 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: MEeFN-9UcjkKdIF-AADR
+Data request received: { type: 'dashboard', timestamp: '2026-03-19T21:26:32.870Z' }
+AI analysis request: { data: [ 1, 2, 3, 4, 5 ], model: 'test' }
+Client disconnected: MEeFN-9UcjkKdIF-AADR
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:26:36 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: PVIfePXbHmG5YpBkAADT
+Client disconnected: PVIfePXbHmG5YpBkAADT
+::1 - - [19/Mar/2026:21:26:41 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:41 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: jXc8f6aMpI6EF3rjAADV
+Client disconnected: jXc8f6aMpI6EF3rjAADV
+::1 - - [19/Mar/2026:21:26:44 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: mooGoe7RHjkjoz4OAADX
+Client disconnected: mooGoe7RHjkjoz4OAADX
+::1 - - [19/Mar/2026:21:26:47 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:47 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: cY63_7XDfP35q4_TAADZ
+Client disconnected: cY63_7XDfP35q4_TAADZ
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:50 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: iw1oHukb6Srscg0cAADb
+Client disconnected: iw1oHukb6Srscg0cAADb
+::1 - - [19/Mar/2026:21:26:53 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: IqYXOJb5dCY65nmHAADd
+Client disconnected: IqYXOJb5dCY65nmHAADd
+::1 - - [19/Mar/2026:21:26:56 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:56 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+Client connected: M0zBf8vPZQDQj1UQAADf
+Client disconnected: M0zBf8vPZQDQj1UQAADf
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:26:59 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:27:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:27:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: MXxc07CmXdIDKb7AAADh
+Client disconnected: MXxc07CmXdIDKb7AAADh
+::1 - - [19/Mar/2026:21:27:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+::1 - - [19/Mar/2026:21:27:00 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [19/Mar/2026:21:27:00 +0000] "GET /health HTTP/1.1" 200 104 "-" "-"
+Client connected: ab5dOPMHcRJTCxu1AADj
+Client disconnected: ab5dOPMHcRJTCxu1AADj

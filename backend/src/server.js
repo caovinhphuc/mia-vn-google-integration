@@ -1,3 +1,6 @@
+require("dotenv").config({
+  path: require("path").join(__dirname, "../../.env"),
+});
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
@@ -44,13 +47,18 @@ async function initGoogleDrive() {
 
   try {
     // Try to find credentials file (same as Google Sheets)
+    const projectRoot = path.join(__dirname, "../..");
     const possiblePaths = [
-      process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      process.env.GOOGLE_APPLICATION_CREDENTIALS &&
+        (path.isAbsolute(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+          ? process.env.GOOGLE_APPLICATION_CREDENTIALS
+          : path.join(projectRoot, process.env.GOOGLE_APPLICATION_CREDENTIALS)),
       process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
-      path.join(__dirname, "../../mia-logistics-469406-eec521c603c0.json"),
-      path.join(__dirname, "../../config/service_account.json"),
-      path.join(__dirname, "../../automation/config/service_account.json"),
-    ];
+      path.join(projectRoot, "config/google-credentials.json"),
+      path.join(projectRoot, "config/service_account.json"),
+      path.join(projectRoot, "mia-logistics-469406-eec521c603c0.json"),
+      path.join(projectRoot, "automation/config/service_account.json"),
+    ].filter(Boolean);
 
     let keyFile = null;
     const fs = require("fs");
@@ -91,13 +99,18 @@ async function initGoogleSheets() {
 
   try {
     // Try to find credentials file
+    const projectRoot = path.join(__dirname, "../..");
     const possiblePaths = [
-      process.env.GOOGLE_APPLICATION_CREDENTIALS,
+      process.env.GOOGLE_APPLICATION_CREDENTIALS &&
+        (path.isAbsolute(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+          ? process.env.GOOGLE_APPLICATION_CREDENTIALS
+          : path.join(projectRoot, process.env.GOOGLE_APPLICATION_CREDENTIALS)),
       process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
-      path.join(__dirname, "../../config/service_account.json"),
-      path.join(__dirname, "../../automation/config/service_account.json"),
-      path.join(__dirname, "../../mia-logistics-469406-eec521c603c0.json"),
-    ];
+      path.join(projectRoot, "config/google-credentials.json"),
+      path.join(projectRoot, "config/service_account.json"),
+      path.join(projectRoot, "automation/config/service_account.json"),
+      path.join(projectRoot, "mia-logistics-469406-eec521c603c0.json"),
+    ].filter(Boolean);
 
     let keyFile = null;
     for (const filePath of possiblePaths) {

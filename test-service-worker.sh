@@ -57,14 +57,16 @@ echo ""
 echo -e "${YELLOW}🚀 Starting production server...${NC}"
 echo ""
 
-PORT=3002
+PORT=3005
+# Use 3005 to avoid conflict with Backend (3001), ws-server (3002), API (3003)
 
-# Check if port is in use
-if lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Port $PORT is in use${NC}"
-    # Find available port
-    PORT=$(node -e "require('http').createServer().listen(0, () => { console.log(process.env.npm_package_scripts_test ? 3003 : 3004); process.exit(); })")
-fi
+# Find available port if 3005 is in use
+for p in 3005 3006 3007; do
+    if ! lsof -Pi :$p -sTCP:LISTEN -t >/dev/null 2>&1; then
+        PORT=$p
+        break
+    fi
+done
 
 # Start server in background
 echo -e "${BLUE}Starting server on port $PORT...${NC}"
@@ -149,6 +151,11 @@ echo ""
 echo "=================================================="
 echo -e "${GREEN}✅ Server running on PID: $SERVER_PID${NC}"
 echo "=================================================="
+echo ""
+echo -e "${YELLOW}⚠️  Để API + WebSocket hoạt động, chạy trước:${NC}"
+echo "   1. cd backend && npm start        (API port 3001)"
+echo "   2. node server/websocket-server.js (WS port 3002)"
+echo "   Build: cp .env.test-pwa .env.production.local && npm run build"
 echo ""
 echo -e "${YELLOW}Press Ctrl+C to stop the server${NC}"
 echo ""

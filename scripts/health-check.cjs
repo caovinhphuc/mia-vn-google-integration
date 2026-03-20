@@ -30,8 +30,7 @@ const log = {
   warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
   error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
   step: (msg) => console.log(`${colors.cyan}🔍 ${msg}${colors.reset}`),
-  header: (msg) =>
-    console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
+  header: (msg) => console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
 };
 
 // Health check results
@@ -66,12 +65,41 @@ const addResult = (service, status, message, details = null) => {
 const checkEnvironmentVariables = () => {
   log.step("Kiểm tra Environment Variables...");
 
-  const requiredVars = [
-    "REACT_APP_GOOGLE_CLIENT_EMAIL",
-    "REACT_APP_GOOGLE_PRIVATE_KEY",
-    "REACT_APP_GOOGLE_PROJECT_ID",
-    "REACT_APP_GOOGLE_SHEET_ID",
-  ];
+  // Sheet ID — chấp nhận nhiều tên
+  const sheetId =
+    process.env.REACT_APP_GOOGLE_SHEET_ID ||
+    process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
+    process.env.GOOGLE_SHEETS_ID;
+
+  // Google config: (A) file credentials HOẶC (B) biến cũ từng cái
+  const credFile =
+    process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+    process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
+    process.env.GOOGLE_CREDENTIALS_PATH;
+  const hasCredFile = credFile && fs.existsSync(path.resolve(process.cwd(), credFile));
+
+  const hasLegacyGoogle =
+    process.env.REACT_APP_GOOGLE_CLIENT_EMAIL &&
+    process.env.REACT_APP_GOOGLE_PRIVATE_KEY &&
+    process.env.REACT_APP_GOOGLE_PROJECT_ID;
+
+  const googleOk =
+    (hasCredFile && sheetId) ||
+    (hasLegacyGoogle && sheetId) ||
+    (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
+      (hasCredFile || process.env.GOOGLE_PRIVATE_KEY?.includes("BEGIN")) &&
+      sheetId);
+
+  if (!googleOk) {
+    const missing = [];
+    if (!sheetId) missing.push("REACT_APP_GOOGLE_SHEET_ID / GOOGLE_SHEETS_ID");
+    if (!hasCredFile && !hasLegacyGoogle)
+      missing.push(
+        "GOOGLE_APPLICATION_CREDENTIALS (file) hoặc REACT_APP_GOOGLE_CLIENT_EMAIL + GOOGLE_PRIVATE_KEY + GOOGLE_PROJECT_ID"
+      );
+    addResult("environment", "error", `Thiếu cấu hình Google: ${missing.join("; ")}`);
+    return false;
+  }
 
   const optionalVars = [
     "REACT_APP_GOOGLE_MAPS_API_KEY",
@@ -83,33 +111,12 @@ const checkEnvironmentVariables = () => {
     "SMTP_PASS",
     "REDIS_URL",
   ];
-
-  const missingRequired = requiredVars.filter(
-    (varName) => !process.env[varName]
-  );
-  const missingOptional = optionalVars.filter(
-    (varName) => !process.env[varName]
-  );
-
-  if (missingRequired.length > 0) {
-    addResult(
-      "environment",
-      "error",
-      `Missing required environment variables: ${missingRequired.join(", ")}`
-    );
-    return false;
-  }
-
+  const missingOptional = optionalVars.filter((varName) => !process.env[varName]);
   if (missingOptional.length > 0) {
-    addResult(
-      "environment",
-      "warning",
-      `Missing optional environment variables: ${missingOptional.join(", ")}`
-    );
+    addResult("environment", "warning", `Optional chưa đặt: ${missingOptional.join(", ")}`);
   } else {
-    addResult("environment", "healthy", "All environment variables configured");
+    addResult("environment", "healthy", "Environment variables OK");
   }
-
   return true;
 };
 
@@ -120,25 +127,35 @@ const checkGoogleSheetsAPI = async () => {
     const { GoogleAuth } = require("google-auth-library");
     const { google } = require("googleapis");
 
-    // Create credentials object
-    const credentials = {
-      type: "service_account",
-      project_id: process.env.GOOGLE_PROJECT_ID,
-      private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-      private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      auth_uri: process.env.GOOGLE_AUTH_URI,
-      token_uri: process.env.GOOGLE_TOKEN_URI,
-      auth_provider_x509_cert_url:
-        process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL,
-    };
+    const credPath =
+      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
+      process.env.GOOGLE_CREDENTIALS_PATH;
+    const credFile = credPath ? path.resolve(process.cwd(), credPath) : null;
 
-    // Initialize auth
-    const auth = new GoogleAuth({
-      credentials: credentials,
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-    });
+    let auth;
+    if (credFile && fs.existsSync(credFile)) {
+      auth = new GoogleAuth({
+        keyFilename: credFile,
+        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+      });
+    } else {
+      const credentials = {
+        type: "service_account",
+        project_id: process.env.GOOGLE_PROJECT_ID || process.env.REACT_APP_GOOGLE_PROJECT_ID,
+        private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || process.env.REACT_APP_GOOGLE_CLIENT_EMAIL,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        auth_uri: process.env.GOOGLE_AUTH_URI,
+        token_uri: process.env.GOOGLE_TOKEN_URI,
+        auth_provider_x509_cert_url: process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL,
+      };
+      auth = new GoogleAuth({
+        credentials,
+        scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+      });
+    }
 
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
@@ -146,7 +163,8 @@ const checkGoogleSheetsAPI = async () => {
     // Test connection
     const sheetId =
       process.env.REACT_APP_GOOGLE_SHEET_ID ||
-      process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID;
+      process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
+      process.env.GOOGLE_SHEETS_ID;
     const response = await sheets.spreadsheets.get({
       spreadsheetId: sheetId,
     });
@@ -164,12 +182,10 @@ const checkGoogleSheetsAPI = async () => {
 
     return true;
   } catch (error) {
-    addResult(
-      "google-sheets",
-      "error",
-      `Google Sheets API connection failed: ${error.message}`,
-      { error: error.message, code: error.code }
-    );
+    addResult("google-sheets", "error", `Google Sheets API connection failed: ${error.message}`, {
+      error: error.message,
+      code: error.code,
+    });
     return false;
   }
 };
@@ -181,42 +197,39 @@ const checkGoogleDriveAPI = async () => {
     const { GoogleAuth } = require("google-auth-library");
     const { google } = require("googleapis");
 
-    // Create credentials object (support both REACT_APP_ and non-prefix)
-    const getEnvVar = (reactAppName, fallbackName) => {
-      return process.env[reactAppName] || process.env[fallbackName];
-    };
+    const credPath =
+      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
+      process.env.GOOGLE_CREDENTIALS_PATH;
+    const credFile = credPath ? path.resolve(process.cwd(), credPath) : null;
 
-    const credentials = {
-      type: "service_account",
-      project_id: getEnvVar("REACT_APP_GOOGLE_PROJECT_ID", "GOOGLE_PROJECT_ID"),
-      private_key_id: getEnvVar(
-        "REACT_APP_GOOGLE_PRIVATE_KEY_ID",
-        "GOOGLE_PRIVATE_KEY_ID"
-      ),
-      private_key: getEnvVar(
-        "REACT_APP_GOOGLE_PRIVATE_KEY",
-        "GOOGLE_PRIVATE_KEY"
-      )?.replace(/\\n/g, "\n"),
-      client_email: getEnvVar(
-        "REACT_APP_GOOGLE_CLIENT_EMAIL",
-        "GOOGLE_SERVICE_ACCOUNT_EMAIL"
-      ),
-      client_id: getEnvVar("REACT_APP_GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_ID"),
-      auth_uri:
-        process.env.GOOGLE_AUTH_URI ||
-        "https://accounts.google.com/o/oauth2/auth",
-      token_uri:
-        process.env.GOOGLE_TOKEN_URI || "https://oauth2.googleapis.com/token",
-      auth_provider_x509_cert_url:
-        process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL ||
-        "https://www.googleapis.com/oauth2/v1/certs",
-    };
-
-    // Initialize auth
-    const auth = new GoogleAuth({
-      credentials: credentials,
-      scopes: ["https://www.googleapis.com/auth/drive.file"],
-    });
+    let auth;
+    if (credFile && fs.existsSync(credFile)) {
+      auth = new GoogleAuth({
+        keyFilename: credFile,
+        scopes: ["https://www.googleapis.com/auth/drive.file"],
+      });
+    } else {
+      const getEnvVar = (reactAppName, fallbackName) =>
+        process.env[reactAppName] || process.env[fallbackName];
+      const credentials = {
+        type: "service_account",
+        project_id: getEnvVar("REACT_APP_GOOGLE_PROJECT_ID", "GOOGLE_PROJECT_ID"),
+        private_key_id: getEnvVar("REACT_APP_GOOGLE_PRIVATE_KEY_ID", "GOOGLE_PRIVATE_KEY_ID"),
+        private_key: getEnvVar("REACT_APP_GOOGLE_PRIVATE_KEY", "GOOGLE_PRIVATE_KEY")?.replace(/\\n/g, "\n"),
+        client_email: getEnvVar("REACT_APP_GOOGLE_CLIENT_EMAIL", "GOOGLE_SERVICE_ACCOUNT_EMAIL"),
+        client_id: getEnvVar("REACT_APP_GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_ID"),
+        auth_uri: process.env.GOOGLE_AUTH_URI || "https://accounts.google.com/o/oauth2/auth",
+        token_uri: process.env.GOOGLE_TOKEN_URI || "https://oauth2.googleapis.com/token",
+        auth_provider_x509_cert_url:
+          process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL ||
+          "https://www.googleapis.com/oauth2/v1/certs",
+      };
+      auth = new GoogleAuth({
+        credentials,
+        scopes: ["https://www.googleapis.com/auth/drive.file"],
+      });
+    }
 
     const authClient = await auth.getClient();
     const drive = google.drive({ version: "v3", auth: authClient });
@@ -236,12 +249,10 @@ const checkGoogleDriveAPI = async () => {
 
     return true;
   } catch (error) {
-    addResult(
-      "google-drive",
-      "error",
-      `Google Drive API connection failed: ${error.message}`,
-      { error: error.message, code: error.code }
-    );
+    addResult("google-drive", "error", `Google Drive API connection failed: ${error.message}`, {
+      error: error.message,
+      code: error.code,
+    });
     return false;
   }
 };
@@ -261,8 +272,7 @@ const checkEmailService = async () => {
     const nodemailer = require("nodemailer");
 
     const transporter = nodemailer.createTransport({
-      service:
-        process.env.REACT_APP_EMAIL_SERVICE || process.env.SMTP_HOST || "gmail",
+      service: process.env.REACT_APP_EMAIL_SERVICE || process.env.SMTP_HOST || "gmail",
       host: process.env.SMTP_HOST || "smtp.gmail.com",
       port: process.env.SMTP_PORT || 587,
       secure: process.env.SMTP_SECURE === "true",
@@ -275,26 +285,15 @@ const checkEmailService = async () => {
     // Test connection
     await transporter.verify();
 
-    addResult(
-      "email-service",
-      "healthy",
-      "Email service connection successful",
-      {
-        user:
-          emailUser ||
-          process.env.REACT_APP_EMAIL_USER ||
-          process.env.EMAIL_FROM,
-      }
-    );
+    addResult("email-service", "healthy", "Email service connection successful", {
+      user: emailUser || process.env.REACT_APP_EMAIL_USER || process.env.EMAIL_FROM,
+    });
 
     return true;
   } catch (error) {
-    addResult(
-      "email-service",
-      "error",
-      `Email service connection failed: ${error.message}`,
-      { error: error.message }
-    );
+    addResult("email-service", "error", `Email service connection failed: ${error.message}`, {
+      error: error.message,
+    });
     return false;
   }
 };
@@ -302,10 +301,8 @@ const checkEmailService = async () => {
 const checkTelegramService = async () => {
   log.step("Kiểm tra Telegram Service...");
 
-  const botToken =
-    process.env.REACT_APP_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
-  const chatId =
-    process.env.REACT_APP_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+  const botToken = process.env.REACT_APP_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.REACT_APP_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
 
   if (!botToken) {
     addResult("telegram-service", "warning", "Telegram service not configured");
@@ -315,9 +312,7 @@ const checkTelegramService = async () => {
   try {
     const axios = require("axios");
 
-    const response = await axios.get(
-      `https://api.telegram.org/bot${botToken}/getMe`
-    );
+    const response = await axios.get(`https://api.telegram.org/bot${botToken}/getMe`);
 
     if (response.data.ok) {
       addResult(
@@ -334,12 +329,9 @@ const checkTelegramService = async () => {
       throw new Error("Invalid bot token");
     }
   } catch (error) {
-    addResult(
-      "telegram-service",
-      "error",
-      `Telegram service connection failed: ${error.message}`,
-      { error: error.message }
-    );
+    addResult("telegram-service", "error", `Telegram service connection failed: ${error.message}`, {
+      error: error.message,
+    });
     return false;
   }
 };
@@ -358,18 +350,12 @@ const checkFileSystem = () => {
     addResult(
       "file-system",
       "error",
-      `Missing files/directories: ${[...missingFiles, ...missingDirs].join(
-        ", "
-      )}`
+      `Missing files/directories: ${[...missingFiles, ...missingDirs].join(", ")}`
     );
     return false;
   }
 
-  addResult(
-    "file-system",
-    "healthy",
-    "All required files and directories present"
-  );
+  addResult("file-system", "healthy", "All required files and directories present");
   return true;
 };
 
@@ -381,19 +367,14 @@ const checkDependencies = () => {
     const nodeModulesExists = fs.existsSync("node_modules");
 
     if (!nodeModulesExists) {
-      addResult(
-        "dependencies",
-        "error",
-        "node_modules directory not found. Run npm install"
-      );
+      addResult("dependencies", "error", "node_modules directory not found. Run npm install");
       return false;
     }
 
     // Check for critical dependencies
     const criticalDeps = ["react", "googleapis", "google-auth-library"];
     const missingDeps = criticalDeps.filter(
-      (dep) =>
-        !packageJson.dependencies[dep] && !packageJson.devDependencies[dep]
+      (dep) => !packageJson.dependencies[dep] && !packageJson.devDependencies[dep]
     );
 
     if (missingDeps.length > 0) {
@@ -408,11 +389,7 @@ const checkDependencies = () => {
 
     return true;
   } catch (error) {
-    addResult(
-      "dependencies",
-      "error",
-      `Error checking dependencies: ${error.message}`
-    );
+    addResult("dependencies", "error", `Error checking dependencies: ${error.message}`);
     return false;
   }
 };
@@ -427,9 +404,8 @@ const generateHealthReport = () => {
   };
 
   console.log(`
-${
-  statusColor[healthResults.overall]
-}Overall Status: ${healthResults.overall.toUpperCase()}${colors.reset}
+${statusColor[healthResults.overall]
+    }Overall Status: ${healthResults.overall.toUpperCase()}${colors.reset}
 ${colors.blue}Timestamp: ${healthResults.timestamp}${colors.reset}
 
 ${colors.cyan}📊 Service Status:${colors.reset}
@@ -478,13 +454,9 @@ ${colors.cyan}📊 Service Status:${colors.reset}
   }
 
   // Save report to file
-  const reportFile = `health-report-${
-    new Date().toISOString().split("T")[0]
-  }.json`;
+  const reportFile = `health-report-${new Date().toISOString().split("T")[0]}.json`;
   fs.writeFileSync(reportFile, JSON.stringify(healthResults, null, 2));
-  console.log(
-    `\n${colors.blue}📄 Health report saved to: ${reportFile}${colors.reset}`
-  );
+  console.log(`\n${colors.blue}📄 Health report saved to: ${reportFile}${colors.reset}`);
 };
 
 const main = async () => {

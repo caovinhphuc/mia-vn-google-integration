@@ -42,13 +42,23 @@ Sau khi cài xong, mở **Terminal mới** để áp dụng `.nvmrc` / env.
 ## 4. Biến môi trường (.env)
 
 - Copy `.env.example` → `.env` (root) và điền giá trị thật.
-- Backend dùng cùng `.env` ở root hoặc `backend/.env` tùy cách đọc trong code.
-- Xem chi tiết biến: `.env.example`, `.env.production.template`.
+- **Backend load `.env` từ project root** (không cần `backend/.env`).
+- Xem chi tiết: [docs/GOOGLE_CREDENTIALS_SETUP.md](docs/GOOGLE_CREDENTIALS_SETUP.md)
 
 ```bash
 cp .env.example .env
 # Chỉnh .env: PORT, JWT_SECRET, Google credentials, SMTP, ...
 ```
+
+### Google Drive/Sheets (dữ liệu thật)
+
+| Biến | Mô tả |
+|------|-------|
+| `GOOGLE_APPLICATION_CREDENTIALS` | Path tới `config/google-credentials.json` |
+| `GOOGLE_DRIVE_FOLDER_ID` | Folder ID (vd: `1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V`) |
+| `GOOGLE_SHEETS_ID` | Spreadsheet ID |
+
+→ Đặt file `config/google-credentials.json` (Service Account JSON từ Google Cloud).
 
 ## 5. Kiểm tra sau khi cài
 

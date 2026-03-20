@@ -4,18 +4,593 @@
   warnings.warn(eol_message.format("3.9"), FutureWarning)
 /Users/phuccao/Projects/personal/react-oas-inntegration-x/one_automation_system/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
-INFO:     Started server process [57004]
+INFO:     Started server process [74486]
 INFO:     Waiting for application startup.
-2026-03-19 09:47:37,649 - main - INFO - 🚀 Starting OneAutomation System...
+2026-03-20 03:17:44,565 - main - INFO - 🚀 Starting OneAutomation System...
 Credentials file not found: config/service_account.json
-2026-03-19 09:47:37,649 - main - INFO - ✅ Google Sheets service initialized
-2026-03-19 09:47:37,649 - main - INFO - ✅ Email service initialized
-2026-03-19 09:47:37,649 - main - INFO - ✅ Data processor initialized
-2026-03-19 09:47:37,649 - main - INFO - 🎉 OneAutomation System started successfully!
+2026-03-20 03:17:44,565 - main - INFO - ✅ Google Sheets service initialized
+2026-03-20 03:17:44,565 - main - INFO - ✅ Email service initialized
+2026-03-20 03:17:44,565 - main - INFO - ✅ Data processor initialized
+2026-03-20 03:17:44,565 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:59430 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59430 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59430 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59430 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59430 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59440 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59441 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59442 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59443 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59443 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59443 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59443 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59443 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59451 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59451 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59451 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59451 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59451 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59451 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59451 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59470 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59470 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59451 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59474 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59472 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59476 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59483 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59483 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59483 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59483 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59483 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59483 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59503 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59504 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59483 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59503 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59506 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59508 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59504 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59483 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59510 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59518 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59518 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59518 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59518 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60310 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60310 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60310 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60310 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60310 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60320 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60321 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60322 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60323 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60323 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60323 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60323 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60323 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60333 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60333 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60333 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60333 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60333 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60333 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60333 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60410 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60333 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60412 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60410 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60414 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60412 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60410 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60460 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60460 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60460 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60460 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60460 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60460 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60460 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60533 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60535 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60460 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60538 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60539 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60539 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60538 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60541 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60549 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60549 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60549 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60549 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60636 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60636 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60636 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60636 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60636 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60646 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60647 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60648 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60649 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60649 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60673 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60673 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60673 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60673 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60673 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60673 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60673 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60694 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60695 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60673 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60700 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60701 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60702 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60703 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60712 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60712 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60712 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60712 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60742 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60742 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60744 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60746 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60749 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60750 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60755 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60765 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60765 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60765 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60765 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62160 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62160 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62160 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62160 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62160 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62170 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62171 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62172 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62173 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62173 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62173 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62173 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62173 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62181 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62181 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62181 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62181 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62181 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62181 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62181 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62201 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62202 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62181 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62201 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62202 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62205 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62206 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62223 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62223 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62223 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62223 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62223 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62223 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62278 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62279 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62223 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62278 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62279 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62223 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62281 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62283 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62285 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62293 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62293 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62293 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62293 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63030 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63030 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63030 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63030 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63030 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63038 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63041 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63042 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63043 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63043 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63051 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63051 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63051 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63051 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63051 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63051 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63051 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63051 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63072 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63070 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63074 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63076 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63078 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63085 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63085 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63085 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63085 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63085 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63085 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63085 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63085 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63141 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63143 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63148 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63158 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63158 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63586 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63586 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63586 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63586 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63586 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63596 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63597 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63598 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63599 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63599 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63599 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63599 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63599 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63610 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63610 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63610 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63610 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63610 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63610 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63610 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63630 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63635 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63636 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63637 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63638 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63639 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63641 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63648 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63648 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63648 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63648 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63648 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63648 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63648 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63648 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63671 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63672 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63673 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63677 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63678 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63679 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63681 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63689 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63689 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63689 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63689 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64331 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64331 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64331 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64331 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64331 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64341 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64342 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64344 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64344 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64344 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64344 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64344 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64352 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64352 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64352 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64352 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64352 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64352 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64352 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64374 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64376 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64379 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64380 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64379 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64379 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64379 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64387 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64387 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64387 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64387 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64387 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64387 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64408 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64387 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64409 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64408 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64412 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64413 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64415 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64409 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64417 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64426 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64426 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64426 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64426 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64690 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64690 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64690 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64690 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64690 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64699 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64700 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64702 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64703 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64703 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64703 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64703 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64703 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64714 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64714 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64714 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64714 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64714 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64714 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64714 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64733 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64714 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64735 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64737 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64744 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64744 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64744 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64744 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64744 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64744 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64744 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64763 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64765 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64744 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64767 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64770 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64772 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64773 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64775 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64783 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64783 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64783 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64783 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49499 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49499 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49499 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49499 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49499 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49509 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49510 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49511 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49512 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49512 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49512 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49512 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49512 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49574 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49629 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49629 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49629 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49629 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49629 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49639 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49640 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49641 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49642 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49642 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49642 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49642 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49642 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49730 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49730 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49730 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49730 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49730 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49730 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49730 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49730 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49774 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49776 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49778 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49780 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49783 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49784 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49801 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49801 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49801 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49801 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49801 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49801 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49825 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49827 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49825 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49827 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49801 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49825 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49827 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49801 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49829 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49837 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49837 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49837 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49837 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50298 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50298 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50298 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50298 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50298 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50308 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50309 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50310 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50311 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50311 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50311 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50311 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50311 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50319 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50319 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50319 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50319 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50319 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50319 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50373 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50374 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50319 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50376 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50373 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50379 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50380 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50373 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50395 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50395 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50395 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50395 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50395 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50395 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50417 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50418 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50395 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50417 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50420 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50418 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50422 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50424 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50426 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50434 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50434 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50434 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50434 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51117 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51117 - "POST /api/ml/predict HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51117 - "POST /api/ml/optimize HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51117 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51117 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51127 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51128 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51129 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51130 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51130 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51130 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51130 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51138 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51138 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51138 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51138 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51160 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51161 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51165 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51166 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51167 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51168 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51169 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51176 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51176 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51176 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51176 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51176 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51176 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51196 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51197 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51200 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51201 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51204 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51205 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51208 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51209 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51211 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51219 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51219 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51219 - "GET /api/ml/insights HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51219 - "GET /health HTTP/1.1" 200 OK
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
-2026-03-19 09:49:39,798 - main - INFO - 👋 Shutting down OneAutomation System...
+2026-03-20 04:30:36,323 - main - INFO - 👋 Shutting down OneAutomation System...
 INFO:     Application shutdown complete.
-INFO:     Finished server process [57004]
+INFO:     Finished server process [74486]

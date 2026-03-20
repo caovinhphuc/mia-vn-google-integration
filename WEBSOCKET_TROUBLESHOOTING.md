@@ -39,6 +39,7 @@
    ```
 
 4. **Run WebSocket test again:**
+
    ```bash
    npm run test:websocket
    ```
@@ -93,6 +94,7 @@
    ```
 
 3. **Restart backend server:**
+
    ```bash
    # Kill and restart
    npm run fix:ports

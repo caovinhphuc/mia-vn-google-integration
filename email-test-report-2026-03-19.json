@@ -1,0 +1,77 @@
+{
+  "title": "Email Service Test Report",
+  "timestamp": "2026-03-19T22:28:30.210Z",
+  "summary": {
+    "total_tests": 5,
+    "passed": 1,
+    "failed": 4,
+    "warnings": 0
+  },
+  "configuration": {
+    "sendgrid_api_key": "configured",
+    "sendgrid_from_email": "kho.1@mia.vn",
+    "smtp_host": "smtp.gmail.com",
+    "smtp_user": "kho.1@mia.vn"
+  },
+  "results": [
+    {
+      "test": "environment-check",
+      "status": "success",
+      "message": "Email service configured: SendGrid API, SMTP",
+      "details": {
+        "sendgrid": true,
+        "smtp": true,
+        "available_methods": [
+          "SendGrid API",
+          "SMTP"
+        ]
+      },
+      "timestamp": "2026-03-19T22:28:29.563Z"
+    },
+    {
+      "test": "sendgrid-connection",
+      "status": "error",
+      "message": "SendGrid connection failed: SendGrid API error: 401 - Unauthorized",
+      "details": {
+        "error": "Request failed with status code 401",
+        "status": 401,
+        "response": {
+          "errors": [
+            {
+              "field": null,
+              "message": "unauthorized"
+            }
+          ]
+        }
+      },
+      "timestamp": "2026-03-19T22:28:30.206Z"
+    },
+    {
+      "test": "smtp-connection",
+      "status": "error",
+      "message": "SMTP connection failed: nodemailer.createTransporter is not a function",
+      "details": {
+        "error": "nodemailer.createTransporter is not a function"
+      },
+      "timestamp": "2026-03-19T22:28:30.207Z"
+    },
+    {
+      "test": "sendgrid-test-email",
+      "status": "error",
+      "message": "Không thể gửi email qua SendGrid: Cannot find module '@sendgrid/mail'\nRequire stack:\n- /Users/phuccao/Projects/personal/react-oas-inntegration-x/scripts/testEmailService.js",
+      "details": {
+        "error": "Cannot find module '@sendgrid/mail'\nRequire stack:\n- /Users/phuccao/Projects/personal/react-oas-inntegration-x/scripts/testEmailService.js"
+      },
+      "timestamp": "2026-03-19T22:28:30.209Z"
+    },
+    {
+      "test": "smtp-test-email",
+      "status": "error",
+      "message": "Không thể gửi email qua SMTP: nodemailer.createTransporter is not a function",
+      "details": {
+        "error": "nodemailer.createTransporter is not a function"
+      },
+      "timestamp": "2026-03-19T22:28:30.210Z"
+    }
+  ]
+}

@@ -388,8 +388,9 @@ REACT_APP_BACKEND_URL=http://localhost:3001
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
 
 # Google Sheets Configuration
-GOOGLE_CREDENTIALS_PATH=config/service_account.json
-GOOGLE_SPREADSHEET_ID=your_spreadsheet_id
+GOOGLE_APPLICATION_CREDENTIALS=./config/google-credentials.json
+GOOGLE_DRIVE_FOLDER_ID=1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
+GOOGLE_SHEETS_ID=your_spreadsheet_id
 
 # Automation Configuration
 ONE_USERNAME=your_username
@@ -398,7 +399,7 @@ ONE_PASSWORD=your_password
 
 ### Google Sheets Setup
 
-Xem hướng dẫn chi tiết tại: [`GOOGLE_SHEETS_SETUP_GUIDE.md`](GOOGLE_SHEETS_SETUP_GUIDE.md)
+Xem hướng dẫn chi tiết tại: [`docs/GOOGLE_CREDENTIALS_SETUP.md`](docs/GOOGLE_CREDENTIALS_SETUP.md) và [`GOOGLE_SHEETS_SETUP_GUIDE.md`](GOOGLE_SHEETS_SETUP_GUIDE.md)
 
 **Tóm tắt:**
 
@@ -548,10 +549,11 @@ Kiểm tra logs trong thư mục `logs/`:
 | Document                                                       | Mô tả                            |
 | -------------------------------------------------------------- | -------------------------------- |
 | [`ARCHITECTURE_GUIDE.md`](ARCHITECTURE_GUIDE.md)               | 📖 Kiến trúc hệ thống chi tiết   |
-| [`ROADMAP_NEXT_STEPS.md`](ROADMAP_NEXT_STEPS.md)               | 🗺️ Roadmap phát triển            |
+| [`docs/GOOGLE_CREDENTIALS_SETUP.md`](docs/GOOGLE_CREDENTIALS_SETUP.md) | 🔑 Google Drive/Sheets credentials, .env |
+| [`docs/FLOW_AND_STRUCTURE.md`](docs/FLOW_AND_STRUCTURE.md)     | 🔄 Cấu trúc, luồng chạy, ports   |
+| [`ENV_SETUP.md`](ENV_SETUP.md)                                 | ⚙️ Cài đặt môi trường            |
 | [`GOOGLE_SHEETS_SETUP_GUIDE.md`](GOOGLE_SHEETS_SETUP_GUIDE.md) | 📊 Hướng dẫn setup Google Sheets |
-| [`PHASE_1_DETAILED_GUIDE.md`](PHASE_1_DETAILED_GUIDE.md)       | 📝 Chi tiết Phase 1              |
-| [`STEP_BY_STEP_GUIDE.md`](STEP_BY_STEP_GUIDE.md)               | 🔄 Hướng dẫn từng bước           |
+| [`GOOGLE_DRIVE_FOLDER_ID.md`](GOOGLE_DRIVE_FOLDER_ID.md)       | 📁 Drive folder ID cấu hình      |
 
 ---
 

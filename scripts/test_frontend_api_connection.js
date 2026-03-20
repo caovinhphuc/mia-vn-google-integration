@@ -15,12 +15,12 @@ const colors = {
   bright: "\x1b[1m",
 };
 
-// API Base URL từ environment hoặc default
-// Backend automation_bridge.py chạy tại port 8000
+// API Base URL — Google Sheets/Drive chạy trên Node backend (3001), không phải AI service (8000)
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL ||
   process.env.VITE_API_BASE_URL ||
-  "http://localhost:8000/api";
+  process.env.REACT_APP_API_URL?.replace(/\/?$/, "/api") ||
+  "http://localhost:3001/api";
 
 console.log(`${colors.bright}${colors.cyan}
 ╔════════════════════════════════════════════════════════════╗

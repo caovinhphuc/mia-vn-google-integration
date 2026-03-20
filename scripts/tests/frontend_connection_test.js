@@ -252,9 +252,9 @@ function checkReactComponents() {
 
   const components = [
     "src/App.jsx",
-    "src/components/dashboard/LiveDashboard.jsx",
+    "src/components/Dashboard/LiveDashboard.jsx",
     "src/components/ai/AIDashboard.jsx",
-    "src/components/common/Loading.jsx",
+    "src/components/Common/Loading.jsx",
   ];
 
   let validComponents = 0;

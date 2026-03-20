@@ -14,7 +14,14 @@ require("dotenv").config();
 
 // Google Sheets configuration
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-const CREDENTIALS_PATH = path.join(__dirname, "../../automation/config/google-credentials.json");
+const PROJECT_ROOT = path.join(__dirname, "../..");
+const CREDENTIALS_CANDIDATES = [
+  process.env.GOOGLE_APPLICATION_CREDENTIALS,
+  process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
+  process.env.GOOGLE_CREDENTIALS_PATH,
+  path.join(PROJECT_ROOT, "config/google-credentials.json"),
+  path.join(PROJECT_ROOT, "automation/config/google-credentials.json"),
+].filter(Boolean);
 
 // Sample data
 const SAMPLE_DATA = {
@@ -42,10 +49,13 @@ async function testGoogleSheetsConnection() {
   try {
     // 1. Kiểm tra credentials file
     console.log("📋 Bước 1: Kiểm tra credentials file...");
-    if (!fs.existsSync(CREDENTIALS_PATH)) {
-      throw new Error(`❌ Không tìm thấy credentials file: ${CREDENTIALS_PATH}`);
+    const CREDENTIALS_PATH = CREDENTIALS_CANDIDATES.find((p) => fs.existsSync(path.resolve(p)));
+    if (!CREDENTIALS_PATH) {
+      throw new Error(
+        `❌ Không tìm thấy credentials file. Thử: config/google-credentials.json, automation/config/google-credentials.json, hoặc đặt GOOGLE_APPLICATION_CREDENTIALS trong .env`
+      );
     }
-    console.log("✅ Credentials file tồn tại");
+    console.log(`✅ Credentials file: ${path.resolve(CREDENTIALS_PATH)}`);
 
     // 2. Kiểm tra environment variables
     console.log("📋 Bước 2: Kiểm tra environment variables...");
@@ -64,7 +74,7 @@ async function testGoogleSheetsConnection() {
 
     // 3. Load credentials
     console.log("📋 Bước 3: Load Google credentials...");
-    const credentials = JSON.parse(fs.readFileSync(CREDENTIALS_PATH, "utf8"));
+    const credentials = JSON.parse(fs.readFileSync(path.resolve(CREDENTIALS_PATH), "utf8"));
 
     if (credentials.project_id === "your-project-id") {
       console.log("⚠️  Credentials file chưa được cấu hình đúng");

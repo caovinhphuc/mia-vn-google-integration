@@ -57,4 +57,8 @@ curl http://localhost:3001/api/drive/files
 
 - Folder ID này sẽ được sử dụng làm default folder khi list files
 - Nếu không set, backend sẽ list files từ root folder
-- Cần đảm bảo Service Account có quyền truy cập folder này
+- **Cần share folder với Service Account** (client_email trong `config/google-credentials.json`)
+
+## 📚 Tài liệu liên quan
+
+- [docs/GOOGLE_CREDENTIALS_SETUP.md](docs/GOOGLE_CREDENTIALS_SETUP.md) - Cấu hình credentials, path, .env
