@@ -35,7 +35,7 @@ npm run perf:size
 npm run check:tools
 ```
 
-**Note**: Tất cả scripts đã được verified với command surface hiện tại (Feb 2026)
+**Note**: Tất cả scripts trong mục này khớp với `package.json` hiện tại (Mar 2026).
 
 ### 2. Hiểu Bundle Structure
 
@@ -49,6 +49,19 @@ build/
 │   └── css/
 │       └── main.[hash].css     # Compiled CSS
 ```
+
+---
+
+## 🗺️ Bundle docs map
+
+| File                                    | Type              | Khi nào dùng                                       | Ghi chú                                              |
+| --------------------------------------- | ----------------- | -------------------------------------------------- | ---------------------------------------------------- |
+| `BUNDLE_OPTIMIZATION_GUIDE.md`          | Guide             | Cần quy trình chuẩn để phân tích/tối ưu bundle     | Tài liệu vận hành chính                              |
+| `BUNDLE_OPTIMIZATION_REPORT.md`         | Snapshot report   | Cần xem kết quả của một lần đo cụ thể              | Số liệu/hash thay đổi theo mỗi build                 |
+| `BUNDLE_OPTIMIZATION_ROADMAP.md`        | Roadmap hành động | Cần kế hoạch theo phase + ưu tiên triển khai       | Ưu tiên theo impact/effort                           |
+| `BUNDLE_OPTIMIZATION_SESSION_UPDATE.md` | Session snapshot  | Cần tra lại log tiến độ theo phiên làm việc        | Mang tính lịch sử, không phải trạng thái live        |
+| `BUNDLE_STATS_UPGRADE.md`               | Technical note    | Cần hiểu script `bundle:stats` đã được nâng cấp gì | Tập trung vào script/features                        |
+| `BUNDLE_STATS_AUTO_FIX.md`              | Technical note    | Cần hiểu cơ chế auto-check/auto-fix dependencies   | Đối chiếu `package.json` hiện tại trước khi kết luận |
 
 ---
 
@@ -117,7 +130,7 @@ npm uninstall moment
 npm install dayjs
 ```
 
-**Status**: ✅ dayjs đã được cài đặt (v1.11.19)
+**Status**: ✅ dayjs đã được cài đặt (`^1.11.20` trong `package.json`)
 
 ```javascript
 // Before
@@ -307,7 +320,7 @@ npx lighthouse /Users/phuccao/Projects/personal/react-oas-inntegration-x/public/
    npm uninstall <unused-package>
    ```
 
-4. ✅ **Install dayjs** (Completed - v1.11.19)
+4. ✅ **Install dayjs** (Completed - `^1.11.20`)
 
    ```bash
    npm install dayjs  # Already installed
@@ -323,9 +336,9 @@ npx lighthouse /Users/phuccao/Projects/personal/react-oas-inntegration-x/public/
    - Import specific components only
    - Import specific icons only
 
-3. ✅ **Replace moment.js** (Completed)
-   - ✅ Install dayjs (v1.11.19)
-   - ⏳ Replace all moment() calls in code
+3. ⏳ **Replace moment.js** (In progress)
+   - ✅ dayjs đã cài (`^1.11.20`)
+   - ⏳ Replace all `moment()` calls trong codebase
 
 ### Long-term (< 1 week)
 
@@ -391,7 +404,7 @@ npm run analyze:all
 ### Before Deployment
 
 - [x] ✅ Bundle analyzer scripts setup
-- [x] ✅ dayjs installed (v1.11.19)
+- [x] ✅ dayjs installed (`^1.11.20`)
 - [x] ✅ Performance scripts configured
 - [x] ✅ Check tools verified
 - [ ] ⏳ Run `npm run perf:bundle`
@@ -411,7 +424,7 @@ npm run analyze:all
 
 ### Completed Optimizations (Jan 2026)
 
-- [x] ✅ Installed dayjs (replaced moment.js)
+- [x] ✅ Installed dayjs dependency
 - [x] ✅ Setup bundle analysis tools
 - [x] ✅ Configured performance scripts
 - [x] ✅ Verified all npm scripts working
@@ -475,11 +488,11 @@ Lighthouse:      92/100  (↑ 42%)
 
 ---
 
-## 🔄 Recent Updates (January 21, 2026)
+## 🔄 Recent Updates (March 2026 refresh)
 
 ### Completed
 
-- ✅ Installed dayjs (v1.11.19) for date manipulation
+- ✅ dayjs dependency present in `package.json` (`^1.11.20`)
 - ✅ Verified all bundle analysis scripts
 - ✅ Setup comprehensive performance tooling
 - ✅ Configured analyze:all script
@@ -487,7 +500,7 @@ Lighthouse:      92/100  (↑ 42%)
 
 ### In Progress
 
-- ⏳ Replace moment.js usage in codebase with dayjs
+- ⏳ Replace remaining `moment` usage in codebase with `dayjs`
 - ⏳ Implement route-based code splitting
 - ⏳ Optimize Ant Design imports
 
@@ -502,6 +515,6 @@ Lighthouse:      92/100  (↑ 42%)
 ---
 
 **Initial Version**: December 11, 2025
-**Last Updated**: January 21, 2026
-**Status**: ✅ Tools verified, optimizations in progress
+**Last Updated**: March 18, 2026
+**Status**: ✅ Scripts aligned, optimizations in progress
 **Version**: 4.0

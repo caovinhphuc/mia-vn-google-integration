@@ -2,7 +2,7 @@
 
 ## ✅ Folder ID Đã Xác Nhận
 
-**Folder URL**: https://drive.google.com/drive/folders/1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
+**Folder URL**: <https://drive.google.com/drive/folders/1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V>
 
 **Folder ID**: `1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V`
 

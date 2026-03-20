@@ -6,6 +6,8 @@
 - ✅ **Test Infrastructure**: Complete và ready
 - ✅ **MatchMedia Mock**: Fixed
 - ✅ **Test Utilities**: Full suite available
+- ✅ **Shell wrapper guard**: Có `npm run scripts:guard-wrappers` + CI check
+- ⚠️ **Coverage run issue**: `npm test -- --coverage` hiện có thể fail với `babel-plugin-istanbul` trên Node mới (stack `ERR_INVALID_ARG_TYPE`)
 
 ---
 
@@ -156,6 +158,10 @@ export const createMockReduxStore = (initialState) => { ... }
 - Configure coverage thresholds
 - Setup coverage badges
 - Add coverage to CI/CD
+- Nếu gặp lỗi `babel-plugin-istanbul`:
+  - Ưu tiên chạy test không coverage trước: `npm run test:ci`
+  - Dùng Node theo `.nvmrc` (`nvm use`) rồi chạy lại coverage
+  - Nếu vẫn lỗi, lock version chain Jest/Babel/Istanbul trước khi ép target coverage
 
 ---
 
@@ -266,6 +272,9 @@ npm install   # chạy prepare → husky
 
 - name: Upload coverage
   uses: codecov/codecov-action@v3
+
+- name: Guard root shell wrappers
+  run: npm run scripts:guard-wrappers
 ```
 
 ---
@@ -343,11 +352,18 @@ npm run test:coverage
 open coverage/lcov-report/index.html
 ```
 
+Nếu coverage fail kiểu `babel-plugin-istanbul`, chạy fallback:
+
+```bash
+nvm use
+npm run test:ci
+```
+
 ---
 
 **Recommendation**: **Start with ProtectedRoute tests** - High impact, relatively quick, và critical cho security.
 
 ---
 
-**Last Updated**: December 19, 2025  
-**Status**: ✅ Ready for next phase
+**Last Updated**: March 20, 2026  
+**Status**: ✅ Updated with current repo practices (wrapper guard + coverage caveat)

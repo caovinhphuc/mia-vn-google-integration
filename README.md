@@ -130,10 +130,25 @@ git clone https://github.com/caovinhphuc/-React-OAS-Integration-v3.0.git
 cd -React-OAS-Integration-v3.0
 
 # 2. Khởi chạy tất cả services (Recommended)
-./start_ai_platform.sh
+./start.sh
 
 # Hoặc khởi chạy từng service riêng lẻ:
 ```
+
+### 🧭 Canonical command map (chuẩn team)
+
+| Tác vụ             | Canonical command                    | Legacy alias (vẫn chạy)                                               |
+| ------------------ | ------------------------------------ | --------------------------------------------------------------------- |
+| Start all services | `./start.sh`                         | `./start_ai_platform.sh`, `./run_projects.sh`, `./start_data_flow.sh` |
+| Main deploy flow   | `./deploy.sh`                        | `./deploy_platform.sh`                                                |
+| Quick deploy       | `./quick-deploy.sh`                  | `./quick_deploy.sh`                                                   |
+| Vercel deploy      | `./deploy-vercel.sh`                 | `./deployVercel.sh`                                                   |
+| Netlify deploy     | `./scripts/deploy/deploy-netlify.sh` | `./deployNetlify.sh`                                                  |
+| GCP deploy         | `./scripts/deploy/deploy-gcp.sh`     | `./deployGCP.sh`                                                      |
+| Serve build        | `./serve-build.sh`                   | -                                                                     |
+| Verify ports       | `./verify_port_config.sh`            | -                                                                     |
+
+> Team rule: script logic đặt ở `scripts/`, root chỉ để wrapper. Xem thêm `SHELL_SCRIPT_STANDARDS.md`.
 
 ### 🔧 Khởi chạy từng service
 

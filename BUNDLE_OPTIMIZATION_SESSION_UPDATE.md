@@ -3,6 +3,8 @@
 **Date**: January 22, 2026 16:00
 **Session**: Phase 1 Implementation - Code Splitting & Tree-Shaking
 
+> Tài liệu này là **session snapshot lịch sử**. Không xem như trạng thái hiện tại; luôn đối chiếu lại bằng `npm run perf:bundle` và `npm run bundle:stats`.
+
 ---
 
 ## Completed Tasks

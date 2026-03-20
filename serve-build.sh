@@ -1,1 +1,6 @@
-npx serve -s build -l 3000
+#!/bin/bash
+
+# Root wrapper for consistent script location.
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$SCRIPT_DIR/scripts/deploy/serve-build.sh" "$@"

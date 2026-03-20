@@ -1,7 +1,7 @@
 # 🚀 Bundle Optimization Roadmap
 
-**Date**: January 22, 2026 (budget script cập nhật 03/2026)
-**Current Status**: `npm run perf:budget` dùng **initial JS** (main+app-root) + **hard limits** — phù hợp code-split; tổng chunk vẫn ~2.3MB (lazy).
+**Date**: March 18, 2026
+**Current Status**: `npm run perf:budget` dùng **initial JS** (main+app-root) + **hard limits** — phù hợp code-split; tổng chunk thường vẫn >2MB do lazy chunks.
 **Target**: Giữ initial <400KB; tách vendor (714/648); tổng transfer nhỏ hơn nhờ gzip/brotli
 
 ---
@@ -14,7 +14,7 @@
 - **CSS**: 80.51 KB (Target: 50 KB) - **161% over budget** ⚠️
 - **Total**: 2.36 MB (Target: 1 MB) - **236% over budget** ⚠️
 
-### Largest Chunks:
+### Largest Chunks (snapshot cũ, cần đo lại mỗi build):
 
 1. `main.f4586a96.js` - **694.58 KB** (main bundle)
 2. `714.d25ea931.chunk.js` - **359.75 KB** (likely Ant Design)
@@ -24,11 +24,11 @@
 
 ---
 
-## ✅ Completed Optimizations (Jan 22, 2026)
+## ✅ Completed Optimizations (as of Mar 2026)
 
-1. ✅ **Removed unused dependencies**:
-   - `cors`, `express`, `lodash-es` (saved ~50KB)
-   - Unused devDependencies (11 packages)
+1. ✅ **Bundle tooling chuẩn hóa**:
+   - `bundle:stats`, `perf:bundle`, `perf:deps`, `perf:size`, `check:tools` đã có trong `package.json`
+   - Quy trình đo bundle đã tài liệu hóa đồng bộ
 
 2. ✅ **Verified icon imports**:
    - All files use specific icon imports (not wildcard)
@@ -172,11 +172,11 @@ export const routes = [
 
 **Expected Savings**: ~300-400 KB
 
-### 2.2 Optimize Google APIs
+### 2.2 Optimize Google APIs (only if frontend bundle includes it)
 
 **Impact**: High | **Effort**: Medium | **Time**: 2-3 hours
 
-**Current Issue**: `googleapis` package is 500KB
+**Current Issue**: `googleapis` package lớn, nhưng cần xác minh có thực sự vào frontend bundle hay không
 
 **Actions**:
 

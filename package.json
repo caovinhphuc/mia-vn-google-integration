@@ -73,6 +73,7 @@
     "verify:setup": "bash scripts/verify-setup.sh",
     "docs:generate": "node scripts/utils/generate-complete-docs.js",
     "docs:watch": "bash scripts/utils/auto-update-docs.sh true",
+    "scripts:guard-wrappers": "bash scripts/utils/check-root-shell-wrappers.sh",
     "bundle:stats": "node scripts/generate-bundle-stats.js",
     "explore:chunk": "node scripts/source-map-explore-chunk.js",
     "check:tools": "npm run tools:check",

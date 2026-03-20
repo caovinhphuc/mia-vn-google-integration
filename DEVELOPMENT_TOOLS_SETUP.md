@@ -212,6 +212,7 @@ npm run validate:full
 | `npm run validate:full`                           | Full validation + build                          |
 | `npm run pre-commit`                              | Run lint-staged manually                         |
 | `npm run check:tools` / `tools:check`             | Kiểm tra Node, npm, Python, git, …               |
+| `npm run scripts:guard-wrappers`                  | Check root `*.sh` giữ chuẩn wrapper ngắn         |
 
 ## 🧩 VS Code / Cursor Extensions
 

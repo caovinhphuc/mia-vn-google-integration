@@ -170,6 +170,7 @@ package-lock.json
 | `npm run validate:full`                           | `validate` + `build:prod`                                |
 | `npm run pre-commit`                              | `lint-staged` (cần `git add` trước)                      |
 | `npm run check:tools` / `npm run tools:check`     | Kiểm tra Node, npm, Python, git, …                       |
+| `npm run scripts:guard-wrappers`                  | Guard script root chỉ là wrapper ngắn                    |
 
 **Môi trường & cài đặt đầy đủ:** [ENV_SETUP.md](./ENV_SETUP.md) · **Chi tiết công cụ:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)
 

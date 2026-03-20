@@ -43,6 +43,7 @@
 | ------------------------------------------------------------------ | ---------------------------------------------- |
 | [`Document/REPO_LAYOUT.md`](./Document/REPO_LAYOUT.md)             | Root vs `backend/`, depcheck                   |
 | [`Document/DEV_SCRIPTS_NOTES.md`](./Document/DEV_SCRIPTS_NOTES.md) | `fix-missing-files`, https, artefact gitignore |
+| [`SHELL_SCRIPT_STANDARDS.md`](./SHELL_SCRIPT_STANDARDS.md)         | Quy dinh vi tri + naming shell scripts         |
 | [`SCRIPTS_GUIDE.md`](./SCRIPTS_GUIDE.md)                           | Scripts tổng quan                              |
 | [`scripts/README.md`](./scripts/README.md)                         | Thư mục `scripts/`                             |
 

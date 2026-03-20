@@ -80,6 +80,7 @@ npm run bundle:stats
 ```
 
 **Verified Working** (Jan 2026):
+
 - ✅ All dependencies check working
 - ✅ Auto-install functionality operational
 - ✅ Version-aware installation verified
@@ -100,6 +101,7 @@ generateBundleStats(false); // Disable auto-install
 ```
 
 ## 📊 Output Example
+
 ### Actual Output (Verified Jan 2026) ✅
 
 ```
@@ -128,6 +130,7 @@ generateBundleStats(false); // Disable auto-install
 ```
 
 ### Example with Missing Dependencies
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   🔍 CHECKING DEPENDENCIES
@@ -156,10 +159,10 @@ generateBundleStats(false); // Disable auto-install
 - ✅ `source-map-explorer` - Bundle analysis
 - ✅ `webpack-bundle-analyzer` - Visual bundle analyzer
 
-### Optional Dependencies (✅ Verified Installed)
+### Optional Dependencies (check theo project hiện tại)
 
-- ✅ `depcheck` - Check unused dependencies
-- ✅ `size-limit` - Bundle size limits
+- `depcheck` - chạy bằng `npx depcheck` hoặc `npm run perf:depcheck` khi cần
+- `size-limit` - chỉ dùng nếu team thêm vào `package.json`
 
 ### System Tools (Optional) (✅ Verified)
 
@@ -195,10 +198,10 @@ generateBundleStats(false); // Disable auto-install
 
 ## ✅ Verification Status
 
-**Tested and Verified**: January 21, 2026
+**Tested and Verified**: March 18, 2026 (doc refresh)
 
 - ✅ `npm run bundle:stats` - Working perfectly
-- ✅ All dependencies detected correctly
+- ✅ Required dependencies detected correctly
 - ✅ Auto-install functionality operational
 - ✅ Version-aware installation confirmed
 - ✅ Cargo detection working
@@ -208,6 +211,6 @@ generateBundleStats(false); // Disable auto-install
 ---
 
 **Initial Version**: December 25, 2025
-**Last Verified**: January 21, 2026
-**Status**: ✅ **Enhanced & Verified**
+**Last Verified**: March 18, 2026
+**Status**: ✅ Enhanced, cần đối chiếu theo `package.json` mỗi lần thay đổi deps
 **Feature**: Auto-fix missing dependencies with version awareness + Cargo detection

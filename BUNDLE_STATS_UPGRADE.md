@@ -17,14 +17,15 @@
 - ✅ **Size Formatting**: Format kích thước file (B, KB, MB)
 - ✅ **Large File Detection**: Phát hiện files lớn và cảnh báo
 
-### 2. Bổ Sung Dependencies
+### 2. Dependencies trạng thái hiện tại
 
 **File**: `package.json`
 
 ```json
 {
   "devDependencies": {
-    "depcheck": "^1.4.7"
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }
 ```
@@ -32,9 +33,9 @@
 **Dependencies đã có sẵn**:
 
 - ✅ `source-map-explorer`: ^2.5.3
-- ✅ `webpack-bundle-analyzer`: ^5.1.0
-- ✅ `size-limit`: ^12.0.0 (via @size-limit packages)
-- ✅ `depcheck`: ^1.4.7 (mới thêm)
+- ✅ `webpack-bundle-analyzer`: ^4.10.2
+- ℹ️ `depcheck`: chạy bằng `npx depcheck` / `npm run perf:depcheck` khi cần
+- ℹ️ `size-limit`: không bắt buộc trong setup hiện tại
 
 ### 3. Thêm Script Mới
 
@@ -194,7 +195,7 @@ npm run perf:size           # Size limit check
 - Script yêu cầu build trước: `npm run build`
 - Stats được export vào `build-stats/` directory
 - Có thể so sánh stats giữa các builds bằng JSON files
-- Dependencies sẽ tự động được cài đặt nếu thiếu (optional deps chỉ cảnh báo)
+- Optional deps chỉ nên cài khi team quyết định đưa vào `package.json`
 
 ### Troubleshooting: `source-map-explorer` + `hasMagic`
 
@@ -206,7 +207,7 @@ npm run perf:size           # Size limit check
 
 ---
 
-**Date**: December 25, 2025  
-**Status**: ✅ **Upgraded**  
+**Date**: March 18, 2026  
+**Status**: ✅ Upgraded (doc refreshed theo trạng thái hiện tại)  
 **Script**: `scripts/generate-bundle-stats.js`  
 **Command**: `npm run bundle:stats`

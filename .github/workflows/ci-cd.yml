@@ -45,6 +45,9 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Guard root shell wrappers
+        run: ./scripts/utils/check-root-shell-wrappers.sh
+
       - name: Install frontend dependencies
         run: npm ci --legacy-peer-deps
 
