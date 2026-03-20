@@ -2,11 +2,10 @@
 
 ## 📊 GOOGLE SHEETS ID
 
-### Cách lấy ID:
+### Cách lấy ID
 
 1. **Tạo Google Sheet mới**:
-
-   - Truy cập: https://sheets.google.com/
+   - Truy cập: <https://sheets.google.com/>
    - Nhấn "+ Blank" để tạo sheet mới
    - Đặt tên: "React Integration Data"
 
@@ -18,11 +17,12 @@
    ```
 
 3. **Cấu hình trong .env**:
+
    ```env
    REACT_APP_GOOGLE_SHEET_ID=1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms
    ```
 
-### Chuẩn bị dữ liệu mẫu:
+### Chuẩn bị dữ liệu mẫu
 
 Tạo sheet "Orders" với header:
 
@@ -36,11 +36,10 @@ date,product,quantity,total,status,customer_id
 
 ## 📁 GOOGLE DRIVE FOLDER ID
 
-### Cách lấy ID:
+### Cách lấy ID
 
 1. **Tạo thư mục mới**:
-
-   - Truy cập: https://drive.google.com/
+   - Truy cập: <https://drive.google.com/>
    - Nhấn "+ New" → "Folder"
    - Đặt tên: "React App Files"
 
@@ -52,6 +51,7 @@ date,product,quantity,total,status,customer_id
    ```
 
 3. **Cấu hình trong .env**:
+
    ```env
    REACT_APP_GOOGLE_DRIVE_FOLDER_ID=1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms
    ```
@@ -62,7 +62,7 @@ date,product,quantity,total,status,customer_id
 
 ### Bước 1: Tạo Google Cloud Project
 
-1. Truy cập: https://console.cloud.google.com/
+1. Truy cập: <https://console.cloud.google.com/>
 2. Tạo project mới: "React Integration"
 3. Enable APIs:
    - Google Sheets API
@@ -102,7 +102,7 @@ node server.js
 node server.js
 ```
 
-Truy cập: http://localhost:3000
+Truy cập: <http://localhost:3000>
 
 - Nếu thấy ⚠️ "Configuration Required" → cần cấu hình thêm
 - Nếu thấy status "OK" → đã sẵn sàng sử dụng
