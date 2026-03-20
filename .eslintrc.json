@@ -2,6 +2,13 @@
   "extends": ["react-app", "react-app/jest", "plugin:prettier/recommended"],
   "plugins": ["prettier"],
   "rules": {
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "ImportDeclaration[source.value='@ant-design/icons'] ImportNamespaceSpecifier",
+        "message": "Không dùng import * từ @ant-design/icons — chỉ import icon cần dùng (tree-shaking)."
+      }
+    ],
     "no-unused-vars": "warn",
     "no-console": "off",
     "react/prop-types": "off",

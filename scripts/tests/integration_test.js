@@ -11,12 +11,12 @@ console.log("=".repeat(60));
 
 // Service endpoints
 const SERVICES = {
-  ai: { host: "localhost", port: 8001, name: "AI Service" },
+  ai: { host: "localhost", port: 8000, name: "AI Service" },
   backend: { host: "localhost", port: 3001, name: "Backend API" },
   automation: { name: "Automation Service" }, // No HTTP port
 };
 
-// Check if AI Service is available (/api/ml/insights - not Automation on 8001)
+// Check if AI Service is available (/api/ml/insights - AI on 8000, Automation on 8001)
 async function isAIServiceAvailable() {
   try {
     const data = await makeRequest(SERVICES.ai.host, SERVICES.ai.port, "/api/ml/insights");
@@ -65,7 +65,7 @@ async function testAIToBackend() {
 
   try {
     // Test AI service root endpoint
-    const aiStatus = await makeRequest("localhost", 8001, "/");
+    const aiStatus = await makeRequest("localhost", 8000, "/");
     const statusData = JSON.parse(aiStatus);
 
     console.log("✅ AI Service root endpoint accessible");
@@ -73,7 +73,7 @@ async function testAIToBackend() {
     console.log(`   Status: ${statusData.status}`);
 
     // Test health endpoint
-    const healthCheck = await makeRequest("localhost", 8001, "/health");
+    const healthCheck = await makeRequest("localhost", 8000, "/health");
     const healthData = JSON.parse(healthCheck);
 
     console.log("✅ AI Service health endpoint accessible");
@@ -92,14 +92,14 @@ async function testBackendToAI() {
 
   try {
     // Test if backend can access AI service basic endpoints
-    const aiRoot = await makeRequest("localhost", 8001, "/");
+    const aiRoot = await makeRequest("localhost", 8000, "/");
     const data = JSON.parse(aiRoot);
 
     console.log("✅ Backend can access AI service");
     console.log(`   AI Features: ${data.features?.join(", ") || "Available"}`);
 
     // Test AI service health from backend perspective
-    const healthCheck = await makeRequest("localhost", 8001, "/health");
+    const healthCheck = await makeRequest("localhost", 8000, "/health");
     console.log("✅ Backend can check AI service health");
 
     return true;
@@ -116,7 +116,7 @@ async function testCrossServiceDataFlow() {
   try {
     // 1. Get data from AI service
     console.log("  📊 Step 1: Getting status from AI service...");
-    const aiData = await makeRequest("localhost", 8001, "/");
+    const aiData = await makeRequest("localhost", 8000, "/");
     const aiStatus = JSON.parse(aiData);
     console.log(`  ✅ AI service status: ${aiStatus.status}`);
 

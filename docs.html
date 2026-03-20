@@ -1864,24 +1864,28 @@ node scripts/config/env.config.js</code></pre>
                 </div>
                 <div class="section-content">
                     <h1>📊📦 Hướng Dẫn Quản Lý Reports & Backups</h1>
-<p>> <strong>React OAS Integration v4.0</strong>  
+<p>> <strong>React OAS Integration v4.0</strong>
 > <strong>Ngày cập nhật</strong>: 2025-01-27</p>
 <hr>
 <h2>✅ ĐÃ HOÀN THÀNH</h2>
 <h3>1. Cấu trúc thư mục mới ✅</h3>
 <pre><code class="language-text">reports/
-├── email/          # 9 files - Email test reports
-├── telegram/       # 9 files - Telegram test reports
-├── health/         # 9 files - Health check reports
+├── email/          # Email test reports
+├── telegram/       # Telegram test reports
+├── health/         # Health check reports
+├── test-runs/      # test-all.js JSON
+├── log-analysis/   # scripts/log-analyzer.js → log-analysis-YYYY-MM-DD.json
 ├── build/          # Build reports
 ├── performance/    # Performance reports
-└── lighthouse/     # 21 files - Lighthouse audit reports
+└── lighthouse/     # Lighthouse JSON (sau organize-reports)
+<p><code>lighthouse-reports/</code> (ở <strong>root</strong> repo): HTML Lighthouse (<code>run-lighthouse.sh</code>, v.v.)</p>
 <p>backups/
 ├── scripts/        # Script backups
 ├── automation/     # Automation backups
 ├── backend/        # Backend backups
 ├── ai-service/     # AI service backups
-└── venv/           # 3557 items - Python venv backups</code></pre></p>
+├── package-json/   # package.json.backup.* (scripts upgrade-phase1)
+└── venv/           # Python venv backups</code></pre></p>
 <h3>2. Scripts tự động ✅</h3>
 <ul><li>✅ <code>scripts/utils/organize-reports.sh</code> - Tự động tổ chức reports</li>
 <li>✅ <code>scripts/utils/cleanup-old-reports.sh</code> - Cleanup reports cũ</li>
@@ -1920,6 +1924,9 @@ node scripts/config/env.config.js</code></pre>
 <li><code>health-report-YYYY-MM-DD.json</code></li>
 <li>Health check results từ các services</li>
 <li>Tự động tạo khi chạy health checks</li>
+<h3>Test-all suite (<code>reports/test-runs/</code>)</h3>
+<li><code>test-report-<timestamp>.json</code> — kết quả <code>scripts/test-all.js</code> (vd. <code>npm run test:complete</code>)</li>
+<li>Bản cũ ở root: chạy <code>./scripts/utils/organize-reports.sh</code> để gom vào đây</li>
 <h3>Build Reports (<code>reports/build/</code>)</h3>
 <li><code>build-report.json</code></li>
 <li><code>bundle-report.json</code></li>
@@ -2005,7 +2012,7 @@ cat reports/email/email-test-report-2025-12-25.json | jq</code></pre>
 <li>[x] Tạo documentation</li>
 <li>[x] Test scripts</li></ul>
 <hr>
-<p><strong>Status</strong>: ✅ Hoàn thành  
+<p><strong>Status</strong>: ✅ Hoàn thành
 <strong>Last Updated</strong>: 2025-01-27
 </p>
                 </div>
@@ -2709,7 +2716,7 @@ import Card from &quot;./components/ui/Card&quot;;</code></pre></p>
             </div>
 
             <div class="last-updated">
-                <p><strong>📅 Last Updated:</strong> lúc 13:41 19 tháng 3, 2026</p>
+                <p><strong>📅 Last Updated:</strong> lúc 13:13 20 tháng 3, 2026</p>
                 <p>🔄 <strong>Auto-generated</strong> from Markdown documentation files</p>
                 <p>📝 <strong>Regenerate:</strong> <code>node scripts/utils/generate-complete-docs.js</code></p>
             </div>

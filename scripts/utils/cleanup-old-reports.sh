@@ -5,7 +5,7 @@
 
 # Get script directory and change to project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
 # Colors
@@ -88,6 +88,8 @@ cleanup_dir "reports/health" "health"
 cleanup_dir "reports/build" "build"
 cleanup_dir "reports/performance" "performance"
 cleanup_dir "reports/lighthouse" "lighthouse"
+cleanup_dir "reports/log-analysis" "log analysis"
+cleanup_dir "reports/test-runs" "test-all suite"
 
 # Cleanup old backups
 print_status "Cleaning up old backups..."

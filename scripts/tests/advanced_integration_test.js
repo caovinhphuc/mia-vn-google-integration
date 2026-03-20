@@ -12,7 +12,7 @@ console.log("=".repeat(60));
 
 // Service endpoints
 const SERVICES = {
-  ai: { host: "localhost", port: 8001, name: "AI Service" },
+  ai: { host: "localhost", port: 8000, name: "AI Service" },
   backend: { host: "localhost", port: 3001, name: "Backend API" },
 };
 
@@ -23,7 +23,7 @@ async function isAIServiceAvailable() {
       const req = http.request(
         {
           hostname: "localhost",
-          port: 8001,
+          port: 8000,
           path: "/api/ml/insights",
           method: "GET",
         },
@@ -58,7 +58,7 @@ async function testAIServiceAPIs() {
   try {
     // Test ML Insights
     console.log("  📊 Testing ML Insights endpoint...");
-    const insightsData = await makeRequest("localhost", 8001, "/api/ml/insights");
+    const insightsData = await makeRequest("localhost", 8000, "/api/ml/insights");
     const insights = JSON.parse(insightsData);
     console.log(`  ✅ ML Insights: Confidence ${insights.confidence_score?.toFixed(2) || "N/A"}`);
     results.insights = true;
@@ -77,7 +77,7 @@ async function testAIServiceAPIs() {
 
     const predictionData = await makePostRequest(
       "localhost",
-      8001,
+      8000,
       "/api/ml/predict",
       predictionPayload
     );
@@ -105,7 +105,7 @@ async function testAIServiceAPIs() {
 
     const optimizationData = await makePostRequest(
       "localhost",
-      8001,
+      8000,
       "/api/ml/optimize",
       optimizationPayload
     );
@@ -158,7 +158,7 @@ async function testEndToEndFlow(aiAvailable) {
   try {
     if (aiAvailable) {
       console.log("  📈 Step 1: Generate AI insights...");
-      const insightsResponse = await makeRequest("localhost", 8001, "/api/ml/insights");
+      const insightsResponse = await makeRequest("localhost", 8000, "/api/ml/insights");
       const insights = JSON.parse(insightsResponse);
       console.log(
         `  ✅ AI insights generated with confidence: ${insights.confidence_score?.toFixed(2) || "N/A"}`
@@ -172,7 +172,7 @@ async function testEndToEndFlow(aiAvailable) {
 
       const predictionResponse = await makePostRequest(
         "localhost",
-        8001,
+        8000,
         "/api/ml/predict",
         predictionPayload
       );
@@ -195,7 +195,7 @@ async function testEndToEndFlow(aiAvailable) {
 
       const optimizationResponse = await makePostRequest(
         "localhost",
-        8001,
+        8000,
         "/api/ml/optimize",
         optimizationPayload
       );
@@ -272,7 +272,7 @@ async function testPerformanceLoad(aiAvailable) {
   // Add AI requests only when AI is available
   if (aiAvailable) {
     for (let i = 0; i < concurrentRequests; i++) {
-      promises.push(makeRequest("localhost", 8001, "/"));
+      promises.push(makeRequest("localhost", 8000, "/"));
     }
   } else {
     console.log("  ⏭️  AI Service unavailable - testing Backend only");
@@ -358,7 +358,7 @@ async function runAdvancedIntegrationTests() {
 
   const aiAvailable = await isAIServiceAvailable();
   if (!aiAvailable) {
-    console.log("⏭️  AI Service (port 8001) unavailable - skipping AI tests (optional)\n");
+    console.log("⏭️  AI Service (port 8000) unavailable - skipping AI tests (optional)\n");
   }
 
   // AI tests only when AI is available

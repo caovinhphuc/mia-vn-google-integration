@@ -90,7 +90,7 @@ async function testAPIConnectivity() {
     // Optional endpoints - AI/Automation features
     {
       name: "AI Service Health",
-      url: "http://localhost:8001/health",
+      url: "http://localhost:8000/health",
       required: false,
       note: "Optional - AI/Automation features",
     },
@@ -102,7 +102,7 @@ async function testAPIConnectivity() {
     },
     {
       name: "AI Insights",
-      url: "http://localhost:8001/api/ml/insights",
+      url: "http://localhost:8000/api/ml/insights",
       required: false,
       note: "Optional - AI/Automation features",
     },
@@ -283,7 +283,7 @@ function checkEnvironmentConfig() {
     },
     {
       name: "REACT_APP_AI_URL",
-      value: process.env.REACT_APP_AI_URL || "http://localhost:8001",
+      value: process.env.REACT_APP_AI_URL || "http://localhost:8000",
     },
   ];
 

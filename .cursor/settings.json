@@ -5,15 +5,49 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  // AI/Code completion settings
   "cursor.ai.enabled": true,
   "cursor.ai.autoComplete": true,
-  // File paths
+  // Editor font & typography (comfortable defaults)
+  "editor.fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  "editor.fontSize": 13,
+  "editor.lineHeight": 22,
+  "editor.letterSpacing": 0.6,
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "250",
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": false,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorStyle": "line",
+  "editor.cursorWidth": 2,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.guides.bracketPairs": "active",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.rulers": [100, 120],
+  // Theme & icons
+  "workbench.colorTheme": "Default Dark+",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.fontAliasing": "antialiased",
+  "window.zoomLevel": 0,
+  "workbench.colorCustomizations": {
+    "editor.foreground": "#EAEAEA",
+    "editorCursor.foreground": "#FFCC00",
+    "editorLineNumber.foreground": "#888888",
+    "editor.selectionBackground": "#264F78",
+    "editor.inactiveSelectionBackground": "#3A3D41A6"
+  },
+  "editor.tokenColorCustomizations": {
+    "comments": "#6A9955",
+    "keywords": "#C586C0",
+    "strings": "#CE9178",
+    "functions": "#4EC9B0",
+    "variables": "#9CDCFE"
+  },
   "files.exclude": {
     "**/__pycache__": true,
     "**/*.pyc": true,
     "**/.venv": true,
     "**/venv": true,
+    "**/venv.backup.*": true,
     "**/node_modules": true,
     "**/dist": true,
     "**/build": true,
@@ -22,26 +56,38 @@
     "**/lighthouse-reports": true,
     "**/*.log": true
   },
-  // Search exclude
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
     "**/build": true,
+    "**/__pycache__": true,
+    "**/.venv": true,
+    "**/venv": true,
+    "**/venv.backup.*": true,
     "**/lighthouse-reports": true,
     "**/backup_markdown": true
   },
-  // Python paths
+  "python.defaultInterpreterPath": "${workspaceFolder}/one_automation_system/venv/bin/python",
   "python.analysis.extraPaths": [
     "./automation",
     "./ai-service",
-    "./one_automation_system"
+    "./one_automation_system",
+    "./mia-logistics-manager"
   ],
-  // Multi-root workspace support
+  "python.analysis.autoSearchPaths": true,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true,
+    "**/__pycache__/**": true,
+    "**/.venv/**": true,
+    "**/venv/**": true,
+    "**/venv.backup.*/**": true,
     "**/dist/**": true,
     "**/build/**": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+    "cSpell.enabled": false
   }
 }

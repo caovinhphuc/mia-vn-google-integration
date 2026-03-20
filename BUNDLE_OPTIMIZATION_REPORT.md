@@ -36,8 +36,10 @@
 
 ### 1. JavaScript bundle quá lớn [HIGH]
 
-- Đã có lazy loading trong App.jsx - cần cải thiện thêm
+- **Cập nhật 20/03/2026:** `index.js` lazy-load `./App` (chunk `app-root`), trang chủ tách `pages/Home.jsx` (chunk `home`), `LayoutConfigManager` lazy khi mở modal (chunk `layout-config`). Entry `main.*.js` giảm mạnh so với bản gộp App trực tiếp.
+- Đã có lazy routes trong `App.jsx` — giữ nguyên pattern `React.lazy` + `webpackChunkName`.
 - Kiểm tra dependencies lớn: antd, recharts, socket.io-client
+- **Icons:** Toàn bộ `@ant-design/icons` đã dùng import có tên; ESLint `no-restricted-syntax` cảnh báo nếu ai dùng `import *`.
 - Sử dụng dynamic imports cho các components không cần thiết ngay
 - Xóa unused imports và dependencies
 - Sử dụng tree-shaking để loại bỏ code không dùng

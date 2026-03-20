@@ -119,7 +119,9 @@ const AIDashboard = () => {
       }
     } catch (err) {
       console.error("AI Analysis Error:", err);
-      setError("Không thể phân tích dữ liệu. Vui lòng thử lại.");
+      setError(
+        "Không thể phân tích dữ liệu. Kiểm tra ai-service (port 8001) và biến REACT_APP_AI_SERVICE_URL."
+      );
 
       // Fallback to sample data if API fails
       const fallbackInsights = [
@@ -360,61 +362,71 @@ const AIDashboard = () => {
 
           {/* Prediction Chart */}
           {predictionChartData.length > 0 && (
-            <div className="prediction-chart-container">
+            <div
+              className="prediction-chart-container"
+              style={{ width: "100%", minWidth: 0, height: 270, minHeight: 270 }}
+            >
               <h4>📊 Dự đoán Tăng Trưởng</h4>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={predictionChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="period" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="sheets" fill="#3b82f6" name="Sheets" />
-                  <Bar dataKey="files" fill="#10b981" name="Files" />
-                  <Bar dataKey="alerts" fill="#f59e0b" name="Alerts" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div style={{ width: "100%", minWidth: 0, height: 250, minHeight: 250 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={predictionChartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="period" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="sheets" fill="#3b82f6" name="Sheets" />
+                    <Bar dataKey="files" fill="#10b981" name="Files" />
+                    <Bar dataKey="alerts" fill="#f59e0b" name="Alerts" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           )}
 
           {/* Trend Chart */}
           {trendChartData.length > 0 && (
-            <div className="trend-chart-container">
+            <div
+              className="trend-chart-container"
+              style={{ width: "100%", minWidth: 0, height: 270, minHeight: 270 }}
+            >
               <h4>📈 Xu Hướng 7 Ngày Tới</h4>
-              <ResponsiveContainer width="100%" height={250}>
-                <AreaChart data={trendChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="sheets"
-                    stackId="1"
-                    stroke="#3b82f6"
-                    fill="#3b82f6"
-                    fillOpacity={0.6}
-                    name="Sheets"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="files"
-                    stackId="1"
-                    stroke="#10b981"
-                    fill="#10b981"
-                    fillOpacity={0.6}
-                    name="Files"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="alerts"
-                    stackId="1"
-                    stroke="#f59e0b"
-                    fill="#f59e0b"
-                    fillOpacity={0.6}
-                    name="Alerts"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <div style={{ width: "100%", minWidth: 0, height: 250, minHeight: 250 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={trendChartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="day" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area
+                      type="monotone"
+                      dataKey="sheets"
+                      stackId="1"
+                      stroke="#3b82f6"
+                      fill="#3b82f6"
+                      fillOpacity={0.6}
+                      name="Sheets"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="files"
+                      stackId="1"
+                      stroke="#10b981"
+                      fill="#10b981"
+                      fillOpacity={0.6}
+                      name="Files"
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="alerts"
+                      stackId="1"
+                      stroke="#f59e0b"
+                      fill="#f59e0b"
+                      fillOpacity={0.6}
+                      name="Alerts"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           )}
 

@@ -1278,7 +1278,7 @@ Test reports are automatically generated:
 
 **Comprehensive Test Report:**
 
-- `test-report-[timestamp].json` - Complete test suite results (from `test-all.js`)
+- `reports/test-runs/test-report-[timestamp].json` - Complete test suite results (from `test-all.js`)
 
 **Report Format:**
 
@@ -2569,7 +2569,7 @@ npm run test:e2e:debug    # Run in debug mode
 **Output:**
 
 - Console: Real-time progress và kết quả
-- JSON Report: `test-report-[timestamp].json`
+- JSON Report: `reports/test-runs/test-report-[timestamp].json`
 
 ### 2. `test-api-endpoints.js` - API Testing
 

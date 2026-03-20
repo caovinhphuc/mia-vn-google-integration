@@ -4,7 +4,7 @@
  * Line, Bar, Pie, Heat maps using Chart.js and Recharts
  */
 
-import React, { useMemo } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Card, Typography, Space, Select, Button } from "antd";
 import {
   LineChart,
@@ -24,8 +24,64 @@ import {
   AreaChart,
 } from "recharts";
 
+import "./ChartComponents.css";
+
 const { Title, Text } = Typography;
 const { Option } = Select;
+
+/**
+ * Recharts trong react-grid-layout / Resizable: parent có thể width=0 lúc mount.
+ * Đo bằng ResizeObserver + truyền width/height số (px) — tránh width(-1).
+ */
+function RechartsSizedBox({ height = 300, children }) {
+  const h = typeof height === "number" ? height : 300;
+  const wrapRef = useRef(null);
+  const [dims, setDims] = useState({ w: 0, hh: h });
+
+  useLayoutEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const rect = el.getBoundingClientRect();
+      let w = Math.floor(rect.width);
+      if (w < 2) w = Math.floor(el.offsetWidth);
+      if (w < 2 && el.parentElement) {
+        w = Math.floor(el.parentElement.getBoundingClientRect().width);
+      }
+      w = Math.max(w, 200);
+      const hh = Math.max(h, Math.floor(rect.height) || h);
+      setDims((prev) => (prev.w === w && prev.hh === hh ? prev : { w, hh }));
+    };
+
+    measure();
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [h]);
+
+  return (
+    <div
+      ref={wrapRef}
+      style={{
+        width: "100%",
+        minWidth: 0,
+        height: h,
+        minHeight: h,
+        position: "relative",
+        flex: "1 1 auto",
+      }}
+    >
+      {dims.w > 0 ? (
+        <ResponsiveContainer width={dims.w} height={dims.hh}>
+          {children}
+        </ResponsiveContainer>
+      ) : (
+        <div style={{ width: "100%", height: h }} aria-hidden />
+      )}
+    </div>
+  );
+}
 
 // Color palette
 const COLORS = [
@@ -76,9 +132,9 @@ export const LineChartComponent = ({
   }, [data, dataKey, strokeColors]);
 
   return (
-    <Card>
+    <Card className="mia-recharts-card">
       {title && <Title level={5}>{title}</Title>}
-      <ResponsiveContainer width="100%" height={height}>
+      <RechartsSizedBox height={height}>
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
@@ -87,7 +143,7 @@ export const LineChartComponent = ({
           {showLegend && <Legend />}
           {lines}
         </LineChart>
-      </ResponsiveContainer>
+      </RechartsSizedBox>
     </Card>
   );
 };
@@ -115,9 +171,9 @@ export const BarChartComponent = ({
   const Chart = orientation === "horizontal" ? BarChart : BarChart;
 
   return (
-    <Card>
+    <Card className="mia-recharts-card">
       {title && <Title level={5}>{title}</Title>}
-      <ResponsiveContainer width="100%" height={height}>
+      <RechartsSizedBox height={height}>
         <BarChart
           data={data}
           layout={orientation === "horizontal" ? "vertical" : "horizontal"}
@@ -136,7 +192,7 @@ export const BarChartComponent = ({
           {showLegend && <Legend />}
           {bars}
         </BarChart>
-      </ResponsiveContainer>
+      </RechartsSizedBox>
     </Card>
   );
 };
@@ -173,9 +229,9 @@ export const PieChartComponent = ({
   };
 
   return (
-    <Card>
+    <Card className="mia-recharts-card">
       {title && <Title level={5}>{title}</Title>}
-      <ResponsiveContainer width="100%" height={height}>
+      <RechartsSizedBox height={height}>
         <PieChart>
           <Pie
             data={data}
@@ -195,7 +251,7 @@ export const PieChartComponent = ({
           <Tooltip />
           {showLegend && <Legend />}
         </PieChart>
-      </ResponsiveContainer>
+      </RechartsSizedBox>
     </Card>
   );
 };
@@ -236,9 +292,9 @@ export const AreaChartComponent = ({
   }, [data, dataKey, strokeColors, fillColors]);
 
   return (
-    <Card>
+    <Card className="mia-recharts-card">
       {title && <Title level={5}>{title}</Title>}
-      <ResponsiveContainer width="100%" height={height}>
+      <RechartsSizedBox height={height}>
         <AreaChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
@@ -247,7 +303,7 @@ export const AreaChartComponent = ({
           {showLegend && <Legend />}
           {areas}
         </AreaChart>
-      </ResponsiveContainer>
+      </RechartsSizedBox>
     </Card>
   );
 };
@@ -290,7 +346,7 @@ export const HeatMapComponent = ({
   };
 
   return (
-    <Card>
+    <Card className="mia-recharts-card">
       {title && <Title level={5}>{title}</Title>}
       <div style={{ height, overflow: "auto" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>

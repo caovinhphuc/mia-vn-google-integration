@@ -250,20 +250,53 @@ function analyzeDependencies() {
   }
 }
 
+/** Đã có lazy routes / tách entry (không gợi ý lại React.lazy chung chung) */
+function detectExistingCodeSplitting(jsFiles) {
+  if (!jsFiles || !jsFiles.length) return false;
+  return jsFiles.some((f) => {
+    const n = f.name;
+    return (
+      n.includes("app-root.") ||
+      n.includes("home.") ||
+      n.includes("layout-config.") ||
+      /\.(dashboard|layout|auth-protected|nlp|security|google-sheets)\.[a-f0-9]+\.chunk\.js/.test(n)
+    );
+  });
+}
+
+/** Chunk chỉ có số hash (vendor/async) — khó debug, thường là antd/recharts/google… */
+function findAnonymousLargeChunks(jsFiles, minBytes) {
+  if (!jsFiles) return [];
+  return jsFiles.filter((f) => f.size >= minBytes && /^\d+\.[a-f0-9]+\.chunk\.js$/i.test(f.name));
+}
+
 // Generate optimization recommendations
 function generateRecommendations(bundleData) {
   header("💡 OPTIMIZATION RECOMMENDATIONS");
 
   const recommendations = [];
+  const jsFiles = bundleData?.jsFiles || [];
+  const hasSplitting = detectExistingCodeSplitting(jsFiles);
 
-  // Check bundle size
+  // Check bundle size (tổng = cộng mọi file — khác transfer gzip thực tế)
   if (bundleData && bundleData.totalSize > 2 * 1024 * 1024) {
-    recommendations.push({
-      priority: "high",
-      issue: `Large bundle size: ${formatSize(bundleData.totalSize)}`,
-      action: "Implement code splitting with React.lazy()",
-      impact: "High",
-      code: `
+    if (hasSplitting) {
+      recommendations.push({
+        priority: "high",
+        issue: `Tổng build (sum JS+CSS) ~${formatSize(bundleData.totalSize)} — entry đã nhỏ (thường main ~145KB)`,
+        action:
+          "Không chỉ nhìn tổng: bật gzip/brotli CDN; phân tích chunk số lớn (714, 648…) bằng npm run analyze; googleapis chỉ backend; tối ưu antd/recharts",
+        impact: "High",
+        code: `Đã có: React.lazy routes, app-root, home, layout-config (xem App.jsx + index.js).
+Tiếp theo: npm run explore:chunk -- 714 (hoặc 648) sau khi npm install; cần map: GENERATE_SOURCEMAP=true npm run build. Hoặc npm run analyze.`,
+      });
+    } else {
+      recommendations.push({
+        priority: "high",
+        issue: `Large bundle size: ${formatSize(bundleData.totalSize)}`,
+        action: "Implement code splitting with React.lazy()",
+        impact: "High",
+        code: `
 // Example:
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Reports = React.lazy(() => import('./pages/Reports'));
@@ -274,10 +307,25 @@ const Reports = React.lazy(() => import('./pages/Reports'));
     <Route path="/reports" element={<Reports />} />
   </Routes>
 </Suspense>`,
+      });
+    }
+  }
+
+  // Chunk số > ~250KB: gợi ý đặt tên / tách vendor (CRA hạn chế — cần eject hoặc CRACO)
+  const anonymousHeavy = findAnonymousLargeChunks(jsFiles, 250 * 1024);
+  if (anonymousHeavy.length > 0) {
+    const sum = anonymousHeavy.reduce((s, f) => s + f.size, 0);
+    recommendations.push({
+      priority: "high",
+      issue: `${anonymousHeavy.length} chunk số (hash) ≥250KB (~${formatSize(sum)}) — thường chứa thư viện lớn`,
+      action:
+        "npm run analyze hoặc npm run explore:chunk -- 714 (source map: GENERATE_SOURCEMAP=true npm run build); lazy thêm / googleapis qua backend",
+      impact: "High",
+      files: anonymousHeavy.slice(0, 8).map((f) => `${f.name} (${formatSize(f.size)})`),
     });
   }
 
-  // Check large chunks
+  // Check large chunks (>500KB đơn lẻ)
   if (bundleData && bundleData.jsFiles) {
     const largeChunks = bundleData.jsFiles.filter((f) => f.size > 500 * 1024);
     if (largeChunks.length > 0) {
@@ -289,6 +337,14 @@ const Reports = React.lazy(() => import('./pages/Reports'));
         files: largeChunks.map((f) => f.name),
       });
     }
+  }
+
+  if (recommendations.length === 0) {
+    log(
+      "✅ Không có cảnh báo tự động (hoặc build chưa đủ lớn). Chạy npm run analyze để soi chi tiết.",
+      "green"
+    );
+    console.log("");
   }
 
   // Display recommendations
@@ -426,8 +482,7 @@ function checkDependencies(autoInstall = true) {
         installedCount++;
       } else {
         log(
-          `   ⚠️  Có thể cần cài thủ công: npm install --save-dev ${dep.name}${
-            dep.version ? `@${dep.version}` : ""
+          `   ⚠️  Có thể cần cài thủ công: npm install --save-dev ${dep.name}${dep.version ? `@${dep.version}` : ""
           }`,
           "yellow"
         );
@@ -494,7 +549,11 @@ function generateBundleStats(autoInstallDeps = true) {
   log("npm run perf:deps          # Check unused dependencies", "cyan");
   log("npm run perf:size          # Size limit check", "cyan");
   log("npx depcheck               # Find unused deps", "cyan");
-  log("npx source-map-explorer build/static/js/*.js  # Detailed analysis", "cyan");
+  log(
+    "npm run explore:chunk        # SME: chunk số lớn nhất có .map (+ --no-border-checks)",
+    "cyan"
+  );
+  log("GENERATE_SOURCEMAP=true npm run build   # bật .map trước khi explore", "cyan");
   console.log("");
 
   log("✨ Analysis Complete!", "green");

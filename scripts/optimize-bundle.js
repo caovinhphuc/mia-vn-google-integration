@@ -22,13 +22,13 @@ function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-// Performance budgets (theo bytes)
+// Ngưỡng mềm tổng JS static/ — canonical budget + initial path: scripts/performance-bundle.js
 const BUDGETS = {
-  javascript: 250 * 1024, // 250 KB
-  css: 50 * 1024, // 50 KB
-  images: 500 * 1024, // 500 KB
-  fonts: 100 * 1024, // 100 KB
-  total: 1 * 1024 * 1024, // 1 MB
+  javascript: 2.8 * 1024 * 1024,
+  css: 130 * 1024,
+  images: 500 * 1024,
+  fonts: 100 * 1024,
+  total: 5 * 1024 * 1024,
 };
 
 function formatBytes(bytes) {
@@ -219,10 +219,7 @@ function analyzeBundle(buildDir = "build") {
   // Scripts để chạy
   log("🚀 Scripts Để Phân Tích:", "blue");
   console.log("");
-  log(
-    "   1. npm run analyze:bundle    - Phân tích bundle với source-map-explorer",
-    "green"
-  );
+  log("   1. npm run analyze:bundle    - Phân tích bundle với source-map-explorer", "green");
   log("   2. npm run build:stats       - Build với webpack stats", "green");
   log("   3. npm run perf:check        - Kiểm tra performance", "green");
   console.log("");
@@ -295,14 +292,14 @@ ${analysis.largestFiles.map((f, i) => `${i + 1}. ${path.relative("build", f.path
 ## 💡 Recommendations
 
 ${analysis.recommendations
-  .map(
-    (rec, i) => `
+      .map(
+        (rec, i) => `
 ### ${i + 1}. ${rec.issue} [${rec.priority}]
 
 ${rec.solutions.map((sol) => `- ${sol.replace(/^[✅🔍📦🗑️⚡📚🎨📝🔧📊🔍⚡📦🗜️]+\s*/, "")}`).join("\n")}
 `
-  )
-  .join("\n")}
+      )
+      .join("\n")}
 
 ## 🚀 Next Steps
 

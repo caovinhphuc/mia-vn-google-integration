@@ -40,16 +40,16 @@
 
 **🔥 Priority 2: Integration & Testing**
 
-5. Tạo API Gateway để điều phối toàn bộ luồng
-6. Thiết lập Jest + Supertest (tests: health, sheets, AI, analytics)
-7. Kết nối Automation → Sheets → AI → Analytics → Recommendations
+1. Tạo API Gateway để điều phối toàn bộ luồng
+2. Thiết lập Jest + Supertest (tests: health, sheets, AI, analytics)
+3. Kết nối Automation → Sheets → AI → Analytics → Recommendations
 
 **🔥 Priority 3: Enhancement**
 
-8. Scaffold `onePageService` + endpoint `/api/onepage/test`
-9. Thêm `schedulerService` (node-cron) trigger automation
-10. Thêm env schema (`config/env.js`) dùng `envalid`
-11. Refactor frontend: cài `@tanstack/react-query` + tạo `apiClient`
+1. Scaffold `onePageService` + endpoint `/api/onepage/test`
+2. Thêm `schedulerService` (node-cron) trigger automation
+3. Thêm env schema (`config/env.js`) dùng `envalid`
+4. Refactor frontend: cài `@tanstack/react-query` + tạo `apiClient`
 
 ### 📌 DEBT / RỦI RO THEO DÕI
 

@@ -167,8 +167,10 @@ async function runAllTests() {
     console.log(`  ${index + 1}. ${status} - ${result.name}${duration}`);
   });
 
-  // Save report to file
-  const reportPath = path.join(__dirname, "..", `test-report-${Date.now()}.json`);
+  // Save report: reports/test-runs/ (không ghi root — xem reports/README.md)
+  const reportDir = path.join(PROJECT_ROOT, "reports", "test-runs");
+  fs.mkdirSync(reportDir, { recursive: true });
+  const reportPath = path.join(reportDir, `test-report-${Date.now()}.json`);
   const report = {
     timestamp: new Date().toISOString(),
     summary: {

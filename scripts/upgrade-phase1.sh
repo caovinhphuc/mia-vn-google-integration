@@ -41,10 +41,12 @@ git checkout -b upgrade/phase-1-security 2>/dev/null || {
 }
 print_success "Switched to upgrade branch"
 
-# Step 2: Backup current package.json
+# Step 2: Backup current package.json → backups/package-json/ (không ghi root)
 print_step "Backing up current package.json..."
-cp package.json package.json.backup.$(date +%Y%m%d_%H%M%S)
-print_success "Package.json backed up"
+BACKUP_DIR="backups/package-json"
+mkdir -p "$BACKUP_DIR"
+cp package.json "$BACKUP_DIR/package.json.backup.$(date +%Y%m%d_%H%M%S)"
+print_success "Package.json backed up → $BACKUP_DIR/"
 
 # Step 3: Run security audit
 print_step "Running security audit..."

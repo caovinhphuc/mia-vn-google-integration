@@ -45,11 +45,13 @@ try {
     }
     Write-Success "Switched to upgrade branch"
 
-    # Step 2: Backup current package.json
+    # Step 2: Backup current package.json → backups/package-json/ (không ghi root)
     Write-Step "Backing up current package.json..."
     $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
-    Copy-Item "package.json" "package.json.backup.$timestamp"
-    Write-Success "Package.json backed up"
+    $backupDir = Join-Path "backups" "package-json"
+    New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
+    Copy-Item "package.json" (Join-Path $backupDir "package.json.backup.$timestamp")
+    Write-Success "Package.json backed up → $backupDir/"
 
     # Step 3: Run security audit
     Write-Step "Running security audit..."
@@ -269,8 +271,13 @@ Generated: $(Get-Date)
     Write-Error "Upgrade failed: $($_.Exception.Message)"
     Write-Host "Rolling back changes..." -ForegroundColor Yellow
 
-    # Restore backup if exists
-    $backupFile = Get-ChildItem "package.json.backup.*" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    # Restore backup if exists (backups/package-json + tương thích bản cũ ở root)
+    $fromDir = @()
+    if (Test-Path (Join-Path "backups" "package-json")) {
+        $fromDir = Get-ChildItem -Path (Join-Path "backups" "package-json") -Filter "package.json.backup.*" -ErrorAction SilentlyContinue
+    }
+    $fromRoot = Get-ChildItem -Path "." -Filter "package.json.backup.*" -ErrorAction SilentlyContinue
+    $backupFile = @($fromDir; $fromRoot) | Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if ($backupFile) {
         Copy-Item $backupFile.FullName "package.json"
         Write-Host "Package.json restored from backup" -ForegroundColor Green

@@ -5,10 +5,58 @@
 
 import axios from "axios";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  process.env.VITE_API_BASE_URL ||
-  "http://localhost:3001/api";
+/** Base URL cho route /sheets/* — luôn kết thúc bằng /api */
+const resolveSheetsApiBase = () => {
+  const raw =
+    process.env.REACT_APP_API_BASE_URL ||
+    process.env.VITE_API_BASE_URL ||
+    process.env.REACT_APP_API_URL ||
+    process.env.VITE_API_URL;
+  if (!raw) return "http://localhost:3001/api";
+  const s = String(raw).replace(/\/$/, "");
+  return s.endsWith("/api") ? s : `${s}/api`;
+};
+
+const API_BASE_URL = resolveSheetsApiBase();
+
+/**
+ * Nhận diện lỗi mạng (backend down, CORS, timeout) và trả thông báo thân thiện.
+ * @returns {Error|null} Error nếu là lỗi mạng, null nếu không
+ */
+const handleNetworkError = (error, operation) => {
+  const errorMessage = String(error.message || "");
+  const errorCode = String(error.code || "");
+  const errorName = String(error.name || "");
+
+  const isAxiosNetworkError =
+    errorName === "AxiosError" && (!error.response || error.code === "ERR_NETWORK");
+
+  const isNetworkError =
+    errorCode === "ERR_NETWORK" ||
+    errorMessage === "Network Error" ||
+    errorMessage === "Failed to fetch" ||
+    errorMessage.toLowerCase().includes("failed to fetch") ||
+    errorMessage.toLowerCase().includes("network error") ||
+    isAxiosNetworkError ||
+    (error.request && !error.response) ||
+    errorMessage.includes("ERR_NETWORK") ||
+    errorMessage.includes("ECONNREFUSED") ||
+    errorMessage.includes("timeout") ||
+    errorMessage.includes("NetworkError");
+
+  if (isNetworkError) {
+    const friendlyMessage =
+      `Không thể kết nối đến backend server.\n` +
+      `Vui lòng kiểm tra:\n` +
+      `1. Backend có đang chạy không? (${API_BASE_URL})\n` +
+      `2. Kiểm tra kết nối mạng\n` +
+      `3. Kiểm tra CORS settings`;
+
+    console.error(`Error ${operation}:`, friendlyMessage);
+    return new Error(friendlyMessage);
+  }
+  return null;
+};
 
 class GoogleSheetsApiService {
   /**
@@ -28,6 +76,9 @@ class GoogleSheetsApiService {
         majorDimension: response.data.majorDimension,
       };
     } catch (error) {
+      const networkError = handleNetworkError(error, "reading sheet");
+      if (networkError) throw networkError;
+
       console.error("Error reading sheet:", error);
       throw new Error(error.response?.data?.error || `Failed to read sheet: ${error.message}`);
     }
@@ -45,6 +96,9 @@ class GoogleSheetsApiService {
       });
       return response.data.data;
     } catch (error) {
+      const networkError = handleNetworkError(error, "writing to sheet");
+      if (networkError) throw networkError;
+
       console.error("Error writing to sheet:", error);
       throw new Error(error.response?.data?.error || `Failed to write to sheet: ${error.message}`);
     }
@@ -62,6 +116,9 @@ class GoogleSheetsApiService {
       });
       return response.data.data;
     } catch (error) {
+      const networkError = handleNetworkError(error, "appending to sheet");
+      if (networkError) throw networkError;
+
       console.error("Error appending to sheet:", error);
       throw new Error(error.response?.data?.error || `Failed to append to sheet: ${error.message}`);
     }
@@ -79,7 +136,17 @@ class GoogleSheetsApiService {
       const response = await axios.get(url);
       return response.data.data;
     } catch (error) {
-      console.error("Error getting sheet metadata:", error);
+      const networkError = handleNetworkError(error, "getting sheet metadata");
+      if (networkError) throw networkError;
+
+      const errText = String(error.response?.data?.error || "");
+      const isAuthError =
+        errText.includes("invalid_grant") || errText.includes("account not found");
+
+      if (!isAuthError && process.env.NODE_ENV === "development") {
+        console.error("Error getting sheet metadata:", error);
+      }
+
       throw new Error(
         error.response?.data?.error || `Failed to get sheet metadata: ${error.message}`
       );
@@ -96,6 +163,9 @@ class GoogleSheetsApiService {
       });
       return response.data.data;
     } catch (error) {
+      const networkError = handleNetworkError(error, "clearing sheet");
+      if (networkError) throw networkError;
+
       console.error("Error clearing sheet:", error);
       throw new Error(error.response?.data?.error || `Failed to clear sheet: ${error.message}`);
     }
@@ -112,6 +182,9 @@ class GoogleSheetsApiService {
       });
       return response.data.data;
     } catch (error) {
+      const networkError = handleNetworkError(error, "adding sheet");
+      if (networkError) throw networkError;
+
       console.error("Error adding sheet:", error);
       throw new Error(error.response?.data?.error || `Failed to add sheet: ${error.message}`);
     }

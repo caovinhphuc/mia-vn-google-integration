@@ -5,7 +5,8 @@
 
 # Get script directory and change to project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+# scripts/utils → repo root = 2 cấp (không dùng ../../.. — sẽ quét nhầm cả thư mục cha)
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
 # Colors
@@ -72,7 +73,11 @@ while IFS= read -r -d '' file; do
         bash -n "$file" 2>&1 | head -3 | sed 's/^/    /'
         FAILED_SH=$((FAILED_SH + 1))
     fi
-done < <(find . -name "*.sh" -type f ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/venv/*" ! -path "*/ai-venv/*" ! -path "*/backups/*" -print0)
+done < <(find . -name "*.sh" -type f \
+    ! -path "*/node_modules/*" ! -path "*/.git/*" \
+    ! -path "*/venv/*" ! -path "*/.venv/*" ! -path "*/ai-venv/*" \
+    ! -path "*/venv.backup*/*" ! -path "*/site-packages/*" \
+    ! -path "*/backups/*" -print0)
 
 echo ""
 
@@ -94,7 +99,11 @@ while IFS= read -r -d '' file; do
         python3 -m py_compile "$file" 2>&1 | head -3 | sed 's/^/    /'
         FAILED_PY=$((FAILED_PY + 1))
     fi
-done < <(find . -name "*.py" -type f ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/venv/*" ! -path "*/ai-venv/*" ! -path "*/backups/*" ! -path "*/__pycache__/*" -print0)
+done < <(find . -name "*.py" -type f \
+    ! -path "*/node_modules/*" ! -path "*/.git/*" \
+    ! -path "*/venv/*" ! -path "*/.venv/*" ! -path "*/ai-venv/*" \
+    ! -path "*/venv.backup*/*" ! -path "*/site-packages/*" \
+    ! -path "*/backups/*" ! -path "*/__pycache__/*" -print0)
 
 echo ""
 echo -e "${BLUE}================================================================================${NC}"

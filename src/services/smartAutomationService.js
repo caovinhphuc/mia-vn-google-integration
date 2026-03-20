@@ -1,189 +1,106 @@
 /* eslint-disable */
 /**
- * Smart Automation Service
- * AI-powered data analysis, predictive alerts, categorization, and reports
+ * Smart Automation — gọi ai-service `/api/ml/legacy/*` (mia_models).
  */
 
-const API_BASE_URL =
-  process.env.REACT_APP_AI_SERVICE_URL ||
-  process.env.VITE_AI_SERVICE_URL ||
-  "http://localhost:8000";
+import { getAiServiceBaseUrl, parseApiJsonText } from "../utils/apiBase";
+
+const API_BASE_URL = () => getAiServiceBaseUrl();
+
+async function postLegacy(path, body) {
+  const url = `${API_BASE_URL()}${path}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const text = await res.text().catch(() => "");
+  if (!res.ok) {
+    throw new Error(text || `${path} ${res.status}`);
+  }
+  return parseApiJsonText(text, url);
+}
 
 class SmartAutomationService {
-  /**
-   * Analyze patterns in data
-   */
   async analyzePatterns(data, valueColumn, dateColumn = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/patterns/analyze`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          value_column: valueColumn,
-          date_column: dateColumn,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Pattern analysis failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error analyzing patterns:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/patterns/analyze", {
+      data,
+      value_column: valueColumn,
+      date_column: dateColumn,
+    });
   }
 
-  /**
-   * Analyze trends in data
-   */
   async analyzeTrends(data, valueColumn) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/patterns/trends`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          value_column: valueColumn,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Trend analysis failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error analyzing trends:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/patterns/trends", {
+      data,
+      value_column: valueColumn,
+    });
   }
 
-  /**
-   * Detect anomalies in data
-   */
   async detectAnomalies(data, valueColumn) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/patterns/anomalies`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          value_column: valueColumn,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Anomaly detection failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error detecting anomalies:", error);
-      throw error;
-    }
+    const r = await postLegacy("/api/ml/legacy/patterns/anomalies", {
+      data,
+      value_column: valueColumn,
+    });
+    return r.anomalies ?? r;
   }
 
-  /**
-   * Generate predictive alerts
-   */
   async generatePredictiveAlerts(data, valueColumn, metricName = null, threshold = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/alerts/predictive`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          value_column: valueColumn,
-          metric_name: metricName,
-          threshold,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Predictive alert failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error generating predictive alerts:", error);
-      throw error;
-    }
+    const r = await postLegacy("/api/ml/legacy/alerts/analyze", {
+      data,
+      value_column: valueColumn,
+      metric_name: metricName,
+      threshold,
+    });
+    return r.alerts ?? [];
   }
 
-  /**
-   * Categorize columns
-   */
   async categorizeColumn(columnName, sampleValues = []) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/categorize/columns`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          column_name: columnName,
-          sample_values: sampleValues,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Categorization failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error categorizing column:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/categorize/column", {
+      column_name: columnName,
+      sample_values: sampleValues,
+    });
   }
 
   /**
-   * Categorize rows
+   * Backend chỉ có categorize/column — gắn _categories cho từng row từ meta cột.
    */
   async categorizeRows(data, categoryRules = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/categorize/rows`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          category_rules: categoryRules,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Row categorization failed: ${response.statusText}`);
+    if (!data?.length) return [];
+    const keys = Object.keys(data[0]).filter((k) => !k.startsWith("_"));
+    const columnMeta = {};
+    for (const key of keys) {
+      const samples = data
+        .slice(0, 25)
+        .map((row) => row[key])
+        .filter((v) => v !== undefined && v !== null);
+      try {
+        columnMeta[key] = await this.categorizeColumn(key, samples);
+      } catch (e) {
+        console.warn("categorizeColumn", key, e.message);
+        columnMeta[key] = { category: "other", confidence: 0.5 };
       }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error categorizing rows:", error);
-      throw error;
     }
+    const tags = [
+      ...new Set(
+        Object.values(columnMeta)
+          .map((m) => m.category)
+          .filter(Boolean)
+      ),
+    ];
+    const priority =
+      categoryRules?.priority ||
+      (tags.includes("financial") || tags.includes("priority") ? "high" : "medium");
+    return data.map((row) => ({
+      ...row,
+      _categories: {
+        tags,
+        priority,
+        byColumn: columnMeta,
+      },
+    }));
   }
 
-  /**
-   * Generate automated report
-   */
   async generateReport(
     data,
     valueColumn,
@@ -191,144 +108,67 @@ class SmartAutomationService {
     dateColumn = null,
     title = null
   ) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/reports/generate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          value_column: valueColumn,
-          date_column: dateColumn,
-          report_type: reportType,
-          title,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Report generation failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error generating report:", error);
-      throw error;
+    const t = title || `Report ${new Date().toLocaleDateString("vi-VN")}`;
+    if (reportType === "summary") {
+      return postLegacy("/api/ml/legacy/report/summary", { data, title: t });
     }
+    if (reportType === "trend") {
+      return postLegacy("/api/ml/legacy/report/trend", {
+        data,
+        value_column: valueColumn,
+        date_column: dateColumn,
+        title: t,
+      });
+    }
+    if (reportType === "anomaly") {
+      const anomalies = await this.detectAnomalies(data, valueColumn);
+      return {
+        title: t,
+        executive_summary: `Phát hiện ${Array.isArray(anomalies) ? anomalies.length : 0} điểm bất thường (legacy patterns).`,
+        sections: { anomalies },
+        insights: Array.isArray(anomalies)
+          ? anomalies.map(
+              (a) =>
+                a.message ||
+                (a.type
+                  ? `Bất thường ${a.type} (z=${Number(a.z_score).toFixed(2)})`
+                  : JSON.stringify(a))
+            )
+          : [],
+      };
+    }
+    return postLegacy("/api/ml/legacy/report/comprehensive", {
+      data,
+      value_column: valueColumn,
+      date_column: dateColumn,
+      title: t,
+    });
   }
 
-  /**
-   * Process natural language chat query
-   */
   async processChatQuery(query, context = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/nlp/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query,
-          context,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`NLP chat failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error processing chat query:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/nlp/parse", { query, context: context || {} });
   }
 
-  /**
-   * Generate auto summary
-   */
   async generateSummary(data, maxLength = 200) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/nlp/summary`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          max_length: maxLength,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Summary generation failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error generating summary:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/nlp/summary", {
+      data,
+      max_length: maxLength,
+    });
   }
 
-  /**
-   * Smart search across all data
-   */
   async smartSearch(query, data, columns = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/nlp/search`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query,
-          data,
-          columns,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Smart search failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error in smart search:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/nlp/search", {
+      query,
+      data,
+      columns,
+    });
   }
 
-  /**
-   * Process voice command
-   */
   async processVoiceCommand(command, context = null) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/nlp/voice`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: command,
-          context,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Voice command processing failed: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      return result.data || result;
-    } catch (error) {
-      console.error("Error processing voice command:", error);
-      throw error;
-    }
+    return postLegacy("/api/ml/legacy/nlp/parse", {
+      query: command,
+      context: context || {},
+    });
   }
 }
 

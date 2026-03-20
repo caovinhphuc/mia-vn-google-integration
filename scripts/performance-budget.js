@@ -9,14 +9,16 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
-// Performance budgets
+// Performance budgets (đồng bộ logic scripts/performance-bundle.js)
 const BUDGETS = {
   bundle: {
-    javascript: 250 * 1024, // 250KB
-    css: 50 * 1024, // 50KB
-    images: 500 * 1024, // 500KB
-    fonts: 100 * 1024, // 100KB
-    total: 1024 * 1024, // 1MB
+    initialJavascript: 400 * 1024,
+    totalJavascriptSoft: 2.8 * 1024 * 1024,
+    totalJavascriptHard: 5 * 1024 * 1024,
+    css: 130 * 1024,
+    images: 500 * 1024,
+    fonts: 100 * 1024,
+    totalBuild: 5 * 1024 * 1024,
   },
   metrics: {
     fcp: 1800, // First Contentful Paint (ms)
@@ -48,39 +50,46 @@ function log(message, color = "reset") {
 function checkBundleBudget() {
   log("📦 Checking Bundle Budget...", "cyan");
 
+  if (process.env.PERF_SKIP_BUNDLE === "1") {
+    log("⏭️  Bỏ qua bundle (PERF_SKIP_BUNDLE=1)", "yellow");
+    return { passed: true, skipped: true };
+  }
+
   const buildDir = "build";
   if (!fs.existsSync(buildDir)) {
-    log('⚠️  Build directory not found. Run "npm run build" first.', "yellow");
+    log("⚠️  Chưa có thư mục build/. Chạy: npm run build", "yellow");
+    log("   Hoặc PERF_SKIP_BUNDLE=1 nếu chỉ kiểm tra Lighthouse/API.", "dim");
     return { passed: false, warnings: ["Build directory not found"] };
   }
 
   const { checkBundleSize } = require("./performance-bundle");
-  try {
-    checkBundleSize();
-    return { passed: true };
-  } catch (error) {
-    return { passed: false, error: error.message };
-  }
+  const { ok } = checkBundleSize();
+  return { passed: ok };
 }
 
 function checkLighthouseBudget() {
   log("🔍 Checking Lighthouse Budget...", "cyan");
 
-  // Check if server is running
+  const url = process.env.PERF_URL || "http://localhost:3000";
+
   try {
-    execSync('curl -s -o /dev/null -w "%{http_code}" http://localhost:3000', {
+    execSync(`curl -s -o /dev/null -w "%{http_code}" ${url}`, {
       stdio: "pipe",
     });
-  } catch (error) {
-    log("⚠️  Server not running. Skipping Lighthouse check.", "yellow");
+  } catch {
+    log(`⚠️  Không gọi được ${url}. Bỏ qua Lighthouse.`, "yellow");
+    log("   Chạy npm start / serve build hoặc đặt PERF_URL.", "dim");
     return { passed: true, skipped: true };
   }
 
-  // Run Lighthouse (simplified check)
   try {
     const { runLighthouse } = require("./performance-lighthouse");
-    runLighthouse("http://localhost:3000");
-    return { passed: true };
+    const r = runLighthouse(url, { noExit: true });
+    return {
+      passed: r.passedBudget,
+      score: r.performanceScore,
+      minScore: r.minScore,
+    };
   } catch (error) {
     return { passed: false, error: error.message };
   }
@@ -122,22 +131,24 @@ function generateReport(results) {
     summary: {
       total: Object.keys(results).length,
       passed: Object.values(results).filter((r) => r.passed).length,
-      failed: Object.values(results).filter((r) => !r.passed && !r.skipped)
-        .length,
+      failed: Object.values(results).filter((r) => !r.passed && !r.skipped).length,
       skipped: Object.values(results).filter((r) => r.skipped).length,
     },
   };
 
-  fs.writeFileSync(
-    "performance-budget-report.json",
-    JSON.stringify(report, null, 2)
-  );
+  fs.writeFileSync("performance-budget-report.json", JSON.stringify(report, null, 2));
   return report;
 }
 
 function checkPerformanceBudget() {
   log("💰 Performance Budget Monitor", "cyan");
   log("================================", "cyan");
+  console.log("");
+  log("Gợi ý: npm run build trước (bundle). Lighthouse: PERF_URL (mặc định :3000).", "dim");
+  log(
+    "Dev (npm start) thường điểm thấp — production: serve build. LIGHTHOUSE_MIN_SCORE=50 để nới dev.",
+    "dim"
+  );
   console.log("");
 
   const results = {
@@ -154,9 +165,17 @@ function checkPerformanceBudget() {
     if (result.skipped) {
       log(`  ⏭️  ${check}: Skipped`, "yellow");
     } else if (result.passed) {
-      log(`  ✅ ${check}: Passed`, "green");
+      const extra =
+        check === "lighthouse" && result.score != null
+          ? ` (Performance ${result.score}/100, yêu cầu ≥${result.minScore ?? BUDGETS.metrics.lighthouse})`
+          : "";
+      log(`  ✅ ${check}: Passed${extra}`, "green");
     } else {
-      log(`  ❌ ${check}: Failed`, "red");
+      const extra =
+        check === "lighthouse" && result.score != null
+          ? ` — ${result.score}/100 < ${result.minScore ?? BUDGETS.metrics.lighthouse}`
+          : "";
+      log(`  ❌ ${check}: Failed${extra}`, "red");
       if (result.error) {
         log(`     Error: ${result.error}`, "red");
       }

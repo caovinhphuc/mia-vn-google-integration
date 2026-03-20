@@ -6,26 +6,23 @@
     }
   ],
   "settings": {
-    "json.schemas": [
-      {
-        "fileMatch": [
-          "/*.code-workspace"
-        ],
-        "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json"
-      }
-    ],
-    "cSpell.words": [
-      "inntegration"
-    ],
-    "cSpell.enabled": false,
-    "[markdown]": {
-      "cSpell.enabled": false
-    },
     "editor.formatOnSave": true,
+    "editor.fontSize": 13,
+    "editor.fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "editor.lineHeight": 22,
+    "editor.letterSpacing": 0.6,
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.zoomLevel": 0,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit",
+      "source.organizeImports": "explicit"
     },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
     "files.exclude": {
       "**/.git": true,
       "**/.DS_Store": true,
@@ -35,7 +32,8 @@
       "**/.venv": true,
       "**/venv": true,
       "**/dist": true,
-      "**/build": true,
+      "**/.next": true,
+      "**/.vercel": true
     },
     "search.exclude": {
       "**/node_modules": true,
@@ -44,11 +42,37 @@
       "**/__pycache__": true,
       "**/.venv": true,
       "**/venv": true,
+      "**/lighthouse-reports": true,
+      "**/backup_markdown": true
     },
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/node_modules/**": true,
+      "**/__pycache__/**": true,
+      "**/.venv/**": true,
+      "**/venv/**": true,
+      "**/build/**": true
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder}/one_automation_system/venv/bin/python",
+    "python.analysis.extraPaths": [
+      "./automation",
+      "./ai-service",
+      "./one_automation_system",
+      "./mia-logistics-manager"
+    ],
+    "python.analysis.autoSearchPaths": true,
     "terminal.integrated.cwd": "${workspaceFolder}",
     "terminal.integrated.defaultProfile.osx": "zsh",
-    "terminal.integrated.env.osx": {
-      "NODE_OPTIONS": ""
+    "json.schemas": [
+      {
+        "fileMatch": ["/*.code-workspace"],
+        "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json"
+      }
+    ],
+    "cSpell.words": ["inntegration"],
+    "cSpell.enabled": false,
+    "[markdown]": {
+      "cSpell.enabled": false
     }
   },
   "extensions": {
@@ -66,6 +90,41 @@
       "styled-components.vscode-styled-components",
       "csstools.postcss",
       "formulahendry.code-runner",
-    ],
+      "ms-python.black-formatter",
+      "ms-python.flake8",
+      "ms-python.isort"
+    ]
   },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Frontend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "start"],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Backend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "backend"],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Full Dev (npm run dev)",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "cwd": "${workspaceFolder}",
+        "console": "integratedTerminal"
+      }
+    ]
+  }
 }

@@ -43,7 +43,7 @@ class SystemSetup:
         """Setup Chrome WebDriver với tối ưu performance"""
         try:
             if self.logger:
-            self.logger.info("🌐 Setting up WebDriver...")
+                self.logger.info("🌐 Setting up WebDriver...")
 
             chrome_options = Options()
 
@@ -106,7 +106,7 @@ class SystemSetup:
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
             except Exception as e:
                 if self.logger:
-                self.logger.warning(f"ChromeDriverManager failed: {e}")
+                    self.logger.warning(f"ChromeDriverManager failed: {e}")
                 service = Service()
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -153,7 +153,7 @@ class SystemSetup:
 
                     if self.logger:
                         self.logger.info(f"  ✅ {package}")
-        except ImportError:
+                except ImportError:
                     missing_packages.append(package)
                     if self.logger:
                         self.logger.warning(f"  ❌ {package}")
@@ -247,7 +247,7 @@ class SystemSetup:
 
         except Exception as e:
             if self.logger:
-            self.logger.error(f"❌ Setup all components failed: {e}")
+                self.logger.error(f"❌ Setup all components failed: {e}")
             return {
                 'success': False,
                 'error': str(e),
@@ -262,10 +262,10 @@ class SystemSetup:
             if self.driver:
                 self.driver.quit()
                 if self.logger:
-                self.logger.info("🧹 WebDriver cleaned up")
+                    self.logger.info("🧹 WebDriver cleaned up")
         except Exception as e:
             if self.logger:
-            self.logger.warning(f"⚠️ Cleanup warning: {e}")
+                self.logger.warning(f"⚠️ Cleanup warning: {e}")
 
 
 def setup_automation_system(logger=None, headless=True):

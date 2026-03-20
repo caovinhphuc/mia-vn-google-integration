@@ -14,3 +14,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+/* Fallback khi lazy-load App (entry nhỏ hơn, không kéo antd từ PWA helper) */
+.mia-app-boot-fallback {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #64748b;
+}

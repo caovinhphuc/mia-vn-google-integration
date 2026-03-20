@@ -1,6 +1,6 @@
 # 📊📦 Hướng Dẫn Quản Lý Reports & Backups
 
-> **React OAS Integration v4.0**  
+> **React OAS Integration v4.0**
 > **Ngày cập nhật**: 2025-01-27
 
 ---
@@ -11,19 +11,24 @@
 
 ```
 reports/
-├── email/          # 9 files - Email test reports
-├── telegram/       # 9 files - Telegram test reports
-├── health/         # 9 files - Health check reports
+├── email/          # Email test reports
+├── telegram/       # Telegram test reports
+├── health/         # Health check reports
+├── test-runs/      # test-all.js JSON
+├── log-analysis/   # scripts/log-analyzer.js → log-analysis-YYYY-MM-DD.json
 ├── build/          # Build reports
 ├── performance/    # Performance reports
-└── lighthouse/     # 21 files - Lighthouse audit reports
+└── lighthouse/     # Lighthouse JSON (sau organize-reports)
+
+`lighthouse-reports/` (ở **root** repo): HTML Lighthouse (`run-lighthouse.sh`, v.v.)
 
 backups/
 ├── scripts/        # Script backups
 ├── automation/     # Automation backups
 ├── backend/        # Backend backups
 ├── ai-service/     # AI service backups
-└── venv/           # 3557 items - Python venv backups
+├── package-json/   # package.json.backup.* (scripts upgrade-phase1)
+└── venv/           # Python venv backups
 ```
 
 ### 2. Scripts tự động ✅
@@ -89,6 +94,11 @@ Script sẽ:
 - `health-report-YYYY-MM-DD.json`
 - Health check results từ các services
 - Tự động tạo khi chạy health checks
+
+### Test-all suite (`reports/test-runs/`)
+
+- `test-report-<timestamp>.json` — kết quả `scripts/test-all.js` (vd. `npm run test:complete`)
+- Bản cũ ở root: chạy `./scripts/utils/organize-reports.sh` để gom vào đây
 
 ### Build Reports (`reports/build/`)
 
@@ -229,5 +239,5 @@ Sau khi tổ chức:
 
 ---
 
-**Status**: ✅ Hoàn thành  
+**Status**: ✅ Hoàn thành
 **Last Updated**: 2025-01-27

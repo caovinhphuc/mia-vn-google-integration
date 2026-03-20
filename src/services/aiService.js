@@ -1,212 +1,228 @@
 /**
- * AI Service - Kết nối với Backend AI API
+ * AI Service — gọi trực tiếp ai-service (FastAPI), map response cho AIDashboard.
  */
 
-const API_BASE_URL = "/api/ai";
+import { getAiServiceBaseUrl, parseApiJsonText } from "../utils/apiBase";
+
+const base = () => getAiServiceBaseUrl();
+
+async function fetchJson(path, options = {}) {
+  const url = `${base()}${path.startsWith("/") ? path : `/${path}`}`;
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+  const text = await res.text().catch(() => "");
+  if (!res.ok) {
+    const err = new Error(text || `HTTP ${res.status} ${res.statusText}`);
+    err.status = res.status;
+    throw err;
+  }
+  return parseApiJsonText(text, url);
+}
+
+function mapTimeframeToMl(tf) {
+  if (tf === "1d") return "1h";
+  if (tf === "7d") return "24h";
+  if (tf === "30d") return "7d";
+  return "7d";
+}
+
+function buildInsightsFromAnalyze(result) {
+  const recs = Array.isArray(result.recommendations) ? result.recommendations : [];
+  const main = {
+    id: result.id || Date.now(),
+    type: "optimization",
+    title: "Kết quả phân tích AI",
+    description: `Chỉ số dự đoán ${Number(result.prediction).toFixed(1)} (độ tin cậy ${Math.round((result.confidence || 0) * 100)}%).`,
+    confidence: result.confidence || 0.85,
+    impact: "medium",
+    action: recs[0] || "Theo dõi xu hướng và tối ưu dữ liệu.",
+  };
+  const extra = recs.slice(1, 5).map((text, i) => ({
+    id: (result.id || Date.now()) + i + 1,
+    type: "trend",
+    title: text.slice(0, 80),
+    description: text,
+    confidence: 0.75,
+    impact: "low",
+    action: "Xem chi tiết trong báo cáo.",
+  }));
+  return [main, ...extra];
+}
+
+function scalePredictions(metrics, preds, weekFactor, monthFactor) {
+  const m = metrics || {};
+  const p = preds || {};
+  const w = (k) => Math.max(0, Math.round((m[k] || 0) * weekFactor * ((p[k] || 100) / 100)));
+  const mo = (k) => Math.max(0, Math.round((m[k] || 0) * monthFactor * ((p[k] || 100) / 100)));
+  return {
+    nextWeek: {
+      sheets: w("sheets"),
+      files: w("files"),
+      alerts: w("alerts"),
+    },
+    nextMonth: {
+      sheets: mo("sheets"),
+      files: mo("files"),
+      alerts: mo("alerts"),
+    },
+  };
+}
 
 class AIService {
-  /**
-   * Phân tích dữ liệu và tạo insights
-   */
   async analyzeData(data, timeframe = "7d") {
-    try {
-      const response = await fetch(`${API_BASE_URL}/analyze`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data,
-          timeframe,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`AI analysis failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error analyzing data:", error);
-      throw error;
-    }
+    const result = await fetchJson("/api/analyze", {
+      method: "POST",
+      body: JSON.stringify({ data: { ...data, timeframe }, type: "dashboard" }),
+    });
+    return { insights: buildInsightsFromAnalyze(result) };
   }
 
-  /**
-   * Lấy predictions cho tương lai
-   */
   async getPredictions(metrics, timeframe = "7d") {
-    try {
-      const response = await fetch(`${API_BASE_URL}/predict`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          metrics,
-          timeframe,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Prediction failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error getting predictions:", error);
-      throw error;
-    }
+    const body = {
+      timeframe: mapTimeframeToMl(timeframe),
+      metrics: ["sheets", "files", "alerts"],
+    };
+    const result = await fetchJson("/api/ml/predict", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+    const preds = result.predictions || {};
+    const m = {
+      sheets: metrics?.sheets ?? 0,
+      files: metrics?.files ?? 0,
+      alerts: metrics?.alerts ?? 0,
+    };
+    const scaled = scalePredictions(m, preds, 1.08, 1.25);
+    return { predictions: scaled };
   }
 
-  /**
-   * Phát hiện anomalies trong dữ liệu
-   */
   async detectAnomalies(data) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/anomalies`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Anomaly detection failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error detecting anomalies:", error);
-      throw error;
-    }
+    return fetchJson("/api/ml/legacy/patterns/anomalies", {
+      method: "POST",
+      body: JSON.stringify({
+        data: Array.isArray(data) ? data : [],
+        value_column: "value",
+      }),
+    }).catch(() => ({ anomalies: [] }));
   }
 
-  /**
-   * Lấy recommendations từ AI
-   */
   async getRecommendations(context) {
     try {
-      const response = await fetch(`${API_BASE_URL}/recommendations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ context }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Recommendations failed: ${response.statusText}`);
+      const [insights, optimize] = await Promise.all([
+        fetchJson("/api/ml/insights"),
+        fetchJson("/api/ml/optimize", {
+          method: "POST",
+          body: JSON.stringify({
+            timestamp: new Date().toISOString(),
+            active_users: context?.files ?? 0,
+            response_time: 1.2,
+            error_rate: 0.01,
+            cpu_usage: 40,
+            memory_usage: 55,
+            disk_usage: 60,
+            network_io: 10,
+          }),
+        }),
+      ]);
+      const fromInsights = insights?.insights?.recommendations || [];
+      const fromOpt = optimize?.recommendations || [];
+      const texts = [...fromInsights, ...fromOpt];
+      const recommendations = texts.map((title, i) => ({
+        id: i + 1,
+        category: "performance",
+        title: typeof title === "string" ? title : JSON.stringify(title),
+        description: typeof title === "string" ? title : "Khuyến nghị từ AI service.",
+        priority: i === 0 ? "high" : "medium",
+        effort: "medium",
+        impact: i === 0 ? "high" : "medium",
+      }));
+      if (recommendations.length === 0) {
+        return {
+          recommendations: [
+            {
+              id: 1,
+              category: "ops",
+              title: "Bật ai-service và mia_models",
+              description: "Chạy `npm run ai-service` (port 8000) để có đủ NLP/patterns.",
+              priority: "medium",
+              effort: "low",
+              impact: "high",
+            },
+          ],
+        };
       }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error getting recommendations:", error);
-      throw error;
+      return { recommendations };
+    } catch (e) {
+      console.error("getRecommendations:", e);
+      return {
+        recommendations: [
+          {
+            id: 1,
+            category: "ops",
+            title: "Không lấy được khuyến nghị từ server",
+            description: e.message || "Kiểm tra REACT_APP_AI_SERVICE_URL và CORS.",
+            priority: "high",
+            effort: "low",
+            impact: "medium",
+          },
+        ],
+      };
     }
   }
 
-  /**
-   * AI Chat - Trò chuyện với AI về dữ liệu
-   */
   async chat(message, context = {}) {
     try {
-      const response = await fetch(`${API_BASE_URL}/chat`, {
+      const parsed = await fetchJson("/api/ml/legacy/nlp/parse", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message,
-          context,
-        }),
+        body: JSON.stringify({ query: message, context }),
       });
-
-      if (!response.ok) {
-        throw new Error(`AI chat failed: ${response.statusText}`);
+      const intent = parsed.intent || "unknown";
+      const conf = typeof parsed.confidence === "number" ? parsed.confidence : 0.7;
+      const responseText = `Ý định: **${intent}**. ${parsed.original_query ? `Truy vấn: "${parsed.original_query.slice(0, 200)}".` : ""} Gợi ý: kiểm tra Sheets/Drive/Alerts trong dashboard.`;
+      return {
+        response: responseText,
+        confidence: conf,
+        suggestions: Object.keys(parsed.entities || {}).slice(0, 5),
+      };
+    } catch (e) {
+      if (e.status === 503 || String(e.message).includes("mia_models")) {
+        return {
+          response:
+            "Module NLP (mia_models) chưa sẵn sàng trên ai-service. Vẫn có thể dùng phân tích /api/analyze.",
+          confidence: 0.4,
+          suggestions: [],
+        };
       }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error in AI chat:", error);
-      throw error;
+      throw e;
     }
   }
 
-  /**
-   * Phân tích Google Sheets data
-   */
   async analyzeSheets(sheetData) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/analyze-sheets`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sheetData }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Sheets analysis failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error analyzing sheets:", error);
-      throw error;
-    }
+    return fetchJson("/api/ml/legacy/nlp/summary", {
+      method: "POST",
+      body: JSON.stringify({
+        data: Array.isArray(sheetData) ? sheetData : [],
+        max_length: 400,
+      }),
+    });
   }
 
-  /**
-   * Phân tích Google Drive data
-   */
   async analyzeDrive(driveData) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/analyze-drive`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ driveData }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Drive analysis failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error analyzing drive:", error);
-      throw error;
-    }
+    return this.analyzeData({ driveFiles: driveData?.length ?? 0 }, "7d");
   }
 
-  /**
-   * Tối ưu hóa hệ thống dựa trên AI
-   */
   async optimizeSystem(systemMetrics) {
-    try {
-      const response = await fetch(`${API_BASE_URL}/optimize`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ systemMetrics }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`System optimization failed: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error optimizing system:", error);
-      throw error;
-    }
+    return fetchJson("/api/ml/optimize", {
+      method: "POST",
+      body: JSON.stringify(systemMetrics || {}),
+    });
   }
 }
 
-// Export singleton instance
 export const aiService = new AIService();
 export default aiService;

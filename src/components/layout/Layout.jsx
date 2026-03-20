@@ -1,22 +1,29 @@
 import { LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
-import { App, Dropdown } from "antd";
-import { useEffect, useState } from "react";
+import { Dropdown, message, Spin } from "antd";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BRAND_CONFIG } from "../../config/brand";
 import { logout } from "../../store/actions/authActions";
+import { useHealthConnections } from "../../hooks/useHealthConnections";
 import ActionButton from "./ActionButton";
 import ConnectionSection from "./ConnectionSection";
 import HamburgerMenu from "./HamburgerMenu";
-import "./Layout.css";
+import LayoutConfigButton from "./LayoutConfigButton";
 import NavSection from "./NavSection";
-import { connectionData } from "./layoutData";
 import { navigationData } from "./navigationData";
+import "./Layout.css";
+
+const LayoutConfigManager = lazy(
+  () => import(/* webpackChunkName: "layout-config" */ "./LayoutConfigManager")
+);
 
 const Layout = ({ children }) => {
-  const { message } = App.useApp();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [connectionStatusExpanded, setConnectionStatusExpanded] = useState(false);
+  const [layoutConfigOpen, setLayoutConfigOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const connections = useHealthConnections();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -143,6 +150,27 @@ const Layout = ({ children }) => {
     },
   ];
 
+  const handleNotificationClick = async () => {
+    try {
+      const API_BASE_URL =
+        process.env.REACT_APP_API_URL || process.env.VITE_API_URL || "http://localhost:3001";
+      const token = localStorage.getItem("authToken") || localStorage.getItem("token");
+      if (token) {
+        const response = await fetch(`${API_BASE_URL}/api/notifications`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setNotificationCount(data.unread || 0);
+        }
+      }
+    } catch {
+      // API chưa sẵn sàng
+    }
+  };
+
+  const handleSettingsClick = () => navigate("/settings");
+
   return (
     <div className="layout-container">
       {/* Header */}
@@ -193,8 +221,21 @@ const Layout = ({ children }) => {
             </div>
           )}
           <div className="header-actions">
-            <ActionButton icon="🔔" title="Thông báo" />
-            <ActionButton icon="⚙️" title="Cài đặt" />
+            <LayoutConfigButton onClick={() => setLayoutConfigOpen(true)} />
+            <ActionButton
+              icon="🔔"
+              title="Thông báo"
+              onClick={handleNotificationClick}
+              className={
+                notificationCount > 0 ? "notification-btn has-notifications" : "notification-btn"
+              }
+            />
+            <ActionButton
+              icon="⚙️"
+              title="Cài đặt"
+              onClick={handleSettingsClick}
+              className="settings-btn"
+            />
           </div>
         </div>
       </header>
@@ -215,11 +256,10 @@ const Layout = ({ children }) => {
               items={navigationData.support}
               collapsed={sidebarCollapsed}
             />
-            s
           </nav>
 
           <ConnectionSection
-            connections={connectionData}
+            connections={connections}
             expanded={connectionStatusExpanded}
             onToggle={() => setConnectionStatusExpanded(!connectionStatusExpanded)}
           />
@@ -230,6 +270,18 @@ const Layout = ({ children }) => {
           <div className="content-wrapper">{children}</div>
         </main>
       </div>
+
+      {layoutConfigOpen ? (
+        <Suspense
+          fallback={
+            <div className="layout-config-suspense-fallback" aria-hidden>
+              <Spin />
+            </div>
+          }
+        >
+          <LayoutConfigManager isOpen onClose={() => setLayoutConfigOpen(false)} />
+        </Suspense>
+      ) : null}
     </div>
   );
 };

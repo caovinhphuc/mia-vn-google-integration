@@ -13,7 +13,7 @@ console.log("=".repeat(60));
 // Check if AI Service is available (must have /api/ml/insights - not Automation on 8001)
 async function isAIServiceAvailable() {
   try {
-    const data = await makeRequestWithTimeout("http://localhost:8001/api/ml/insights", 2000);
+    const data = await makeRequestWithTimeout("http://localhost:8000/api/ml/insights", 2000);
     if (!data) return false;
     const json = JSON.parse(data);
     return json && (json.confidence_score != null || json.insights != null);
@@ -93,7 +93,7 @@ async function simulateAIAnalyticsWorkflow(aiAvailable) {
   try {
     // Step 1: User requests AI insights
     console.log("  📈 Step 1: User requests AI insights...");
-    const insightsResponse = await makeRequest("http://localhost:8001/api/ml/insights");
+    const insightsResponse = await makeRequest("http://localhost:8000/api/ml/insights");
     const insights = JSON.parse(insightsResponse);
     console.log(
       `  ✅ AI insights generated - confidence: ${insights.confidence_score?.toFixed(2)}`
@@ -107,7 +107,7 @@ async function simulateAIAnalyticsWorkflow(aiAvailable) {
     };
 
     const predictionResponse = await makePostRequest(
-      "http://localhost:8001/api/ml/predict",
+      "http://localhost:8000/api/ml/predict",
       predictionPayload
     );
     const predictions = JSON.parse(predictionResponse);
@@ -129,7 +129,7 @@ async function simulateAIAnalyticsWorkflow(aiAvailable) {
     };
 
     const optimizationResponse = await makePostRequest(
-      "http://localhost:8001/api/ml/optimize",
+      "http://localhost:8000/api/ml/optimize",
       optimizationPayload
     );
     const optimization = JSON.parse(optimizationResponse);
@@ -183,7 +183,7 @@ async function simulateRealtimeDataFlow(aiAvailable) {
     if (aiAvailable) {
       // Step 1: AI service generates insights
       console.log("  🧠 Step 1: AI generates real-time insights...");
-      const aiInsights = await makeRequest("http://localhost:8001/api/ml/insights");
+      const aiInsights = await makeRequest("http://localhost:8000/api/ml/insights");
       const insights = JSON.parse(aiInsights);
       console.log(
         `  ✅ AI insights: ${insights.insights?.performance_trends?.overall_trend || "generated"}`
@@ -292,7 +292,7 @@ async function simulateQuickUserFlow(userId, aiAvailable = true) {
     await makeRequest("http://localhost:3001/health");
     // AI health check (optional)
     if (aiAvailable) {
-      await makeRequest("http://localhost:8001/health");
+      await makeRequest("http://localhost:8000/health");
     }
     return true;
   } catch (error) {

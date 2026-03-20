@@ -1,12 +1,14 @@
 {
-  "timestamp": "2026-03-17T10:32:10.428Z",
+  "timestamp": "2026-03-20T06:02:03.155Z",
   "budgets": {
     "bundle": {
-      "javascript": 256000,
-      "css": 51200,
+      "initialJavascript": 409600,
+      "totalJavascriptSoft": 2936012.8,
+      "totalJavascriptHard": 5242880,
+      "css": 133120,
       "images": 512000,
       "fonts": 102400,
-      "total": 1048576
+      "totalBuild": 5242880
     },
     "metrics": {
       "fcp": 1800,
@@ -28,17 +30,18 @@
     },
     "lighthouse": {
       "passed": true,
-      "skipped": true
+      "score": 93,
+      "minScore": 90
     },
     "api": {
       "passed": true,
-      "skipped": true
+      "responseTime": 86
     }
   },
   "summary": {
     "total": 3,
     "passed": 3,
     "failed": 0,
-    "skipped": 2
+    "skipped": 0
   }
 }

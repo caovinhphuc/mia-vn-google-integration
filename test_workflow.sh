@@ -11,6 +11,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
 print_status() {
@@ -27,6 +28,10 @@ print_error() {
 
 print_warning() {
     echo -e "${YELLOW}[!]${NC} $1"
+}
+
+print_info() {
+    echo -e "${CYAN}[ℹ]${NC} $1"
 }
 
 # Test counter
@@ -50,27 +55,32 @@ run_test() {
     fi
 }
 
-# 1. Validate workflow YAML syntax
+# 1. Validate workflow YAML (PyYAML → Ruby stdlib → lỗi cú pháp / thiếu công cụ)
+WORKFLOW_YML=".github/workflows/ci-cd.yml"
 print_status "Step 1: Validating workflow YAML syntax..."
-if command -v python3 &> /dev/null; then
-    python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci-cd.yml'))" 2>/dev/null
-    if [ $? -eq 0 ]; then
-        print_success "Workflow YAML syntax is valid"
+if [ ! -f "$WORKFLOW_YML" ]; then
+    print_error "Missing $WORKFLOW_YML"
+    ((TESTS_FAILED++))
+elif command -v python3 &> /dev/null && python3 -c "import yaml; yaml.safe_load(open('$WORKFLOW_YML'))" 2>/dev/null; then
+    print_success "Workflow YAML syntax is valid (PyYAML)"
+    ((TESTS_PASSED++))
+elif command -v ruby &> /dev/null && ruby -r yaml -e "YAML.load_file('$WORKFLOW_YML')" 2>/dev/null; then
+    print_success "Workflow YAML syntax is valid (Ruby)"
+    ((TESTS_PASSED++))
+else
+    if command -v python3 &> /dev/null && python3 -c "import yaml" 2>/dev/null; then
+        print_error "Workflow YAML syntax has errors"
+        ((TESTS_FAILED++))
+    elif command -v ruby &> /dev/null; then
+        print_error "Workflow YAML syntax has errors (Ruby parser)"
+        ((TESTS_FAILED++))
+    elif command -v python3 &> /dev/null; then
+        print_warning "Thiếu PyYAML. Cài: pip install -r scripts/requirements-workflow.txt (hoặc dùng Ruby có sẵn trên macOS)"
         ((TESTS_PASSED++))
     else
-        # Check if it's just missing PyYAML module
-        python3 -c "import yaml" 2>/dev/null
-        if [ $? -ne 0 ]; then
-            print_warning "PyYAML not installed, skipping YAML validation (install: pip install pyyaml)"
-            ((TESTS_PASSED++))
-        else
-            print_error "Workflow YAML syntax has errors"
-            ((TESTS_FAILED++))
-        fi
+        print_warning "Cần python3+PyYAML hoặc ruby để validate YAML"
+        ((TESTS_PASSED++))
     fi
-else
-    print_warning "Python3 not found, skipping YAML validation"
-    ((TESTS_PASSED++))
 fi
 
 # 2. Check Node.js version
@@ -84,14 +94,16 @@ else
     ((TESTS_PASSED++))
 fi
 
-# 3. Check Python version
+# 3. Check Python version (>= 3.11, khớp tinh thần CI: PYTHON_VERSION 3.11+)
 print_status "Step 3: Checking Python version..."
-PYTHON_VERSION=$(python3 --version 2>/dev/null | cut -d' ' -f2 | cut -d'.' -f1,2)
-if [ "$PYTHON_VERSION" = "3.11" ] || [ "$PYTHON_VERSION" = "3.12" ] || [ "$PYTHON_VERSION" = "3.13" ]; then
-    print_success "Python version: $(python3 --version) (compatible)"
+if command -v python3 &> /dev/null && python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>/dev/null; then
+    print_success "Python version: $(python3 --version) (compatible, >= 3.11)"
     ((TESTS_PASSED++))
+elif command -v python3 &> /dev/null; then
+    print_warning "Python version: $(python3 --version) (CI dùng 3.11+; nâng Python hoặc dùng pyenv/asdf)"
+    ((TESTS_FAILED++))
 else
-    print_warning "Python version: $(python3 --version) (expected 3.11+)"
+    print_warning "Python3 not found (CI cài Python từ actions/setup-python)"
     ((TESTS_PASSED++))
 fi
 
@@ -162,8 +174,8 @@ if command -v docker &> /dev/null; then
         print_success "Docker daemon is running"
         ((TESTS_PASSED++))
     else
-        print_warning "Docker daemon is not running (start Docker Desktop)"
-        # Don't count as failure, just warning
+        # Không phải lỗi workflow: nhiều dev không bật Docker hằng ngày; CI chạy trên GitHub
+        print_info "Docker daemon chưa chạy — bình thường nếu không build image local. Gợi ý: macOS → Docker Desktop · Linux → sudo systemctl start docker · Colima → colima start. Job Docker trên CI không cần daemon máy bạn."
         ((TESTS_PASSED++))
     fi
 else

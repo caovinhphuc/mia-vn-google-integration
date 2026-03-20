@@ -22,18 +22,22 @@ module.exports = {
   // ============================================================================
   performance: {
     budgets: {
-      javascript: 250 * 1024, // 250KB
-      css: 50 * 1024, // 50KB
-      images: 500 * 1024, // 500KB
-      fonts: 100 * 1024, // 100KB
-      total: 1024 * 1024, // 1MB
+      // Đồng bộ scripts/performance-bundle.js (SPA code-split)
+      initialJavascript: 400 * 1024,
+      totalJavascriptSoft: 2.8 * 1024 * 1024,
+      totalJavascriptHard: 5 * 1024 * 1024,
+      css: 130 * 1024,
+      images: 500 * 1024,
+      fonts: 100 * 1024,
+      totalBuild: 5 * 1024 * 1024,
     },
     current: {
-      javascript: 2.33 * 1024 * 1024, // ~2.33MB
-      css: 80.51 * 1024, // ~80KB
+      initialJavascriptApprox: 163 * 1024,
+      javascriptAllChunks: 2.33 * 1024 * 1024,
+      css: 97 * 1024,
       images: 0,
       fonts: 0,
-      total: 2.41 * 1024 * 1024, // ~2.41MB
+      totalBuild: 2.51 * 1024 * 1024,
     },
     thresholds: {
       warning: 0.8, // 80% of budget

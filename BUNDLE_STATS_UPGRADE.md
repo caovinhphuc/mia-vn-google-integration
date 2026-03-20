@@ -195,6 +195,14 @@ npm run perf:size           # Size limit check
 - Có thể so sánh stats giữa các builds bằng JSON files
 - Dependencies sẽ tự động được cài đặt nếu thiếu (optional deps chỉ cảnh báo)
 
+### Troubleshooting: `source-map-explorer` + `hasMagic`
+
+- **Nguyên nhân:** `overrides.glob@10` làm `source-map-explorer` load `glob` v10 (không còn `hasMagic` như v7).
+- **Fix:** `package.json` → `overrides.source-map-explorer.glob: "7.2.3"` (đã thêm). Chạy `npm install`.
+- **Lệnh an toàn:** `npm run explore:chunk` (tự chọn chunk số lớn nhất có `.map`) hoặc `npm run explore:chunk -- 648` nếu biết prefix sau build.
+- **Source map:** `npm run build:maps` hoặc `npm run analyze:maps` (build + SME một lần).
+- **Lỗi `column Infinity`:** `source-map-explorer` script đã thêm `--no-border-checks` (map minify đôi khi không qua validate). Nếu vẫn lỗi: `npm run analyze` (webpack-bundle-analyzer).
+
 ---
 
 **Date**: December 25, 2025  

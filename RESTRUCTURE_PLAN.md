@@ -87,24 +87,24 @@ Chuẩn hoá cấu trúc dự án phân tách rõ: ứng dụng (apps), thư vi�
 
 | Hiện tại                                  | Mới đề xuất                                                    | Ghi chú                                           |
 | ----------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------- | ------------------ |
-| `src/` (App.jsx, components/google)`      | `apps/web/src/`                                                | Gộp vào web chính                                 |
-| `shared/` (React TS app)                  | (Phân rã) `apps/web/` + `packages/ui`, `packages/shared-utils` | Quyết định app chính dựa trên code hoàn thiện hơn |
-| `new-react-router-app/`                   | `apps/sandbox/`                                                | Giữ làm playground hoặc bỏ nếu dư                 |
-| `shared-services/google-sheets`           | `packages/google-sheets-sdk/`                                  | Chuẩn hoá export index.ts                         |
-| `shared-services/service/*.js`            | `packages/notification-services/`                              | Module hoá                                        |
-| `shared-services/shared/*` (docs, docker) | `infrastructure/` + `docs/`                                    | Phân loại lại                                     |
-| `automation/automation.py ...`            | `apps/automation/src/`                                         | Modules → src/                                    |
-| `automation/modules/`                     | `apps/automation/src/modules/`                                 | Đổi import relative                               |
-| `automation/tests/`                       | `apps/automation/tests/`                                       | Giữ gần code hoặc merge root `/tests/automation`  |
-| `ai_service.py`                           | `apps/ai-service/src/ai_service.py`                            | Tạo package Python                                |
-| `Dockerfile.ai`                           | `apps/ai-service/Dockerfile`                                   | Chuẩn tên                                         |
-| `server.js` (trong shared)                | `apps/backend-api/src/server.js`                               | Nếu vẫn dùng Node backend                         |
-| Root `integration_test.js`...             | `/tests/integration/\*.test.(js                                | ts)`                                              | Chuẩn hoá tên file |
-| Root `*.sh` scripts                       | `/scripts/{dev,deploy,ops}/`                                   | Đổi tên chuẩn snake-case                          |
-| Tài liệu root \*.md                       | `/docs/`                                                       | Giữ alias README ở root với link                  |
-| `backup_markdown/`                        | `/docs/reports/legacy/`                                        | Hoặc lưu trữ ngoài repo                           |
-| `logs/`                                   | `/logs/`                                                       | Thêm ignore & xoá rác cũ                          |
-| Rải rác `.env*`                           | `.env.example` + `infrastructure/env-templates/`               | Không commit env thực                             |
+| `src/` (App.jsx, components/google)` | `apps/web/src/` | Gộp vào web chính                                 |
+| `shared/` (React TS app)                  | (Phân rã) `apps/web/` + `packages/ui`,`packages/shared-utils` | Quyết định app chính dựa trên code hoàn thiện hơn |
+| `new-react-router-app/` | `apps/sandbox/` | Giữ làm playground hoặc bỏ nếu dư                 |
+| `shared-services/google-sheets` | `packages/google-sheets-sdk/` | Chuẩn hoá export index.ts                         |
+| `shared-services/service/*.js` | `packages/notification-services/` | Module hoá                                        |
+| `shared-services/shared/*` (docs, docker) | `infrastructure/` + `docs/` | Phân loại lại                                     |
+| `automation/automation.py ...` | `apps/automation/src/` | Modules → src/                                    |
+| `automation/modules/` | `apps/automation/src/modules/` | Đổi import relative                               |
+| `automation/tests/` | `apps/automation/tests/` | Giữ gần code hoặc merge root `/tests/automation` |
+| `ai_service.py` | `apps/ai-service/src/ai_service.py` | Tạo package Python                                |
+| `Dockerfile.ai` | `apps/ai-service/Dockerfile` | Chuẩn tên                                         |
+| `server.js` (trong shared)                | `apps/backend-api/src/server.js` | Nếu vẫn dùng Node backend                         |
+| Root `integration_test.js`...             |`/tests/integration/\*.test.(js                                | ts)` | Chuẩn hoá tên file |
+| Root `*.sh` scripts                       | `/scripts/{dev,deploy,ops}/` | Đổi tên chuẩn snake-case                          |
+| Tài liệu root \*.md                       | `/docs/` | Giữ alias README ở root với link                  |
+| `backup_markdown/` | `/docs/reports/legacy/` | Hoặc lưu trữ ngoài repo                           |
+| `logs/` | `/logs/` | Thêm ignore & xoá rác cũ                          |
+| Rải rác `.env*` | `.env.example` + `infrastructure/env-templates/`               | Không commit env thực                             |
 
 ## Chi tiết di trú Python (Automation & AI)
 
@@ -289,7 +289,7 @@ Chuẩn hoá cấu trúc dự án phân tách rõ: ứng dụng (apps), thư vi�
 | `ai_service.py`                      | `apps/ai-service/src/ai_service.py`                       | Tạo package Python                 |
 | `Dockerfile.ai`                      | `apps/ai-service/Dockerfile`                              | Đổi tên nhất quán                  |
 | `server.js` (trong shared)           | `apps/backend-api/src/server.js`                          | Nếu tiếp tục dùng Node backend     |
-| `integration_test.js` (root)         | `tests/integration/integration.test.js`                   | Chuẩn tên _.test._                 |
+| `integration_test.js` (root)         | `tests/integration/integration.test.js`                   | Chuẩn tên *.test.*                 |
 | `advanced_integration_test.js`       | `tests/integration/advanced.integration.test.js`          | Đổi pattern                        |
 | `complete_system_test.js`            | `tests/e2e/system.e2e.test.js`                            | Phân tầng e2e                      |
 | `end_to_end_test.js`                 | `tests/e2e/end-to-end.e2e.test.js`                        | Thống nhất hậu tố                  |

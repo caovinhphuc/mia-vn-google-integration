@@ -8,18 +8,12 @@
 // eslint-disable-next-line no-undef
 const precacheManifest = self.__WB_MANIFEST || [];
 
-const CACHE_NAME = "react-oas-v4.0.0";
-const DATA_CACHE_NAME = "react-oas-data-v4.0.0";
+// Bump khi sửa logic SW — xóa cache cũ có thể map nhầm JS → index.html
+const CACHE_NAME = "react-oas-v4.0.2";
+const DATA_CACHE_NAME = "react-oas-data-v4.0.2";
 
-// Files to cache immediately on install
-const FILES_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/static/css/main.css",
-  "/static/js/bundle.js",
-  "/manifest.json",
-  "/favicon.ico",
-];
+// Chỉ thêm asset tồn tại; CRA dùng main.[hash].js — không dùng /static/js/bundle.js
+const FILES_TO_CACHE = ["/manifest.json", "/favicon.ico"];
 
 // API endpoints to cache with network-first strategy
 const API_URLS = ["/api/", "https://sheets.googleapis.com/", "https://www.googleapis.com/"];
@@ -90,7 +84,13 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static Assets - Cache First with Network Fallback
+  // JS/CSS chunks: network-first + không cache / không dùng bản cache nếu là HTML (tránh Unexpected token '<')
+  if (url.origin === self.location.origin && isWebpackStaticAsset(url)) {
+    event.respondWith(networkFirstStaticAsset(request));
+    return;
+  }
+
+  // Còn lại — cache-first
   event.respondWith(cacheFirstStrategy(request));
 });
 
@@ -102,18 +102,79 @@ function isAPIRequest(request) {
   return API_URLS.some((apiUrl) => url.href.includes(apiUrl));
 }
 
+/** Chunk JS/CSS CRA — cache-first dễ giữ nhầm HTML sau deploy; ưu tiên network + kiểm tra MIME */
+function isWebpackStaticAsset(url) {
+  const p = url.pathname;
+  return (
+    p.includes("/static/js/") || p.includes("/static/css/") || /\.(js|mjs|css)(\?.*)?$/i.test(p)
+  );
+}
+
+function responseLooksLikeJavaScript(response) {
+  const ct = (response.headers.get("content-type") || "").toLowerCase();
+  if (!ct) return true;
+  if (ct.includes("text/html")) return false;
+  return ct.includes("javascript") || ct.includes("ecmascript");
+}
+
+function responseLooksLikeCss(response) {
+  const ct = (response.headers.get("content-type") || "").toLowerCase();
+  if (!ct) return true;
+  if (ct.includes("text/html")) return false;
+  return ct.includes("css");
+}
+
+function staticAssetMimeOk(request, response) {
+  const url = new URL(request.url);
+  const p = url.pathname.toLowerCase();
+  if (p.endsWith(".css") || p.includes("/static/css/")) {
+    return responseLooksLikeCss(response);
+  }
+  if (p.endsWith(".js") || p.endsWith(".mjs") || p.includes("/static/js/")) {
+    return responseLooksLikeJavaScript(response);
+  }
+  return true;
+}
+
 /**
  * Network First Strategy - For API calls
  * Try network first, fall back to cache if network fails
  */
+/**
+ * Network-first cho /static/js|css — tránh phục vụ index.html từ cache như bundle.js
+ */
+async function networkFirstStaticAsset(request) {
+  const cache = await caches.open(CACHE_NAME);
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.status === 200) {
+      if (staticAssetMimeOk(request, networkResponse)) {
+        await cache.put(request.url, networkResponse.clone());
+        return networkResponse;
+      }
+      await cache.delete(request.url);
+      const cached = await caches.match(request);
+      if (cached && staticAssetMimeOk(request, cached)) return cached;
+      return networkResponse;
+    }
+    const cached = await caches.match(request);
+    if (cached && staticAssetMimeOk(request, cached)) return cached;
+    return networkResponse;
+  } catch (e) {
+    const cached = await caches.match(request);
+    if (cached && staticAssetMimeOk(request, cached)) return cached;
+    throw e;
+  }
+}
+
 async function networkFirstStrategy(request) {
   try {
     const networkResponse = await fetch(request);
 
     // Cache successful responses
     if (networkResponse && networkResponse.status === 200) {
-      const cache = await caches.open(DATA_CACHE_NAME);
-      cache.put(request.url, networkResponse.clone());
+      const dataCache = await caches.open(DATA_CACHE_NAME);
+      dataCache.put(request.url, networkResponse.clone());
     }
 
     return networkResponse;
@@ -150,17 +211,22 @@ async function networkFirstStrategy(request) {
  */
 async function cacheFirstStrategy(request) {
   try {
-    // Try cache first
     const cachedResponse = await caches.match(request);
-    if (cachedResponse) {
+    if (cachedResponse && staticAssetMimeOk(request, cachedResponse)) {
       return cachedResponse;
     }
+    if (cachedResponse && !staticAssetMimeOk(request, cachedResponse)) {
+      const c = await caches.open(CACHE_NAME);
+      await c.delete(request.url);
+    }
 
-    // Fetch from network if not in cache
     const networkResponse = await fetch(request);
 
-    // Cache the response for future use
-    if (networkResponse && networkResponse.status === 200) {
+    if (
+      networkResponse &&
+      networkResponse.status === 200 &&
+      staticAssetMimeOk(request, networkResponse)
+    ) {
       const cache = await caches.open(CACHE_NAME);
       cache.put(request.url, networkResponse.clone());
     }
@@ -169,14 +235,24 @@ async function cacheFirstStrategy(request) {
   } catch (error) {
     console.log("[ServiceWorker] Fetch failed:", error);
 
-    // Try to match any cached response as fallback
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
     }
 
-    // Return offline page
-    return caches.match("/index.html");
+    // Không trả index.html cho script/style — sẽ gây SyntaxError: Unexpected token '<'
+    const dest = request.destination;
+    const isNavigation = request.mode === "navigate" || dest === "document";
+    if (isNavigation) {
+      const page = await caches.match("/index.html");
+      if (page) return page;
+    }
+
+    return new Response("Offline", {
+      status: 503,
+      statusText: "Service Unavailable",
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   }
 }
 

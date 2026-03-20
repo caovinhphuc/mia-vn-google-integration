@@ -15,6 +15,8 @@
     "start": "react-scripts start",
     "prepare": "husky install",
     "build:prod": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build:maps": "GENERATE_SOURCEMAP=true react-scripts build",
+    "analyze:maps": "npm run build:maps && node scripts/source-map-explore-chunk.js",
     "build:analyze": "GENERATE_SOURCEMAP=true react-scripts build && npm run analyze",
     "test": "react-scripts test",
     "test:complete": "npm run test:ci && npm run test:scripts",
@@ -26,7 +28,7 @@
     "fix:git-push": "git add . && git commit -m 'fix: git push' && git push",
     "cleanup:duplicates": "bash scripts/cleanup-duplicates.sh",
     "backend": "cd backend && npm start",
-    "ai-service": "cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8001 --reload",
+    "ai-service": "cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload",
     "vercel-build": "npm run build",
     "analyze": "node scripts/perf-bundle-analyzer.js",
     "analyze-deps": "node scripts/analyze-bundle-deps.js",
@@ -65,9 +67,10 @@
     "check:backend": "curl -s http://localhost:3001/health || echo 'Backend not running'",
     "health-check": "node scripts/health-check.js",
     "health:full": "bash scripts/utils/comprehensive-health-check.sh",
-    "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && curl -fsS http://localhost:8001/health >/dev/null && { curl -fsS http://localhost:8000/health >/dev/null && echo \"✅ All core services healthy (AI: up)\" || echo \"✅ All core services healthy (AI: optional/down)\"; } || (echo \"❌ Core services down\" && exit 1)'",
+    "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && { curl -fsS http://localhost:8000/health >/dev/null && echo \"✅ Core + AI (8000)\" || { curl -fsS http://localhost:8001/health >/dev/null && echo \"✅ Core + Automation (8001)\" || echo \"✅ Core OK (AI 8000 & Automation 8001 optional)\"; }; } || (echo \"❌ Core down\" && exit 1)'",
     "verify:setup": "bash scripts/verify-setup.sh",
     "bundle:stats": "node scripts/generate-bundle-stats.js",
+    "explore:chunk": "node scripts/source-map-explore-chunk.js",
     "check:tools": "npm run tools:check",
     "deploy:prep": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
     "quick-start": "npm run fix:ports && npm run format && npm run lint:fix && npm run build:prod && npm run validate:full && npm run verify:setup",
@@ -108,24 +111,17 @@
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
     "@reduxjs/toolkit": "^2.11.2",
-    "ajv": "^8.18.0",
     "antd": "^5.29.3",
-    "assert": "^2.1.0",
     "axios": "^1.12.2",
     "browserify-zlib": "^0.2.0",
-    "buffer": "^6.0.3",
     "chalk": "^5.6.2",
-    "chart.js": "^4.5.1",
     "cors": "^2.8.6",
     "crypto-browserify": "^3.12.1",
-    "d3": "^7.9.0",
     "dayjs": "^1.11.20",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "google-auth-library": "^10.6.2",
     "googleapis": "^171.4.0",
-    "lodash-es": "^4.17.23",
-    "lucide-react": "^0.294.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.13",
     "react": "^18.2.0",
@@ -136,15 +132,13 @@
     "react-is": "^19.2.4",
     "react-redux": "^9.2.0",
     "react-resizable": "^3.1.3",
-    "react-router": "^6.30.3",
     "react-router-dom": "^6.30.3",
     "recharts": "^3.8.0",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
-    "styled-components": "^6.1.0"
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.29.0",
@@ -208,7 +202,10 @@
   },
   "overrides": {
     "rimraf": "5.0.10",
-    "glob": "10.5.0"
+    "glob": "10.5.0",
+    "source-map-explorer": {
+      "glob": "7.2.3"
+    }
   },
   "keywords": [
     "react",
@@ -240,14 +237,17 @@
       ]
     },
     "_performanceBudget": {
-      "javascript": "250KB (current: ~2.3MB - needs optimization)",
-      "css": "50KB (current: ~80KB - acceptable)",
-      "total": "1MB (current: ~2.4MB - exceeds budget)"
+      "initialJavascript": "400KB max (main+app-root; perf-bundle.js)",
+      "totalJavascriptHard": "5MB max (mọi chunk)",
+      "totalJavascriptSoft": "2.8MB cảnh báo mềm",
+      "css": "130KB",
+      "totalBuild": "5MB (toàn thư mục build/)"
     }
   },
   "_performanceBudget": {
-    "javascript": "250KB",
-    "css": "50KB",
-    "total": "1MB"
+    "initialJavascript": "400KB",
+    "totalJavascriptHard": "5MB",
+    "css": "130KB",
+    "totalBuild": "5MB"
   }
 }

@@ -1,6 +1,13 @@
 // Google Sheets Service
 import googleConfig from "../../config/googleConfig";
 
+function allowSheetsMockFallback() {
+  if (process.env.NODE_ENV === "production") {
+    return process.env.REACT_APP_ALLOW_SHEETS_MOCK === "true";
+  }
+  return process.env.REACT_APP_ALLOW_SHEETS_MOCK !== "false";
+}
+
 class GoogleSheetsService {
   constructor() {
     this.apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -23,8 +30,10 @@ class GoogleSheetsService {
       }
       return await response.json();
     } catch (error) {
-      // Fallback: return mock info if API fails
-      console.warn("API call failed, using mock data:", error.message);
+      if (!allowSheetsMockFallback()) {
+        throw error;
+      }
+      console.warn("Sheets API failed, mock metadata (dev):", error.message);
       return {
         spreadsheetId: this.spreadsheetId,
         properties: {
@@ -48,8 +57,10 @@ class GoogleSheetsService {
       }
       return await response.json();
     } catch (error) {
-      // Return mock data for development
-      console.warn("Read API failed, using mock data:", error.message);
+      if (!allowSheetsMockFallback()) {
+        throw error;
+      }
+      console.warn("Sheets read failed, mock rows (dev):", error.message);
       return {
         values: [
           ["Ngày", "Sản phẩm", "Số lượng", "Giá", "Trạng thái", "Khách hàng"],

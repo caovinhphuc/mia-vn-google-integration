@@ -5,7 +5,8 @@
 
 # Get script directory and change to project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+# scripts/utils → repo root (2 cấp)
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
 # Colors
@@ -32,8 +33,9 @@ echo ""
 
 # Create directory structure
 print_status "Creating directory structure..."
-mkdir -p reports/{email,telegram,health,build,performance,lighthouse}
-mkdir -p backups/{scripts,automation,backend,ai-service,venv}
+mkdir -p reports/{email,telegram,health,build,performance,lighthouse,test-runs,log-analysis}
+mkdir -p lighthouse-reports
+mkdir -p backups/{scripts,automation,backend,ai-service,venv,package-json}
 print_success "Directory structure created"
 
 # Move email test reports
@@ -69,6 +71,13 @@ find . -name "health-report-*.json" -type f \
 HEALTH_COUNT=$(ls reports/health/*.json 2>/dev/null | wc -l | xargs)
 print_success "Moved $HEALTH_COUNT health reports"
 
+# Move test-all.js suite reports (test-report-<timestamp>.json) từ root → reports/test-runs/
+print_status "Organizing test-all suite reports (test-report-*.json)..."
+find . -maxdepth 1 -name "test-report-*.json" -type f \
+    -exec mv {} reports/test-runs/ \; 2>/dev/null
+TEST_RUN_COUNT=$(ls reports/test-runs/*.json 2>/dev/null | wc -l | xargs)
+print_success "test-runs folder now has $TEST_RUN_COUNT JSON report(s) (includes any already there)"
+
 # Move build reports
 print_status "Organizing build reports..."
 find . -name "*build*report*.json" -o -name "*bundle*report*.json" -o -name "*setup*report*.json" | \
@@ -101,6 +110,24 @@ find . -name "*lighthouse*.json" -type f \
 LIGHTHOUSE_COUNT=$(find reports/lighthouse -name "*.json" 2>/dev/null | wc -l | xargs)
 print_success "Moved $LIGHTHOUSE_COUNT lighthouse reports"
 
+# Lighthouse HTML ở root → lighthouse-reports/
+# - run-lighthouse.sh: lighthouse-report-*.html
+# - Lighthouse CLI mặc định theo URL: <host>_YYYY-MM-DD_HH-MM-SS.report.html
+print_status "Organizing Lighthouse HTML reports (root → lighthouse-reports/)..."
+find . -maxdepth 1 \( -name "lighthouse-report*.html" -o -name "lighthouse-report.html" \) -type f \
+    -exec mv {} lighthouse-reports/ \; 2>/dev/null
+find . -maxdepth 1 -name "*.report.html" -type f \
+    -exec mv {} lighthouse-reports/ \; 2>/dev/null
+LH_HTML_COUNT=$(find lighthouse-reports -maxdepth 1 -name "*.html" 2>/dev/null | wc -l | xargs)
+print_success "lighthouse-reports/ có $LH_HTML_COUNT file HTML (maxdepth 1)"
+
+# Log analyzer JSON (root → reports/log-analysis/)
+print_status "Organizing log-analysis reports..."
+find . -maxdepth 1 -name "log-analysis-*.json" -type f \
+    -exec mv {} reports/log-analysis/ \; 2>/dev/null
+LOG_ANALYSIS_COUNT=$(ls reports/log-analysis/*.json 2>/dev/null | wc -l | xargs)
+print_success "reports/log-analysis/ có $LOG_ANALYSIS_COUNT file JSON"
+
 # Move venv backups
 print_status "Organizing venv backups..."
 find . -name "*venv.backup*" -type d \
@@ -111,6 +138,13 @@ find . -name "*venv.backup*" -type d \
 VENV_BACKUP_COUNT=$(ls -d backups/venv/* 2>/dev/null | wc -l | xargs)
 print_success "Moved $VENV_BACKUP_COUNT venv backups"
 
+# Move package.json backups (root → backups/package-json/)
+print_status "Organizing package.json backups..."
+find . -maxdepth 1 -name "package.json.backup.*" -type f \
+    -exec mv {} backups/package-json/ \; 2>/dev/null
+PKG_JSON_BACKUP_COUNT=$(ls backups/package-json/package.json.backup.* 2>/dev/null | wc -l | xargs)
+print_success "package-json backup folder has $PKG_JSON_BACKUP_COUNT file(s)"
+
 # Summary
 echo ""
 echo "===================================="
@@ -120,12 +154,16 @@ echo "📊 Summary:"
 echo "   Email reports:      $EMAIL_COUNT"
 echo "   Telegram reports:   $TELEGRAM_COUNT"
 echo "   Health reports:     $HEALTH_COUNT"
+echo "   Test-all reports:   $TEST_RUN_COUNT"
 echo "   Build reports:      $BUILD_COUNT"
 echo "   Performance reports: $PERF_COUNT"
-echo "   Lighthouse reports: $LIGHTHOUSE_COUNT"
+echo "   Lighthouse JSON:    $LIGHTHOUSE_COUNT"
+echo "   Lighthouse HTML:    $LH_HTML_COUNT (trong lighthouse-reports/)"
+echo "   Log analysis JSON:  $LOG_ANALYSIS_COUNT"
 echo "   Venv backups:       $VENV_BACKUP_COUNT"
+echo "   package.json backups: $PKG_JSON_BACKUP_COUNT"
 echo ""
-echo "📁 Reports location: reports/"
+echo "📁 Reports: reports/ | Lighthouse HTML: lighthouse-reports/"
 echo "💾 Backups location: backups/"
 echo ""
 

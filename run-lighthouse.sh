@@ -22,7 +22,9 @@ echo ""
 
 # Default URL
 URL="${1:-http://localhost:54804}"
-OUTPUT_FILE="lighthouse-report-$(date +%Y%m%d-%H%M%S).html"
+OUT_DIR="lighthouse-reports"
+mkdir -p "$OUT_DIR"
+OUTPUT_FILE="${OUT_DIR}/lighthouse-report-$(date +%Y%m%d-%H%M%S).html"
 
 echo -e "${BLUE}Testing URL:${NC} $URL"
 echo -e "${BLUE}Output:${NC} $OUTPUT_FILE"

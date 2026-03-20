@@ -297,7 +297,7 @@ const MIARetailDashboard = () => {
               📈 Sales Trend (Last 7 Days)
             </Typography.Title>
             {salesChartData && salesChartData.length > 0 ? (
-              <div style={{ width: "100%", height: 300 }}>
+              <div style={{ width: "100%", minWidth: 0, height: 300, minHeight: 300 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={salesChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -339,7 +339,7 @@ const MIARetailDashboard = () => {
               📦 Inventory Status
             </Typography.Title>
             {inventoryStatusData && inventoryStatusData.length > 0 ? (
-              <div style={{ width: "100%", height: 300 }}>
+              <div style={{ width: "100%", minWidth: 0, height: 300, minHeight: 300 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -383,7 +383,7 @@ const MIARetailDashboard = () => {
               🏆 Top Selling Products
             </Typography.Title>
             {topProductsData && topProductsData.length > 0 ? (
-              <div style={{ width: "100%", height: 300 }}>
+              <div style={{ width: "100%", minWidth: 0, height: 300, minHeight: 300 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={topProductsData}>
                     <CartesianGrid strokeDasharray="3 3" />

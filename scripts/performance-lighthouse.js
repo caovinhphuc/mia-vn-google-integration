@@ -2,12 +2,15 @@
 
 /**
  * Lighthouse Performance Audit
- * Runs Lighthouse audit and generates performance report
+ * Chạy trực tiếp: điểm < LIGHTHOUSE_MIN_SCORE (mặc 90) → exit 1
+ * Gọi từ performance-budget: { noExit: true } → return { passedBudget, ... }
  */
 
 const { execSync } = require("child_process");
 const fs = require("fs");
 const path = require("path");
+
+const DEFAULT_MIN_SCORE = 90;
 
 const colors = {
   reset: "\x1b[0m",
@@ -15,17 +18,25 @@ const colors = {
   yellow: "\x1b[33m",
   red: "\x1b[31m",
   cyan: "\x1b[36m",
+  dim: "\x1b[2m",
 };
 
 function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
+function resolveMinScore(override) {
+  if (typeof override === "number" && !Number.isNaN(override)) return override;
+  const env = parseInt(process.env.LIGHTHOUSE_MIN_SCORE ?? "", 10);
+  if (!Number.isNaN(env) && env >= 0 && env <= 100) return env;
+  return DEFAULT_MIN_SCORE;
+}
+
 function checkLighthouseInstalled() {
   try {
     execSync("lighthouse --version", { stdio: "ignore" });
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -36,39 +47,67 @@ function installLighthouse() {
     execSync("npm install -g lighthouse", { stdio: "inherit" });
     log("✅ Lighthouse installed successfully", "green");
     return true;
-  } catch (error) {
+  } catch {
     log("❌ Failed to install Lighthouse", "red");
     return false;
   }
 }
 
-function runLighthouse(url = "http://localhost:3000") {
+function bail(message, noExit) {
+  log(message, "red");
+  if (noExit) throw new Error(message);
+  process.exit(1);
+}
+
+/** Bỏ ExperimentalWarning (JSON import) từ Lighthouse / Node 20+ */
+function envWithLighthouseNodeOptions() {
+  const flag = "--disable-warning=ExperimentalWarning";
+  const cur = process.env.NODE_OPTIONS || "";
+  const merged = cur.includes("disable-warning=ExperimentalWarning")
+    ? cur
+    : [cur, flag].filter(Boolean).join(" ").trim();
+  return { ...process.env, NODE_OPTIONS: merged };
+}
+
+/**
+ * @param {string} url
+ * @param {{ noExit?: boolean, minScore?: number }} [options]
+ * @returns {{ performanceScore: number, passedBudget: boolean, reportPath: string, jsonPath: string, minScore: number }}
+ */
+function runLighthouse(url = "http://localhost:3000", options = {}) {
+  const noExit = Boolean(options.noExit);
+  const minScore = resolveMinScore(options.minScore);
+
   log("🔍 Running Lighthouse Performance Audit", "cyan");
   log("=========================================", "cyan");
   console.log("");
 
-  // Check if Lighthouse is installed
   if (!checkLighthouseInstalled()) {
     log("⚠️  Lighthouse not found. Installing...", "yellow");
     if (!installLighthouse()) {
-      log("❌ Please install Lighthouse manually: npm install -g lighthouse", "red");
-      process.exit(1);
+      bail("❌ Cài Lighthouse: npm install -g lighthouse", noExit);
     }
   }
 
-  // Check if URL is accessible
   log(`🌐 Testing URL: ${url}`, "cyan");
+  log(
+    "ℹ️  npm start (dev) → bundle lớn, LCP/TTI thường thấp; cảnh báo source map là bình thường.",
+    "dim"
+  );
+  log(
+    "   Production: npm run build && npx serve -s build -l 3000 → PERF_URL=http://localhost:3000 npm run perf:check",
+    "dim"
+  );
+  console.log("");
+
   try {
     execSync(`curl -s -o /dev/null -w "%{http_code}" ${url}`, {
       stdio: "pipe",
     });
-  } catch (error) {
-    log(`❌ Cannot access ${url}. Make sure the server is running.`, "red");
-    log("💡 Start the server with: npm start", "yellow");
-    process.exit(1);
+  } catch {
+    bail(`❌ Không truy cập được ${url}. Chạy server hoặc đặt PERF_URL (vd. serve build).`, noExit);
   }
 
-  // Run Lighthouse
   const outputDir = "lighthouse-reports";
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
@@ -83,7 +122,6 @@ function runLighthouse(url = "http://localhost:3000") {
   console.log("");
 
   try {
-    // Run Lighthouse with performance category
     execSync(
       `lighthouse ${url} ` +
         `--output=html,json ` +
@@ -91,10 +129,9 @@ function runLighthouse(url = "http://localhost:3000") {
         `--only-categories=performance ` +
         `--chrome-flags="--headless --no-sandbox" ` +
         `--quiet`,
-      { stdio: "inherit" }
+      { stdio: "inherit", env: envWithLighthouseNodeOptions() }
     );
 
-    // Read JSON report - wait a moment for file to be written
     let attempts = 0;
     let jsonReport = null;
     while (attempts < 5 && !jsonReport) {
@@ -104,10 +141,11 @@ function runLighthouse(url = "http://localhost:3000") {
         } else {
           throw new Error(`File not found: ${jsonPath}`);
         }
-      } catch (e) {
+      } catch {
         attempts++;
         if (attempts < 5) {
-          require("child_process").execSync("sleep 1");
+          const until = Date.now() + 1000;
+          while (Date.now() < until) {}
         }
       }
     }
@@ -115,22 +153,21 @@ function runLighthouse(url = "http://localhost:3000") {
     if (!jsonReport) {
       throw new Error(`Could not read lighthouse report from ${jsonPath}`);
     }
+
     const scores = jsonReport.categories;
+    const performanceScore = scores.performance?.score
+      ? Math.round(scores.performance.score * 100)
+      : 0;
+    const passedBudget = performanceScore >= minScore;
 
     console.log("");
     log("📊 Lighthouse Performance Scores:", "cyan");
     console.log("");
 
-    // Display scores
-    const performanceScore = scores.performance?.score
-      ? Math.round(scores.performance.score * 100)
-      : 0;
     const scoreColor = performanceScore >= 90 ? "green" : performanceScore >= 50 ? "yellow" : "red";
-
-    log(`Performance Score: ${performanceScore}/100`, scoreColor);
+    log(`Performance Score: ${performanceScore}/100 (budget ≥ ${minScore})`, scoreColor);
     console.log("");
 
-    // Display metrics
     const metrics = jsonReport.audits;
     const keyMetrics = [
       "first-contentful-paint",
@@ -145,7 +182,7 @@ function runLighthouse(url = "http://localhost:3000") {
     keyMetrics.forEach((metric) => {
       const audit = metrics[metric];
       if (audit) {
-        const value = audit.numericValue || audit.displayValue || "N/A";
+        const value = formatAuditValue(audit);
         const score = audit.score !== null ? Math.round(audit.score * 100) : "N/A";
         const status = audit.score >= 0.9 ? "✅" : audit.score >= 0.5 ? "⚠️" : "❌";
         log(
@@ -160,15 +197,12 @@ function runLighthouse(url = "http://localhost:3000") {
     log(`📄 JSON Report: ${jsonPath}`, "cyan");
     console.log("");
 
-    // Recommendations
     if (performanceScore < 90) {
       log("💡 Performance Recommendations:", "yellow");
-
       const opportunities = Object.values(jsonReport.audits)
         .filter((audit) => audit.details?.type === "opportunity" && audit.score < 1)
         .sort((a, b) => (b.numericValue || 0) - (a.numericValue || 0))
         .slice(0, 5);
-
       opportunities.forEach((opportunity) => {
         const savings = opportunity.numericValue ? formatBytes(opportunity.numericValue) : "";
         log(
@@ -179,16 +213,30 @@ function runLighthouse(url = "http://localhost:3000") {
       console.log("");
     }
 
-    if (performanceScore >= 90) {
-      log("✅ Performance score is excellent!", "green");
-    } else if (performanceScore >= 50) {
-      log("⚠️  Performance score needs improvement", "yellow");
+    if (passedBudget) {
+      log(`✅ Đạt budget Lighthouse (≥ ${minScore}).`, "green");
     } else {
-      log("❌ Performance score is poor. Immediate action required.", "red");
+      log(`❌ Chưa đạt budget: ${performanceScore}/100 < ${minScore}.`, "red");
+      log(
+        `   Dev server: thử LIGHTHOUSE_MIN_SCORE=50 hoặc đo trên build production (serve).`,
+        "yellow"
+      );
+    }
+
+    if (!noExit && !passedBudget) {
       process.exit(1);
     }
+
+    return {
+      performanceScore,
+      passedBudget,
+      reportPath,
+      jsonPath,
+      minScore,
+    };
   } catch (error) {
     log(`❌ Lighthouse audit failed: ${error.message}`, "red");
+    if (noExit) throw error;
     process.exit(1);
   }
 }
@@ -200,10 +248,30 @@ function formatBytes(bytes) {
   return (bytes / (1024 * 1024)).toFixed(2) + " MB";
 }
 
-// Main execution
-if (require.main === module) {
-  const url = process.argv[2] || "http://localhost:3000";
-  runLighthouse(url);
+/** Ưu tiên displayValue của Lighthouse; fallback format ms → s */
+function formatAuditValue(audit) {
+  if (audit.displayValue) return audit.displayValue;
+  const n = audit.numericValue;
+  if (n == null) return "N/A";
+  const id = audit.id || "";
+  const timeLike =
+    id.includes("paint") ||
+    id === "speed-index" ||
+    id === "interactive" ||
+    id === "total-blocking-time" ||
+    id === "max-potential-fid";
+  if (timeLike && typeof n === "number") {
+    if (id === "total-blocking-time" || n < 2000) return `${Math.round(n)} ms`;
+    return `${(n / 1000).toFixed(2)} s`;
+  }
+  if (typeof n === "number" && Math.abs(n) < 1) return n.toFixed(3);
+  if (typeof n === "number") return Number.isInteger(n) ? String(n) : n.toFixed(2);
+  return String(n);
 }
 
-module.exports = { runLighthouse };
+if (require.main === module) {
+  const url = process.argv[2] || process.env.PERF_URL || "http://localhost:3000";
+  runLighthouse(url, { noExit: false });
+}
+
+module.exports = { runLighthouse, resolveMinScore };

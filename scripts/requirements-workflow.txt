@@ -1,0 +1,4 @@
+# Optional: dùng cho test_workflow.sh (validate .github/workflows/*.yml)
+# Cài: pip install -r scripts/requirements-workflow.txt
+# (hoặc: pip install --user pyyaml — có thể bị chặn bởi PEP 668 trên Python hệ thống)
+pyyaml>=6.0.1

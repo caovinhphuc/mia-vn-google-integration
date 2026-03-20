@@ -5,13 +5,9 @@
 
 set -e
 
-# Tìm project root (thư mục chứa package.json) và chuyển vào đó
+# Tìm project root (thư mục chứa package.json)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$SCRIPT_DIR"
-while [ -n "$PROJECT_ROOT" ] && [ ! -f "$PROJECT_ROOT/package.json" ]; do
-    [ "$PROJECT_ROOT" = "$(dirname "$PROJECT_ROOT")" ] && break
-    PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
-done
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 if [ ! -f "${PROJECT_ROOT}/package.json" ]; then
     echo "Không tìm thấy package.json. Chạy từ thư mục gốc project."
     exit 1
@@ -191,8 +187,10 @@ if command -v python3 &> /dev/null; then
     echo -e "${GREEN}✅ $PYTHON_VERSION${NC}"
     echo "   Path: $(which python3)"
 
-    # Chuẩn bị môi trường Python cho automation
-    echo -e "${BLUE}🧪 Chuẩn bị Python env cho Automation...${NC}"
+    # Chuẩn bị Python env (one_automation_system — mặc định cho IDE interpreter)
+    # Repo có nhiều venv: automation/venv, ai-service/venv, one_automation_system/venv, .venv
+    # IDE defaultInterpreterPath: one_automation_system/venv — đổi qua Python: Select Interpreter nếu cần
+    echo -e "${BLUE}🧪 Chuẩn bị Python env...${NC}"
     AUTOMATION_DIR="one_automation_system"
     AUTOMATION_VENV="$AUTOMATION_DIR/venv"
     MINIMAL_REQUIREMENTS="$AUTOMATION_DIR/requirements-minimal.txt"
@@ -335,4 +333,7 @@ echo -e "${GREEN}✨ Hoàn tất!${NC}"
 echo ""
 echo "📚 Cài đặt lại môi trường: ENV_SETUP.md"
 echo "   Kiểm tra nhanh: npm run tools:check && npm run verify:setup"
+echo ""
+echo -e "${CYAN}🐍 Python/venv:${NC} IDE dùng one_automation_system/venv mặc định."
+echo "   Dùng ai-service hoặc automation: Cmd+Shift+P → Python: Select Interpreter"
 echo ""

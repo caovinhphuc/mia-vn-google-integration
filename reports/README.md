@@ -11,10 +11,14 @@ reports/
 ├── email/          # Email test reports
 ├── telegram/       # Telegram test reports
 ├── health/         # Health check reports
+├── test-runs/      # Báo cáo `npm run test:complete` / `test-all.js` (test-report-<timestamp>.json)
 ├── build/          # Build reports (bundle, setup, etc.)
 ├── performance/    # Performance reports
-└── lighthouse/     # Lighthouse audit reports
+├── log-analysis/   # Output `scripts/log-analyzer.js` (log-analysis-YYYY-MM-DD.json)
+└── lighthouse/     # Lighthouse JSON (sau organize; file gốc có thể từ nhiều thư mục con)
 ```
+
+**Lighthouse HTML** (báo cáo mở trên trình duyệt) nằm ở `lighthouse-reports/`: `lighthouse-report-*.html`, `lighthouse-*.report.html`, hoặc `<hostname>_YYYY-MM-DD_….report.html` (mặc định CLI khi audit URL). `organize-reports.sh` gom các file này từ **root** vào đây.
 
 ---
 
@@ -44,7 +48,12 @@ reports/
 
 ### Lighthouse Reports
 
-- `lighthouse-YYYY-MM-DDTHH-MM-SS-sssZ.report.json` - Lighthouse audit results
+- `lighthouse-YYYY-MM-DDTHH-MM-SS-sssZ.report.json` - Lighthouse audit results (JSON, thường vào `reports/lighthouse/` sau `organize-reports.sh`)
+- HTML: thư mục `lighthouse-reports/` ở root repo
+
+### Log analysis (`log-analysis/`)
+
+- `log-analysis-YYYY-MM-DD.json` — tổng hợp từ `node scripts/log-analyzer.js` (đọc thư mục `logs/`)
 
 ---
 
@@ -91,4 +100,4 @@ Scripts tự động sẽ:
 
 ---
 
-**Last Updated**: 2025-01-27
+**Last Updated**: 2026-03-19

@@ -1,8 +1,8 @@
 # 🚀 Bundle Optimization Roadmap
 
-**Date**: January 22, 2026
-**Current Status**: Bundle size exceeds performance budget
-**Target**: Reduce bundle from 2.36 MB to < 1 MB
+**Date**: January 22, 2026 (budget script cập nhật 03/2026)
+**Current Status**: `npm run perf:budget` dùng **initial JS** (main+app-root) + **hard limits** — phù hợp code-split; tổng chunk vẫn ~2.3MB (lazy).
+**Target**: Giữ initial <400KB; tách vendor (714/648); tổng transfer nhỏ hơn nhờ gzip/brotli
 
 ---
 

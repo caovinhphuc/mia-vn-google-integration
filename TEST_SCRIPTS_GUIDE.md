@@ -77,7 +77,7 @@ node scripts/test-all.js
 **Output:**
 
 - Console: Real-time test results
-- File: `test-report-[timestamp].json`
+- File: `reports/test-runs/test-report-[timestamp].json`
 
 ---
 
@@ -438,7 +438,7 @@ echo $REACT_APP_API_URL
 3. **Xem reports chi tiết:**
 
    ```bash
-   cat test-report-*.json | jq
+   cat reports/test-runs/test-report-*.json | jq
    ```
 
 4. **Tích hợp vào CI/CD:**

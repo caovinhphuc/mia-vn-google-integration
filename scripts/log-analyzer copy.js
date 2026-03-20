@@ -9,6 +9,8 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
+const REPO_ROOT = path.resolve(__dirname, "..");
+
 const colors = {
   reset: "\x1b[0m",
   green: "\x1b[32m",
@@ -177,12 +179,16 @@ function searchLogs(pattern, logDir = "logs") {
 }
 
 function analyzeLogs(logDir = "logs", searchPattern = null) {
+  const resolvedLogDir = path.isAbsolute(logDir)
+    ? logDir
+    : path.join(REPO_ROOT, logDir);
+
   log("🔍 Log Analyzer", "cyan");
   log("=".repeat(60), "cyan");
 
   if (searchPattern) {
     log(`\n🔎 Searching for: "${searchPattern}"`, "yellow");
-    const results = searchLogs(searchPattern, logDir);
+    const results = searchLogs(searchPattern, resolvedLogDir);
 
     if (results.length === 0) {
       log("   No matches found", "yellow");
@@ -201,10 +207,10 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
     return;
   }
 
-  const logFiles = findLogFiles(logDir);
+  const logFiles = findLogFiles(resolvedLogDir);
 
   if (logFiles.length === 0) {
-    log(`No log files found in ${logDir}`, "yellow");
+    log(`No log files found in ${resolvedLogDir}`, "yellow");
     return;
   }
 
@@ -216,7 +222,7 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
   // Save report
   const report = {
     timestamp: new Date().toISOString(),
-    logDir,
+    logDir: resolvedLogDir,
     files: analyses,
     summary: {
       totalFiles: analyses.length,
@@ -226,7 +232,12 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
     },
   };
 
-  const reportFile = `log-analysis-${new Date().toISOString().split("T")[0]}.json`;
+  const reportDir = path.join(REPO_ROOT, "reports", "log-analysis");
+  fs.mkdirSync(reportDir, { recursive: true });
+  const reportFile = path.join(
+    reportDir,
+    `log-analysis-${new Date().toISOString().split("T")[0]}.json`,
+  );
   fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
   log(`\n📄 Report saved to: ${reportFile}`, "cyan");
 }
@@ -234,8 +245,11 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
 // Main execution
 if (require.main === module) {
   const args = process.argv.slice(2);
-  const logDir =
+  const rawLogDir =
     args.find((arg) => arg.startsWith("--dir="))?.split("=")[1] || "logs";
+  const logDir = path.isAbsolute(rawLogDir)
+    ? rawLogDir
+    : path.join(REPO_ROOT, rawLogDir);
   const searchPattern =
     args.find((arg) => arg.startsWith("--search="))?.split("=")[1] || null;
 
