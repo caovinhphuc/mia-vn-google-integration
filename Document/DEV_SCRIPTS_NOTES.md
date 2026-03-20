@@ -6,8 +6,8 @@
 
 **Không phải** công cụ “tìm mọi file thiếu trong repo” — chỉ xử lý đúng các path trong mảng `FILES` trong script (hiện tại):
 
-| File |
-|------|
+| File                                                |
+| --------------------------------------------------- |
 | `src/components/automation/AutomationDashboard.jsx` |
 | `src/components/automation/AutomationDashboard.css` |
 
@@ -50,4 +50,17 @@ Xem thêm: [`REPO_LAYOUT.md`](./REPO_LAYOUT.md) — root = React chính, `backen
 
 ---
 
-*Cập nhật: 2026-03-20*
+## Báo cáo tự sinh (không commit — `.gitignore`)
+
+Các file sau **không** đưa vào git (nặng, tạo lại được):
+
+| Pattern / path                                           | Nguồn gần đúng                                      |
+| -------------------------------------------------------- | --------------------------------------------------- |
+| `**/lighthouse-reports/**`                               | `npm run perf:lighthouse`, LHCI                     |
+| `/build-stats/*.json`                                    | `npm run bundle:stats` / `generate-bundle-stats.js` |
+| `/bundle-report.json`, `/performance-budget-report.json` | script phân tích bundle / budget                    |
+| `/health-report-*.json`                                  | health check scripts (root)                         |
+
+---
+
+_Cập nhật: 2026-03-20_

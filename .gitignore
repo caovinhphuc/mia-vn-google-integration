@@ -131,6 +131,14 @@ reports/**/*.json
 !reports/.gitkeep
 !reports/**/.gitkeep
 
+# Lighthouse / bundle / perf — output tự sinh, dung lượng lớn (không commit)
+# Chạy lại: npm run perf:lighthouse, scripts performance, generate-bundle-stats, v.v.
+**/lighthouse-reports/**
+/build-stats/*.json
+/bundle-report.json
+/performance-budget-report.json
+/health-report-*.json
+
 # Shared directories (if containing generated files)
 shared/__pycache__/
 
