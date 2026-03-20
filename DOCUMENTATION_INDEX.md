@@ -84,12 +84,13 @@
 
 ### 🚢 Deploy
 
-| File                                                                 | Mục đích                 |
-| -------------------------------------------------------------------- | ------------------------ |
-| [`DEPLOY_INSTRUCTIONS.md`](./DEPLOY_INSTRUCTIONS.md)                 | Deploy tổng quan, Vercel |
-| [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)                       | Workflow, env, hook      |
-| [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md)         | Chi tiết Vercel          |
-| [`Document/DEPLOYMENT_SUMMARY.md`](./Document/DEPLOYMENT_SUMMARY.md) | Tóm tắt                  |
+| File                                                                         | Mục đích                                                    |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| [`DEPLOY_INSTRUCTIONS.md`](./DEPLOY_INSTRUCTIONS.md)                         | Deploy tổng quan, Vercel                                    |
+| [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)                               | Workflow, env, hook                                         |
+| [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md)                 | Chi tiết Vercel                                             |
+| [`docs/VERCEL_GOOGLE_ARCHITECTURE.md`](./docs/VERCEL_GOOGLE_ARCHITECTURE.md) | Luồng Vercel → backend → Google Sheet/Drive, env production |
+| [`Document/DEPLOYMENT_SUMMARY.md`](./Document/DEPLOYMENT_SUMMARY.md)         | Tóm tắt                                                     |
 
 ### 📚 HTML docs & checklist
 
