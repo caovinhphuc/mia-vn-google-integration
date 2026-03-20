@@ -37,7 +37,8 @@
 
 ## 📋 Scripts Mới Đã Thêm
 
-> **Zsh:** Tránh copy `lệnh  # ghi chú` một dòng — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) (mục Scripts).
+> **Zsh:** Tránh copy `lệnh  # ghi chú` một dòng — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) (mục Scripts).  
+> **Prettier:** `npx prettier` không đối số → chỉ hiện help (đúng CLI). Dùng `npm run prettier` (= `format`) hoặc `npx prettier --write <file>`.
 
 ### Linting
 
@@ -156,23 +157,29 @@ package-lock.json
 
 ## 📚 Quick Reference
 
-| Command                                       | Mô tả                                                    |
-| --------------------------------------------- | -------------------------------------------------------- |
-| `npm run lint`                                | ESLint `src` (`.js`, `.jsx`)                             |
-| `npm run lint:check`                          | Giống trên, `--max-warnings 0` (strict)                  |
-| `npm run lint:fix`                            | ESLint + auto-fix                                        |
-| `npm run format`                              | Prettier ghi `src/**/*.{js,jsx,json,css,md}`             |
-| `npm run format:check`                        | Prettier chỉ kiểm tra, không sửa file                    |
-| `npm run type:check`                          | `tsc --noEmit`                                           |
-| `npm run type:watch`                          | `tsc --noEmit --watch`                                   |
-| `npm run validate`                            | `lint:check` + `format:check` + `type:check` + `test:ci` |
-| `npm run validate:full`                       | `validate` + `build:prod`                                |
-| `npm run pre-commit`                          | `lint-staged` (cần `git add` trước)                      |
-| `npm run check:tools` / `npm run tools:check` | Kiểm tra Node, npm, Python, git, …                       |
+| Command                                           | Mô tả                                                    |
+| ------------------------------------------------- | -------------------------------------------------------- |
+| `npm run lint`                                    | ESLint `src` (`.js`, `.jsx`)                             |
+| `npm run lint:check`                              | Giống trên, `--max-warnings 0` (strict)                  |
+| `npm run lint:fix`                                | ESLint + auto-fix                                        |
+| `npm run format` / `npm run prettier`             | Prettier ghi `src/**/*.{js,jsx,json,css,md}`             |
+| `npm run format:check` / `npm run prettier:check` | Prettier chỉ kiểm tra, không sửa file                    |
+| `npm run type:check`                              | `tsc --noEmit`                                           |
+| `npm run type:watch`                              | `tsc --noEmit --watch`                                   |
+| `npm run validate`                                | `lint:check` + `format:check` + `type:check` + `test:ci` |
+| `npm run validate:full`                           | `validate` + `build:prod`                                |
+| `npm run pre-commit`                              | `lint-staged` (cần `git add` trước)                      |
+| `npm run check:tools` / `npm run tools:check`     | Kiểm tra Node, npm, Python, git, …                       |
 
 **Môi trường & cài đặt đầy đủ:** [ENV_SETUP.md](./ENV_SETUP.md) · **Chi tiết công cụ:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)
 
 ## 🔧 Troubleshooting
+
+### Issue: `npx prettier` chỉ in Usage / help
+
+**Problem**: Chạy `npx prettier` không kèm path → CLI không biết format file nào.
+
+**Solution**: `npm run prettier` hoặc `npm run format` (glob chuẩn repo). Một file: `npx prettier --write src/App.jsx`.
 
 ### Issue: Prettier EACCES Error
 

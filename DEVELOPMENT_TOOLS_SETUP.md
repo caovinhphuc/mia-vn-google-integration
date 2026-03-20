@@ -30,6 +30,8 @@
 > **Zsh / copy-paste:** Đừng copy cả phần `# ...` **cùng dòng** với lệnh (vd. `eslint ... # Lint`). Nếu shell không bật `setopt interactivecomments`, ký tự `#` có thể bị coi là đối số → lỗi ESLint _pattern "#"_ hoặc _unknown file attribute_.  
 > An toàn: chỉ copy lệnh, hoặc dùng khối bên dưới (ghi chú ở **dòng riêng**).
 
+> **Prettier:** `npx prettier` **không kèm file/glob** chỉ in help (đúng CLI). Trong repo: **`npm run format`** hoặc **`npm run prettier`** (cùng glob `src/**/*.{js,jsx,json,css,md}`), **`npm run format:check`** / **`npm run prettier:check`**. Một file: `npx prettier --write path/to/file.jsx`.
+
 ### Linting
 
 ```bash
@@ -44,10 +46,13 @@ npm run lint:fix
 ### Formatting
 
 ```bash
-# Format
+# Format (Prettier) — hai tên tương đương
 npm run format
-# Kiểm tra không ghi file
+npm run prettier
+
+# Chỉ kiểm tra
 npm run format:check
+npm run prettier:check
 ```
 
 ### Type Checking
@@ -196,17 +201,17 @@ npm run validate:full
 
 ## 📚 Useful Commands Reference
 
-| Command                               | Description                                      |
-| ------------------------------------- | ------------------------------------------------ |
-| `npm run lint`                        | Lint all code                                    |
-| `npm run lint:fix`                    | Auto-fix linting issues                          |
-| `npm run format`                      | Format all code                                  |
-| `npm run format:check`                | Check formatting                                 |
-| `npm run type:check`                  | TypeScript type check                            |
-| `npm run validate`                    | lint:check + format:check + type:check + test:ci |
-| `npm run validate:full`               | Full validation + build                          |
-| `npm run pre-commit`                  | Run lint-staged manually                         |
-| `npm run check:tools` / `tools:check` | Kiểm tra Node, npm, Python, git, …               |
+| Command                                           | Description                                      |
+| ------------------------------------------------- | ------------------------------------------------ |
+| `npm run lint`                                    | Lint all code                                    |
+| `npm run lint:fix`                                | Auto-fix linting issues                          |
+| `npm run format` / `npm run prettier`             | Format `src/**/*.{js,jsx,json,css,md}`           |
+| `npm run format:check` / `npm run prettier:check` | Kiểm tra Prettier (không sửa file)               |
+| `npm run type:check`                              | TypeScript type check                            |
+| `npm run validate`                                | lint:check + format:check + type:check + test:ci |
+| `npm run validate:full`                           | Full validation + build                          |
+| `npm run pre-commit`                              | Run lint-staged manually                         |
+| `npm run check:tools` / `tools:check`             | Kiểm tra Node, npm, Python, git, …               |
 
 ## 🧩 VS Code / Cursor Extensions
 
