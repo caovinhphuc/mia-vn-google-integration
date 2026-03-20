@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-20T06:02:03.155Z",
+  "timestamp": "2026-03-20T06:30:19.378Z",
   "budgets": {
     "bundle": {
       "initialJavascript": 409600,
@@ -29,19 +29,19 @@
       "passed": true
     },
     "lighthouse": {
-      "passed": true,
-      "score": 93,
+      "passed": false,
+      "score": 84,
       "minScore": 90
     },
     "api": {
       "passed": true,
-      "responseTime": 86
+      "responseTime": 37
     }
   },
   "summary": {
     "total": 3,
-    "passed": 3,
-    "failed": 0,
+    "passed": 2,
+    "failed": 1,
     "skipped": 0
   }
 }
