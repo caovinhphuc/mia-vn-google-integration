@@ -1,8 +1,24 @@
 # 📋 PHÂN TÍCH VÀ PHÂN LOẠI SCRIPTS - React OAS Integration v4.0
 
-> **Ngày phân tích**: 2025-01-27  
-> **Tổng số scripts**: 82 files  
-> **Mục đích**: Phân loại và tổ chức lại các script cho khoa học
+> **Ngày phân tích gốc**: 2025-01-27  
+> **Refresh**: 2026-03-18  
+> **Mục đích**: Phân loại scripts + xác định canonical path hiện tại
+
+## ✅ Current snapshot (Mar 2026)
+
+- Repo đang tồn tại cả **canonical scripts** và **legacy aliases** song song
+- Chuẩn hiện tại: root scripts là wrapper ngắn, canonical logic nằm trong `scripts/<group>/`
+- Guard drift đã có: `scripts/utils/check-root-shell-wrappers.sh` + `npm run scripts:guard-wrappers`
+- Command surface chính hiện tại đi qua `package.json` (`dev`, `validate`, `deploy:prep`, `deploy:vercel`, `health:*`)
+
+## 🎯 Kết luận thực dụng
+
+1. Ưu tiên chạy command theo `package.json` và root wrappers canonical (`start.sh`, `deploy.sh`, `quick-deploy.sh`)
+2. Xem các tên cũ camelCase/underscore là alias tương thích (`deployVercel.sh`, `quick_deploy.sh`)
+3. Không tạo thêm root script có logic dài; thêm canonical script vào `scripts/` trước rồi mới tạo wrapper
+4. Dọn duplicate có thể làm theo batch riêng để tránh phá backward compatibility
+
+> Phần nội dung chi tiết bên dưới giữ lại làm lịch sử migration/đối chiếu.
 
 ---
 
@@ -334,4 +350,4 @@ scripts/
 
 ---
 
-**Last Updated**: 2025-01-27
+**Last Updated**: 2026-03-18

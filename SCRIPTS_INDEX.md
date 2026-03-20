@@ -1,45 +1,46 @@
-# 📚 SCRIPTS INDEX - React OAS Integration v4.0
+# 📚 SCRIPTS INDEX - React OAS Integration
 
-> **Quick Reference** cho tất cả scripts trong dự án
+> **Quick Reference (đã refresh theo repo hiện tại - Mar 2026)**
 
 ---
 
-## 🚀 QUICK START
+## 🚀 QUICK START (Canonical)
 
 ### Development
 
 ```bash
-# Setup lần đầu
+# Setup
 ./setup.sh
 
-# Start all services
-./start_dev_servers.sh
-# hoặc
-./deploy_platform.sh start
+# Start dev stack (canonical)
+./start.sh
+# hoặc npm run dev
 
-# Stop all services
-./deploy_platform.sh stop
+# Stop ports nhanh
+npm run fix:ports
 ```
 
 ### Deployment
 
 ```bash
-# Quick deploy
-./quick-deploy.sh "Commit message"
+# Deploy chuẩn qua npm scripts
+npm run deploy:prep
+npm run deploy:vercel
 
-# Production deploy
-./deploy-production.sh
+# Hoặc wrapper
+./quick-deploy.sh "Commit message"
 ```
 
 ---
 
 ## 📖 TÀI LIỆU
 
-| File                                                         | Mô tả                             |
-| ------------------------------------------------------------ | --------------------------------- |
-| [SCRIPTS_GUIDE.md](./SCRIPTS_GUIDE.md)                       | 📚 Hướng dẫn sử dụng chi tiết     |
-| [SCRIPTS_ANALYSIS.md](./SCRIPTS_ANALYSIS.md)                 | 🔍 Phân tích và phân loại scripts |
-| [SCRIPTS_RESTRUCTURE_PLAN.md](./SCRIPTS_RESTRUCTURE_PLAN.md) | 📁 Kế hoạch tổ chức lại scripts   |
+| File                                                         | Mô tả                                    |
+| ------------------------------------------------------------ | ---------------------------------------- |
+| [SCRIPTS_GUIDE.md](./SCRIPTS_GUIDE.md)                       | 📚 Hướng dẫn canonical scripts đang dùng |
+| [SCRIPTS_ANALYSIS.md](./SCRIPTS_ANALYSIS.md)                 | 🔍 Phân tích hiện trạng + legacy cần dọn |
+| [SCRIPTS_RESTRUCTURE_PLAN.md](./SCRIPTS_RESTRUCTURE_PLAN.md) | 📁 Kế hoạch chuẩn hóa tiếp theo          |
+| [SHELL_SCRIPT_STANDARDS.md](./SHELL_SCRIPT_STANDARDS.md)     | ✅ Chuẩn root wrapper + CI guard         |
 
 ---
 
@@ -49,23 +50,23 @@
 
 - `./setup.sh` - Setup toàn bộ hệ thống
 
-### ⭐ Start/Stop
+### ⭐ Start/Stop (khuyến nghị)
 
-- `./start_dev_servers.sh` - Start development servers
-- `./deploy_platform.sh start` - Start all services
-- `./deploy_platform.sh stop` - Stop all services
+- `./start.sh` - canonical root wrapper để chạy stack chính
+- `npm run dev` - chạy frontend + backend + ai-service bằng npm
+- `npm run fix:ports` - dọn nhanh port 3000/3001/8000
 
-### ⭐ Deployment
+### ⭐ Deployment (khuyến nghị)
 
-- `./deploy.sh` - Deploy chính (Netlify + Render)
-- `./quick-deploy.sh` - Quick deploy (Vercel + Railway)
-- `./deploy-production.sh` - Production deployment
+- `npm run deploy:prep` - chuẩn bị build/validate trước deploy
+- `npm run deploy:vercel` - deploy Vercel
+- `./quick-deploy.sh` - wrapper legacy-compatible
 
 ### ⭐ Troubleshooting
 
-- `./scripts/check-ports.sh` - Check ports
-- `./scripts/fix-port-conflict.sh` - Fix port conflicts
-- `./scripts/check-backend.sh` - Check backend
+- `npm run check:ports` - check ports listeners
+- `npm run check:backend` - check backend health endpoint
+- `npm run scripts:guard-wrappers` - guard root wrappers theo chuẩn
 
 ---
 
@@ -105,9 +106,9 @@ Xem: [SCRIPTS_GUIDE.md#7-sub-projects-scripts](./SCRIPTS_GUIDE.md#7-sub-projects
 
 1. **Hầu hết scripts chạy từ Root directory**
 2. **Kiểm tra permissions**: `chmod +x script-name.sh`
-3. **Kiểm tra ports**: `./scripts/check-ports.sh`
-4. **Kiểm tra env**: `./scripts/check-env.sh`
+3. **Chuẩn root wrappers**: xem `SHELL_SCRIPT_STANDARDS.md`
+4. **Kiểm tra wrapper drift**: `npm run scripts:guard-wrappers`
 
 ---
 
-**Last Updated**: 2025-01-27
+**Last Updated**: 2026-03-18

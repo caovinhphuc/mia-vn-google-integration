@@ -1,7 +1,17 @@
 # ✅ SCRIPTS MIGRATION COMPLETE - React OAS Integration v4.0
 
-> **Ngày hoàn thành**: 2025-01-27  
-> **Trạng thái**: ✅ Đã tổ chức lại scripts
+> **Ngày hoàn thành phase gốc**: 2025-01-27  
+> **Refresh**: 2026-03-18  
+> **Trạng thái**: ✅ Hoàn thành phase nền tảng, hiện duy trì hybrid (canonical + legacy aliases)
+
+## ⚠️ Clarification (quan trọng)
+
+- File này phản ánh **một phase migration lịch sử**.
+- Trạng thái repo hiện tại không phải "100% chỉ còn scripts mới"; vẫn có alias/duplicate để tương thích.
+- Nguồn chuẩn hiện tại:
+  - `SHELL_SCRIPT_STANDARDS.md`
+  - `SCRIPTS_INDEX.md`
+  - `package.json` scripts
 
 ---
 
@@ -167,15 +177,14 @@ scripts/
 
 ---
 
-## 📝 NEXT STEPS
+## 📝 NEXT STEPS (refresh)
 
-1. ⏳ Test tất cả scripts
-2. ⏳ Gộp các scripts trùng lặp còn lại
-3. ⏳ Cập nhật `start_ai_platform.sh` version
-4. ⏳ Xóa scripts duplicate sau khi test
-5. ⏳ Cập nhật README.md với thông tin mới
+1. ⏳ Test lại các alias ít dùng trước khi xóa
+2. ⏳ Chuẩn hóa naming cho một số script còn typo/legacy
+3. ⏳ Duy trì guard `scripts:guard-wrappers` trong CI và local
+4. ⏳ Chỉ xóa duplicate sau khi xác nhận không còn được team dùng
 
 ---
 
-**Status**: ✅ Migration hoàn thành cơ bản  
-**Last Updated**: 2025-01-27
+**Status**: ✅ Migration nền tảng hoàn tất, đang tối ưu hậu migration  
+**Last Updated**: 2026-03-18

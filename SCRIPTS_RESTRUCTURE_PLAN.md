@@ -1,7 +1,22 @@
 # 📁 KẾ HOẠCH TỔ CHỨC LẠI SCRIPTS - React OAS Integration v4.0
 
 > **Ngày tạo**: 2025-01-27  
-> **Mục đích**: Đề xuất cấu trúc thư mục mới và kế hoạch migration
+> **Refresh**: 2026-03-18  
+> **Mục đích**: Đề xuất cấu trúc thư mục + chuẩn hóa root wrappers
+
+## ✅ Trạng thái so với plan (Mar 2026)
+
+- Đã áp dụng chuẩn wrapper root cho nhiều script deploy/start
+- Đã có CI/local guard chống wrapper drift:
+  - `scripts/utils/check-root-shell-wrappers.sh`
+  - `npm run scripts:guard-wrappers`
+- Chưa nên coi migration là "done tuyệt đối" vì vẫn còn alias/duplicate để tương thích
+
+## 📌 Ưu tiên hiện tại
+
+1. Giữ nguyên backward-compatible aliases đang dùng thực tế
+2. Script mới bắt buộc theo chuẩn `SHELL_SCRIPT_STANDARDS.md`
+3. Chỉ dọn/xóa script cũ khi đã có mapping thay thế và test hồi quy
 
 ---
 
@@ -241,21 +256,13 @@ Tạo các wrapper scripts ở root để backward compatibility:
 
 ---
 
-## 📝 CHECKLIST MIGRATION
+## 📝 CHECKLIST MIGRATION (refresh)
 
-- [ ] Tạo cấu trúc thư mục mới
-- [ ] Di chuyển setup scripts
-- [ ] Di chuyển start/stop scripts
-- [ ] Di chuyển deployment scripts
-- [ ] Di chuyển fix scripts
-- [ ] Di chuyển utility scripts
-- [ ] Di chuyển git scripts
-- [ ] Gộp scripts trùng lặp
-- [ ] Cập nhật paths trong scripts
-- [ ] Tạo wrapper scripts ở root
-- [ ] Test tất cả scripts
-- [ ] Cập nhật documentation
-- [ ] Xóa scripts cũ (sau khi test)
+- [x] Thiết lập chuẩn wrapper root + canonical scripts
+- [x] Thêm local/CI guard cho root wrappers
+- [x] Cập nhật docs scripts chính (index/guide/analysis)
+- [ ] Rà soát alias trùng lặp và quyết định giữ/xóa theo mức sử dụng thực tế
+- [ ] Test hồi quy trước khi xóa bất kỳ alias legacy nào
 
 ---
 
@@ -269,4 +276,4 @@ Tạo các wrapper scripts ở root để backward compatibility:
 
 ---
 
-**Last Updated**: 2025-01-27
+**Last Updated**: 2026-03-18

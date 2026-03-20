@@ -44,8 +44,24 @@
 | [`Document/REPO_LAYOUT.md`](./Document/REPO_LAYOUT.md)             | Root vs `backend/`, depcheck                   |
 | [`Document/DEV_SCRIPTS_NOTES.md`](./Document/DEV_SCRIPTS_NOTES.md) | `fix-missing-files`, https, artefact gitignore |
 | [`SHELL_SCRIPT_STANDARDS.md`](./SHELL_SCRIPT_STANDARDS.md)         | Quy dinh vi tri + naming shell scripts         |
+| [`SCRIPTS_INDEX.md`](./SCRIPTS_INDEX.md)                           | Hub scripts (refresh 2026-03)                  |
 | [`SCRIPTS_GUIDE.md`](./SCRIPTS_GUIDE.md)                           | Scripts tổng quan                              |
+| [`SCRIPTS_ANALYSIS.md`](./SCRIPTS_ANALYSIS.md)                     | Current snapshot + legacy notes                |
+| [`SCRIPTS_RESTRUCTURE_PLAN.md`](./SCRIPTS_RESTRUCTURE_PLAN.md)     | Kế hoạch chuẩn hóa scripts                     |
+| [`SCRIPTS_MIGRATION_COMPLETE.md`](./SCRIPTS_MIGRATION_COMPLETE.md) | Báo cáo phase migration + trạng thái hybrid    |
+| [`SCRIPTS_TEST_REPORT.md`](./SCRIPTS_TEST_REPORT.md)               | Historical test snapshot scripts               |
 | [`scripts/README.md`](./scripts/README.md)                         | Thư mục `scripts/`                             |
+
+### 📦 Bundle optimization docs
+
+| File                                                                               | Mục đích                                 |
+| ---------------------------------------------------------------------------------- | ---------------------------------------- |
+| [`BUNDLE_OPTIMIZATION_GUIDE.md`](./BUNDLE_OPTIMIZATION_GUIDE.md)                   | Guide chính để phân tích/tối ưu bundle   |
+| [`BUNDLE_OPTIMIZATION_REPORT.md`](./BUNDLE_OPTIMIZATION_REPORT.md)                 | Snapshot report theo từng lần đo         |
+| [`BUNDLE_OPTIMIZATION_ROADMAP.md`](./BUNDLE_OPTIMIZATION_ROADMAP.md)               | Roadmap triển khai tối ưu theo phase     |
+| [`BUNDLE_OPTIMIZATION_SESSION_UPDATE.md`](./BUNDLE_OPTIMIZATION_SESSION_UPDATE.md) | Session snapshot lịch sử                 |
+| [`BUNDLE_STATS_UPGRADE.md`](./BUNDLE_STATS_UPGRADE.md)                             | Technical note cho script bundle stats   |
+| [`BUNDLE_STATS_AUTO_FIX.md`](./BUNDLE_STATS_AUTO_FIX.md)                           | Ghi chú auto-check/auto-fix dependencies |
 
 ### 📐 Kiến trúc
 
@@ -110,7 +126,7 @@
 1. `README.md`
 2. `ENV_SETUP.md`
 3. `QUICK_REFERENCE.md`
-4. Chạy: `npm install` → `npm run dev` hoặc `./start_dev_servers.sh` (tuỳ bạn dùng script nào)
+4. Chạy: `npm install` → `npm run dev` hoặc `./start.sh`
 
 ### Full-stack + deploy (~45 phút)
 
@@ -144,7 +160,18 @@
 ├── PORT_CLARIFICATION.md
 ├── ARCHITECTURE.md
 ├── ARCHITECTURE_GUIDE.md
+├── SCRIPTS_INDEX.md
 ├── SCRIPTS_GUIDE.md
+├── SCRIPTS_ANALYSIS.md
+├── SCRIPTS_RESTRUCTURE_PLAN.md
+├── SCRIPTS_MIGRATION_COMPLETE.md
+├── SCRIPTS_TEST_REPORT.md
+├── BUNDLE_OPTIMIZATION_GUIDE.md
+├── BUNDLE_OPTIMIZATION_REPORT.md
+├── BUNDLE_OPTIMIZATION_ROADMAP.md
+├── BUNDLE_OPTIMIZATION_SESSION_UPDATE.md
+├── BUNDLE_STATS_UPGRADE.md
+├── BUNDLE_STATS_AUTO_FIX.md
 ├── PROJECT_STRUCTURE_FINAL.md
 ├── FINAL_FIX_REPORT.md
 ├── READ_THIS_FIRST.md

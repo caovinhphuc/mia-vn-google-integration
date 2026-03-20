@@ -1,8 +1,42 @@
 # 📚 HƯỚNG DẪN SỬ DỤNG SCRIPTS - React OAS Integration v4.0
 
-> **Version**: 4.0
-> **Ngày cập nhật**: 2025-01-27
-> **Mục đích**: Hướng dẫn sử dụng các scripts trong dự án
+> **Version**: 4.x
+> **Ngày cập nhật**: 2026-03-18
+> **Mục đích**: Hướng dẫn canonical scripts đang dùng thực tế
+
+## ✅ TRẠNG THÁI HIỆN TẠI (ƯU TIÊN DÙNG MỤC NÀY)
+
+### Canonical commands (team nên dùng)
+
+```bash
+# Dev stack
+./start.sh
+npm run dev
+
+# Quality gates
+npm run validate
+npm run scripts:guard-wrappers
+
+# Health checks
+npm run check:ports
+npm run check:backend
+npm run health:quick
+```
+
+### Deploy (ưu tiên npm scripts)
+
+```bash
+npm run deploy:prep
+npm run deploy:vercel
+```
+
+### Shell wrapper standards
+
+- Root `*.sh` chỉ nên là wrapper ngắn, không chứa logic dài
+- Chuẩn chi tiết: `SHELL_SCRIPT_STANDARDS.md`
+- Guard local/CI: `npm run scripts:guard-wrappers`
+
+> **Lưu ý quan trọng:** Các section bên dưới là tài liệu lịch sử từ phase migrate cũ (2025). Có thể còn tham chiếu script/path không còn canonical.
 
 ---
 
@@ -771,5 +805,5 @@ Một số scripts cần environment variables. Kiểm tra:
 
 ---
 
-**Last Updated**: 2025-01-27
+**Last Updated**: 2026-03-18
 **Version**: 4.0

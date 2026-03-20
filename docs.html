@@ -1151,12 +1151,32 @@ NODE_ENV=development</code></pre>
                 </div>
                 <div class="section-content">
                     <h1>📚 HƯỚNG DẪN SỬ DỤNG SCRIPTS - React OAS Integration v4.0</h1>
-<p>> <strong>Version</strong>: 4.0
-> <strong>Ngày cập nhật</strong>: 2025-01-27
-> <strong>Mục đích</strong>: Hướng dẫn sử dụng các scripts trong dự án</p>
+<p>> <strong>Version</strong>: 4.x
+> <strong>Ngày cập nhật</strong>: 2026-03-18
+> <strong>Mục đích</strong>: Hướng dẫn canonical scripts đang dùng thực tế</p>
+<h2>✅ TRẠNG THÁI HIỆN TẠI (ƯU TIÊN DÙNG MỤC NÀY)</h2>
+<h3>Canonical commands (team nên dùng)</h3>
+<pre><code class="language-bash"># Dev stack
+./start.sh
+npm run dev
+<h1>Quality gates</h1>
+npm run validate
+npm run scripts:guard-wrappers
+<h1>Health checks</h1>
+npm run check:ports
+npm run check:backend
+npm run health:quick</code></pre>
+<h3>Deploy (ưu tiên npm scripts)</h3>
+<pre><code class="language-bash">npm run deploy:prep
+npm run deploy:vercel</code></pre>
+<h3>Shell wrapper standards</h3>
+<ul><li>Root <code>*.sh</code> chỉ nên là wrapper ngắn, không chứa logic dài</li>
+<li>Chuẩn chi tiết: <code>SHELL_SCRIPT_STANDARDS.md</code></li>
+<li>Guard local/CI: <code>npm run scripts:guard-wrappers</code></li>
+<p>> <strong>Lưu ý quan trọng:</strong> Các section bên dưới là tài liệu lịch sử từ phase migrate cũ (2025). Có thể còn tham chiếu script/path không còn canonical.</p>
 <hr>
 <h2>📋 MỤC LỤC</h2>
-<ul><li><a href="#1-setup-scripts" target="_blank">Setup Scripts</a></li>
+<li><a href="#1-setup-scripts" target="_blank">Setup Scripts</a></li>
 <li><a href="#2-startstop-scripts" target="_blank">Start/Stop Scripts</a></li>
 <li><a href="#3-deployment-scripts" target="_blank">Deployment Scripts</a></li>
 <li><a href="#4-fixtroubleshooting-scripts" target="_blank">Fix/Troubleshooting Scripts</a></li>
@@ -1493,37 +1513,7 @@ cd mia-logistics-manager &amp;&amp; ./start-mia.sh</code></pre>
 <hr>
 <h3>📊 Google Sheets Project</h3>
 <h4><code>google-sheets-project/start.sh</code></h4>
-<p><strong>Mục đích</strong>: Start Google Sheets project
-<strong>Chạy từ</strong>: Root directory hoặc <code>google-sheets-project/</code>
-<strong>Cách dùng</strong>:</p>
-<pre><code class="language-bash">./google-sheets-project/start.sh
-<h1>hoặc</h1>
-cd google-sheets-project &amp;&amp; ./start.sh</code></pre>
-<hr>
-<h2>🎯 QUICK REFERENCE</h2>
-<h3>⚡ Development Workflow</h3>
-<pre><code class="language-bash"># 1. Setup lần đầu
-./setup.sh
-<h1>2. Start development servers</h1>
-./start_dev_servers.sh
-<h1>hoặc</h1>
-./deploy_platform.sh start
-<h1>3. Stop servers</h1>
-./deploy_platform.sh stop
-<h1>hoặc</h1>
-./scripts/stop_all.sh</code></pre>
-<hr>
-<h3>🚀 Deployment Workflow</h3>
-<pre><code class="language-bash"># Quick deploy (Vercel + Railway)
-./quick-deploy.sh &quot;Your commit message&quot;
-<h1>Production deploy</h1>
-./deploy-production.sh
-<h1>Deploy to specific platform</h1>
-./deploy-vercel.sh
-./deployNetlify.sh
-./deployGCP.sh</code></pre>
-<hr>
-<p>###</p>
+<p><strong>Mục đích</strong>: S</p>
 <p>... (truncated, see full file for complete content)</p>
                 </div>
                 <div class="section-footer">
@@ -2710,7 +2700,7 @@ import Card from &quot;./components/ui/Card&quot;;</code></pre></p>
             </div>
 
             <div class="last-updated">
-                <p><strong>📅 Last Updated:</strong> lúc 15:29 20 tháng 3, 2026</p>
+                <p><strong>📅 Last Updated:</strong> lúc 15:56 20 tháng 3, 2026</p>
                 <p>🔄 <strong>Auto-generated</strong> from Markdown documentation files</p>
                 <p>📝 <strong>Regenerate:</strong> <code>node scripts/utils/generate-complete-docs.js</code></p>
             </div>
