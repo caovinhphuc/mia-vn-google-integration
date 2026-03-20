@@ -6,10 +6,26 @@
 
 import axios from "axios";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  process.env.VITE_API_BASE_URL ||
-  "http://localhost:3001/api";
+const resolveDriveApiBase = () => {
+  const raw =
+    process.env.REACT_APP_API_BASE_URL ||
+    process.env.VITE_API_BASE_URL ||
+    process.env.REACT_APP_API_URL ||
+    process.env.VITE_API_URL;
+  if (!raw) return "http://localhost:3001/api";
+
+  const s = String(raw)
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .replace(/\/$/, "");
+  const isAbsoluteHttp = /^https?:\/\//i.test(s);
+  const isRootRelative = s.startsWith("/");
+  if (!isAbsoluteHttp && !isRootRelative) return "http://localhost:3001/api";
+
+  return s.endsWith("/api") ? s : `${s}/api`;
+};
+
+const API_BASE_URL = resolveDriveApiBase();
 
 class GoogleDriveApiService {
   /**

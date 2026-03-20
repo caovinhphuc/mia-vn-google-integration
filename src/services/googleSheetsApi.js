@@ -13,7 +13,16 @@ const resolveSheetsApiBase = () => {
     process.env.REACT_APP_API_URL ||
     process.env.VITE_API_URL;
   if (!raw) return "http://localhost:3001/api";
-  const s = String(raw).replace(/\/$/, "");
+  const s = String(raw)
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .replace(/\/$/, "");
+
+  // Reject obvious invalid values from misconfigured env pulls (e.g. "n")
+  const isAbsoluteHttp = /^https?:\/\//i.test(s);
+  const isRootRelative = s.startsWith("/");
+  if (!isAbsoluteHttp && !isRootRelative) return "http://localhost:3001/api";
+
   return s.endsWith("/api") ? s : `${s}/api`;
 };
 
