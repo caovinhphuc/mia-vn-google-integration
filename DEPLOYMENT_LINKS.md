@@ -1,6 +1,6 @@
 # 🌐 Deployment Links - React OAS Integration v4.0
 
-> Refreshed: 2026-03-18. Ưu tiên command canonical qua npm scripts và root wrappers.
+> Refreshed: 2026-03-20. Ưu tiên command canonical qua npm scripts và root wrappers.
 
 ## 📍 Thông Tin Repository
 
@@ -14,15 +14,31 @@
 
 ### Thông Tin Project
 
-- **Project ID**: `prj_BXxEXaTvE6rots5H7qXDR4tcsn18`
-- **Organization ID**: `team_6EDR6K8jQ0bK7bji7eGz9PWs`
-- **Project Name**: `react-oas-integration-v4`
+- **Project ID**: `prj_7AjXluQWQGPIIyJ3qwnDrfAVeAO0`
+- **Organization ID**: `team_2QxVAInW2KD0ATucWbe7WjVw`
+- **Project Name**: `react-oas-integration-v4-0`
 - **Nguồn**: File `.vercel/project.json` (thư mục root của project)
 
-### URLs
+### URLs & Domains
 
-- **Production URL**: `https://mia-vn-google-integration.vercel.app`
-- **Vercel Dashboard**: `https://vercel.com/dashboard`
+| Loại                                               | URL                                                                        |
+| -------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Production (domain chính)**                      | https://react-oas-integration-v4-0.vercel.app                              |
+| **Deployment cụ thể** (mỗi lần build, có thể khác) | Ví dụ: `https://react-oas-integration-v4-0-clei55unl-git-react.vercel.app` |
+| **Dashboard**                                      | https://vercel.com/dashboard                                               |
+
+- **Production** = alias ổn định trỏ bản **Ready** mới nhất.
+- **Deployment URL** = link riêng từng lần deploy (preview/history); Vercel tạo slug theo branch/commit — **không** dùng làm “website chính” trên GitHub.
+
+### Cập nhật hiển thị trên GitHub (About / Website)
+
+GitHub **không** tự lấy domain từ Vercel. Sau mỗi lần đổi project/domain:
+
+1. Vào repo → **Settings** → **General** → mục **Website** (hoặc phần **About** trên trang repo → ✏️ → **Website**).
+2. Đặt: `https://react-oas-integration-v4-0.vercel.app` (hoặc custom domain nếu có).
+3. Nếu vẫn thấy URL cũ (vd. `logistics-dashboard-final-xi.vercel.app`) — đó là project/link cũ; sửa tay như trên.
+
+README/badge trong repo: cập nhật link production trong [`README.md`](./README.md) (mục Deploy production) cho đồng bộ với Vercel.
 
 ### Cấu Hình
 
@@ -132,7 +148,7 @@ Cần cấu hình trong Railway Dashboard:
 
 ## 🔗 Quick Links
 
-- **Frontend**: https://mia-vn-google-integration.vercel.app
+- **Frontend (production)**: https://react-oas-integration-v4-0.vercel.app
 - **Backend Health**: https://mia-backend-production-7e56.up.railway.app/health
 - **GitHub Repo**: https://github.com/caovinhphuc/React-OAS-Integration-v4.0
 - **Vercel Dashboard**: https://vercel.com/dashboard

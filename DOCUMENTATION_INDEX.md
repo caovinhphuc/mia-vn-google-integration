@@ -90,6 +90,7 @@
 | [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)                               | Workflow, env, hook                                         |
 | [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md)                 | Chi tiết Vercel                                             |
 | [`docs/VERCEL_GOOGLE_ARCHITECTURE.md`](./docs/VERCEL_GOOGLE_ARCHITECTURE.md) | Luồng Vercel → backend → Google Sheet/Drive, env production |
+| [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md)                               | Domain production / preview, GitHub Website, Vercel project |
 | [`Document/DEPLOYMENT_SUMMARY.md`](./Document/DEPLOYMENT_SUMMARY.md)         | Tóm tắt                                                     |
 
 ### 📚 HTML docs & checklist

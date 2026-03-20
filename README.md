@@ -22,6 +22,11 @@
 
 **React OAS Integration v4.0** là một nền tảng tự động hóa hoàn chỉnh với AI-powered analytics, tích hợp với Google Sheets và hệ thống ONE Page. Hệ thống cung cấp:
 
+### 🌐 Deploy production (Vercel)
+
+- **Frontend:** [react-oas-integration-v4-0.vercel.app](https://react-oas-integration-v4-0.vercel.app)
+- **Domain / GitHub About / link từng môi trường:** xem [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md)
+
 - 🤖 **Automation System**: Thu thập dữ liệu tự động từ ONE Page
 - 📊 **Google Sheets Integration**: Kho lưu trữ dữ liệu tập trung
 - 🧠 **AI Service**: Phân tích thông minh và dự đoán
