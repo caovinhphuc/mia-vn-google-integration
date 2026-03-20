@@ -1,8 +1,8 @@
 {
   "folders": [
     {
-      "path": "../../work/client-a/react-oas-integration"
-    }
+      "path": "../..",
+    },
   ],
   "settings": {
     "editor.formatOnSave": true,
@@ -15,7 +15,7 @@
     "window.zoomLevel": 0,
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
     },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2,
@@ -32,7 +32,7 @@
       "**/venv": true,
       "**/dist": true,
       "**/.next": true,
-      "**/.vercel": true
+      "**/.vercel": true,
     },
     "search.exclude": {
       "**/node_modules": true,
@@ -42,7 +42,7 @@
       "**/.venv": true,
       "**/venv": true,
       "**/lighthouse-reports": true,
-      "**/backup_markdown": true
+      "**/backup_markdown": true,
     },
     "files.watcherExclude": {
       "**/.git/objects/**": true,
@@ -50,14 +50,14 @@
       "**/__pycache__/**": true,
       "**/.venv/**": true,
       "**/venv/**": true,
-      "**/build/**": true
+      "**/build/**": true,
     },
     "python.defaultInterpreterPath": "${workspaceFolder}/one_automation_system/venv/bin/python",
     "python.analysis.extraPaths": [
       "./automation",
       "./ai-service",
       "./one_automation_system",
-      "./mia-logistics-manager"
+      "./mia-logistics-manager",
     ],
     "python.analysis.autoSearchPaths": true,
     "terminal.integrated.cwd": "${workspaceFolder}",
@@ -67,16 +67,16 @@
         "fileMatch": [
           "/*.code-workspace"
         ],
-        "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json"
-      }
+        "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json",
+      },
     ],
     "cSpell.words": [
       "inntegration"
     ],
     "cSpell.enabled": false,
     "[markdown]": {
-      "cSpell.enabled": false
-    }
+      "cSpell.enabled": false,
+    },
   },
   "extensions": {
     "recommendations": [
@@ -95,8 +95,8 @@
       "formulahendry.code-runner",
       "ms-python.black-formatter",
       "ms-python.flake8",
-      "ms-python.isort"
-    ]
+      "ms-python.isort",
+    ],
   },
   "launch": {
     "version": "0.2.0",
@@ -111,7 +111,7 @@
           "start"
         ],
         "cwd": "${workspaceFolder}",
-        "console": "integratedTerminal"
+        "console": "integratedTerminal",
       },
       {
         "name": "Backend",
@@ -123,7 +123,7 @@
           "backend"
         ],
         "cwd": "${workspaceFolder}",
-        "console": "integratedTerminal"
+        "console": "integratedTerminal",
       },
       {
         "name": "Full Dev (npm run dev)",
@@ -135,8 +135,8 @@
           "dev"
         ],
         "cwd": "${workspaceFolder}",
-        "console": "integratedTerminal"
-      }
-    ]
-  }
+        "console": "integratedTerminal",
+      },
+    ],
+  },
 }
