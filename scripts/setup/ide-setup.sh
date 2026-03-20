@@ -38,8 +38,13 @@ echo -e "${BLUE}🛠️  Đồng bộ Cấu hình IDE...${NC}"
 
 mkdir -p .vscode .cursor
 
+COMFORT_TEMPLATE="$SCRIPT_DIR/ide-settings-comfortable.json"
+
 if [ ! -f ".vscode/settings.json" ]; then
-    if [ -f ".cursor/settings.json" ]; then
+    if [ -f "$COMFORT_TEMPLATE" ]; then
+        cp "$COMFORT_TEMPLATE" .vscode/settings.json
+        echo -e "   ${GREEN}✓${NC} Tạo .vscode/settings.json từ template (font 13, theme, icon)"
+    elif [ -f ".cursor/settings.json" ]; then
         cp .cursor/settings.json .vscode/settings.json
         echo -e "   ${GREEN}✓${NC} Tạo .vscode/settings.json từ .cursor/settings.json"
     else
@@ -47,6 +52,18 @@ if [ ! -f ".vscode/settings.json" ]; then
 {}
 EOF
         echo -e "   ${GREEN}✓${NC} Tạo .vscode/settings.json mặc định"
+    fi
+fi
+
+if [ ! -f ".cursor/settings.json" ]; then
+    if [ -f ".vscode/settings.json" ]; then
+        cp .vscode/settings.json .cursor/settings.json
+        echo -e "   ${GREEN}✓${NC} Tạo .cursor/settings.json từ .vscode/settings.json"
+    elif [ -f "$COMFORT_TEMPLATE" ]; then
+        cp "$COMFORT_TEMPLATE" .cursor/settings.json
+        echo -e "   ${GREEN}✓${NC} Tạo .cursor/settings.json từ template"
+    else
+        cp .vscode/settings.json .cursor/settings.json 2>/dev/null || true
     fi
 fi
 
@@ -62,6 +79,31 @@ if [ ! -f ".vscode/extensions.json" ]; then
 EOF
         echo -e "   ${GREEN}✓${NC} Tạo .vscode/extensions.json mặc định"
     fi
+fi
+
+# Tạo/cập nhật workspace file nếu thiếu
+if [ ! -f "$WORKSPACE_FILE" ]; then
+    echo -e "   ${YELLOW}→${NC} Tạo $WORKSPACE_FILE..."
+    cat > "$WORKSPACE_FILE" << 'WORKSPACE_EOF'
+{
+  "folders": [{"name": "react-oas-inntegration-x", "path": "."}],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.fontSize": 13,
+    "editor.fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "editor.lineHeight": 22,
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.iconTheme": "material-icon-theme",
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.fontSize": 13
+  },
+  "extensions": {"recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "pkief.material-icon-theme"]}
+}
+WORKSPACE_EOF
+    echo -e "   ${GREEN}✓${NC} Đã tạo $WORKSPACE_FILE (chạy lại để đồng bộ đầy đủ)"
+elif ! grep -q '"folders"' "$WORKSPACE_FILE" 2>/dev/null; then
+    echo -e "   ${YELLOW}⚠️${NC} $WORKSPACE_FILE thiếu cấu trúc folders - cần tạo lại thủ công"
 fi
 
 echo ""
