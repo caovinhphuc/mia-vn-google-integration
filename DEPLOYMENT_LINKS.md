@@ -78,15 +78,12 @@ README/badge trong repo: cập nhật link production trong [`README.md`](./READ
 
 (`getGoogleProxyApiBase()` trong `src/utils/apiBase.js` cần base kết thúc một segment `/api` cho route Sheets/Drive.)
 
-### Quick deploy + nhiều service Railway
+### Quick deploy + Railway (`quick-deploy.sh`)
 
-Script `scripts/deploy/quick-deploy.sh` gọi:
-
-`railway up --service "${RAILWAY_SERVICE:-backend}"`
-
-- Tên service phải **trùng** tên trên Railway Dashboard (tab **Services**).
-- Nếu không phải `backend`:  
-  `RAILWAY_SERVICE=ten-service-dung ./quick-deploy.sh "message"`
+- **Mặc định:** `cd backend && railway up` (không `--service`) — dùng khi project **chỉ có một** service.
+- **Nhiều service:** bắt buộc đặt tên khớp Dashboard (tab **Services**), ví dụ:  
+  `RAILWAY_SERVICE=mia-backend ./quick-deploy.sh "message"`
+- Lỗi **`Service not found`:** trước đó script mặc định `--service backend` nhưng project bạn **không** có service tên đó — giờ đã bỏ mặc định; nếu vẫn lỗi, kiểm tra tên trên Dashboard hoặc unset `RAILWAY_SERVICE`.
 
 Lần đầu trên máy: `railway login` → `cd backend && railway link`.
 
