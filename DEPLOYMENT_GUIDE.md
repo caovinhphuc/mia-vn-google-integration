@@ -11,11 +11,12 @@ Dự án có nhiều cách deployment khác nhau tùy theo môi trường và nh
 ### 1️⃣ Development (Local)
 
 ```bash
-# Chạy development server
-npm start
+# Chạy full stack (canonical)
+./start.sh
+# hoặc npm run dev
 
-# Hoặc chạy full stack
-./deploy_platform.sh start
+# Stop nhanh khi cần reset ports
+npm run fix:ports
 ```
 
 **Truy cập:**
@@ -47,11 +48,12 @@ npm run serve:deployed
 ### 3️⃣ Cloud Deployment (Vercel + Railway)
 
 ```bash
-# Deploy lên cloud (tự động commit + push + deploy)
-./quick-deploy.sh "Your commit message"
+# Deploy chuẩn qua npm scripts
+npm run deploy:prep
+npm run deploy:vercel
 
-# Hoặc chỉ deploy Vercel
-./deploy-vercel.sh
+# Wrapper legacy-compatible
+./quick-deploy.sh "Your commit message"
 ```
 
 **Truy cập:**
@@ -97,9 +99,9 @@ npm run serve:deployed
 
 ---
 
-### `deploy_platform.sh` - Local Full Stack
+### `start.sh` / `npm run dev` - Local Full Stack
 
-**Mục đích:** Deploy tất cả services local (Frontend + Backend + AI)
+**Mục đích:** Chạy tất cả services local (Frontend + Backend + AI)
 
 **Tính năng:**
 
@@ -111,14 +113,9 @@ npm run serve:deployed
 **Sử dụng:**
 
 ```bash
-# Start all services
-./deploy_platform.sh start
-
-# Stop all services
-./deploy_platform.sh stop
-
-# Restart all services
-./deploy_platform.sh restart
+./start.sh
+# hoặc
+npm run dev
 ```
 
 ---
@@ -162,6 +159,8 @@ npm run serve:deployed
 **Sử dụng:**
 
 ```bash
+npm run deploy:vercel
+# hoặc wrapper
 ./deploy-vercel.sh
 ```
 
@@ -266,10 +265,11 @@ npm run format:check       # Check code formatting
 
 ```bash
 npm run fix:ports          # Fix port conflicts
-npm run kill:port          # Kill process on port
+npm run kill:port --port=3000  # Kill process on port cụ thể
 npm run check:ports        # Check port availability
 npm run check:backend      # Check backend health
 npm run verify:setup       # Verify project setup
+npm run scripts:guard-wrappers # Guard root wrappers theo chuẩn
 ```
 
 ---
@@ -309,10 +309,10 @@ npm run verify:setup       # Verify project setup
 lsof -i :3000
 
 # Kill process on port
-npm run kill:port 3000
+npm run kill:port --port=3000
 
 # Or use the script
-./scripts/fix-port-conflict.sh
+./scripts/fix/fix-port-conflict.sh
 ```
 
 ### Build Errors
@@ -399,9 +399,9 @@ NODE_ENV=development
 
 ### Development
 
-1. Start services: `./deploy_platform.sh start`
+1. Start services: `./start.sh` hoặc `npm run dev`
 2. Develop and test
-3. Stop services: `./deploy_platform.sh stop`
+3. Stop/reset ports: `npm run fix:ports`
 
 ### Testing Production Build
 
@@ -432,7 +432,7 @@ NODE_ENV=development
    git push origin main
    ```
 
-5. Deploy: `./quick-deploy.sh "Deploy message"`
+5. Deploy: `npm run deploy:prep` → `npm run deploy:vercel`
 
 ---
 
@@ -456,9 +456,9 @@ Nếu gặp vấn đề, kiểm tra:
 
 ---
 
-**Last Updated:** January 21, 2026
+**Last Updated:** March 18, 2026
 **Version:** 4.0
-**Status:** ✅ **Complete & Verified**
+**Status:** ✅ Refreshed to canonical command surface
 **Recent Updates:**
 
 - ✅ Git remote origin configured

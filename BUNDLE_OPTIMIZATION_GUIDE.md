@@ -292,7 +292,11 @@ npm run analyze
 Performance audit:
 
 ```bash
-npx lighthouse /Users/phuccao/Projects/personal/react-oas-inntegration-x/public/index.html --view
+# Khuyến nghị: dùng script của repo (mặc định test http://localhost:3000)
+npm run perf:lighthouse
+
+# Hoặc chạy trực tiếp với URL hợp lệ
+npx lighthouse http://localhost:3000 --view
 ```
 
 ---

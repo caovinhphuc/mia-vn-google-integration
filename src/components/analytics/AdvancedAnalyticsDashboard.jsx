@@ -43,7 +43,6 @@ import {
   PieChartComponent,
   AreaChartComponent,
   HeatMapComponent,
-  ChartTypeSelector,
 } from "./ChartComponents";
 import { DataFilterPanel } from "./DataFilterPanel";
 import { exportToPDF, exportToExcel, exportToCSV } from "../../utils/exportUtils";

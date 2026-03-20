@@ -642,7 +642,7 @@ cd -React-OAS-Integration-v3.0
 <h1>Hoặc khởi chạy từng service riêng lẻ:</code></pre></h1>
 <h3>🧭 Canonical command map (chuẩn team)</h3>
 <p><tr><td>Tác vụ</td><td>Canonical command</td><td>Legacy alias (vẫn chạy)</td></tr>
-<tr><td>---</td><td>---</td><td>---</td></tr>
+<tr><td>------------------------</td><td>--------------------------------</td><td>---------------------------------------------------------------------</td></tr>
 <tr><td>Setup project</td><td><code>./setup.sh</code></td><td>-</td></tr>
 <tr><td>Start all services</td><td><code>./start.sh</code></td><td><code>./start_ai_platform.sh</code>, <code>./run_projects.sh</code>, <code>./start_data_flow.sh</code></td></tr>
 <tr><td>Dev (npm)</td><td><code>npm run dev</code></td><td>-</td></tr>
@@ -708,18 +708,7 @@ python main.py
 <tr><td>🔔 <strong>Alerts</strong></td><td><http://localhost:3000/alerts></td><td>Alerts Management</td></tr>
 <tr><td>📈 <strong>Advanced Analytics</strong></td><td><http://localhost:3000/advanced-analytics></td><td>Advanced Analytics</td></tr>
 <tr><td>🤖 <strong>Smart Automation</strong></td><td><http://localhost:3000/smart-automation></td><td>Smart Automation</td></tr>
-<tr><td>💬 <strong>NLP</strong></td><td><http://localhost:3000/nlp></td><td>NLP Dashboard</td></tr>
-<tr><td>🔒 <strong>Security</strong></td><td><http://localhost:3000/security></td><td>Security Dashboard</td></tr>
-<tr><td>🔧 <strong>Backend API</strong></td><td><http://localhost:3001/health></td><td>Health check</td></tr>
-<tr><td>🧠 <strong>AI Service</strong></td><td><http://localhost:8000/health></td><td>AI Service health</td></tr>
-<tr><td>📚 <strong>API Docs</strong></td><td><http://localhost:8000/docs></td><td>FastAPI Swagger UI</td></tr></p>
-<hr>
-<h2>📊 Tính năng chính</h2>
-<h3>✅ Đã hoàn thành</h3>
-<p><tr><td>Feature</td><td>Status</td><td>Mô tả</td></tr>
-<tr><td>--------------------------------</td><td>------</td><td>-------------------------------------</td></tr>
-<tr><td>🤖 <strong>Automation System</strong></td><td>✅</td><td>Thu thập dữ liệu từ ONE Page tự động</td></tr>
-<tr><td>📊 <strong>Google Sheets Integration</strong></td><td>✅</td></tr></table> Tích hợp đầy đủ với Google Sheets</p>
+<tr><td>💬 <strong>NLP</strong></td></tr></table> <http://localhost:3000/nlp>             </p>
 <p>... (truncated, see full file for complete content)</p>
                 </div>
                 <div class="section-footer">
@@ -886,10 +875,11 @@ Sheets → Backend cache refresh → WebSocket broadcast → UI refresh</code></
 <hr>
 <h2>🎯 Quick Start</h2>
 <h3>1️⃣ Development (Local)</h3>
-<pre><code class="language-bash"># Chạy development server
-npm start
-<h1>Hoặc chạy full stack</h1>
-./deploy_platform.sh start</code></pre>
+<pre><code class="language-bash"># Chạy full stack (canonical)
+./start.sh
+<h1>hoặc npm run dev</h1>
+<h1>Stop nhanh khi cần reset ports</h1>
+npm run fix:ports</code></pre>
 <p><strong>Truy cập:</strong></p>
 <ul><li>Frontend: <http://localhost:3000></li>
 <li>Backend: <http://localhost:3001></li>
@@ -906,10 +896,11 @@ npm run serve:deployed
 <p><strong>Build location:</strong> <code>~/Sites/mia-vn-integration</code></p>
 <hr>
 <h3>3️⃣ Cloud Deployment (Vercel + Railway)</h3>
-<pre><code class="language-bash"># Deploy lên cloud (tự động commit + push + deploy)
-./quick-deploy.sh &quot;Your commit message&quot;
-<h1>Hoặc chỉ deploy Vercel</h1>
-./deploy-vercel.sh</code></pre>
+<pre><code class="language-bash"># Deploy chuẩn qua npm scripts
+npm run deploy:prep
+npm run deploy:vercel
+<h1>Wrapper legacy-compatible</h1>
+./quick-deploy.sh &quot;Your commit message&quot;</code></pre>
 <p><strong>Truy cập:</strong></p>
 <li>Frontend: <https://your-app.vercel.app></li>
 <li>Backend: <https://your-app.railway.app></li>
@@ -936,20 +927,17 @@ npm run serve:deployed
 <li>Setup nginx</li>
 <li>Cần sudo</li>
 <hr>
-<h3><code>deploy_platform.sh</code> - Local Full Stack</h3>
-<p><strong>Mục đích:</strong> Deploy tất cả services local (Frontend + Backend + AI)</p>
+<h3><code>start.sh</code> / <code>npm run dev</code> - Local Full Stack</h3>
+<p><strong>Mục đích:</strong> Chạy tất cả services local (Frontend + Backend + AI)</p>
 <p><strong>Tính năng:</strong></p>
 <li>✅ Port management (3000, 3001, 8000)</li>
 <li>✅ Kill existing processes</li>
 <li>✅ Start all services</li>
 <li>✅ Health checks</li>
 <p><strong>Sử dụng:</strong></p>
-<pre><code class="language-bash"># Start all services
-./deploy_platform.sh start
-<h1>Stop all services</h1>
-./deploy_platform.sh stop
-<h1>Restart all services</h1>
-./deploy_platform.sh restart</code></pre>
+<pre><code class="language-bash">./start.sh
+<h1>hoặc</h1>
+npm run dev</code></pre>
 <hr>
 <h3><code>quick-deploy.sh</code> - Cloud Deployment</h3>
 <p><strong>Mục đích:</strong> Commit + Deploy nhanh lên Vercel + Railway</p>
@@ -974,7 +962,9 @@ npm run serve:deployed
 <li>✅ Deploy to Vercel</li>
 <li>✅ Environment variables setup</li>
 <p><strong>Sử dụng:</strong></p>
-<pre><code class="language-bash">./deploy-vercel.sh</code></pre>
+<pre><code class="language-bash">npm run deploy:vercel
+<h1>hoặc wrapper</h1>
+./deploy-vercel.sh</code></pre>
 <hr>
 <h3>Git Deployment Workflow</h3>
 <p><strong>Mục đích:</strong> Commit và push code lên GitHub</p>
@@ -1032,10 +1022,11 @@ npm run format             # Format code with Prettier
 npm run format:check       # Check code formatting</code></pre>
 <h3>Utilities</h3>
 <pre><code class="language-bash">npm run fix:ports          # Fix port conflicts
-npm run kill:port          # Kill process on port
+npm run kill:port --port=3000  # Kill process on port cụ thể
 npm run check:ports        # Check port availability
 npm run check:backend      # Check backend health
-npm run verify:setup       # Verify project setup</code></pre>
+npm run verify:setup       # Verify project setup
+npm run scripts:guard-wrappers # Guard root wrappers theo chuẩn</code></pre>
 <hr>
 <h2>🌐 Deployment Targets</h2>
 <h3>Local Development</h3>
@@ -1058,9 +1049,9 @@ npm run verify:setup       # Verify project setup</code></pre>
 <pre><code class="language-bash"># Check what&#039;s using the port
 lsof -i :3000
 <h1>Kill process on port</h1>
-npm run kill:port 3000
+npm run kill:port --port=3000
 <h1>Or use the script</h1>
-./scripts/fix-port-conflict.sh</code></pre>
+./scripts/fix/fix-port-conflict.sh</code></pre>
 <h3>Build Errors</h3>
 <pre><code class="language-bash"># Clean install
 rm -rf node_modules package-lock.json
@@ -1107,9 +1098,9 @@ NODE_ENV=development</code></pre>
 <hr>
 <h2>🎯 Recommended Workflow</h2>
 <h3>Development</h3>
-<li>Start services: <code>./deploy_platform.sh start</code></li>
+<li>Start services: <code>./start.sh</code> hoặc <code>npm run dev</code></li>
 <li>Develop and test</li>
-<li>Stop services: <code>./deploy_platform.sh stop</code></li>
+<li>Stop/reset ports: <code>npm run fix:ports</code></li>
 <h3>Testing Production Build</h3>
 <li>Build: <code>./deploy-production.sh</code></li>
 <li>Serve: <code>npm run serve:deployed</code></li>
@@ -1124,7 +1115,7 @@ NODE_ENV=development</code></pre>
 <p>   <pre><code class="language-bash">git pull origin main --no-rebase</code></pre></p>
 <li>Push to GitHub:</li>
 <p>   <pre><code class="language-bash">git push origin main</code></pre></p>
-<li>Deploy: <code>./quick-deploy.sh "Deploy message"</code></li>
+<li>Deploy: <code>npm run deploy:prep</code> → <code>npm run deploy:vercel</code></li>
 <hr>
 <h2>📚 Additional Resources</h2>
 <li><a href="https://react.dev" target="_blank">React Documentation</a></li>
@@ -1139,9 +1130,9 @@ NODE_ENV=development</code></pre>
 <li>Backend health với <code>npm run check:backend</code></li>
 <li>Environment variables trong <code>.env</code></li>
 <hr>
-<p><strong>Last Updated:</strong> January 21, 2026
+<p><strong>Last Updated:</strong> March 18, 2026
 <strong>Version:</strong> 4.0
-<strong>Status:</strong> ✅ <strong>Complete & Verified</strong>
+<strong>Status:</strong> ✅ Refreshed to canonical command surface
 <strong>Recent Updates:</strong></p>
 <li>✅ Git remote origin configured</li>
 <li>✅ Pre-commit hooks with Husky & lint-staged</li>
@@ -2710,7 +2701,7 @@ import Card from &quot;./components/ui/Card&quot;;</code></pre></p>
             </div>
 
             <div class="last-updated">
-                <p><strong>📅 Last Updated:</strong> lúc 16:03 20 tháng 3, 2026</p>
+                <p><strong>📅 Last Updated:</strong> lúc 16:14 20 tháng 3, 2026</p>
                 <p>🔄 <strong>Auto-generated</strong> from Markdown documentation files</p>
                 <p>📝 <strong>Regenerate:</strong> <code>node scripts/utils/generate-complete-docs.js</code></p>
             </div>

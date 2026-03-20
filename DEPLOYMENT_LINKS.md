@@ -1,5 +1,7 @@
 # 🌐 Deployment Links - React OAS Integration v4.0
 
+> Refreshed: 2026-03-18. Ưu tiên command canonical qua npm scripts và root wrappers.
+
 ## 📍 Thông Tin Repository
 
 - **GitHub Repository**: `https://github.com/caovinhphuc/React-OAS-Integration-v4.0`
@@ -52,18 +54,17 @@
 ### Quick Deploy
 
 ```bash
+npm run deploy:prep
+npm run deploy:vercel
+# hoặc wrapper legacy-compatible
 ./quick-deploy.sh
-# hoặc
-./scripts/deploy/quick-deploy.sh
 ```
 
-Script này sẽ:
+Flow khuyến nghị:
 
-1. ✅ Commit tất cả thay đổi
-2. ✅ Push lên GitHub
-3. ✅ Build frontend
-4. ✅ Deploy lên Vercel
-5. ✅ Deploy lên Railway
+1. ✅ Validate + build (`deploy:prep`)
+2. ✅ Deploy frontend (`deploy:vercel`)
+3. ℹ️ Backend deploy theo platform riêng (Railway/manual pipeline)
 
 ---
 
@@ -119,6 +120,8 @@ Cần cấu hình trong Railway Dashboard:
 
 ## 📊 Commit Gần Nhất
 
+> Mục này là snapshot lịch sử, có thể không còn phản ánh commit hiện tại.
+
 - **Commit Hash**: `90f7795c7aa9fc83b39daf267b429948c8e34d85`
 - **Message**: `🔧 Update: Auto commit and deploy`
 - **Author**: Phuc Cao <phuccao@mia.vn>
@@ -140,6 +143,6 @@ Cần cấu hình trong Railway Dashboard:
 ## ⚠️ Lưu Ý
 
 1. **Vercel Project**: Đã được link và cấu hình đầy đủ
-2. **Railway Project**: Chưa được link trong local, cần chạy `railway link`
-3. **Log Files**: File `logs/ai-service.log` đang được commit vào git - nên thêm vào `.gitignore`
-4. **Environment Variables**: Cần kiểm tra và cập nhật trong cả Vercel và Railway dashboards
+2. **Railway Project**: Cần xác minh `railway link` theo môi trường máy hiện tại
+3. **Environment Variables**: Cần kiểm tra và cập nhật trong cả Vercel và Railway dashboards
+4. **Script standards**: Root `*.sh` nên chỉ là wrapper, xem `SHELL_SCRIPT_STANDARDS.md`

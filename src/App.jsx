@@ -88,18 +88,6 @@ const SecurityDashboard = lazy(
   () => import(/* webpackChunkName: "security" */ "./components/security/SecurityDashboard")
 );
 
-// Preload critical components
-const preloadComponent = (componentLoader) => {
-  componentLoader();
-};
-
-// Preload dashboard on app start
-if (typeof window !== "undefined") {
-  setTimeout(() => {
-    preloadComponent(() => import("./components/Dashboard/LiveDashboard"));
-  }, 2000);
-}
-
 // Main App component with Router
 function App() {
   return (

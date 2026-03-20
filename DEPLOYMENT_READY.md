@@ -1,7 +1,7 @@
 # 🚀 Deployment Ready - React OAS Integration v4.0
 
 **Status:** ✅ **READY FOR PRODUCTION DEPLOYMENT**
-**Date:** February 12, 2026
+**Date:** March 18, 2026
 **Build Size:** 2.8 MB (gzipped)
 **Performance Score:** 59/100
 
@@ -50,9 +50,8 @@
 **One-command deployment:**
 
 ```bash
+npm run deploy:prep
 npm run deploy:vercel
-# or
-vercel --prod
 ```
 
 **Setup (first time):**
@@ -79,7 +78,7 @@ git push origin main
 
 ```bash
 npm run deploy:build
-# Creates ./build/ directory (2.8 MB gzipped)
+# Creates ./build/ directory
 ```
 
 **Serve production build:**
@@ -128,6 +127,9 @@ scp -r build/ user@server:/var/www/react-oas/
 ## 📋 Available Deployment Scripts
 
 ```bash
+# Canonical pre-deploy pipeline
+npm run deploy:prep
+
 # Build production (no source maps)
 npm run deploy:build
 
@@ -139,6 +141,9 @@ npm run deploy:vercel
 
 # Verify setup before deploying
 npm run verify:setup
+
+# Guard root shell wrappers
+npm run scripts:guard-wrappers
 
 # Performance audit before deploy
 npm run perf:lighthouse
@@ -160,7 +165,8 @@ GENERATE_SOURCEMAP=false
 ```env
 REACT_APP_API_URL=https://api.example.com
 REACT_APP_AI_SERVICE_URL=https://ai.example.com
-GOOGLE_SHEETS_ID=your_sheet_id
+GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 ```
 
 ### Vercel Environment Setup
@@ -313,6 +319,6 @@ Before clicking "Deploy":
 
 For detailed platform-specific guides, see:
 
-- [Vercel Deployment](./docs/VERCEL_DEPLOYMENT.md)
+- [Vercel Deployment](./VERCEL_DEPLOYMENT_GUIDE.md)
 - [Docker Deployment](./docs/DOCKER_DEPLOYMENT.md)
 - [Manual Server Deployment](./docs/SERVER_DEPLOYMENT.md)
