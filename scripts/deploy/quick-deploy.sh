@@ -195,7 +195,14 @@ if command -v railway &> /dev/null; then
     else
         echo "$RAILWAY_OUTPUT" | tail -20
         print_warning "Railway deploy thất bại, kiểm tra logs trên"
-        print "Lưu ý: Nếu có nhiều services, chỉ định: railway up --service backend"
+        if echo "$RAILWAY_OUTPUT" | grep -qi 'No linked project'; then
+            echo -e "${CYAN}🚀${NC} → Nguyên nhân: chưa railway link trong thư mục backend."
+            print "  1. railway login"
+            print "  2. cd backend && railway link   (chọn đúng project/service)"
+            print "  3. railway up   hoặc chạy lại quick-deploy"
+            print "  Hoặc deploy từ Railway Dashboard (GitHub connect) — không cần CLI."
+        fi
+        print "Lưu ý: Nếu có nhiều services, chỉ định: railway up --service <tên-service>"
     fi
     cd ..
 else

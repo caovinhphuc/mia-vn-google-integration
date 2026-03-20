@@ -99,8 +99,10 @@ REACT_APP_ENABLE_ANALYTICS=true
 1. **Click "Deploy"**
 2. **Chờ build hoàn tất** (2-5 phút tùy theo kích thước project)
 3. **Nhận Deployment URL**:
-   - Production URL: `https://react-oas-integration-v4-[hash].vercel.app`
+   - **Domain production (alias):** `https://react-oas-integration-v4-0.vercel.app` (cập nhật theo project thật trong Vercel → Domains)
+   - **URL từng lần deploy:** dạng `https://react-oas-integration-v4-0-<slug>.vercel.app` (xem tab Deployments)
    - Hoặc custom domain nếu đã cấu hình
+   - Đồng bộ link lên GitHub: [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md) mục _Cập nhật hiển thị trên GitHub_
 4. **Xem Deployment**:
    - Click vào deployment để xem logs
    - Kiểm tra build logs nếu có lỗi
