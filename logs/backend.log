@@ -1,26 +1,14 @@
 
-> react-oas-integration-backend@1.0.0 start
-> node src/server.js
+> react-oas-integration-backend@1.0.0 dev
+> nodemon src/server.js
 
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node src/server.js`[39m
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-::1 - - [20/Mar/2026:13:13:53 +0000] "GET /manifest.json HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:13:54 +0000] "GET /manifest.json HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:13:54 +0000] "GET /static/js/vendors-node_modules_antd_es_spin_index_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:13:54 +0000] "GET /static/js/vendors-node_modules_antd_es_dropdown_dropdown_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:13:54 +0000] "GET /static/js/vendors-node_modules_ant-design_icons_es_components_AntdIcon_js.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:13:54 +0000] "GET /static/js/layout.chunk.js HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:14:04 +0000] "POST /api/error-report HTTP/1.1" 404 156 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-::1 - - [20/Mar/2026:13:14:04 +0000] "GET / HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:14:07 +0000] "GET / HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
-::1 - - [20/Mar/2026:13:14:15 +0000] "GET / HTTP/1.1" 404 266 "http://localhost:3001/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-Error: ENOENT: no such file or directory, stat '/Users/phuccao/Projects/personal/react-oas-inntegration-x/backend/build/index.html'
+SIGTERM received, shutting down gracefully
+Process terminated

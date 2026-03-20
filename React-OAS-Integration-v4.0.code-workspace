@@ -1,8 +1,7 @@
 {
   "folders": [
     {
-      "name": "react-oas-inntegration-x",
-      "path": "."
+      "path": "../../work/client-a/react-oas-integration"
     }
   ],
   "settings": {
@@ -65,11 +64,15 @@
     "terminal.integrated.defaultProfile.osx": "zsh",
     "json.schemas": [
       {
-        "fileMatch": ["/*.code-workspace"],
+        "fileMatch": [
+          "/*.code-workspace"
+        ],
         "url": "https://raw.githubusercontent.com/microsoft/vscode/main/extensions/configuration-editing/schemas/workspaceConfig.schema.json"
       }
     ],
-    "cSpell.words": ["inntegration"],
+    "cSpell.words": [
+      "inntegration"
+    ],
     "cSpell.enabled": false,
     "[markdown]": {
       "cSpell.enabled": false
@@ -103,7 +106,10 @@
         "type": "node",
         "request": "launch",
         "runtimeExecutable": "npm",
-        "runtimeArgs": ["run", "start"],
+        "runtimeArgs": [
+          "run",
+          "start"
+        ],
         "cwd": "${workspaceFolder}",
         "console": "integratedTerminal"
       },
@@ -112,7 +118,10 @@
         "type": "node",
         "request": "launch",
         "runtimeExecutable": "npm",
-        "runtimeArgs": ["run", "backend"],
+        "runtimeArgs": [
+          "run",
+          "backend"
+        ],
         "cwd": "${workspaceFolder}",
         "console": "integratedTerminal"
       },
@@ -121,7 +130,10 @@
         "type": "node",
         "request": "launch",
         "runtimeExecutable": "npm",
-        "runtimeArgs": ["run", "dev"],
+        "runtimeArgs": [
+          "run",
+          "dev"
+        ],
         "cwd": "${workspaceFolder}",
         "console": "integratedTerminal"
       }
