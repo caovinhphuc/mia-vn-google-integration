@@ -28,7 +28,29 @@ export function register(config) {
           );
         });
       } else {
-        registerValidSW(swUrl, config);
+        // Production: chỉ đăng ký khi server thật sự trả JS (tránh HTML SPA → SecurityError MIME)
+        fetch(swUrl, { headers: { "Service-Worker": "script" } })
+          .then((response) => {
+            const contentType = response.headers.get("content-type") || "";
+            const okJs =
+              response.ok &&
+              (contentType.includes("javascript") || contentType.includes("ecmascript"));
+            if (!okJs) {
+              console.info(
+                "[PWA] Bỏ qua service worker: không có script hợp lệ tại",
+                swUrl,
+                "(MIME:",
+                contentType || "unknown",
+                "status:",
+                `${response.status})`
+              );
+              return;
+            }
+            registerValidSW(swUrl, config);
+          })
+          .catch(() => {
+            console.info("[PWA] Bỏ qua service worker: không tải được", swUrl);
+          });
       }
     });
   }

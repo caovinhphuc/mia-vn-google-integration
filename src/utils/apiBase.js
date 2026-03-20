@@ -39,3 +39,31 @@ export function getAiServiceBaseUrl() {
       "http://localhost:8000"
   );
 }
+
+/**
+ * Base cho route backend `/sheets/*`, `/drive/*` — luôn một segment `/api` cuối.
+ * Tránh `.../api/api/...` khi env đã có `/api` mà script/tool lại nối thêm.
+ */
+export function getGoogleProxyApiBase() {
+  const raw =
+    process.env.REACT_APP_API_BASE_URL ||
+    process.env.VITE_API_BASE_URL ||
+    process.env.REACT_APP_API_URL ||
+    process.env.VITE_API_URL;
+  if (!raw) return "http://localhost:3001/api";
+
+  let s = String(raw)
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .replace(/\/+$/, "");
+
+  const isAbsoluteHttp = /^https?:\/\//i.test(s);
+  const isRootRelative = s.startsWith("/");
+  if (!isAbsoluteHttp && !isRootRelative) return "http://localhost:3001/api";
+
+  while (s.includes("/api/api")) {
+    s = s.replace(/\/api\/api/g, "/api");
+  }
+
+  return s.endsWith("/api") ? s : `${s}/api`;
+}

@@ -4,29 +4,9 @@
  */
 
 import axios from "axios";
+import { getGoogleProxyApiBase } from "../utils/apiBase";
 
-/** Base URL cho route /sheets/* — luôn kết thúc bằng /api */
-const resolveSheetsApiBase = () => {
-  const raw =
-    process.env.REACT_APP_API_BASE_URL ||
-    process.env.VITE_API_BASE_URL ||
-    process.env.REACT_APP_API_URL ||
-    process.env.VITE_API_URL;
-  if (!raw) return "http://localhost:3001/api";
-  const s = String(raw)
-    .trim()
-    .replace(/^["']|["']$/g, "")
-    .replace(/\/$/, "");
-
-  // Reject obvious invalid values from misconfigured env pulls (e.g. "n")
-  const isAbsoluteHttp = /^https?:\/\//i.test(s);
-  const isRootRelative = s.startsWith("/");
-  if (!isAbsoluteHttp && !isRootRelative) return "http://localhost:3001/api";
-
-  return s.endsWith("/api") ? s : `${s}/api`;
-};
-
-const API_BASE_URL = resolveSheetsApiBase();
+const API_BASE_URL = getGoogleProxyApiBase();
 
 /**
  * Nhận diện lỗi mạng (backend down, CORS, timeout) và trả thông báo thân thiện.
