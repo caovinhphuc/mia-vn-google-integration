@@ -10,5 +10,21 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-SIGTERM received, shutting down gracefully
-Process terminated
+::1 - - [20/Mar/2026:16:18:36 +0000] "GET /health HTTP/1.1" 200 104 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:36 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:36 +0000] "GET /health HTTP/1.1" 200 104 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:36 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:37 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:37 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:37 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/dashboard HTTP/1.1" 200 225 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/inventory HTTP/1.1" 200 182 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/inventory HTTP/1.1" 200 182 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 200 201 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/sales?timeframe=30d HTTP/1.1" 200 201 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 200 216 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/customers?timeframe=30d HTTP/1.1" 200 216 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/retail/dashboard HTTP/1.1" 200 225 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+✅ Google Sheets API initialized with: /Users/phuccao/Projects/personal/react-oas-inntegration-x/config/google-credentials.json
+::1 - - [20/Mar/2026:16:18:39 +0000] "GET /api/auth/verify HTTP/1.1" 200 58 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"

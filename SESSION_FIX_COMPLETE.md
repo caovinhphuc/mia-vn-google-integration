@@ -3,6 +3,7 @@
 ## 📋 Vấn đề ban đầu
 
 **Triệu chứng:**
+
 ```
 ✅ User logged in: admin@mia.vn
 ❌ GET /api/auth/verify HTTP/1.1" 401 (Unauthorized)
@@ -13,6 +14,7 @@ Người dùng đăng nhập thành công nhưng **ngay lập tức bị logout*
 ## 🔍 Phân tích root cause
 
 ### Backend Response (Login)
+
 ```json
 {
   "success": true,
@@ -27,23 +29,27 @@ Người dùng đăng nhập thành công nhưng **ngay lập tức bị logout*
 ```
 
 ### Frontend Code (Trước khi fix)
+
 ```javascript
 // ❌ SAI: Lưu session_id thay vì token
 const token = sessionData.session_id || `token_${Date.now()}`;
-setAuthToken(token);  // Lưu "session_123..." vào localStorage
+setAuthToken(token); // Lưu "session_123..." vào localStorage
 ```
 
 ### Backend Verify Logic
+
 ```javascript
 // Kiểm tra token format
-if (token.startsWith("token_")) {  // ✅ Yêu cầu bắt đầu bằng "token_"
+if (token.startsWith("token_")) {
+  // ✅ Yêu cầu bắt đầu bằng "token_"
   return { success: true, valid: true };
 } else {
-  return { success: false, error: "Token không hợp lệ" };  // ❌ FAIL
+  return { success: false, error: "Token không hợp lệ" }; // ❌ FAIL
 }
 ```
 
 ### Kết quả
+
 ```
 Frontend gửi: "session_1702252800000_xyz"
 Backend expect: "token_..."
@@ -55,18 +61,21 @@ Result: 401 Unauthorized ❌
 ### Fix trong `src/services/securityService.js`
 
 **Trước:**
+
 ```javascript
 // Generate token from session_id if no token provided
 const token = sessionData.session_id || `token_${Date.now()}`;
 ```
 
 **Sau:**
+
 ```javascript
 // Use token from backend response (NOT session_id)
 const token = data.token || `token_${Date.now()}`;
 ```
 
 ### Giải thích
+
 - Backend trả về **2 giá trị riêng biệt**: `token` và `session.session_id`
 - `token`: Dùng cho **authentication** (Bearer token)
 - `session_id`: Dùng cho **session tracking** (optional)
@@ -75,6 +84,7 @@ const token = data.token || `token_${Date.now()}`;
 ## 🧪 Test kết quả
 
 ### Trước khi fix
+
 ```bash
 POST /api/auth/login → 200 ✅
 GET /api/auth/verify → 401 ❌
@@ -82,6 +92,7 @@ POST /api/auth/logout → 200 (forced logout)
 ```
 
 ### Sau khi fix
+
 ```bash
 POST /api/auth/login → 200 ✅
 GET /api/auth/verify → 200 ✅
@@ -91,6 +102,7 @@ GET /api/auth/verify → 200 ✅
 ## 📝 Chi tiết kỹ thuật
 
 ### Token Flow (Đúng)
+
 ```
 1. User login
    ↓
@@ -108,6 +120,7 @@ GET /api/auth/verify → 200 ✅
 ```
 
 ### Token Storage
+
 ```javascript
 // localStorage
 {
@@ -118,6 +131,7 @@ GET /api/auth/verify → 200 ✅
 ```
 
 ### HTTP Headers
+
 ```http
 Authorization: Bearer token_1702252800000_abc123
 ```
@@ -134,6 +148,7 @@ Authorization: Bearer token_1702252800000_abc123
 ## 🚀 Hướng dẫn sử dụng
 
 ### Login
+
 ```bash
 # Truy cập
 http://localhost:3000/login
@@ -144,13 +159,15 @@ Password: admin123
 ```
 
 ### Kiểm tra token
+
 ```javascript
 // Browser console
-localStorage.getItem('auth_token')
+localStorage.getItem("auth_token");
 // Should return: "token_1702252800000_abc123"
 ```
 
 ### Test API với token
+
 ```bash
 # Get token from localStorage
 TOKEN=$(node -e "console.log(localStorage.getItem('auth_token'))")
@@ -166,16 +183,20 @@ curl -H "Authorization: Bearer $TOKEN" \
 ## ⚠️ Lưu ý quan trọng
 
 ### 1. Token vs Session ID
+
 - **Token**: Dùng cho authentication (Bearer token)
 - **Session ID**: Dùng cho session tracking (optional)
 - **Không được** nhầm lẫn 2 giá trị này!
 
 ### 2. Token Format
+
 Backend yêu cầu token phải:
+
 - Bắt đầu bằng `"token_"`
 - Format: `token_${timestamp}_${random}`
 
 ### 3. Token Expiry
+
 - Token hiện tại **không có expiry** (mock authentication)
 - Trong production, cần implement JWT với expiry time
 - Session có expiry: 24 giờ (trong response)
@@ -183,16 +204,16 @@ Backend yêu cầu token phải:
 ## 🔮 Cải tiến tương lai
 
 ### 1. JWT Implementation
+
 ```javascript
 // Thay vì mock token
-const token = jwt.sign(
-  { userId: user.id, email: user.email },
-  process.env.JWT_SECRET,
-  { expiresIn: '24h' }
-);
+const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET, {
+  expiresIn: "24h",
+});
 ```
 
 ### 2. Token Refresh
+
 ```javascript
 // Implement refresh token
 {
@@ -202,6 +223,7 @@ const token = jwt.sign(
 ```
 
 ### 3. Session Storage
+
 ```javascript
 // Store sessions in database/Redis
 const sessions = new Map(); // Currently in-memory
@@ -211,11 +233,13 @@ sessions.set(token, { userId, expiresAt, ... });
 ## 📊 Impact Analysis
 
 ### Before Fix
+
 - Login success rate: 100%
 - Session persistence: 0% ❌
 - User experience: Very poor (immediate logout)
 
 ### After Fix
+
 - Login success rate: 100%
 - Session persistence: 100% ✅
 - User experience: Excellent (smooth login flow)
@@ -225,4 +249,3 @@ sessions.set(token, { userId, expiresAt, ... });
 **Ngày fix:** 2025-12-11
 **Status:** ✅ RESOLVED
 **Impact:** Critical bug fix - Authentication now works correctly
-
