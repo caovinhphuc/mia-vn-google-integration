@@ -1,7 +1,7 @@
 # 📚 HTML Documentation Guide
 
 > **React OAS Integration v4.0**  
-> **Ngày cập nhật**: 2025-01-27
+> **Ngày cập nhật**: 2026-03-20
 
 ---
 
@@ -22,8 +22,8 @@
 
 ### 3. NPM Scripts ✅
 
-- ✅ `npm run docs:generate` - Generate docs.html
-- ✅ `npm run docs:watch` - Watch mode (auto-update)
+- ✅ `npm run docs:generate` — ghi `docs.html` (root)
+- ✅ `npm run docs:watch` — gọi `auto-update-docs.sh true` (cần **`fswatch`** trên macOS: `brew install fswatch`)
 
 ---
 
@@ -37,11 +37,32 @@ npm run docs:generate
 # hoặc
 node scripts/utils/generate-complete-docs.js
 
-# Watch mode (tự động cập nhật khi có thay đổi)
+# Watch mode — xem mục "Auto (watch)" bên dưới
 npm run docs:watch
 # hoặc
 ./scripts/utils/auto-update-docs.sh true
 ```
+
+### Auto (watch) — cần làm gì?
+
+1. **`package.json` có script** (đoạn `"docs:watch": "bash scripts/utils/auto-update-docs.sh true"`). Nếu `npm run docs:watch` báo _Missing script_ → file chưa lưu / chưa pull đúng branch, hoặc không đứng ở **root repo** (nơi có `package.json`).
+
+2. **Công cụ `fswatch`** (script dùng lệnh này để theo dõi file `*.md`):
+   - **macOS:** `brew install fswatch`
+   - Chưa cài → vòng lặp watch sẽ lỗi _command not found_ sau lần generate đầu tiên.
+
+3. **Cách chạy:** mở một terminal, từ root:
+
+   ```bash
+   npm run docs:watch
+   ```
+
+   Giữ terminal đó; mỗi khi lưu file `.md` trong repo, `docs.html` được generate lại. Dừng: `Ctrl+C`.
+
+4. **Không dùng watch:** sau mỗi lần sửa markdown, chạy một lần:
+   ```bash
+   npm run docs:generate
+   ```
 
 ### Xem Documentation
 
@@ -105,8 +126,8 @@ Documentation được generate từ các file markdown:
 
 ### 4. Auto-Update ✅
 
-- Tự động generate từ markdown
-- Watch mode để auto-update
+- Generate từ markdown: `npm run docs:generate`
+- Watch: `npm run docs:watch` + **`fswatch`** (xem mục **Auto (watch)** ở trên)
 - Timestamp hiển thị last updated
 
 ---

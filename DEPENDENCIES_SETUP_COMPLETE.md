@@ -28,13 +28,12 @@
 ✅ terser-webpack-plugin     # Cho webpack.config.js
 ✅ webpack-bundle-analyzer   # Cho webpack.config.js
 
-# Development Tools (Code Quality)
-✅ husky@^9.0.11            # Git hooks manager
-✅ lint-staged@^15.2.2      # Run linters on staged files
-✅ prettier@^3.2.5          # Code formatter
-✅ eslint-plugin-prettier@^5.1.3
-✅ eslint-config-prettier@^9.1.0
-✅ @types/node@^20.11.30    # TypeScript definitions
+# Development Tools (Code Quality) — phiên bản chính xác: package.json + npm ls
+✅ husky (v9+)             # `prepare` → `husky` (không dùng `husky install`)
+✅ lint-staged              # Pre-commit: `.husky/pre-commit` → `npx lint-staged`
+✅ prettier (~3.8.x)       # `npm run format` | `npm run prettier` | `prettier:check`
+✅ eslint-plugin-prettier, eslint-config-prettier
+✅ typescript (dev)         # `npm run type:check` — root không khai báo @types/node trực tiếp
 
 # Webpack Polyfills & Loaders (cho webpack.config.js)
 ✅ stream-browserify
@@ -197,7 +196,6 @@ Các dependencies sau đã được cài đặt để hỗ trợ **webpack.confi
 1. ✅ **Webpack polyfills đã được cài đặt** - Sẵn sàng cho custom webpack nếu cần
 
 2. **Update dependencies** (khi có bản mới):
-
    - `react-scripts` - chờ bản update
    - `mjml` - tìm alternative hoặc disable
    - Các packages khác - update thường xuyên
@@ -220,6 +218,7 @@ Các dependencies sau đã được cài đặt để hỗ trợ **webpack.confi
 | Security Vulnerabilities | 68     | 99    | ⚠️ Monitor   |
 
 **Lưu ý**:
+
 - Security vulnerabilities tăng vì đã cài thêm các packages (mjml, handlebars, etc.), nhưng không ảnh hưởng production.
 - Dev dependencies đã được optimize với thêm code quality tools (Husky, lint-staged, Prettier).
 
@@ -240,19 +239,22 @@ Các dependencies sau đã được cài đặt để hỗ trợ **webpack.confi
 ## 🔄 Recent Updates (January 21, 2026)
 
 ### Development Tools
+
 - ✅ Installed Husky (v9.0.11) for git hooks
-- ✅ Installed lint-staged (v15.2.2) for staged file linting
-- ✅ Installed Prettier (v3.2.5) and ESLint integration
+- ✅ lint-staged — staged file linting (phiên bản: `package.json`)
+- ✅ Prettier + ESLint integration (phiên bản: `package.json`; `npm run prettier` = `format`)
 - ✅ Configured pre-commit hooks to auto-format and lint code
 - ✅ Fixed prettier EACCES error by using `npx prettier`
 
 ### Git Configuration
+
 - ✅ Configured git remote origin: `https://github.com/caovinhphuc/React-OAS-Integration-v4.0.git`
 - ✅ Successfully resolved merge conflicts
 - ✅ Tested and verified pre-commit hooks
 - ✅ Successfully pushed to GitHub
 
 ### Configuration Files
+
 - ✅ `.lintstagedrc.json` - lint-staged configuration
 - ✅ `.prettierrc.json` - Prettier formatting rules
 - ✅ `.prettierignore` - Prettier ignore patterns

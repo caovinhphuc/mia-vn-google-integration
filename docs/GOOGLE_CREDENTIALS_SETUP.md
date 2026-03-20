@@ -6,10 +6,10 @@ Hướng dẫn cấu hình để Backend đọc dữ liệu thật từ Google D
 
 Backend cần **Google Service Account credentials** để gọi Google APIs. Nếu không có, sẽ dùng **mock data**.
 
-| Thành phần      | Credentials | Fallback   |
-|-----------------|-------------|------------|
-| Google Sheets   | config/google-credentials.json | Mock data |
-| Google Drive    | Cùng file   | Mock data  |
+| Thành phần    | Credentials                    | Fallback  |
+| ------------- | ------------------------------ | --------- |
+| Google Sheets | config/google-credentials.json | Mock data |
+| Google Drive  | Cùng file                      | Mock data |
 
 ## 2. File credentials
 
@@ -46,9 +46,15 @@ GOOGLE_APPLICATION_CREDENTIALS=./config/google-credentials.json
 # https://drive.google.com/drive/folders/1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
 GOOGLE_DRIVE_FOLDER_ID=1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
 
-# Google Sheets (optional - có default)
-GOOGLE_SHEETS_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+# Spreadsheet ID — backend đọc (ưu tiên):
+GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+# Legacy / frontend (googleConfig.js) — nên trùng ID với trên:
+# GOOGLE_SHEETS_ID=...
+# REACT_APP_GOOGLE_SHEET_ID=...
 ```
+
+Chi tiết biến `.env` root vs backend: [`ENV_SETUP.md`](../ENV_SETUP.md).
 
 ## 4. Backend load .env
 

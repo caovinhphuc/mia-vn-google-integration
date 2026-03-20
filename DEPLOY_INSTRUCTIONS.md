@@ -105,11 +105,10 @@ Sau khi đã kết nối repository trong Vercel Dashboard:
    - Mỗi push lên `main` branch → Auto deploy production
    - Mỗi push lên branch khác → Auto deploy preview
 
-**Note**: Pre-commit hooks đã được cấu hình với Husky và lint-staged để tự động:
+**Note**: Husky 9 (`prepare` → `husky`). File **`.husky/pre-commit`** chạy **`npx lint-staged`** trên file đã `git add`. Tài liệu đầy đủ: [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md).
 
-- ✅ Chạy ESLint và auto-fix lỗi
-- ✅ Format code với Prettier
-- ✅ Đảm bảo code quality trước khi commit
+- ESLint `--fix` + Prettier (`npx prettier --write`) theo `.lintstagedrc.json`
+- Bỏ qua hook khi cần: `git commit -n` hoặc `HUSKY=0`
 
 ---
 

@@ -629,7 +629,7 @@
 <h3>📋 Yêu cầu hệ thống</h3>
 <table><tr><td>Component</td><td>Version</td><td>Ghi chú</td></tr>
 <tr><td>------------</td><td>-------</td><td>-----------------------------------</td></tr>
-<tr><td><strong>Node.js</strong></td><td>18+</td><td>Runtime cho Frontend & Backend</td></tr>
+<tr><td><strong>Node.js</strong></td><td><strong>20</strong> (<code>.nvmrc</code>)</td><td>Runtime cho Frontend & Backend; có thể thử 18 LTS</td></tr>
 <tr><td><strong>Python</strong></td><td>3.9+</td><td>Runtime cho Automation & AI Service</td></tr>
 <tr><td><strong>npm/yarn</strong></td><td>Latest</td><td>Package manager</td></tr>
 <tr><td><strong>Git</strong></td><td>Latest</td><td>Version control</td></tr>
@@ -718,7 +718,7 @@ python main.py
 <tr><td>💬 <strong>NLP Dashboard</strong></td><td>✅</td><td>Chat, Voice, Search, Summaries</td></tr>
 <tr><td>🤖 <strong>Smart Automation</strong></td><td>✅</td><td>AI-powered automation</td></tr>
 <tr><td>📈 <strong>Advanced Analytics</strong></td><td>✅</td><td>Phân tích nâng cao với biểu đồ</td></tr></table>
-| 🔔 <strong>Alerts Management</strong>   </p>
+| 🔔 </p>
 <p>... (truncated, see full file for complete content)</p>
                 </div>
                 <div class="section-footer">
@@ -986,7 +986,7 @@ npm run serve:deployed
 <pre><code class="language-bash"># Add và commit changes
 git add .
 git commit -m &quot;Your commit message&quot;
-<h1>Pre-commit hook sẽ tự động chạy lint-staged</h1>
+<h1>Pre-commit: .husky/pre-commit → npx lint-staged (cần git add). Bỏ qua: git commit -n</h1>
 <h1>Pull latest changes</h1>
 git pull origin main --no-rebase
 <h1>Resolve conflicts nếu có, rồi commit</h1>
@@ -994,7 +994,7 @@ git add .
 git commit -m &quot;Merge: Resolve conflicts&quot;
 <h1>Push to GitHub</h1>
 git push origin main</code></pre>
-<p><strong>Note:</strong> Pre-commit hook đã được cấu hình với Husky và lint-staged để tự động format và lint code.</p>
+<p><strong>Note:</strong> Husky 9 (<code>npm run prepare</code> → <code>husky</code>). Hook <code>.husky/pre-commit</code> gọi <code>npx lint-staged</code>. Chi tiết: <a href="./DEVELOPMENT_TOOLS_SETUP.md" target="_blank">DEVELOPMENT_TOOLS_SETUP.md</a>.</p>
 <hr>
 <h3><code>serve-build.sh</code> - Serve Production Build</h3>
 <p><strong>Mục đích:</strong> Serve production build locally</p>
@@ -1096,9 +1096,11 @@ git push origin main</code></pre>
 REACT_APP_API_URL=http://localhost:3001
 REACT_APP_API_BASE_URL=http://localhost:3001/api
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
-GOOGLE_SHEETS_ID=your_sheet_id
+GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 GOOGLE_DRIVE_FOLDER_ID=your_folder_id</code></pre>
-<h3>Backend (backend/.env)</h3>
+<p>Backend đọc <code>.env</code> <strong>ở root repo</strong> (không bắt buộc <code>backend/.env</code>). Xem <a href="./ENV_SETUP.md" target="_blank">ENV_SETUP.md</a>.</p>
+<h3>Backend (tuỳ chọn)</h3>
 <pre><code class="language-bash">PORT=3001
 NODE_ENV=development</code></pre>
 <hr>
@@ -1116,7 +1118,7 @@ NODE_ENV=development</code></pre>
 <li>Commit changes:</li>
 <p>   <pre><code class="language-bash">git add .
    git commit -m &quot;message&quot;
-   # Pre-commit hook tự động chạy lint-staged</code></pre></p>
+   # Pre-commit: npx lint-staged (file đã stage)</code></pre></p>
 <li>Pull latest:</li>
 <p>   <pre><code class="language-bash">git pull origin main --no-rebase</code></pre></p>
 <li>Push to GitHub:</li>
@@ -1865,7 +1867,8 @@ node scripts/config/env.config.js</code></pre>
                 <div class="section-content">
                     <h1>📊📦 Hướng Dẫn Quản Lý Reports & Backups</h1>
 <p>> <strong>React OAS Integration v4.0</strong>
-> <strong>Ngày cập nhật</strong>: 2025-01-27</p>
+> <strong>Ngày cập nhật</strong>: 2026-03-20</p>
+<p>> <strong>Git:</strong> <code>lighthouse-reports/</code>, <code>build-stats/<em>.json</code>, <code>bundle-report.json</code>, <code>performance-budget-report.json</code>, <code>health-report-</em>.json</code> (root) được liệt kê trong <strong><code>.gitignore</code></strong> — không đưa vào repo; xem <a href="Document/DEV_SCRIPTS_NOTES.md" target="_blank"><code>Document/DEV_SCRIPTS_NOTES.md</code></a>.</p>
 <hr>
 <h2>✅ ĐÃ HOÀN THÀNH</h2>
 <h3>1. Cấu trúc thư mục mới ✅</h3>
@@ -2716,7 +2719,7 @@ import Card from &quot;./components/ui/Card&quot;;</code></pre></p>
             </div>
 
             <div class="last-updated">
-                <p><strong>📅 Last Updated:</strong> lúc 13:13 20 tháng 3, 2026</p>
+                <p><strong>📅 Last Updated:</strong> lúc 14:18 20 tháng 3, 2026</p>
                 <p>🔄 <strong>Auto-generated</strong> from Markdown documentation files</p>
                 <p>📝 <strong>Regenerate:</strong> <code>node scripts/utils/generate-complete-docs.js</code></p>
             </div>

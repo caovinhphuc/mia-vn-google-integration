@@ -2,6 +2,8 @@
 
 > **Quản lý tất cả các reports và test results**
 
+> **Git:** Nhiều artefact nặng (Lighthouse HTML/JSON tại `**/lighthouse-reports/`, `build-stats/*.json`, `bundle-report.json`, `performance-budget-report.json`, `health-report-*.json` ở root) nằm trong **`.gitignore`** — không commit; tạo lại bằng script (`perf:lighthouse`, `bundle:stats`, …). Chi tiết: [`Document/DEV_SCRIPTS_NOTES.md`](../Document/DEV_SCRIPTS_NOTES.md).
+
 ---
 
 ## 📁 Cấu trúc

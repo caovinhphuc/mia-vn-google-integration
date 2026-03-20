@@ -250,12 +250,11 @@ describe('ComponentName', () => {
 
 ### 2. Pre-commit Hooks
 
-```bash
-# Setup Husky + lint-staged
-npm install --save-dev husky lint-staged
+Repo đã có Husky 9 + lint-staged — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md).
 
-# Run tests before commit
-npx husky add .husky/pre-commit "npm test -- --watchAll=false"
+```bash
+npm install   # chạy prepare → husky
+# .husky/pre-commit → npx lint-staged (ESLint + Prettier trên file đã git add)
 ```
 
 ### 3. CI/CD Integration

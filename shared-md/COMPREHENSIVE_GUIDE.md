@@ -81,7 +81,8 @@ cp automation/config/google-credentials.json.example automation/config/google-cr
 ```env
 # Google Authentication
 REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
-REACT_APP_GOOGLE_SHEETS_ID=your-spreadsheet-id
+REACT_APP_GOOGLE_SHEET_ID=your-spreadsheet-id
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
 
 # API Configuration
 REACT_APP_API_BASE_URL=http://localhost:3001
@@ -96,11 +97,14 @@ REACT_APP_DEMO_MODE=false
 
 #### Backend (.env)
 
+> Thực tế repo load **một file `.env` ở root** cho `backend/` — xem `ENV_SETUP.md`.
+
 ```env
 # Server Configuration
 PORT=3001
 NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key
+GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
 JWT_EXPIRE=7d
 
 # Database
@@ -117,8 +121,9 @@ RATE_LIMIT_MAX=100
 #### Automation (.env)
 
 ```env
-# Google Sheets API
-GOOGLE_SHEETS_ID=your-spreadsheet-id
+# Google Sheets API (automation có .env riêng; đồng bộ ID với root nếu cùng spreadsheet)
+GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
+# Legacy: GOOGLE_SHEETS_ID=...
 GOOGLE_CREDENTIALS_PATH=./config/google-credentials.json
 
 # Notification Services
@@ -258,7 +263,7 @@ react-oas-integration-project/
 
 ```yaml
 # docker-compose.yml
-version: '3.8'
+version: "3.8"
 services:
   frontend:
     build: .
@@ -402,29 +407,29 @@ server {
 module.exports = {
   apps: [
     {
-      name: 'react-oas-frontend',
-      script: 'serve',
-      args: '-s build -l 3000',
-      instances: 'max',
-      exec_mode: 'cluster'
+      name: "react-oas-frontend",
+      script: "serve",
+      args: "-s build -l 3000",
+      instances: "max",
+      exec_mode: "cluster",
     },
     {
-      name: 'react-oas-backend',
-      script: './backend/src/server.js',
+      name: "react-oas-backend",
+      script: "./backend/src/server.js",
       instances: 2,
-      exec_mode: 'cluster',
+      exec_mode: "cluster",
       env: {
-        NODE_ENV: 'production',
-        PORT: 3001
-      }
+        NODE_ENV: "production",
+        PORT: 3001,
+      },
     },
     {
-      name: 'react-oas-automation',
-      script: './automation/src/main.py',
-      interpreter: 'python3',
-      instances: 1
-    }
-  ]
+      name: "react-oas-automation",
+      script: "./automation/src/main.py",
+      interpreter: "python3",
+      instances: 1,
+    },
+  ],
 };
 ```
 
@@ -470,15 +475,15 @@ import Button from '@mui/material/Button';
 // Redux Toolkit với RTK Query
 // Automatic caching và background updates
 export const apiSlice = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api',
+    baseUrl: "/api",
     prepareHeaders: (headers, { getState }) => {
-      headers.set('authorization', `Bearer ${getState().auth.token}`);
+      headers.set("authorization", `Bearer ${getState().auth.token}`);
       return headers;
     },
   }),
-  tagTypes: ['User', 'Report', 'Notification'],
+  tagTypes: ["User", "Report", "Notification"],
   endpoints: (builder) => ({
     // Auto-generated hooks: useGetUsersQuery, useUpdateUserMutation
   }),
@@ -502,11 +507,11 @@ const pool = new Pool({
 // Sử dụng indexes, avoid N+1 queries
 
 // 3. Caching với Redis
-const redis = require('redis');
+const redis = require("redis");
 const client = redis.createClient();
 
 // Cache API responses
-app.use('/api/reports', cache('5 minutes'), reportsRouter);
+app.use("/api/reports", cache("5 minutes"), reportsRouter);
 ```
 
 #### API Performance
@@ -516,16 +521,16 @@ app.use('/api/reports', cache('5 minutes'), reportsRouter);
 app.use(compression());
 
 // 2. Rate limiting
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
 });
-app.use('/api/', limiter);
+app.use("/api/", limiter);
 
 // 3. Response caching
-app.use('/api/static-data', (req, res, next) => {
-  res.set('Cache-Control', 'public, max-age=300'); // 5 minutes
+app.use("/api/static-data", (req, res, next) => {
+  res.set("Cache-Control", "public, max-age=300"); // 5 minutes
   next();
 });
 ```
@@ -567,7 +572,7 @@ def process_large_dataset(data):
 
 ```javascript
 // 1. Web Vitals tracking
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
 
 getCLS(console.log);
 getFID(console.log);
@@ -589,18 +594,18 @@ Sentry.init({
 
 ```javascript
 // Google Analytics 4
-import { gtag } from 'ga-gtag';
+import { gtag } from "ga-gtag";
 
-gtag('config', process.env.REACT_APP_GA_MEASUREMENT_ID, {
+gtag("config", process.env.REACT_APP_GA_MEASUREMENT_ID, {
   page_title: document.title,
   page_location: window.location.href,
 });
 
 // Custom events tracking
-gtag('event', 'user_action', {
-  event_category: 'engagement',
-  event_label: 'button_click',
-  value: 1
+gtag("event", "user_action", {
+  event_category: "engagement",
+  event_label: "button_click",
+  value: 1,
 });
 ```
 
@@ -627,12 +632,14 @@ cat automation/config/google-credentials.json | grep client_email
 
 ```javascript
 // Backend CORS configuration
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 ```
 
 #### 3. Build Errors
@@ -650,9 +657,9 @@ npm install --legacy-peer-deps
 
 ```javascript
 // JWT token debugging
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const decoded = jwt.verify(token, process.env.JWT_SECRET);
-console.log('Token payload:', decoded);
+console.log("Token payload:", decoded);
 
 // Google OAuth debugging
 // Kiểm tra client_id và redirect_uri
@@ -689,13 +696,13 @@ df -h
 
 ## 📈 Performance Targets
 
-| Metric | Target | Current |
-|--------|---------|---------|
-| **First Contentful Paint** | < 1.5s | 1.2s |
-| **Largest Contentful Paint** | < 2.5s | 2.1s |
-| **Cumulative Layout Shift** | < 0.1 | 0.05 |
-| **Bundle Size** | < 500KB | 420KB |
-| **API Response** | < 200ms | 150ms |
+| Metric                       | Target  | Current |
+| ---------------------------- | ------- | ------- |
+| **First Contentful Paint**   | < 1.5s  | 1.2s    |
+| **Largest Contentful Paint** | < 2.5s  | 2.1s    |
+| **Cumulative Layout Shift**  | < 0.1   | 0.05    |
+| **Bundle Size**              | < 500KB | 420KB   |
+| **API Response**             | < 200ms | 150ms   |
 
 ---
 
@@ -708,7 +715,7 @@ df -h
 
 ---
 
-*Cập nhật cuối: 2024-01-XX*
-*Version: 2.0.0*
+_Cập nhật cuối: 2024-01-XX_
+_Version: 2.0.0_
 
 **Made with ❤️ by React OAS Integration Team**

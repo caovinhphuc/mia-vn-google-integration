@@ -314,7 +314,7 @@ pip install uvicorn fastapi python-dotenv gspread \
 ---
 
 **Date**: December 25, 2025  
-**Updated**: March 18, 2026 — đồng bộ `package.json`, `.lintstagedrc.json`, `.eslintrc.json`, Husky/lint-staged, VS Code vs Cursor  
+**Updated**: March 20, 2026 — Husky 9 `prepare`, pre-commit bật, alias `npm run prettier`, artefact perf/Lighthouse trong `.gitignore` (xem `Document/DEV_SCRIPTS_NOTES.md`)  
 **Status**: ✅ **Complete**  
 **Tools**: ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (`one_automation_system/venv`)  
 **Môi trường tổng quát:** [ENV_SETUP.md](./ENV_SETUP.md)

@@ -71,6 +71,8 @@
     "health:full": "bash scripts/utils/comprehensive-health-check.sh",
     "health:quick": "bash -c 'curl -fsS http://localhost:3000 >/dev/null && curl -fsS http://localhost:3001/health >/dev/null && { curl -fsS http://localhost:8000/health >/dev/null && echo \"✅ Core + AI (8000)\" || { curl -fsS http://localhost:8001/health >/dev/null && echo \"✅ Core + Automation (8001)\" || echo \"✅ Core OK (AI 8000 & Automation 8001 optional)\"; }; } || (echo \"❌ Core down\" && exit 1)'",
     "verify:setup": "bash scripts/verify-setup.sh",
+    "docs:generate": "node scripts/utils/generate-complete-docs.js",
+    "docs:watch": "bash scripts/utils/auto-update-docs.sh true",
     "bundle:stats": "node scripts/generate-bundle-stats.js",
     "explore:chunk": "node scripts/source-map-explore-chunk.js",
     "check:tools": "npm run tools:check",

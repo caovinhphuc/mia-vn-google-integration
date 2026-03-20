@@ -1,332 +1,217 @@
 # 📚 Documentation Index
 
-## 🎯 Bắt Đầu Từ Đây
-
-### 1. Quick Overview
-
-- **FIX_SUMMARY.txt** - Tóm tắt siêu ngắn (text format)
-- **READ_THIS_FIRST.md** - Hướng dẫn đọc đầu tiên
-
-### 2. Main Documentation
-
-- **START_HERE.md** - Main entry point, hướng dẫn bắt đầu
-- **QUICK_REFERENCE.md** - Quick commands và troubleshooting
+> **Cập nhật:** 2026-03-20 — đồng bộ với file **có thật** trong repo. Một số tên cũ (`START_HERE.md`, `AUTOMATION_SETUP.md`, …) từng xuất hiện trong index trước đây **không còn**; dùng cột “Thay thế” bên dưới.
 
 ---
 
-## 📖 Documentation By Category
+## 🎯 Bắt đầu từ đây
 
-### 🚀 Getting Started (Bắt Đầu)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `FIX_SUMMARY.txt` | Tóm tắt nhanh | Đọc đầu tiên |
-| `READ_THIS_FIRST.md` | Hướng dẫn navigation | Sau FIX_SUMMARY |
-| `START_HERE.md` | Main setup guide | Khi bắt đầu project |
-| `QUICK_REFERENCE.md` | Quick commands | Khi cần commands nhanh |
-
-### 🔧 Setup Guides (Hướng Dẫn Cài Đặt)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `AUTOMATION_SETUP.md` | Setup automation service | Nếu cần Google Sheets |
-| `SETUP_CHECKLIST.md` | Step-by-step checklist | First-time setup |
-
-### 📊 Architecture & Analysis (Kiến Trúc)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `SYSTEM_DIAGRAM.md` | Architecture diagrams | Hiểu system design |
-| `ARCHITECTURE.md` | Detailed architecture | Deep dive vào design |
-| `PROJECT_STRUCTURE_FINAL.md` | Project structure | Hiểu file organization |
-
-### 🔍 Fix Documentation (Tài Liệu Fix)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `FINAL_FIX_REPORT.md` | Complete fix overview | Hiểu toàn bộ fix |
-| `DOCUMENTATION_FIX_SUMMARY.md` | Detailed changes | Chi tiết từng thay đổi |
-| `PORT_CLARIFICATION.md` | Port analysis | Hiểu port configuration |
-
-### 🛠️ Technical Improvements (Cải Tiến Kỹ Thuật)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `BACKEND_IMPROVEMENTS.md` | Backend API changes | Hiểu backend updates |
-| `CORS_FIX.md` | CORS configuration | Debug CORS issues |
-| `IMPROVEMENT_SUMMARY.md` | All improvements | Overview of changes |
-
-### 🧪 Testing & Scripts (Testing & Scripts)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `IMPROVED_SCRIPTS_GUIDE.md` | Script documentation | Hiểu các scripts |
-| `TEST_SCRIPTS_GUIDE.md` | Testing guide | Khi cần test |
-| `verify_port_config.sh` | Port verification | Verify configuration |
-
-### 📦 Deployment (Triển Khai)
-
-| File | Purpose | When to Read |
-|------|---------|--------------|
-| `DEPLOY_INSTRUCTIONS.md` | Deployment guide | Khi deploy production |
-| `VERCEL_DEPLOYMENT_GUIDE.md` | Vercel-specific | Deploy to Vercel |
+| Ưu tiên | File                                         | Ghi chú                                                                        |
+| ------- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1       | [`README.md`](./README.md)                   | Tổng quan, quick start, bảng link tài liệu                                     |
+| 2       | [`ENV_SETUP.md`](./ENV_SETUP.md)             | Node 20, `.env`, backend load root `.env`, Google env                          |
+| 3       | [`QUICK_REFERENCE.md`](./QUICK_REFERENCE.md) | Hub lệnh nhanh → `DEVELOPMENT_TOOLS_SUMMARY`, `QUICK_SCRIPTS_REFERENCE`, ports |
+| 4       | [`READ_THIS_FIRST.md`](./READ_THIS_FIRST.md) | Hướng dẫn đọc (một số link trong file có thể cần chỉnh tay nếu lỗi thời)       |
+| —       | [`FIX_SUMMARY.txt`](./FIX_SUMMARY.txt)       | Tóm tắt text (legacy)                                                          |
 
 ---
 
-## 🗺️ Reading Paths (Lộ Trình Đọc)
+## 📖 Theo chủ đề
 
-### Path 1: Quick Start (Nhanh Nhất)
+### 🚀 Getting started & môi trường
 
-```
-1. FIX_SUMMARY.txt          (2 phút)
-2. START_HERE.md            (5 phút)
-3. QUICK_REFERENCE.md       (3 phút)
-4. ./start_dev_servers.sh   (Action!)
-```
+| File                                                                     | Mục đích                                           |
+| ------------------------------------------------------------------------ | -------------------------------------------------- |
+| [`README.md`](./README.md)                                               | Entry chính                                        |
+| [`ENV_SETUP.md`](./ENV_SETUP.md)                                         | Cài đặt, `.env`, `GOOGLE_SHEETS_SPREADSHEET_ID`, … |
+| [`docs/GOOGLE_CREDENTIALS_SETUP.md`](./docs/GOOGLE_CREDENTIALS_SETUP.md) | Service account, Drive/Sheets                      |
+| [`QUICK_REFERENCE.md`](./QUICK_REFERENCE.md)                             | Link nhanh                                         |
+| [`QUICK_SCRIPTS_REFERENCE.md`](./QUICK_SCRIPTS_REFERENCE.md)             | npm scripts, port, test                            |
 
-**Total time:** ~10 phút + start coding
+**Không còn trong repo:** `START_HERE.md` → dùng **README + ENV_SETUP**. `SETUP_CHECKLIST.md` → **ENV_SETUP + verify**.
 
----
+### 🛠️ Dev tools (ESLint, Prettier, Husky)
 
-### Path 2: Complete Understanding (Hiểu Toàn Diện)
+| File                                                             | Mục đích        |
+| ---------------------------------------------------------------- | --------------- |
+| [`DEVELOPMENT_TOOLS_SETUP.md`](./DEVELOPMENT_TOOLS_SETUP.md)     | Chi tiết        |
+| [`DEVELOPMENT_TOOLS_SUMMARY.md`](./DEVELOPMENT_TOOLS_SUMMARY.md) | Bảng lệnh nhanh |
 
-```
-1. READ_THIS_FIRST.md              (5 phút)
-2. FINAL_FIX_REPORT.md             (15 phút)
-3. START_HERE.md                   (10 phút)
-4. SYSTEM_DIAGRAM.md               (10 phút)
-5. IMPROVED_SCRIPTS_GUIDE.md       (15 phút)
-```
+### 🗺️ Cấu trúc repo & script
 
-**Total time:** ~55 phút
+| File                                                               | Mục đích                                       |
+| ------------------------------------------------------------------ | ---------------------------------------------- |
+| [`Document/REPO_LAYOUT.md`](./Document/REPO_LAYOUT.md)             | Root vs `backend/`, depcheck                   |
+| [`Document/DEV_SCRIPTS_NOTES.md`](./Document/DEV_SCRIPTS_NOTES.md) | `fix-missing-files`, https, artefact gitignore |
+| [`SCRIPTS_GUIDE.md`](./SCRIPTS_GUIDE.md)                           | Scripts tổng quan                              |
+| [`scripts/README.md`](./scripts/README.md)                         | Thư mục `scripts/`                             |
 
----
+### 📐 Kiến trúc
 
-### Path 3: Fix Investigation (Điều Tra Fix)
+| File                                                         | Mục đích                      |
+| ------------------------------------------------------------ | ----------------------------- |
+| [`ARCHITECTURE_GUIDE.md`](./ARCHITECTURE_GUIDE.md)           | Hướng dẫn kiến trúc (ưu tiên) |
+| [`ARCHITECTURE.md`](./ARCHITECTURE.md)                       | Bổ sung / legacy              |
+| [`PROJECT_STRUCTURE_FINAL.md`](./PROJECT_STRUCTURE_FINAL.md) | Cấu trúc thư mục              |
 
-```
-1. FIX_SUMMARY.txt                 (2 phút)
-2. PORT_CLARIFICATION.md           (10 phút)
-3. DOCUMENTATION_FIX_SUMMARY.md    (15 phút)
-4. FINAL_FIX_REPORT.md             (20 phút)
-```
+**Không còn:** `SYSTEM_DIAGRAM.md` → xem **ARCHITECTURE_GUIDE**, sơ đồ trong **README**.
 
-**Total time:** ~47 phút
+### 📊 Google Sheets / Automation
 
----
+| File                                                                                   | Mục đích            |
+| -------------------------------------------------------------------------------------- | ------------------- |
+| [`GOOGLE_SHEETS_SETUP_GUIDE.md`](./GOOGLE_SHEETS_SETUP_GUIDE.md)                       | Setup Sheets (root) |
+| [`automation/GOOGLE_SHEETS_SETUP_GUIDE.md`](./automation/GOOGLE_SHEETS_SETUP_GUIDE.md) | Góc nhìn automation |
 
-### Path 4: Setup Only (Chỉ Setup)
+**Không còn:** `AUTOMATION_SETUP.md` (tên cũ) → **GOOGLE_SHEETS_SETUP_GUIDE + `automation/docs/`** (nếu có).
 
-```
-1. START_HERE.md                   (5 phút)
-2. SETUP_CHECKLIST.md              (10 phút)
-3. ./health_check.sh               (Action!)
-4. ./start_dev_servers.sh          (Action!)
-```
+### 🚢 Deploy
 
-**Total time:** ~15 phút + setup
+| File                                                                 | Mục đích                 |
+| -------------------------------------------------------------------- | ------------------------ |
+| [`DEPLOY_INSTRUCTIONS.md`](./DEPLOY_INSTRUCTIONS.md)                 | Deploy tổng quan, Vercel |
+| [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md)                       | Workflow, env, hook      |
+| [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md)         | Chi tiết Vercel          |
+| [`Document/DEPLOYMENT_SUMMARY.md`](./Document/DEPLOYMENT_SUMMARY.md) | Tóm tắt                  |
 
----
+### 📚 HTML docs & checklist
 
-## 📁 File Organization
+| File                                                             | Mục đích                                         |
+| ---------------------------------------------------------------- | ------------------------------------------------ |
+| [`DOCUMENTATION_HTML_GUIDE.md`](./DOCUMENTATION_HTML_GUIDE.md)   | `npm run docs:generate`, `docs:watch`, `fswatch` |
+| [`DOCUMENTATION_CHECKLIST.md`](./DOCUMENTATION_CHECKLIST.md)     | Checklist chất lượng doc                         |
+| [`DOCUMENTATION_FIX_SUMMARY.md`](./DOCUMENTATION_FIX_SUMMARY.md) | Lịch sử chỉnh doc (legacy session)               |
+| `docs.html`                                                      | Output sau `npm run docs:generate`               |
 
-### Root Level Documentation
+### 🔧 Fix / port (legacy nhưng vẫn hữu ích)
 
-```
-/
-├── FIX_SUMMARY.txt                    ⭐ Start here
-├── READ_THIS_FIRST.md                 ⭐ Navigation guide
-├── START_HERE.md                      ⭐ Main entry
-├── QUICK_REFERENCE.md                 ⭐ Quick commands
-│
-├── FINAL_FIX_REPORT.md                📋 Complete fix overview
-├── DOCUMENTATION_FIX_SUMMARY.md       📋 Detailed changes
-├── PORT_CLARIFICATION.md              📋 Port analysis
-├── DOCUMENTATION_INDEX.md             📋 This file
-│
-├── AUTOMATION_SETUP.md                🔧 Optional setup
-├── BACKEND_IMPROVEMENTS.md            🔧 Backend changes
-├── CORS_FIX.md                        🔧 CORS config
-│
-├── SYSTEM_DIAGRAM.md                  📊 Architecture
-├── ARCHITECTURE.md                    📊 Design docs
-├── PROJECT_STRUCTURE_FINAL.md         📊 File structure
-│
-├── IMPROVED_SCRIPTS_GUIDE.md          🛠️ Scripts guide
-├── TEST_SCRIPTS_GUIDE.md              🛠️ Testing guide
-│
-└── verify_port_config.sh              ✅ Verification tool
-```
+| File                                               | Mục đích                                       |
+| -------------------------------------------------- | ---------------------------------------------- |
+| [`PORT_CLARIFICATION.md`](./PORT_CLARIFICATION.md) | Port 3000 / 3001 / 8000 / 8001                 |
+| [`FINAL_FIX_REPORT.md`](./FINAL_FIX_REPORT.md)     | Báo cáo fix cũ                                 |
+| [`verify_port_config.sh`](./verify_port_config.sh) | Kiểm tra port (nếu script còn khớp môi trường) |
 
----
+**Không còn:** `BACKEND_IMPROVEMENTS.md`, `CORS_FIX.md`, `IMPROVEMENT_SUMMARY.md`, `IMPROVED_SCRIPTS_GUIDE.md` — tra **DEPLOYMENT_GUIDE**, **ARCHITECTURE_GUIDE**, **SCRIPTS_GUIDE**.
 
-## 🎯 By Use Case
+### 🧪 Testing
 
-### "Tôi mới join project"
-
-→ `START_HERE.md` → `QUICK_REFERENCE.md`
-
-### "Tôi muốn hiểu bug fix"
-
-→ `FIX_SUMMARY.txt` → `FINAL_FIX_REPORT.md`
-
-### "Tôi cần setup Google Sheets"
-
-→ `AUTOMATION_SETUP.md`
-
-### "Tôi muốn hiểu architecture"
-
-→ `SYSTEM_DIAGRAM.md` → `ARCHITECTURE.md`
-
-### "Tôi gặp lỗi port"
-
-→ `PORT_CLARIFICATION.md` → `./verify_port_config.sh`
-
-### "Tôi cần deploy"
-
-→ `DEPLOY_INSTRUCTIONS.md`
-
-### "Tôi muốn test"
-
-→ `TEST_SCRIPTS_GUIDE.md` → `IMPROVED_SCRIPTS_GUIDE.md`
+| File                                                   | Mục đích       |
+| ------------------------------------------------------ | -------------- |
+| [`TEST_SCRIPTS_GUIDE.md`](./TEST_SCRIPTS_GUIDE.md)     | Hướng dẫn test |
+| [`scripts/tests/README.md`](./scripts/tests/README.md) | Test scripts   |
 
 ---
 
-## 📊 Documentation Stats
+## 🗺️ Lộ trình đọc gợi ý
 
-### Files Updated in This Fix
+### Nhanh (~15 phút)
 
-- ✅ 4 files updated (START_HERE, QUICK_REFERENCE, AUTOMATION_SETUP, PORT_CLARIFICATION)
-- ✅ 5 files created (DOCUMENTATION_FIX_SUMMARY, FINAL_FIX_REPORT, READ_THIS_FIRST, verify_port_config.sh, FIX_SUMMARY.txt)
-- ✅ 1 index created (this file)
+1. `README.md`
+2. `ENV_SETUP.md`
+3. `QUICK_REFERENCE.md`
+4. Chạy: `npm install` → `npm run dev` hoặc `./start_dev_servers.sh` (tuỳ bạn dùng script nào)
 
-### Total Documentation Files
+### Full-stack + deploy (~45 phút)
 
-- 📄 Main guides: 4 files
-- 📄 Setup guides: 2 files
-- 📄 Architecture: 3 files
-- 📄 Fix docs: 4 files
-- 📄 Technical: 3 files
-- 📄 Testing: 2 files
-- 📄 Deployment: 2 files
-- 🔧 Scripts: 1 file
+1. `README.md` → `ARCHITECTURE_GUIDE.md`
+2. `ENV_SETUP.md` → `docs/GOOGLE_CREDENTIALS_SETUP.md`
+3. `DEVELOPMENT_TOOLS_SETUP.md`
+4. `DEPLOYMENT_GUIDE.md` hoặc `DEPLOY_INSTRUCTIONS.md`
 
-**Total:** 21 documentation files + 1 script
+### Chỉ doc HTML
+
+1. `DOCUMENTATION_HTML_GUIDE.md`
+2. `npm run docs:generate` → mở `docs.html`
 
 ---
 
-## 🔍 Search Tips
+## 📁 Một phần cây tài liệu (root)
 
-### Find Information About
+```
+├── README.md
+├── ENV_SETUP.md
+├── QUICK_REFERENCE.md
+├── QUICK_SCRIPTS_REFERENCE.md
+├── DEVELOPMENT_TOOLS_SETUP.md
+├── DEVELOPMENT_TOOLS_SUMMARY.md
+├── DOCUMENTATION_INDEX.md          ← file này
+├── DOCUMENTATION_HTML_GUIDE.md
+├── DOCUMENTATION_CHECKLIST.md
+├── DOCUMENTATION_FIX_SUMMARY.md
+├── DEPLOYMENT_GUIDE.md
+├── DEPLOY_INSTRUCTIONS.md
+├── PORT_CLARIFICATION.md
+├── ARCHITECTURE.md
+├── ARCHITECTURE_GUIDE.md
+├── SCRIPTS_GUIDE.md
+├── PROJECT_STRUCTURE_FINAL.md
+├── FINAL_FIX_REPORT.md
+├── READ_THIS_FIRST.md
+├── FIX_SUMMARY.txt
+├── docs/
+│   └── GOOGLE_CREDENTIALS_SETUP.md
+├── Document/
+│   ├── REPO_LAYOUT.md
+│   ├── DEV_SCRIPTS_NOTES.md
+│   └── DEPLOYMENT_SUMMARY.md
+├── scripts/README.md
+├── start_dev_servers.sh
+└── verify_port_config.sh
+```
 
-**Ports:**
+---
+
+## 🎯 Theo tình huống
+
+| Nhu cầu                                         | Xem                                                 |
+| ----------------------------------------------- | --------------------------------------------------- |
+| Mới vào project                                 | `README.md` → `ENV_SETUP.md` → `QUICK_REFERENCE.md` |
+| Lint / format / commit hook                     | `DEVELOPMENT_TOOLS_SUMMARY.md`                      |
+| `.env` & Google                                 | `ENV_SETUP.md`, `docs/GOOGLE_CREDENTIALS_SETUP.md`  |
+| Port                                            | `QUICK_REFERENCE.md`, `PORT_CLARIFICATION.md`       |
+| Deploy                                          | `DEPLOY_INSTRUCTIONS.md`, `DEPLOYMENT_GUIDE.md`     |
+| Cấu trúc repo                                   | `Document/REPO_LAYOUT.md`                           |
+| Artefact không commit (Lighthouse, build-stats) | `Document/DEV_SCRIPTS_NOTES.md`                     |
+| Cập nhật `docs.html`                            | `DOCUMENTATION_HTML_GUIDE.md`                       |
+
+---
+
+## 🔍 Gợi ý lệnh tìm nhanh
+
+**Port:**
 
 ```bash
-grep -r "port" QUICK_REFERENCE.md PORT_CLARIFICATION.md
+grep -ri "port" QUICK_REFERENCE.md PORT_CLARIFICATION.md
 ```
 
-**Services:**
+**Service / stack:**
 
 ```bash
-grep -r "service" START_HERE.md AUTOMATION_SETUP.md
+grep -ri "service" README.md DEPLOYMENT_GUIDE.md
 ```
 
-**Commands:**
+**Lệnh bash trong quick ref:**
 
 ```bash
-cat QUICK_REFERENCE.md | grep "bash"
+grep "bash" QUICK_REFERENCE.md QUICK_SCRIPTS_REFERENCE.md
 ```
 
-**Setup:**
+**Test connection (automation port — kiểm tra path trong repo):**
 
 ```bash
-cat START_HERE.md SETUP_CHECKLIST.md
+node scripts/tests/frontend_connection_test.js
 ```
 
 ---
 
-## ✅ Documentation Quality Checklist
+## ✅ Checklist bảo trì index
 
-- [x] All files có clear purpose
-- [x] Reading paths defined
-- [x] Cross-references accurate
-- [x] Commands tested
-- [x] Examples provided
-- [x] Troubleshooting included
-- [x] Up-to-date with code
-- [x] Consistent terminology
-- [x] Clear structure
-- [x] Index created
+- [x] Không liệt kê file đã xóa như đang tồn tại
+- [x] Trỏ tới `DEVELOPMENT_TOOLS_*`, `ENV_SETUP`, `Document/*`
+- [x] Ghi chú `docs:generate` / `docs:watch`
+- [ ] Định kỳ: `ls *.md` và so khớp bảng trên
 
 ---
 
-## 🎓 Documentation Principles
-
-### 1. Accuracy
-
-- ✅ All information verified against code
-- ✅ Port numbers consistent
-- ✅ Commands tested
-
-### 2. Clarity
-
-- ✅ Clear purpose statements
-- ✅ Step-by-step instructions
-- ✅ Examples provided
-
-### 3. Completeness
-
-- ✅ Multiple reading paths
-- ✅ Different skill levels
-- ✅ Various use cases
-
-### 4. Maintainability
-
-- ✅ Clear organization
-- ✅ Easy to update
-- ✅ Version tracked
-
----
-
-## 📞 Quick Links
-
-### Most Important Files
-
-1. **FIX_SUMMARY.txt** - Start here!
-2. **START_HERE.md** - Main guide
-3. **QUICK_REFERENCE.md** - Commands
-4. **FINAL_FIX_REPORT.md** - Complete fix details
-
-### Most Used Commands
-
-```bash
-./verify_port_config.sh          # Verify
-./start_dev_servers.sh           # Start
-node frontend_connection_test.js # Test
-```
-
-### Most Common Questions
-
-- Q: Port configuration? → `PORT_CLARIFICATION.md`
-- Q: How to start? → `START_HERE.md`
-- Q: Commands? → `QUICK_REFERENCE.md`
-- Q: What changed? → `FINAL_FIX_REPORT.md`
-
----
-
-## 🎉 Summary
-
-**Total Documentation:** 21 files + 1 script
-**Status:** ✅ Complete and synchronized
-**Quality:** ✅ Verified and tested
-**Accessibility:** ✅ Multiple entry points and paths
-
-**Start Reading:** `FIX_SUMMARY.txt` or `READ_THIS_FIRST.md`
-
----
-
-**Version:** 4.0.3
-**Date:** December 11, 2025
-**Status:** ✅ Complete
-
-**Happy Reading! 📚**
+**Phiên bản index:** 2.0  
+**Trạng thái:** Đồng bộ repo 2026-03-20

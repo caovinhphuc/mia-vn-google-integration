@@ -1,3 +1,15 @@
+# Documentation Fix Summary (Legacy Redirect)
+
+File này được giữ lại để tương thích link cũ.
+
+Nội dung chi tiết đã chuyển sang:
+
+- `DOCUMENTATION_INDEX.md`
+- `DOCUMENTATION_UPDATE_REPORT.md`
+- `QUICK_REFERENCE.md`
+
+Updated: 2026-03-20
+
 # 📚 Documentation Fix Summary
 
 ## 🎯 Vấn Đề Đã Sửa
@@ -69,7 +81,7 @@ Hệ thống chỉ có:
 - Commands: Removed start_ai_service.sh
 - Health checks: AI Service → Automation (Optional)
 - Logs: ai-service.log → automation.log
-- Stop commands: Updated to python.*uvicorn
+- Stop commands: Updated to python.\*uvicorn
 - File structure: Updated log names
 
 ### 3. AUTOMATION_SETUP.md ✅

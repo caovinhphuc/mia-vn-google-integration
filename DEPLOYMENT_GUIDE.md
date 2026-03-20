@@ -184,7 +184,7 @@ npm run serve:deployed
 # Add và commit changes
 git add .
 git commit -m "Your commit message"
-# Pre-commit hook sẽ tự động chạy lint-staged
+# Pre-commit: .husky/pre-commit → npx lint-staged (cần git add). Bỏ qua: git commit -n
 
 # Pull latest changes
 git pull origin main --no-rebase
@@ -197,7 +197,7 @@ git commit -m "Merge: Resolve conflicts"
 git push origin main
 ```
 
-**Note:** Pre-commit hook đã được cấu hình với Husky và lint-staged để tự động format và lint code.
+**Note:** Husky 9 (`npm run prepare` → `husky`). Hook `.husky/pre-commit` gọi `npx lint-staged`. Chi tiết: [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md).
 
 ---
 
@@ -379,11 +379,14 @@ PORT=3000
 REACT_APP_API_URL=http://localhost:3001
 REACT_APP_API_BASE_URL=http://localhost:3001/api
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
-GOOGLE_SHEETS_ID=your_sheet_id
+GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 GOOGLE_DRIVE_FOLDER_ID=your_folder_id
 ```
 
-### Backend (backend/.env)
+Backend đọc `.env` **ở root repo** (không bắt buộc `backend/.env`). Xem [ENV_SETUP.md](./ENV_SETUP.md).
+
+### Backend (tuỳ chọn)
 
 ```bash
 PORT=3001
@@ -414,7 +417,7 @@ NODE_ENV=development
    ```bash
    git add .
    git commit -m "message"
-   # Pre-commit hook tự động chạy lint-staged
+   # Pre-commit: npx lint-staged (file đã stage)
    ```
 
 3. Pull latest:

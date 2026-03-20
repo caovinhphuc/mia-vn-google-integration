@@ -84,7 +84,7 @@ Các thư mục sau đã được loại trừ khỏi file explorer:
 - `.venv/`, `venv/`
 - `dist/`, `build/`
 - `.vercel/`
-- `lighthouse-reports/`
+- `lighthouse-reports/` (và các artefact perf tương tự — đồng thời **gitignored**, không commit)
 
 ### Search Exclusions
 

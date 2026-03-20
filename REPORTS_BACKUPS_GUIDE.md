@@ -1,7 +1,9 @@
 # 📊📦 Hướng Dẫn Quản Lý Reports & Backups
 
 > **React OAS Integration v4.0**
-> **Ngày cập nhật**: 2025-01-27
+> **Ngày cập nhật**: 2026-03-20
+
+> **Git:** `lighthouse-reports/`, `build-stats/*.json`, `bundle-report.json`, `performance-budget-report.json`, `health-report-*.json` (root) được liệt kê trong **`.gitignore`** — không đưa vào repo; xem [`Document/DEV_SCRIPTS_NOTES.md`](Document/DEV_SCRIPTS_NOTES.md).
 
 ---
 

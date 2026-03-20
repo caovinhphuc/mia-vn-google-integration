@@ -91,7 +91,8 @@ NODE_ENV=development
 PORT=3001
 AI_SERVICE_URL=http://localhost:8000
 JWT_SECRET=your-secret-key-here-$(date +%s)
-GOOGLE_SHEETS_ID=your-spreadsheet-id
+GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
+# Legacy: GOOGLE_SHEETS_ID (đồng bộ cùng ID nếu còn dùng)
 EOF
 ```
 

@@ -215,6 +215,6 @@ git push origin main
 ---
 
 **Date**: January 21, 2026  
-**Updated**: March 18, 2026 — bảng Quick Reference + stack đồng bộ `package.json` / `.lintstagedrc.json`  
+**Updated**: March 20, 2026 — Quick Reference (prettier alias, Husky 9, pre-commit), Troubleshooting `npx prettier`  
 **Status**: ✅ **Complete**  
 **Chi tiết:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)

@@ -87,6 +87,7 @@ Tự động đề xuất cải thiện dựa trên:
 
 - Export stats ra `build-stats/bundle-stats-{timestamp}.json`
 - Lưu latest stats vào `build-stats/bundle-stats-latest.json`
+- **Git:** toàn bộ `build-stats/*.json` (root) nằm trong `.gitignore` — không commit; tạo lại bằng `npm run bundle:stats`
 - Format: JSON với timestamp, bundle data, dependencies, recommendations
 
 ### Check Dependencies

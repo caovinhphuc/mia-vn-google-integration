@@ -4,12 +4,12 @@ Hướng dẫn kiểm tra và cài đặt lại thư viện, config workspace, t
 
 ## 1. Yêu cầu hệ thống
 
-| Công cụ    | Phiên bản gợi ý | Ghi chú              |
-|------------|------------------|----------------------|
-| Node.js    | **20** (theo `.nvmrc`) | `nvm use` — có thể thử 18 LTS nếu cần, repo khuyến nghị 20 |
-| npm        | **10.x** (`npm@10.0.0` trong `packageManager`) | |
-| Python     | 3.10+            | Cho `ai-service` (`uvicorn`), automation nếu dùng |
-| Git        | bất kỳ           | Version control      |
+| Công cụ | Phiên bản gợi ý                                | Ghi chú                                                    |
+| ------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| Node.js | **20** (theo `.nvmrc`)                         | `nvm use` — có thể thử 18 LTS nếu cần, repo khuyến nghị 20 |
+| npm     | **10.x** (`npm@10.0.0` trong `packageManager`) |                                                            |
+| Python  | 3.10+                                          | Cho `ai-service` (`uvicorn`), automation nếu dùng          |
+| Git     | bất kỳ                                         | Version control                                            |
 
 ## 2. Cài đặt lại dependencies
 
@@ -54,12 +54,12 @@ cp .env.example .env
 
 ### Google Drive/Sheets (dữ liệu thật)
 
-| Biến | Mô tả |
-|------|-------|
-| `GOOGLE_APPLICATION_CREDENTIALS` | Path tới JSON service account (vd: `./config/google-credentials.json`, relative từ root) |
-| `GOOGLE_SERVICE_ACCOUNT_KEY_PATH` | (Tuỳ chọn) path thay thế mà backend thử |
-| `GOOGLE_DRIVE_FOLDER_ID` hoặc `REACT_APP_GOOGLE_DRIVE_FOLDER_ID` | Folder Drive |
-| **`GOOGLE_SHEETS_SPREADSHEET_ID`** hoặc **`REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID`** | **Spreadsheet ID — backend đọc hai tên này** (ưu tiên theo thứ tự trong `server.js`) |
+| Biến                                                                                 | Mô tả                                                                                    |
+| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `GOOGLE_APPLICATION_CREDENTIALS`                                                     | Path tới JSON service account (vd: `./config/google-credentials.json`, relative từ root) |
+| `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`                                                    | (Tuỳ chọn) path thay thế mà backend thử                                                  |
+| `GOOGLE_DRIVE_FOLDER_ID` hoặc `REACT_APP_GOOGLE_DRIVE_FOLDER_ID`                     | Folder Drive                                                                             |
+| **`GOOGLE_SHEETS_SPREADSHEET_ID`** hoặc **`REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID`** | **Spreadsheet ID — backend đọc hai tên này** (ưu tiên theo thứ tự trong `server.js`)     |
 
 **Tên cũ / chỗ khác trong repo:** `GOOGLE_SHEETS_ID`, `REACT_APP_GOOGLE_SHEET_ID` (singular) dùng ở **frontend** (`src/config/googleConfig.js`) hoặc **một số script** — nên **đồng bộ cùng một ID** với bảng trên để tránh lệch môi trường.
 
@@ -80,13 +80,13 @@ npm run check:backend
 
 ## 6. Lệnh hữu ích
 
-| Lệnh                | Mô tả                          |
-|---------------------|--------------------------------|
-| `npm run dev`       | Frontend + Backend + AI service |
-| `npm run start`     | Chỉ frontend (port 3000)       |
-| `npm run backend`   | Chỉ backend (port 3001)        |
-| `npm run ai-service`| Chỉ AI service (port 8000)     |
-| `npm run fix:ports` | Giải phóng port 3000/3001/8000 |
+| Lệnh                   | Mô tả                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| `npm run dev`          | Frontend + Backend + AI service                                                     |
+| `npm run start`        | Chỉ frontend (port 3000)                                                            |
+| `npm run backend`      | Chỉ backend (port 3001)                                                             |
+| `npm run ai-service`   | Chỉ AI service (port 8000)                                                          |
+| `npm run fix:ports`    | Giải phóng port 3000/3001/8000                                                      |
 | `npm run health:quick` | Kiểm tra nhanh: 3000 + 3001/health; AI **8000** hoặc automation **8001** (optional) |
 
 ## 7. Cập nhật môi trường sau này
@@ -101,4 +101,4 @@ npm run check:backend
 
 ---
 
-*Cập nhật theo repo: Node 20 (`.nvmrc`), `backend` load root `.env`, biến spreadsheet backend `GOOGLE_SHEETS_SPREADSHEET_ID`.*
+_Cập nhật theo repo: Node 20 (`.nvmrc`), `backend` load root `.env`, biến spreadsheet backend `GOOGLE_SHEETS_SPREADSHEET_ID`. Công cụ dev: [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md). Artefact Lighthouse/bundle gitignored: [Document/DEV_SCRIPTS_NOTES.md](./Document/DEV_SCRIPTS_NOTES.md)._

@@ -115,12 +115,12 @@
 
 ### 📋 Yêu cầu hệ thống
 
-| Component    | Version | Ghi chú                             |
-| ------------ | ------- | ----------------------------------- |
-| **Node.js**  | 18+     | Runtime cho Frontend & Backend      |
-| **Python**   | 3.9+    | Runtime cho Automation & AI Service |
-| **npm/yarn** | Latest  | Package manager                     |
-| **Git**      | Latest  | Version control                     |
+| Component    | Version           | Ghi chú                                           |
+| ------------ | ----------------- | ------------------------------------------------- |
+| **Node.js**  | **20** (`.nvmrc`) | Runtime cho Frontend & Backend; có thể thử 18 LTS |
+| **Python**   | 3.9+              | Runtime cho Automation & AI Service               |
+| **npm/yarn** | Latest            | Package manager                                   |
+| **Git**      | Latest            | Version control                                   |
 
 ### ⚡ Khởi chạy nhanh
 
@@ -546,14 +546,18 @@ Kiểm tra logs trong thư mục `logs/`:
 
 ## 📚 Documentation
 
-| Document                                                       | Mô tả                            |
-| -------------------------------------------------------------- | -------------------------------- |
-| [`ARCHITECTURE_GUIDE.md`](ARCHITECTURE_GUIDE.md)               | 📖 Kiến trúc hệ thống chi tiết   |
+| Document                                                               | Mô tả                                    |
+| ---------------------------------------------------------------------- | ---------------------------------------- |
+| [`DOCUMENTATION_INDEX.md`](DOCUMENTATION_INDEX.md)                     | 📇 Mục lục tài liệu (cập nhật 2026)      |
+| [`ARCHITECTURE_GUIDE.md`](ARCHITECTURE_GUIDE.md)                       | 📖 Kiến trúc hệ thống chi tiết           |
 | [`docs/GOOGLE_CREDENTIALS_SETUP.md`](docs/GOOGLE_CREDENTIALS_SETUP.md) | 🔑 Google Drive/Sheets credentials, .env |
-| [`docs/FLOW_AND_STRUCTURE.md`](docs/FLOW_AND_STRUCTURE.md)     | 🔄 Cấu trúc, luồng chạy, ports   |
-| [`ENV_SETUP.md`](ENV_SETUP.md)                                 | ⚙️ Cài đặt môi trường            |
-| [`GOOGLE_SHEETS_SETUP_GUIDE.md`](GOOGLE_SHEETS_SETUP_GUIDE.md) | 📊 Hướng dẫn setup Google Sheets |
-| [`GOOGLE_DRIVE_FOLDER_ID.md`](GOOGLE_DRIVE_FOLDER_ID.md)       | 📁 Drive folder ID cấu hình      |
+| [`docs/FLOW_AND_STRUCTURE.md`](docs/FLOW_AND_STRUCTURE.md)             | 🔄 Cấu trúc, luồng chạy, ports           |
+| [`ENV_SETUP.md`](ENV_SETUP.md)                                         | ⚙️ Cài đặt môi trường                    |
+| [`DEVELOPMENT_TOOLS_SETUP.md`](DEVELOPMENT_TOOLS_SETUP.md)             | 🛠️ ESLint, Prettier, Husky, lint-staged  |
+| [`DEVELOPMENT_TOOLS_SUMMARY.md`](DEVELOPMENT_TOOLS_SUMMARY.md)         | 📎 Tóm tắt lệnh dev nhanh                |
+| [`Document/DEV_SCRIPTS_NOTES.md`](Document/DEV_SCRIPTS_NOTES.md)       | 📌 Script fix/https + artefact gitignore |
+| [`GOOGLE_SHEETS_SETUP_GUIDE.md`](GOOGLE_SHEETS_SETUP_GUIDE.md)         | 📊 Hướng dẫn setup Google Sheets         |
+| [`GOOGLE_DRIVE_FOLDER_ID.md`](GOOGLE_DRIVE_FOLDER_ID.md)               | 📁 Drive folder ID cấu hình              |
 
 ---
 
@@ -569,7 +573,8 @@ Chúng tôi hoan nghênh mọi đóng góp! Vui lòng:
 
 ### Development Guidelines
 
-- Follow code style và conventions
+- Follow code style và conventions (`npm run format` / `npm run prettier`, `npm run lint:fix`)
+- Pre-commit: sau `git add`, commit chạy **lint-staged** (`.husky/pre-commit`). Bỏ qua: `git commit -n`
 - Thêm tests cho features mới
 - Update documentation khi cần
 - Keep commits atomic và descriptive
