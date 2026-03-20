@@ -15,7 +15,7 @@ logs
 *.log
 backend
 ai-service
-automation
+/automation
 mia-logistics-manager
 google-sheets-project
 one_automation_system
