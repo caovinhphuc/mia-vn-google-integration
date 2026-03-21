@@ -21,14 +21,14 @@ Checklist này hướng dẫn xử lý dự án theo thứ tự logic, từ cơ 
 - [ ] Enable Google Sheets API
 - [ ] Tạo Service Account
 - [ ] Download JSON key file
-- [ ] Cập nhật `env.config.js` với thông tin thực
+- [ ] Cập nhật `.env` hoặc `backend/config/` với thông tin thực
 
 #### ✅ 1.3 Cài đặt dependencies
 
-- [ ] Cài đặt dependencies cho main-project (`cd main-project && npm install --legacy-peer-deps`)
+- [ ] Cài đặt dependencies cho main project (`npm install --legacy-peer-deps` — ở root)
 - [ ] Cài đặt dependencies cho google-sheets-project (`cd google-sheets-project && npm install --legacy-peer-deps`)
-- [ ] Cài đặt Python packages cho AI service (`cd main-project/ai-service && pip install -r requirements.txt`)
-- [ ] Cài đặt Python packages cho automation (`cd main-project/automation && pip install -r requirements.txt`)
+- [ ] Cài đặt Python packages (`source .venv/bin/activate && pip install -r requirements-dev.txt` hoặc `cd ai-service && pip install -r requirements.txt`)
+- [ ] Cài đặt automation (`cd automation && pip install -r requirements.txt`)
 
 ---
 
@@ -36,11 +36,11 @@ Checklist này hướng dẫn xử lý dự án theo thứ tự logic, từ cơ 
 
 #### ✅ 2.1 Khởi động dự án chính (Main Project)
 
-- [ ] Khởi động Backend (`cd main-project/backend && node src/server.js`)
+- [ ] Khởi động Backend (`npm run backend` hoặc `cd backend && npm start`)
 - [ ] Kiểm tra Backend hoạt động (`curl http://localhost:3001/health`)
-- [ ] Khởi động AI Service (`cd main-project/ai-service && python main.py`)
+- [ ] Khởi động AI Service (`npm run ai-service` hoặc `source .venv/bin/activate && cd ai-service && python -m uvicorn main_simple:app --port 8000`)
 - [ ] Kiểm tra AI Service hoạt động (`curl http://localhost:8000/health`)
-- [ ] Khởi động Frontend (`cd main-project && npm start`)
+- [ ] Khởi động Frontend (`npm start`)
 - [ ] Kiểm tra Frontend hoạt động (`http://localhost:3000`)
 
 #### ✅ 2.2 Khởi động dự án Google Sheets
@@ -113,7 +113,7 @@ Checklist này hướng dẫn xử lý dự án theo thứ tự logic, từ cơ 
 
 #### ✅ 6.1 Production Build
 
-- [ ] Build main-project (`cd main-project && npm run build`)
+- [ ] Build main project (`npm run build` — ở root)
 - [ ] Build google-sheets-project (`cd google-sheets-project && npm run build`)
 - [ ] Test production builds locally
 
@@ -136,15 +136,15 @@ Checklist này hướng dẫn xử lý dự án theo thứ tự logic, từ cơ 
 
 ### 🔶 **Ưu tiên trung bình**
 
-4. **Phase 2.2**: Khởi động dự án Google Sheets
-5. **Phase 3.2**: Kiểm tra chức năng Google Sheets
-6. **Phase 4.1**: Integration Testing
+1. **Phase 2.2**: Khởi động dự án Google Sheets
+2. **Phase 3.2**: Kiểm tra chức năng Google Sheets
+3. **Phase 4.1**: Integration Testing
 
 ### 🔵 **Ưu tiên thấp (Làm sau)**
 
-7. **Phase 4.2**: Performance Testing
-8. **Phase 5**: UI/UX Optimization
-9. **Phase 6**: Deployment Preparation
+1. **Phase 4.2**: Performance Testing
+2. **Phase 5**: UI/UX Optimization
+3. **Phase 6**: Deployment Preparation
 
 ---
 

@@ -23,7 +23,10 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 PROJECT_NAME="react-oas-inntegration-x"
-WORKSPACE_FILE="React-OAS-Integration-v4.0.code-workspace"
+# Ưu tiên workspace mới; fallback về legacy
+WORKSPACE_PRIMARY="react-oas-integration.code-workspace"
+WORKSPACE_LEGACY="React-OAS-Integration-v4.0.code-workspace"
+WORKSPACE_FILE="$([ -f "$WORKSPACE_PRIMARY" ] && echo "$WORKSPACE_PRIMARY" || echo "$WORKSPACE_LEGACY")"
 
 echo -e "${BLUE}🚀 Cài đặt / Cập nhật Cấu hình IDE — ${PROJECT_NAME}${NC}"
 echo "=================================================="
@@ -78,11 +81,11 @@ EOF
 fi
 
 # Tạo/cập nhật workspace file nếu thiếu
-if [ ! -f "$WORKSPACE_FILE" ]; then
-    echo -e "   ${YELLOW}→${NC} Tạo $WORKSPACE_FILE..."
-    cat > "$WORKSPACE_FILE" << 'WORKSPACE_EOF'
+if [ ! -f "$WORKSPACE_PRIMARY" ] && [ ! -f "$WORKSPACE_LEGACY" ]; then
+    echo -e "   ${YELLOW}→${NC} Tạo $WORKSPACE_PRIMARY..."
+    cat > "$WORKSPACE_PRIMARY" << 'WORKSPACE_EOF'
 {
-  "folders": [{"name": "react-oas-inntegration-x", "path": "."}],
+  "folders": [{"name": "main", "path": "."}],
   "settings": {
     "editor.formatOnSave": true,
     "editor.fontSize": 13,
@@ -97,8 +100,8 @@ if [ ! -f "$WORKSPACE_FILE" ]; then
   "extensions": {"recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "pkief.material-icon-theme"]}
 }
 WORKSPACE_EOF
-    echo -e "   ${GREEN}✓${NC} Đã tạo $WORKSPACE_FILE (chạy lại để đồng bộ đầy đủ)"
-elif ! grep -q '"folders"' "$WORKSPACE_FILE" 2>/dev/null; then
+    echo -e "   ${GREEN}✓${NC} Đã tạo $WORKSPACE_PRIMARY"
+elif [ -f "$WORKSPACE_FILE" ] && ! grep -q '"folders"' "$WORKSPACE_FILE" 2>/dev/null; then
     echo -e "   ${YELLOW}⚠️${NC} $WORKSPACE_FILE thiếu cấu trúc folders - cần tạo lại thủ công"
 fi
 
@@ -130,15 +133,11 @@ echo ""
 echo "=================================================="
 echo ""
 
-# Cài đặt VS Code Extensions
-if command -v code &> /dev/null; then
-    echo -e "${BLUE}📦 Cài đặt VS Code Extensions...${NC}"
-
-    INSTALLED_EXTENSIONS=$(code --list-extensions 2>/dev/null || true)
-
-    EXTENSIONS=(
+# Danh sách extensions dùng chung cho VS Code và Cursor
+EXTENSIONS=(
         "esbenp.prettier-vscode"
         "dbaeumer.vscode-eslint"
+        "DavidAnson.vscode-markdownlint"
         "eamodio.gitlens"
         "ms-vscode.vscode-typescript-next"
         "bradlc.vscode-tailwindcss"
@@ -153,21 +152,25 @@ if command -v code &> /dev/null; then
         "ms-python.black-formatter"
         "ms-python.flake8"
         "ms-python.isort"
-    )
+)
 
+# Cài đặt VS Code Extensions
+if command -v code &> /dev/null; then
+    echo -e "${BLUE}📦 Cài đặt VS Code Extensions...${NC}"
+    INSTALLED_EXTENSIONS=$(code --list-extensions 2>/dev/null || true)
     INSTALLED=0
     SKIPPED=0
 
     for ext in "${EXTENSIONS[@]}"; do
         if printf '%s\n' "$INSTALLED_EXTENSIONS" | grep -Fxq "$ext"; then
             echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
-            ((SKIPPED++))
+            SKIPPED=$((SKIPPED + 1))
         else
             echo -e "   ${YELLOW}→${NC} Đang cài $ext..."
             if code --install-extension "$ext" &> /dev/null; then
                 echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
                 INSTALLED_EXTENSIONS=$(printf '%s\n%s\n' "$INSTALLED_EXTENSIONS" "$ext")
-                ((INSTALLED++))
+                INSTALLED=$((INSTALLED + 1))
             else
                 echo -e "   ${RED}✗${NC} $ext (lỗi)"
             fi
@@ -180,58 +183,88 @@ if command -v code &> /dev/null; then
     echo ""
 fi
 
+# Cài đặt Cursor Extensions (tương tự VS Code)
+if command -v cursor &> /dev/null; then
+    echo -e "${BLUE}📦 Cài đặt Cursor Extensions...${NC}"
+    CURSOR_EXTENSIONS=$(cursor --list-extensions 2>/dev/null || true)
+    CURSOR_INSTALLED=0
+    CURSOR_SKIPPED=0
+
+    for ext in "${EXTENSIONS[@]}"; do
+        if printf '%s\n' "$CURSOR_EXTENSIONS" | grep -Fxq "$ext"; then
+            echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
+            CURSOR_SKIPPED=$((CURSOR_SKIPPED + 1))
+        else
+            echo -e "   ${YELLOW}→${NC} Đang cài $ext..."
+            if cursor --install-extension "$ext" &> /dev/null; then
+                echo -e "   ${GREEN}✓${NC} $ext (đã cài)"
+                CURSOR_EXTENSIONS=$(printf '%s\n%s\n' "$CURSOR_EXTENSIONS" "$ext")
+                CURSOR_INSTALLED=$((CURSOR_INSTALLED + 1))
+            else
+                echo -e "   ${RED}✗${NC} $ext (lỗi)"
+            fi
+        fi
+    done
+
+    echo ""
+    echo -e "${GREEN}✅ Cursor: Đã cài $CURSOR_INSTALLED, Đã có $CURSOR_SKIPPED extensions${NC}"
+    echo ""
+fi
+
 # Kiểm tra Python
 echo -e "${BLUE}🐍 Kiểm tra Python...${NC}"
-if command -v python3 &> /dev/null; then
-    PYTHON_VERSION=$(python3 --version)
+# Ưu tiên Python 3.11 (chuẩn project: pydantic, ai-service)
+PYTHON_CMD=""
+if command -v python3.11 &> /dev/null; then
+    PYTHON_CMD="python3.11"
+elif command -v python3 &> /dev/null; then
+    PYTHON_CMD="python3"
+fi
+
+if [ -n "$PYTHON_CMD" ]; then
+    PYTHON_VERSION=$($PYTHON_CMD --version)
     echo -e "${GREEN}✅ $PYTHON_VERSION${NC}"
-    echo "   Path: $(which python3)"
+    echo "   Path: $(which $PYTHON_CMD)"
 
-    # Chuẩn bị Python env (one_automation_system — mặc định cho IDE interpreter)
-    # Repo có nhiều venv: automation/venv, ai-service/venv, one_automation_system/venv, .venv
-    # IDE defaultInterpreterPath: one_automation_system/venv — đổi qua Python: Select Interpreter nếu cần
-    echo -e "${BLUE}🧪 Chuẩn bị Python env...${NC}"
-    AUTOMATION_DIR="one_automation_system"
-    AUTOMATION_VENV="$AUTOMATION_DIR/venv"
-    MINIMAL_REQUIREMENTS="$AUTOMATION_DIR/requirements-minimal.txt"
+    # Chuẩn bị Python env thống nhất tại root .venv
+    # Dùng cho: ai-service, one_automation_system, IDE
+    echo -e "${BLUE}🧪 Chuẩn bị Python env (.venv tại root)...${NC}"
+    VENV_DIR=".venv"
+    REQUIREMENTS_DEV="requirements-dev.txt"
 
-    if [ -d "$AUTOMATION_DIR" ]; then
-        if [ ! -d "$AUTOMATION_VENV" ]; then
-            echo -e "   ${YELLOW}→${NC} Tạo virtual environment tại $AUTOMATION_VENV..."
-            python3 -m venv "$AUTOMATION_VENV"
-            echo -e "   ${GREEN}✓${NC} Đã tạo virtual environment"
-        else
-            echo -e "   ${GREEN}✓${NC} Đã có virtual environment"
-        fi
-
-        # shellcheck disable=SC1091
-        source "$AUTOMATION_VENV/bin/activate"
-
-        if ! pip install --upgrade pip &> /dev/null; then
-            echo -e "   ${YELLOW}⚠️${NC} Không thể nâng cấp pip (tiếp tục)"
-        fi
-
-        if [ -f "$MINIMAL_REQUIREMENTS" ]; then
-            echo -e "   ${YELLOW}→${NC} Cài dependencies tối thiểu từ $MINIMAL_REQUIREMENTS..."
-            if pip install -r "$MINIMAL_REQUIREMENTS" &> /dev/null; then
-                echo -e "   ${GREEN}✓${NC} Đã cài dependencies tối thiểu"
-            else
-                echo -e "   ${YELLOW}⚠️${NC} Cài requirements-minimal thất bại, cài gói cốt lõi..."
-                pip install uvicorn fastapi python-dotenv gspread google-auth google-auth-oauthlib google-auth-httplib2 pandas numpy openpyxl &> /dev/null || true
-            fi
-        else
-            echo -e "   ${YELLOW}→${NC} Không thấy requirements-minimal, cài gói cốt lõi..."
-            pip install uvicorn fastapi python-dotenv gspread google-auth google-auth-oauthlib google-auth-httplib2 pandas numpy openpyxl &> /dev/null || true
-        fi
-
-        deactivate 2>/dev/null || true
-        echo -e "   ${GREEN}✓${NC} Python env automation đã sẵn sàng"
+    if [ ! -d "$VENV_DIR" ]; then
+        echo -e "   ${YELLOW}→${NC} Tạo .venv ($PYTHON_CMD)..."
+        $PYTHON_CMD -m venv "$VENV_DIR"
+        echo -e "   ${GREEN}✓${NC} Đã tạo .venv"
     else
-        echo -e "   ${YELLOW}⚠️${NC} Không tìm thấy thư mục $AUTOMATION_DIR, bỏ qua"
+        echo -e "   ${GREEN}✓${NC} Đã có .venv"
     fi
+
+    # shellcheck disable=SC1091
+    source "$VENV_DIR/bin/activate"
+
+    if ! pip install --upgrade pip &> /dev/null; then
+        echo -e "   ${YELLOW}⚠️${NC} Không thể nâng cấp pip (tiếp tục)"
+    fi
+
+    if [ -f "$REQUIREMENTS_DEV" ]; then
+        echo -e "   ${YELLOW}→${NC} Cài dependencies từ $REQUIREMENTS_DEV..."
+        if pip install -r "$REQUIREMENTS_DEV" &> /dev/null; then
+            echo -e "   ${GREEN}✓${NC} Đã cài requirements-dev"
+        else
+            echo -e "   ${YELLOW}⚠️${NC} Fallback: cài gói cốt lõi..."
+            pip install uvicorn fastapi python-dotenv pandas numpy openpyxl &> /dev/null || true
+        fi
+    else
+        echo -e "   ${YELLOW}→${NC} Fallback: cài gói cốt lõi..."
+        pip install uvicorn fastapi python-dotenv pandas numpy openpyxl &> /dev/null || true
+    fi
+
+    deactivate 2>/dev/null || true
+    echo -e "   ${GREEN}✓${NC} Python env đã sẵn sàng (source .venv/bin/activate)"
 else
     echo -e "${RED}✗ Python3 chưa được cài đặt${NC}"
-    echo "   Cài đặt: brew install python3"
+    echo "   Cài đặt: brew install python@3.11  (khuyến nghị 3.11)"
 fi
 
 echo ""
@@ -295,7 +328,6 @@ REQUIRED_FILES=(
     ".cursor/settings.json"
     ".cursor/extensions.json"
     ".editorconfig"
-    "$WORKSPACE_FILE"
 )
 
 for file in "${REQUIRED_FILES[@]}"; do
@@ -305,6 +337,15 @@ for file in "${REQUIRED_FILES[@]}"; do
         echo -e "${RED}✗ $file (thiếu)${NC}"
     fi
 done
+
+# Workspace: ưu tiên primary, chấp nhận legacy
+if [ -f "$WORKSPACE_PRIMARY" ]; then
+    echo -e "${GREEN}✅ $WORKSPACE_PRIMARY${NC}"
+elif [ -f "$WORKSPACE_LEGACY" ]; then
+    echo -e "${GREEN}✅ $WORKSPACE_LEGACY${NC}"
+else
+    echo -e "${RED}✗ Workspace file (thiếu)${NC}"
+fi
 
 echo ""
 echo "=================================================="
@@ -334,6 +375,6 @@ echo ""
 echo "📚 Cài đặt lại môi trường: ENV_SETUP.md"
 echo "   Kiểm tra nhanh: npm run tools:check && npm run verify:setup"
 echo ""
-echo -e "${CYAN}🐍 Python/venv:${NC} IDE dùng one_automation_system/venv mặc định."
-echo "   Dùng ai-service hoặc automation: Cmd+Shift+P → Python: Select Interpreter"
+echo -e "${CYAN}🐍 Python/venv:${NC} Dùng .venv thống nhất tại root."
+echo "   Kích hoạt: source .venv/bin/activate  hoặc  source scripts/activate-venv.sh"
 echo ""

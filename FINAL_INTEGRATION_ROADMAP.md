@@ -96,7 +96,7 @@ Integrated Logistics System
 
 ```bash
 # Tích hợp MIA Logistics Manager backend vào Main Project
-main-project/server/
+backend/
 ├── src/
 │   ├── routes/
 │   │   ├── authRoutes.js (existing)
@@ -135,7 +135,7 @@ main-project/server/
 ```typescript
 // Cập nhật MIA Logistics Manager để gọi Main Project API
 // Thay vì gọi localhost:5050 → gọi localhost:3001
-const API_BASE_URL = 'http://localhost:3001/api'
+const API_BASE_URL = "http://localhost:3001/api";
 ```
 
 #### **2.2. Authentication Flow** (1 ngày)

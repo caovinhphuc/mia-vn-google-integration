@@ -1,0 +1,28 @@
+# requirements-dev.txt — Thống nhất cho root .venv
+# Dùng cho: ai-service, one_automation_system, IDE, scripts
+# Cài: pip install -r requirements-dev.txt
+
+# ===== AI-SERVICE (Primary) =====
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+python-multipart==0.0.9
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# ===== ONE_AUTOMATION_SYSTEM MINIMAL =====
+selenium==4.15.2
+webdriver-manager==4.0.1
+pandas==2.3.0
+openpyxl==3.1.5
+requests==2.31.0
+pyperclip==1.9.0
+schedule==1.2.0
+loguru==0.7.3
+beautifulsoup4==4.12.2
+lxml==6.0.0
+flask==3.1.2
+flask-cors==6.0.1

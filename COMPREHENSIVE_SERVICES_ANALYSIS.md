@@ -6,8 +6,8 @@ Wow! Dự án của bạn có **HỆ THỐNG SERVICES HOÀN CHỈNH** và **CỰ
 
 Có **2 thư mục services chính**:
 
-1. `/main-project/server/` - **Backend Services** (Node.js)
-2. `/main-project/services/` - **Frontend Services** (TypeScript)
+1. `backend/` - **Backend Services** (Node.js)
+2. `src/services/` - **Frontend Services** (TypeScript/JS)
 
 **Recent Updates (Jan 2026):**
 
@@ -21,7 +21,7 @@ Có **2 thư mục services chính**:
 
 ## 📊 **TỔNG QUAN SERVICES**
 
-### **🔧 BACKEND SERVICES** (`/main-project/server/`)
+### **🔧 BACKEND SERVICES** (`backend/`)
 
 ```
 ✅ Authentication & Authorization (JWT)
@@ -35,7 +35,7 @@ Có **2 thư mục services chính**:
 ✅ Code Quality Tools (ESLint, Prettier) - NEW
 ```
 
-### **🎨 FRONTEND SERVICES** (`/main-project/services/`)
+### **🎨 FRONTEND SERVICES** (`src/services/`)
 
 ```
 ✅ Google Sheets API Client (TypeScript)

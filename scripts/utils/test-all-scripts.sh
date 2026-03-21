@@ -77,7 +77,9 @@ done < <(find . -name "*.sh" -type f \
     ! -path "*/node_modules/*" ! -path "*/.git/*" \
     ! -path "*/venv/*" ! -path "*/.venv/*" ! -path "*/ai-venv/*" \
     ! -path "*/venv.backup*/*" ! -path "*/site-packages/*" \
-    ! -path "*/backups/*" -print0)
+    ! -path "*/backups/*" \
+    ! -path "./React-OAS-Integration-v4.0/*" \
+    -print0)
 
 echo ""
 
@@ -103,7 +105,9 @@ done < <(find . -name "*.py" -type f \
     ! -path "*/node_modules/*" ! -path "*/.git/*" \
     ! -path "*/venv/*" ! -path "*/.venv/*" ! -path "*/ai-venv/*" \
     ! -path "*/venv.backup*/*" ! -path "*/site-packages/*" \
-    ! -path "*/backups/*" ! -path "*/__pycache__/*" -print0)
+    ! -path "*/backups/*"     ! -path "*/__pycache__/*" \
+    ! -path "./React-OAS-Integration-v4.0/*" \
+    -print0)
 
 echo ""
 echo -e "${BLUE}================================================================================${NC}"

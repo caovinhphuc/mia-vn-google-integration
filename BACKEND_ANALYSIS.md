@@ -122,7 +122,7 @@ POST / api / notifications / schedule;
 ## 🔧 **CẤU TRÚC THƯ MỤC CẦN BỔ SUNG**
 
 ```
-main-project/backend/src/
+backend/src/
 ├── routes/
 │   ├── auth.js              # User authentication
 │   ├── one-page.js          # One Page integration

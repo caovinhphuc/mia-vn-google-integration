@@ -2,66 +2,62 @@
 
 ## 🎯 TỔNG QUAN DỰ ÁN
 
-Dự án đã được cấu trúc lại thành 3 phần chính để tránh xung đột port và tổ chức rõ ràng:
+Dự án được tổ chức flat tại root — **không có** thư mục `main-project`. Root `react-oas-inntegration-x` chính là main project:
 
 ```
-react-oas-integration-project/
-├── 🎯 main-project/           # Dự án chính (AI-Powered Analytics)
-├── 📊 google-sheets-project/  # Dự án Google Sheets
-├── 🔧 shared-services/        # Dịch vụ chung
-└── 📚 Documentation/          # Tài liệu
+react-oas-inntegration-x/      # ROOT = Main Project
+├── src/                       # Frontend React (Port 3000)
+├── backend/                   # Backend Node.js (Port 3001)
+├── ai-service/                # AI Service Python (Port 8000)
+├── automation/                # Automation Service Python
+├── google-sheets-project/     # Dự án Google Sheets (Port 3002, 3003)
+├── package.json
+├── .venv/                     # Python venv thống nhất
+└── start.sh                   # Khởi động tất cả
 ```
 
 ## 🏗️ CẤU TRÚC CHI TIẾT
 
-### 1️⃣ MAIN PROJECT (Dự án chính)
+### 1️⃣ MAIN PROJECT (Root)
 
 ```
-main-project/
+react-oas-inntegration-x/
 ├── src/                    # Frontend React (Port 3000)
-│   ├── components/         # React Components
-│   ├── services/          # API Services
-│   ├── store/             # Redux Store
-│   └── styles/            # Material-UI Themes
-├── backend/               # Backend Node.js (Port 3001)
+│   ├── components/
+│   ├── services/
+│   ├── store/
+│   └── ...
+├── backend/                # Backend Node.js (Port 3001)
 │   ├── src/
-│   │   ├── routes/        # API Endpoints
-│   │   ├── models/        # Data Models
-│   │   └── middleware/    # Auth, CORS
-│   └── server.js          # Main Server
-├── ai-service/            # AI Service Python (Port 8000)
-│   ├── models/            # ML Models
-│   ├── utils/             # Data Processing
-│   └── main.py            # FastAPI Server
-├── automation/            # Automation Service Python
-│   ├── src/               # Automation Modules
-│   └── run_automation.py  # Scheduler
-├── package.json           # Dependencies
-├── start.sh              # Auto Start Script
-└── README.md             # Documentation
+│   │   ├── routes/
+│   │   └── ...
+│   └── package.json
+├── ai-service/             # AI Service Python (Port 8000)
+│   ├── main_simple.py      # FastAPI entry point
+│   └── requirements.txt
+├── automation/             # Automation Service
+├── package.json
+├── .env                    # Config (hoặc backend/config)
+└── start.sh                # Wrapper → scripts/start-stop/start-all.sh
 ```
 
 ### 2️⃣ GOOGLE SHEETS PROJECT
 
 ```
 google-sheets-project/
-├── src/                   # Frontend React (Port 3002)
-│   ├── pages/            # Login, Dashboard, Test
-│   ├── components/       # Google Sheets Components
-│   └── services/         # Authentication Service
-├── server.js             # Backend Node.js (Port 3003)
-├── package.json          # Dependencies
-├── start.sh             # Auto Start Script
-└── README.md            # Documentation
+├── src/                   # Frontend (Port 3002)
+├── server.js              # Backend (Port 3003)
+├── env.config.js
+└── start.sh
 ```
 
-### 3️⃣ SHARED SERVICES
+### 3️⃣ SHARED / SCRIPTS
 
 ```
-shared-services/
-├── google-apps-script/   # Google Apps Script
-├── service/              # Common Services
-└── shared/               # Shared Resources
+scripts/
+├── start-stop/start-all.sh
+├── activate-venv.sh
+└── config/
 ```
 
 ## 🔄 LUỒNG DỮ LIỆU
@@ -80,35 +76,49 @@ User → Frontend (3000) → Backend (3001) → AI Service (8000)
 
 ```
 User → Frontend (3002) → Backend (3003) → Google Sheets API
-                    ↓
-              Google Drive API
-                    ↓
-              Alert System
 ```
 
 ## 🚀 CÁCH KHỞI ĐỘNG
 
-### Khởi động dự án chính
+### Khởi động dự án chính (tất cả services)
 
 ```bash
-cd main-project
+# Ở project root
 ./start.sh
+# hoặc
+npm run dev
 ```
 
-### Khởi động dự án Google Sheets
+### Khởi động từng service riêng
+
+```bash
+# Frontend (port 3000)
+npm start
+
+# Backend (port 3001)
+npm run backend
+
+# AI Service (port 8000)
+npm run ai-service
+```
+
+### Khởi động Google Sheets Project
 
 ```bash
 cd google-sheets-project
 ./start.sh
+# hoặc
+cd google-sheets-project && node server.js &
+cd google-sheets-project && PORT=3002 npm start
 ```
 
 ### Khởi động cả hai dự án
 
 ```bash
-# Terminal 1
-cd main-project && ./start.sh
+# Terminal 1: Main
+./start.sh
 
-# Terminal 2
+# Terminal 2: Google Sheets
 cd google-sheets-project && ./start.sh
 ```
 
@@ -122,36 +132,9 @@ cd google-sheets-project && ./start.sh
 | Google Sheets Backend  | 3003 | <http://localhost:3003> |
 | AI Service             | 8000 | <http://localhost:8000> |
 
-## ✅ LỢI ÍCH CỦA CẤU TRÚC MỚI
+## ✅ LỢI ÍCH
 
-1. **Tránh xung đột port**: Mỗi dự án có port riêng
-2. **Tổ chức rõ ràng**: Dễ tìm và quản lý
-3. **Khởi động độc lập**: Có thể chạy riêng từng dự án
-4. **Dễ bảo trì**: Cấu trúc logic và dễ hiểu
-5. **Mở rộng dễ dàng**: Thêm dự án mới không ảnh hưởng
-
-## 🔧 TÍNH NĂNG CHÍNH
-
-### Main Project
-
-- ✅ AI/ML Analytics
-- ✅ Real-time Dashboard
-- ✅ WebSocket Communication
-- ✅ Google Sheets Integration
-- ✅ Automation Service
-
-### Google Sheets Project
-
-- ✅ Google Sheets Authentication
-- ✅ Data Read/Write
-- ✅ Google Drive Integration
-- ✅ Alert System
-- ✅ Real-time Sync
-
-## 📊 TECHNOLOGIES
-
-- **Frontend**: React 18, Material-UI v5, Redux Toolkit
-- **Backend**: Node.js, Express.js, Socket.io
-- **AI/ML**: Python, FastAPI, scikit-learn
-- **Database**: Google Sheets API
-- **Deployment**: Docker, Vercel, Railway
+1. **Flat structure** — Không cần `cd main-project`
+2. **venv thống nhất** — `.venv` tại root cho Python
+3. **npm scripts** — `npm run dev` chạy 3 services
+4. **start.sh** — Wrapper gọn để khởi động tất cả

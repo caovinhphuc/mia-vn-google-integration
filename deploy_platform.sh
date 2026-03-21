@@ -145,7 +145,7 @@ MIA_FRONTEND_PORT=5173
 # Service directories
 GOOGLE_SHEETS_DIR="./google-sheets-project"
 MIA_LOGISTICS_DIR="./src/mia-logistics-manager"
-AI_ENV_DIR="./ai-venv"
+AI_ENV_DIR="./.venv"
 
 # Start function
 start_services() {
@@ -157,8 +157,8 @@ start_services() {
     fi
 
     if [ ! -d "$AI_ENV_DIR" ]; then
-        warn "AI environment not found. Creating virtual environment..."
-        python3 -m venv $AI_ENV_DIR
+        warn "Python .venv not found. Run: npm run ide:setup"
+        exit 1
     fi
 
     # Install dependencies

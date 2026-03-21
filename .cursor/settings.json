@@ -22,7 +22,10 @@
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.guides.bracketPairs": "active",
   "editor.bracketPairColorization.enabled": true,
-  "editor.rulers": [100, 120],
+  "editor.rulers": [
+    100,
+    120
+  ],
   // Theme & icons
   "workbench.colorTheme": "Default Dark+",
   "workbench.iconTheme": "material-icon-theme",
@@ -67,7 +70,7 @@
     "**/lighthouse-reports": true,
     "**/backup_markdown": true
   },
-  "python.defaultInterpreterPath": "${workspaceFolder}/one_automation_system/venv/bin/python",
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.analysis.extraPaths": [
     "./automation",
     "./ai-service",

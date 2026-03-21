@@ -94,16 +94,24 @@ else
     ((TESTS_PASSED++))
 fi
 
-# 3. Check Python version (>= 3.11, khớp tinh thần CI: PYTHON_VERSION 3.11+)
+# 3. Check Python version (chuẩn: 3.11 — khớp CI và ai-service/pydantic)
 print_status "Step 3: Checking Python version..."
-if command -v python3 &> /dev/null && python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>/dev/null; then
-    print_success "Python version: $(python3 --version) (compatible, >= 3.11)"
+PYTHON_CMD=""
+if command -v python3.11 &> /dev/null; then
+    PYTHON_CMD="python3.11"
+elif command -v python3 &> /dev/null && python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>/dev/null; then
+    PYTHON_CMD="python3"
+fi
+
+if [ -n "$PYTHON_CMD" ]; then
+    print_success "Python version: $($PYTHON_CMD --version) (OK, dùng 3.11+)"
     ((TESTS_PASSED++))
 elif command -v python3 &> /dev/null; then
-    print_warning "Python version: $(python3 --version) (CI dùng 3.11+; nâng Python hoặc dùng pyenv/asdf)"
+    print_warning "Python version: $(python3 --version) — Project chuẩn hóa 3.11"
+    print_warning "  Cài Python 3.11: brew install python@3.11  hoặc  pyenv install 3.11 && pyenv local 3.11"
     ((TESTS_FAILED++))
 else
-    print_warning "Python3 not found (CI cài Python từ actions/setup-python)"
+    print_warning "Python3 not found (CI dùng actions/setup-python@3.11)"
     ((TESTS_PASSED++))
 fi
 

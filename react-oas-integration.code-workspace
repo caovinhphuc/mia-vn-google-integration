@@ -1,0 +1,143 @@
+{
+  "folders": [
+    {
+      "name": "main",
+      "path": "."
+    },
+    {
+      "name": "React-OAS-Integration-v4.0",
+      "path": "React-OAS-Integration-v4.0"
+    },
+    {
+      "name": "mia-warehouse-management-v2",
+      "path": "mia-warehouse-management-v2"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.fontSize": 13,
+    "editor.fontFamily": "SF Pro Text, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    "editor.lineHeight": 22,
+    "editor.letterSpacing": 0.6,
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.zoomLevel": 0,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.exclude": {
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.venv": true,
+      "**/venv": true,
+      "**/dist": true,
+      "**/.next": true,
+      "**/.vercel": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/__pycache__": true,
+      "**/.venv": true,
+      "**/venv": true,
+      "**/lighthouse-reports": true,
+      "**/backup_markdown": true
+    },
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/node_modules/**": true,
+      "**/__pycache__/**": true,
+      "**/.venv/**": true,
+      "**/venv/**": true,
+      "**/build/**": true
+    },
+    "python.defaultInterpreterPath": "${workspaceFolder:main}/.venv/bin/python",
+    "python.analysis.extraPaths": [
+      "./automation",
+      "./ai-service",
+      "./one_automation_system",
+      "./mia-logistics-manager"
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "terminal.integrated.cwd": "${workspaceFolder:main}",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "cSpell.words": [
+      "inntegration"
+    ],
+    "cSpell.enabled": false,
+    "[markdown]": {
+      "cSpell.enabled": false
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "eamodio.gitlens",
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "ms-python.python",
+      "ms-toolsai.jupyter",
+      "Prisma.prisma",
+      "GraphQL.vscode-graphql",
+      "pkief.material-icon-theme",
+      "styled-components.vscode-styled-components",
+      "csstools.postcss",
+      "formulahendry.code-runner",
+      "ms-python.black-formatter",
+      "ms-python.flake8",
+      "ms-python.isort"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Frontend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": [
+          "run",
+          "start"
+        ],
+        "cwd": "${workspaceFolder:main}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Backend",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": [
+          "run",
+          "backend"
+        ],
+        "cwd": "${workspaceFolder:main}",
+        "console": "integratedTerminal"
+      },
+      {
+        "name": "Full Dev (npm run dev)",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": [
+          "run",
+          "dev"
+        ],
+        "cwd": "${workspaceFolder:main}",
+        "console": "integratedTerminal"
+      }
+    ]
+  }
+}

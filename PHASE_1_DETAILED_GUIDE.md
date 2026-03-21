@@ -4,6 +4,8 @@
 
 Chuẩn bị môi trường phát triển hoàn chỉnh để chạy cả hai dự án một cách ổn định.
 
+> **⚠️ Quan trọng:** Tất cả lệnh main project chạy từ **project root** (`react-oas-inntegration-x`). Không có thư mục `main-project` — root chính là main project.
+
 ---
 
 ## 📋 **BƯỚC 1: KIỂM TRA HỆ THỐNG**
@@ -52,7 +54,7 @@ pip --version
 
 ### ✅ 2.1 Tạo Google Cloud Project
 
-1. Truy cập: https://console.cloud.google.com/
+1. Truy cập: <https://console.cloud.google.com/>/>/>
 2. Đăng nhập bằng Google account
 3. Tạo project mới:
    - Tên project: `react-integration-469009`
@@ -96,12 +98,12 @@ pip --version
    - `client_email`
    - `project_id`
    - `private_key`
-3. Cập nhật vào `main-project/env.config.js`
+3. Cập nhật vào `.env` (project root) hoặc `backend/config/`
 4. Cập nhật vào `google-sheets-project/env.config.js`
 
 ### ✅ 2.6 Cấu hình Google Sheets permissions
 
-1. Mở Google Sheets: https://sheets.google.com/
+1. Mở Google Sheets: <https://sheets.google.com/>/>/>
 2. Tạo spreadsheet mới hoặc mở spreadsheet hiện có
 3. Click **Share** (Chia sẻ)
 4. Thêm email service account: `react-integration-service@react-integration-469009.iam.gserviceaccount.com`
@@ -113,12 +115,10 @@ pip --version
 
 ## 📋 **BƯỚC 3: CÀI ĐẶT DEPENDENCIES**
 
-### ✅ 3.1 Cài đặt dependencies cho Main Project
+### ✅ 3.1 Cài đặt dependencies cho Main Project (root)
 
 ```bash
-# Di chuyển vào thư mục main-project
-cd main-project
-
+# Ở project root (react-oas-inntegration-x)
 # Cài đặt Node.js dependencies
 npm install --legacy-peer-deps
 
@@ -130,43 +130,38 @@ ls node_modules/ | head -5
 
 ```bash
 # Di chuyển vào thư mục google-sheets-project
-cd ../google-sheets-project
+cd google-sheets-project
 
 # Cài đặt Node.js dependencies
 npm install --legacy-peer-deps
 
 # Kiểm tra cài đặt thành công
 ls node_modules/ | head -5
+
+# Quay lại root
+cd ..
 ```
 
 ### ✅ 3.3 Cài đặt Python packages cho AI Service
 
 ```bash
-# Di chuyển vào thư mục ai-service
-cd ../main-project/ai-service
+# Ở project root — dùng .venv thống nhất
+source .venv/bin/activate  # hoặc: source scripts/activate-venv.sh
 
-# Tạo virtual environment (tùy chọn)
-python3 -m venv venv
-source venv/bin/activate  # Trên macOS/Linux
+# Cài đặt từ requirements-dev (đã gồm ai-service)
+pip install -r requirements-dev.txt
 
-# Cài đặt Python packages
-pip install -r requirements.txt
-
-# Kiểm tra cài đặt thành công
-pip list | head -10
+# Hoặc cài riêng ai-service
+cd ai-service && pip install -r requirements.txt && cd ..
 ```
 
 ### ✅ 3.4 Cài đặt Python packages cho Automation
 
 ```bash
-# Di chuyển vào thư mục automation
-cd ../automation
-
-# Cài đặt Python packages
+# Ở project root, .venv đã kích hoạt
+cd automation
 pip install -r requirements.txt
-
-# Kiểm tra cài đặt thành công
-pip list | head -10
+cd ..
 ```
 
 ---
@@ -176,8 +171,8 @@ pip list | head -10
 ### ✅ 4.1 Kiểm tra file cấu hình
 
 ```bash
-# Kiểm tra main-project config
-cat main-project/env.config.js
+# Kiểm tra env (project root)
+ls -la .env .env.example
 
 # Kiểm tra google-sheets-project config
 cat google-sheets-project/env.config.js
@@ -187,12 +182,12 @@ cat google-sheets-project/env.config.js
 
 ```bash
 # Kiểm tra file credentials
-ls -la main-project/backend/config/
+ls -la backend/config/
 ls -la google-sheets-project/config/
 
-# Kiểm tra file JSON key
-ls -la main-project/backend/config/google-credentials.json
-ls -la google-sheets-project/config/google-credentials.json
+# Kiểm tra file JSON key (nếu có)
+ls -la backend/config/google-credentials.json 2>/dev/null || echo "Dùng .env cho credentials"
+ls -la google-sheets-project/config/google-credentials.json 2>/dev/null
 ```
 
 ### ✅ 4.3 Kiểm tra port availability
@@ -253,7 +248,7 @@ pip --version
 
 ```bash
 # Test kết nối Google Sheets (tùy chọn)
-cd main-project
+# Ở project root
 node -e "
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet('YOUR_SPREADSHEET_ID');

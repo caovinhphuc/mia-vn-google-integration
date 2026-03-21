@@ -205,13 +205,13 @@ Khi có:
 const CACHE_NAME = "react-oas-v4.1.0"; // <- Increment version
 ```
 
-2. **Rebuild**:
+1. **Rebuild**:
 
 ```bash
 npm run build
 ```
 
-3. **Deploy**: Service worker sẽ tự động update
+1. **Deploy**: Service worker sẽ tự động update
 
 ### User Experience
 
