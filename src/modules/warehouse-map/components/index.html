@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hệ Thống Quản Lý Kho KCN Tân Bình</title>
+
+    <!-- External Libraries -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #2c5aa0;
+        --secondary-color: #f8f9fa;
+        --accent-color: #28a745;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --dark-color: #343a40;
+        --light-color: #ffffff;
+        --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--secondary-color);
+        line-height: 1.6;
+      }
+
+      /* Header Styles */
+      .navbar {
+        background: var(--gradient-bg) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-light);
+        border: none;
+      }
+
+      .navbar-brand {
+        font-weight: bold;
+        color: white !important;
+        font-size: 1.5rem;
+      }
+
+      /* Dashboard Container */
+      .dashboard-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      }
+
+      /* Sidebar */
+      .sidebar {
+        background: white;
+        min-height: calc(100vh - 76px);
+        box-shadow: var(--shadow-light);
+        border-radius: 0 15px 15px 0;
+      }
+
+      .sidebar .nav-link {
+        color: var(--dark-color);
+        padding: 15px 20px;
+        margin: 5px 10px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .sidebar .nav-link:hover,
+      .sidebar .nav-link.active {
+        background: var(--primary-color);
+        color: white;
+        transform: translateX(5px);
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 20px;
+      }
+
+      /* Cards */
+      .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: var(--shadow-light);
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-heavy);
+      }
+
+      .card-header {
+        background: var(--gradient-bg);
+        color: white;
+        border: none;
+        border-radius: 15px 15px 0 0 !important;
+        padding: 20px;
+        font-weight: bold;
+      }
+
+      /* Statistics Cards */
+      .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-align: center;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-light);
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: scale(1.05);
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .stat-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      /* Warehouse Map */
+      .warehouse-map {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-light);
+        min-height: 500px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .warehouse-grid {
+        display: grid;
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(15, 1fr);
+        gap: 2px;
+        height: 450px;
+        padding: 10px;
+      }
+
+      .warehouse-cell {
+        background: #e9ecef;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        position: relative;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .warehouse-cell:hover {
+        transform: scale(1.1);
+        z-index: 10;
+      }
+
+      .warehouse-cell.occupied {
+        background: var(--accent-color);
+        color: white;
+      }
+
+      .warehouse-cell.maintenance {
+        background: var(--warning-color);
+        color: white;
+      }
+
+      .warehouse-cell.blocked {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .warehouse-cell.selected {
+        background: var(--primary-color);
+        color: white;
+        box-shadow: 0 0 15px rgba(44, 90, 160, 0.7);
+      }
+
+      /* Forms */
+      .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(44, 90, 160, 0.2);
+      }
+
+      .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: var(--gradient-bg);
+        border: none;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-light);
+      }
+
+      /* Tables */
+      .table {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow-light);
+      }
+
+      .table thead {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .table tbody tr:hover {
+        background: rgba(44, 90, 160, 0.1);
+      }
+
+      /* Import/Export Section */
+      .import-export-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-light);
+      }
+
+      .file-drop-zone {
+        border: 3px dashed var(--primary-color);
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background: rgba(44, 90, 160, 0.05);
+      }
+
+      .file-drop-zone:hover,
+      .file-drop-zone.dragover {
+        background: rgba(44, 90, 160, 0.1);
+        border-color: var(--accent-color);
+      }
+
+      /* Search and Filter */
+      .search-filter-section {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-light);
+      }
+
+      /* Chart Container */
+      .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+        box-shadow: var(--shadow-light);
+        min-height: 400px;
+      }
+
+      /* Modal Styles */
+      .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: var(--shadow-heavy);
+      }
+
+      .modal-header {
+        background: var(--gradient-bg);
+        color: white;
+        border: none;
+        border-radius: 15px 15px 0 0;
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .sidebar {
+          border-radius: 0;
+        }
+
+        .main-content {
+          padding: 10px;
+        }
+
+        .warehouse-grid {
+          grid-template-columns: repeat(10, 1fr);
+          grid-template-rows: repeat(8, 1fr);
+        }
+
+        .stat-number {
+          font-size: 2rem;
+        }
+      }
+
+      /* Animation Classes */
+      .fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-warehouse me-2"></i>
+          Hệ Thống Quản Lý Kho KCN Tân Bình
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link text-white" href="#" onclick="exportData()">
+            <i class="fas fa-download me-1"></i>Xuất Dữ Liệu
+          </a>
+          <a class="nav-link text-white" href="#" onclick="showSettings()">
+            <i class="fas fa-cog me-1"></i>Cài Đặt
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="dashboard-container">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Sidebar -->
+          <div class="col-lg-2 col-md-3 p-0">
+            <div class="sidebar">
+              <ul class="nav nav-pills flex-column p-3">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    href="#"
+                    onclick="showSection('dashboard')"
+                  >
+                    <i class="fas fa-chart-pie me-2"></i>Dashboard
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="#"
+                    onclick="showSection('warehouse-map')"
+                  >
+                    <i class="fas fa-map me-2"></i>Sơ Đồ Kho
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="#"
+                    onclick="showSection('inventory')"
+                  >
+                    <i class="fas fa-boxes me-2"></i>Hàng Tồn Kho
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="#"
+                    onclick="showSection('import-export')"
+                  >
+                    <i class="fas fa-file-excel me-2"></i>Import/Export
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" onclick="showSection('search')">
+                    <i class="fas fa-search me-2"></i>Tìm Kiếm
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" onclick="showSection('reports')">
+                    <i class="fas fa-chart-bar me-2"></i>Báo Cáo
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div class="col-lg-10 col-md-9">
+            <div class="main-content">
+              <!-- Dashboard Section -->
+              <div id="dashboard-section" class="content-section fadeInUp">
+                <h2 class="mb-4">
+                  <i class="fas fa-chart-pie me-2"></i>Dashboard Tổng Quan
+                </h2>
+
+                <!-- Statistics Cards -->
+                <div class="row">
+                  <div class="col-lg-3 col-md-6">
+                    <div class="stat-card animate__animated animate__fadeInUp">
+                      <div class="stat-number" id="total-locations">320</div>
+                      <div class="stat-label">Tổng Vị Trí</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <div
+                      class="stat-card animate__animated animate__fadeInUp animate__delay-1s"
+                      style="
+                        background: linear-gradient(
+                          135deg,
+                          #28a745 0%,
+                          #20c997 100%
+                        );
+                      "
+                    >
+                      <div class="stat-number" id="occupied-locations">245</div>
+                      <div class="stat-label">Đã Sử Dụng</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <div
+                      class="stat-card animate__animated animate__fadeInUp animate__delay-2s"
+                      style="
+                        background: linear-gradient(
+                          135deg,
+                          #ffc107 0%,
+                          #fd7e14 100%
+                        );
+                      "
+                    >
+                      <div class="stat-number" id="available-locations">75</div>
+                      <div class="stat-label">Còn Trống</div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <div
+                      class="stat-card animate__animated animate__fadeInUp animate__delay-3s"
+                      style="
+                        background: linear-gradient(
+                          135deg,
+                          #dc3545 0%,
+                          #e83e8c 100%
+                        );
+                      "
+                    >
+                      <div class="stat-number" id="utilization-rate">76%</div>
+                      <div class="stat-label">Tỷ Lệ Sử Dụng</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <i class="fas fa-bolt me-2"></i>Thao Tác Nhanh
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-lg-3 col-md-6 mb-3">
+                            <button
+                              class="btn btn-primary w-100"
+                              onclick="showAddLocationModal()"
+                            >
+                              <i class="fas fa-plus me-2"></i>Thêm Vị Trí Mới
+                            </button>
+                          </div>
+                          <div class="col-lg-3 col-md-6 mb-3">
+                            <button
+                              class="btn btn-success w-100"
+                              onclick="importSampleData()"
+                            >
+                              <i class="fas fa-file-import me-2"></i>Import Mẫu
+                            </button>
+                          </div>
+                          <div class="col-lg-3 col-md-6 mb-3">
+                            <button
+                              class="btn btn-warning w-100"
+                              onclick="generateReport()"
+                            >
+                              <i class="fas fa-chart-line me-2"></i>Tạo Báo Cáo
+                            </button>
+                          </div>
+                          <div class="col-lg-3 col-md-6 mb-3">
+                            <button
+                              class="btn btn-info w-100"
+                              onclick="backupData()"
+                            >
+                              <i class="fas fa-cloud-upload-alt me-2"></i>Sao
+                              Lưu
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div class="row mt-4">
+                  <div class="col-lg-8">
+                    <div class="chart-container">
+                      <h5>
+                        <i class="fas fa-chart-area me-2"></i>Biểu Đồ Sử Dụng
+                        Kho Theo Thời Gian
+                      </h5>
+                      <canvas
+                        id="utilizationChart"
+                        width="400"
+                        height="200"
+                      ></canvas>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="chart-container">
+                      <h5>
+                        <i class="fas fa-chart-pie me-2"></i>Phân Bố Loại Hàng
+                      </h5>
+                      <canvas
+                        id="categoryChart"
+                        width="200"
+                        height="200"
+                      ></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Warehouse Map Section -->
+              <div
+                id="warehouse-map-section"
+                class="content-section"
+                style="display: none"
+              >
+                <h2 class="mb-4">
+                  <i class="fas fa-map me-2"></i>Sơ Đồ Kho Tương Tác
+                </h2>
+
+                <!-- Map Controls -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-lg-8">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <select
+                              class="form-select"
+                              id="floorSelect"
+                              onchange="changeFloor()"
+                            >
+                              <option value="1">Tầng 1</option>
+                              <option value="2">Tầng 2</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <select
+                              class="form-select"
+                              id="zoneSelect"
+                              onchange="filterByZone()"
+                            >
+                              <option value="all">Tất Cả Khu Vực</option>
+                              <option value="A">Khu Vực A</option>
+                              <option value="B">Khu Vực B</option>
+                              <option value="C">Khu Vực C</option>
+                              <option value="D">Khu Vực D</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="locationSearch"
+                              placeholder="Tìm vị trí (VD: A1-001)"
+                              onkeyup="searchLocation(this.value)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 text-end">
+                        <button
+                          class="btn btn-outline-primary me-2"
+                          onclick="toggleGrid()"
+                        >
+                          <i class="fas fa-grid" id="gridIcon"></i> Lưới
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          onclick="refreshMap()"
+                        >
+                          <i class="fas fa-sync-alt"></i> Làm Mới
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h6><i class="fas fa-info-circle me-2"></i>Chú Thích</h6>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <span class="badge bg-secondary me-2"></span>Trống
+                      </div>
+                      <div class="col-md-3">
+                        <span class="badge bg-success me-2"></span>Có Hàng
+                      </div>
+                      <div class="col-md-3">
+                        <span class="badge bg-warning me-2"></span>Bảo Trì
+                      </div>
+                      <div class="col-md-3">
+                        <span class="badge bg-danger me-2"></span>Bị Chặn
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Warehouse Map -->
+                <div class="warehouse-map">
+                  <div class="warehouse-grid" id="warehouseGrid"></div>
+                </div>
+              </div>
+
+              <!-- Inventory Section -->
+              <div
+                id="inventory-section"
+                class="content-section"
+                style="display: none"
+              >
+                <h2 class="mb-4">
+                  <i class="fas fa-boxes me-2"></i>Quản Lý Hàng Tồn Kho
+                </h2>
+
+                <!-- Inventory Controls -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-8">
+                        <div class="row">
+                          <div class="col-md-4">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="inventorySearch"
+                              placeholder="Tìm sản phẩm..."
+                              onkeyup="filterInventory()"
+                            />
+                          </div>
+                          <div class="col-md-4">
+                            <select
+                              class="form-select"
+                              id="categoryFilter"
+                              onchange="filterInventory()"
+                            >
+                              <option value="">Tất cả danh mục</option>
+                              <option value="electronics">Điện tử</option>
+                              <option value="clothing">Quần áo</option>
+                              <option value="food">Thực phẩm</option>
+                              <option value="furniture">Nội thất</option>
+                            </select>
+                          </div>
+                          <div class="col-md-4">
+                            <select
+                              class="form-select"
+                              id="statusFilter"
+                              onchange="filterInventory()"
+                            >
+                              <option value="">Tất cả trạng thái</option>
+                              <option value="in-stock">Còn hàng</option>
+                              <option value="low-stock">Sắp hết</option>
+                              <option value="out-of-stock">Hết hàng</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 text-end">
+                        <button
+                          class="btn btn-primary"
+                          onclick="showAddItemModal()"
+                        >
+                          <i class="fas fa-plus me-2"></i>Thêm Sản Phẩm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="card">
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table mb-0" id="inventoryTable">
+                        <thead>
+                          <tr>
+                            <th>Mã SP</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Danh Mục</th>
+                            <th>Vị Trí</th>
+                            <th>Số Lượng</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                          </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                          <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Import/Export Section -->
+              <div
+                id="import-export-section"
+                class="content-section"
+                style="display: none"
+              >
+                <h2 class="mb-4">
+                  <i class="fas fa-file-excel me-2"></i>Import/Export Dữ Liệu
+                </h2>
+
+                <!-- Import Section -->
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <i class="fas fa-file-import me-2"></i>Import Dữ Liệu
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="file-drop-zone" id="fileDropZone">
+                          <i
+                            class="fas fa-cloud-upload-alt fa-3x mb-3 text-primary"
+                          ></i>
+                          <h5>Kéo thả file Excel/CSV vào đây</h5>
+                          <p class="text-muted">hoặc nhấp để chọn file</p>
+                          <input
+                            type="file"
+                            id="fileInput"
+                            class="d-none"
+                            accept=".xlsx,.xls,.csv"
+                            multiple
+                          />
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="document.getElementById('fileInput').click()"
+                          >
+                            Chọn File
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <h6>
+                          <i class="fas fa-info-circle me-2"></i>Định dạng file
+                          được hỗ trợ:
+                        </h6>
+                        <ul class="list-unstyled">
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i>Excel
+                            (.xlsx, .xls)
+                          </li>
+                          <li>
+                            <i class="fas fa-check text-success me-2"></i>CSV
+                            (.csv)
+                          </li>
+                        </ul>
+
+                        <h6 class="mt-4">
+                          <i class="fas fa-download me-2"></i>File mẫu:
+                        </h6>
+                        <div class="d-grid gap-2">
+                          <button
+                            class="btn btn-outline-primary"
+                            onclick="downloadSample('inventory')"
+                          >
+                            <i class="fas fa-download me-2"></i>Mẫu Hàng Tồn Kho
+                          </button>
+                          <button
+                            class="btn btn-outline-success"
+                            onclick="downloadSample('locations')"
+                          >
+                            <i class="fas fa-download me-2"></i>Mẫu Vị Trí Kho
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Export Section -->
+                <div class="card">
+                  <div class="card-header">
+                    <i class="fas fa-file-export me-2"></i>Export Dữ Liệu
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <h6>Chọn dữ liệu xuất:</h6>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="exportInventory"
+                            checked
+                          />
+                          <label class="form-check-label" for="exportInventory"
+                            >Hàng tồn kho</label
+                          >
+                        </div>
+                        <div class="form-check mb-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="exportLocations"
+                            checked
+                          />
+                          <label class="form-check-label" for="exportLocations"
+                            >Vị trí kho</label
+                          >
+                        </div>
+                        <div class="form-check mb-3">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="exportReports"
+                          />
+                          <label class="form-check-label" for="exportReports"
+                            >Báo cáo thống kê</label
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <h6>Định dạng xuất:</h6>
+                        <div class="d-grid gap-2">
+                          <button
+                            class="btn btn-success"
+                            onclick="exportToExcel()"
+                          >
+                            <i class="fas fa-file-excel me-2"></i>Xuất Excel
+                          </button>
+                          <button class="btn btn-info" onclick="exportToCSV()">
+                            <i class="fas fa-file-csv me-2"></i>Xuất CSV
+                          </button>
+                          <button
+                            class="btn btn-danger"
+                            onclick="exportToPDF()"
+                          >
+                            <i class="fas fa-file-pdf me-2"></i>Xuất PDF
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Search Section -->
+              <div
+                id="search-section"
+                class="content-section"
+                style="display: none"
+              >
+                <h2 class="mb-4">
+                  <i class="fas fa-search me-2"></i>Tìm Kiếm & Lọc Dữ Liệu
+                </h2>
+
+                <!-- Advanced Search -->
+                <div class="search-filter-section">
+                  <h5><i class="fas fa-filter me-2"></i>Tìm Kiếm Nâng Cao</h5>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                      <label class="form-label">Từ khóa:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="advancedSearchKeyword"
+                        placeholder="Nhập từ khóa..."
+                      />
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                      <label class="form-label">Danh mục:</label>
+                      <select class="form-select" id="advancedSearchCategory">
+                        <option value="">Tất cả</option>
+                        <option value="electronics">Điện tử</option>
+                        <option value="clothing">Quần áo</option>
+                        <option value="food">Thực phẩm</option>
+                        <option value="furniture">Nội thất</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                      <label class="form-label">Khu vực:</label>
+                      <select class="form-select" id="advancedSearchZone">
+                        <option value="">Tất cả</option>
+                        <option value="A">Khu vực A</option>
+                        <option value="B">Khu vực B</option>
+                        <option value="C">Khu vực C</option>
+                        <option value="D">Khu vực D</option>
+                      </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                      <label class="form-label">Trạng thái:</label>
+                      <select class="form-select" id="advancedSearchStatus">
+                        <option value="">Tất cả</option>
+                        <option value="in-stock">Còn hàng</option>
+                        <option value="low-stock">Sắp hết</option>
+                        <option value="out-of-stock">Hết hàng</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6 mb-3">
+                      <label class="form-label">Khoảng số lượng:</label>
+                      <div class="row">
+                        <div class="col-6">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="quantityMin"
+                            placeholder="Từ"
+                          />
+                        </div>
+                        <div class="col-6">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="quantityMax"
+                            placeholder="Đến"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                      <label class="form-label">&nbsp;</label>
+                      <div>
+                        <button
+                          class="btn btn-primary me-2"
+                          onclick="performAdvancedSearch()"
+                        >
+                          <i class="fas fa-search me-2"></i>Tìm Kiếm
+                        </button>
+                        <button
+                          class="btn btn-outline-secondary"
+                          onclick="resetSearch()"
+                        >
+                          <i class="fas fa-undo me-2"></i>Đặt Lại
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Search Results -->
+                <div class="card">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <span
+                      ><i class="fas fa-list me-2"></i>Kết Quả Tìm Kiếm</span
+                    >
+                    <span class="badge bg-primary" id="searchResultCount"
+                      >0 kết quả</span
+                    >
+                  </div>
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table mb-0">
+                        <thead>
+                          <tr>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Danh Mục</th>
+                            <th>Vị Trí</th>
+                            <th>Số Lượng</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                          </tr>
+                        </thead>
+                        <tbody id="searchResultsBody">
+                          <tr>
+                            <td colspan="7" class="text-center text-muted">
+                              <i class="fas fa-search fa-2x mb-3"></i>
+                              <p>Sử dụng bộ lọc trên để tìm kiếm dữ liệu</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reports Section -->
+              <div
+                id="reports-section"
+                class="content-section"
+                style="display: none"
+              >
+                <h2 class="mb-4">
+                  <i class="fas fa-chart-bar me-2"></i>Báo Cáo & Thống Kê
+                </h2>
+
+                <!-- Report Controls -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <div class="row align-items-end">
+                      <div class="col-lg-3 col-md-6 mb-3">
+                        <label class="form-label">Loại báo cáo:</label>
+                        <select class="form-select" id="reportType">
+                          <option value="inventory">Báo cáo hàng tồn</option>
+                          <option value="utilization">
+                            Báo cáo sử dụng kho
+                          </option>
+                          <option value="movement">Báo cáo xuất nhập</option>
+                          <option value="performance">Báo cáo hiệu suất</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-3 col-md-6 mb-3">
+                        <label class="form-label">Từ ngày:</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="reportDateFrom"
+                        />
+                      </div>
+                      <div class="col-lg-3 col-md-6 mb-3">
+                        <label class="form-label">Đến ngày:</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="reportDateTo"
+                        />
+                      </div>
+                      <div class="col-lg-3 col-md-6 mb-3">
+                        <button
+                          class="btn btn-primary w-100"
+                          onclick="generateCustomReport()"
+                        >
+                          <i class="fas fa-chart-line me-2"></i>Tạo Báo Cáo
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Report Charts -->
+                <div class="row">
+                  <div class="col-lg-8">
+                    <div class="chart-container">
+                      <h5>
+                        <i class="fas fa-chart-line me-2"></i>Biểu Đồ Xu Hướng
+                      </h5>
+                      <canvas id="trendChart" width="400" height="200"></canvas>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="chart-container">
+                      <h5>
+                        <i class="fas fa-chart-donut me-2"></i>Phân Tích Theo
+                        Khu Vực
+                      </h5>
+                      <canvas id="zoneChart" width="200" height="200"></canvas>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Report Summary -->
+                <div class="row mt-4">
+                  <div class="col-lg-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <i class="fas fa-trophy me-2"></i>Top Sản Phẩm
+                      </div>
+                      <div class="card-body">
+                        <div id="topProductsList">
+                          <!-- Will be populated by JavaScript -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Cảnh Báo
+                        Hàng Tồn
+                      </div>
+                      <div class="card-body">
+                        <div id="stockAlertsList">
+                          <!-- Will be populated by JavaScript -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Location Modal -->
+    <div class="modal fade" id="addLocationModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-plus me-2"></i>Thêm Vị Trí Mới
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="addLocationForm">
+              <div class="mb-3">
+                <label class="form-label">Mã vị trí:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="locationCode"
+                  placeholder="VD: A1-001"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Khu vực:</label>
+                <select class="form-select" id="locationZone">
+                  <option value="A">Khu vực A</option>
+                  <option value="B">Khu vực B</option>
+                  <option value="C">Khu vực C</option>
+                  <option value="D">Khu vực D</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Tầng:</label>
+                <select class="form-select" id="locationFloor">
+                  <option value="1">Tầng 1</option>
+                  <option value="2">Tầng 2</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Loại vị trí:</label>
+                <select class="form-select" id="locationType">
+                  <option value="storage">Lưu trữ</option>
+                  <option value="staging">Tập kết</option>
+                  <option value="shipping">Giao hàng</option>
+                  <option value="receiving">Nhận hàng</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="saveLocation()"
+            >
+              <i class="fas fa-save me-2"></i>Lưu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              <i class="fas fa-plus me-2"></i>Thêm Sản Phẩm
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="addItemForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Mã sản phẩm:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="itemCode"
+                    placeholder="VD: SP-001"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Tên sản phẩm:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="itemName"
+                    placeholder="Tên sản phẩm"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Danh mục:</label>
+                  <select class="form-select" id="itemCategory">
+                    <option value="electronics">Điện tử</option>
+                    <option value="clothing">Quần áo</option>
+                    <option value="food">Thực phẩm</option>
+                    <option value="furniture">Nội thất</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Vị trí:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="itemLocation"
+                    placeholder="VD: A1-001"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Số lượng:</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="itemQuantity"
+                    placeholder="0"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Đơn vị:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="itemUnit"
+                    placeholder="VD: Cái, Thùng"
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Mô tả:</label>
+                <textarea
+                  class="form-control"
+                  id="itemDescription"
+                  rows="3"
+                  placeholder="Mô tả sản phẩm"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Hủy
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveItem()">
+              <i class="fas fa-save me-2"></i>Lưu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- External Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+      // Global Variables
+      let warehouseData = [];
+      let inventoryData = [];
+      let currentSection = 'dashboard';
+      let gridVisible = true;
+
+      // Initialize Application
+      document.addEventListener('DOMContentLoaded', function () {
+        initializeApp();
+      });
+
+      function initializeApp() {
+        generateSampleData();
+        initializeCharts();
+        createWarehouseGrid();
+        updateStatistics();
+        populateInventoryTable();
+        setupEventListeners();
+
+        // Set default dates for reports
+        const today = new Date();
+        const lastMonth = new Date();
+        lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+        document.getElementById('reportDateFrom').value = lastMonth
+          .toISOString()
+          .split('T')[0];
+        document.getElementById('reportDateTo').value = today
+          .toISOString()
+          .split('T')[0];
+      }
+
+      function generateSampleData() {
+        // Generate sample warehouse locations
+        const zones = ['A', 'B', 'C', 'D'];
+        warehouseData = [];
+
+        for (let zone of zones) {
+          for (let row = 1; row <= 5; row++) {
+            for (let col = 1; col <= 20; col++) {
+              const locationCode = `${zone}${row}-${col
+                .toString()
+                .padStart(3, '0')}`;
+              const status =
+                Math.random() < 0.76
+                  ? 'occupied'
+                  : Math.random() < 0.1
+                  ? 'maintenance'
+                  : Math.random() < 0.05
+                  ? 'blocked'
+                  : 'available';
+
+              warehouseData.push({
+                code: locationCode,
+                zone: zone,
+                floor: Math.random() < 0.5 ? 1 : 2,
+                row: row,
+                col: col,
+                status: status,
+                type: 'storage',
+              });
+            }
+          }
+        }
+
+        // Generate sample inventory
+        const categories = ['electronics', 'clothing', 'food', 'furniture'];
+        const productNames = {
+          electronics: [
+            'Laptop Dell',
+            'iPhone 14',
+            'Samsung TV',
+            'Tai nghe Sony',
+            'Camera Canon',
+          ],
+          clothing: [
+            'Áo sơ mi',
+            'Quần jeans',
+            'Váy dạ hội',
+            'Giày thể thao',
+            'Túi xách',
+          ],
+          food: ['Gạo ST25', 'Dầu ăn', 'Nước mắm', 'Bánh kẹo', 'Trà xanh'],
+          furniture: [
+            'Bàn làm việc',
+            'Ghế office',
+            'Tủ sách',
+            'Giường ngủ',
+            'Sofa',
+          ],
+        };
+
+        inventoryData = [];
+        for (let i = 1; i <= 50; i++) {
+          const category =
+            categories[Math.floor(Math.random() * categories.length)];
+          const productList = productNames[category];
+          const productName =
+            productList[Math.floor(Math.random() * productList.length)];
+          const quantity = Math.floor(Math.random() * 1000) + 1;
+          const status =
+            quantity > 100
+              ? 'in-stock'
+              : quantity > 20
+              ? 'low-stock'
+              : 'out-of-stock';
+          const location =
+            warehouseData[Math.floor(Math.random() * warehouseData.length)];
+
+          inventoryData.push({
+            code: `SP-${i.toString().padStart(3, '0')}`,
+            name: `${productName} ${i}`,
+            category: category,
+            location: location.code,
+            quantity: quantity,
+            unit: 'Cái',
+            status: status,
+            description: `Mô tả cho ${productName} số ${i}`,
+          });
+        }
+      }
+
+      function showSection(section) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach((el) => {
+          el.style.display = 'none';
+        });
+
+        // Remove active class from all nav links
+        document.querySelectorAll('.sidebar .nav-link').forEach((el) => {
+          el.classList.remove('active');
+        });
+
+        // Show selected section
+        document.getElementById(section + '-section').style.display = 'block';
+
+        // Add active class to clicked nav link
+        event.target.classList.add('active');
+
+        currentSection = section;
+
+        // Add animation
+        document
+          .getElementById(section + '-section')
+          .classList.add('animate__animated', 'animate__fadeIn');
+
+        // Section specific initialization
+        if (section === 'warehouse-map') {
+          createWarehouseGrid();
+        } else if (section === 'inventory') {
+          populateInventoryTable();
+        } else if (section === 'reports') {
+          generateCustomReport();
+        }
+      }
+
+      function createWarehouseGrid() {
+        const grid = document.getElementById('warehouseGrid');
+        grid.innerHTML = '';
+
+        // Create grid for current floor
+        const currentFloor = parseInt(
+          document.getElementById('floorSelect')?.value || 1
+        );
+        const filteredData = warehouseData.filter(
+          (location) => location.floor === currentFloor
+        );
+
+        // Group by zone for better visualization
+        const zones = ['A', 'B', 'C', 'D'];
+        zones.forEach((zone) => {
+          const zoneData = filteredData.filter(
+            (location) => location.zone === zone
+          );
+          zoneData.forEach((location) => {
+            const cell = document.createElement('div');
+            cell.className = `warehouse-cell ${location.status}`;
+            cell.setAttribute('data-location', location.code);
+            cell.setAttribute(
+              'title',
+              `${location.code} - ${getStatusText(location.status)}`
+            );
+            cell.innerHTML = `<small>${location.code}</small>`;
+
+            cell.addEventListener('click', () => selectLocation(location));
+            grid.appendChild(cell);
+          });
+        });
+      }
+
+      function getStatusText(status) {
+        const statusMap = {
+          available: 'Trống',
+          occupied: 'Có hàng',
+          maintenance: 'Bảo trì',
+          blocked: 'Bị chặn',
+        };
+        return statusMap[status] || status;
+      }
+
+      function selectLocation(location) {
+        // Remove previous selection
+        document
+          .querySelectorAll('.warehouse-cell.selected')
+          .forEach((cell) => {
+            cell.classList.remove('selected');
+          });
+
+        // Select new location
+        const cell = document.querySelector(
+          `[data-location="${location.code}"]`
+        );
+        if (cell) {
+          cell.classList.add('selected');
+
+          // Show location details (you can implement a modal or sidebar panel)
+          showLocationDetails(location);
+        }
+      }
+
+      function showLocationDetails(location) {
+        // Find items in this location
+        const items = inventoryData.filter(
+          (item) => item.location === location.code
+        );
+
+        const modal = new bootstrap.Modal(document.createElement('div'));
+        modal._element.innerHTML = `
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chi tiết vị trí ${
+                              location.code
+                            }</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Khu vực:</strong> ${location.zone}</p>
+                            <p><strong>Tầng:</strong> ${location.floor}</p>
+                            <p><strong>Trạng thái:</strong> ${getStatusText(
+                              location.status
+                            )}</p>
+                            <p><strong>Số lượng sản phẩm:</strong> ${
+                              items.length
+                            }</p>
+                            ${
+                              items.length > 0
+                                ? `
+                                <h6>Sản phẩm trong vị trí:</h6>
+                                <ul class="list-group">
+                                    ${items
+                                      .map(
+                                        (item) => `
+                                        <li class="list-group-item">
+                                            <strong>${item.name}</strong> - ${item.quantity} ${item.unit}
+                                        </li>
+                                    `
+                                      )
+                                      .join('')}
+                                </ul>
+                            `
+                                : '<p class="text-muted">Không có sản phẩm nào</p>'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        document.body.appendChild(modal._element);
+        modal.show();
+
+        modal._element.addEventListener('hidden.bs.modal', () => {
+          document.body.removeChild(modal._element);
+        });
+      }
+
+      function updateStatistics() {
+        const totalLocations = warehouseData.length;
+        const occupiedLocations = warehouseData.filter(
+          (loc) => loc.status === 'occupied'
+        ).length;
+        const availableLocations = warehouseData.filter(
+          (loc) => loc.status === 'available'
+        ).length;
+        const utilizationRate = Math.round(
+          (occupiedLocations / totalLocations) * 100
+        );
+
+        document.getElementById('total-locations').textContent = totalLocations;
+        document.getElementById('occupied-locations').textContent =
+          occupiedLocations;
+        document.getElementById('available-locations').textContent =
+          availableLocations;
+        document.getElementById('utilization-rate').textContent =
+          utilizationRate + '%';
+      }
+
+      function populateInventoryTable() {
+        const tbody = document.getElementById('inventoryTableBody');
+        tbody.innerHTML = '';
+
+        inventoryData.forEach((item) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${getCategoryText(item.category)}</td>
+                    <td>${item.location}</td>
+                    <td>${item.quantity} ${item.unit}</td>
+                    <td><span class="badge bg-${getStatusColor(
+                      item.status
+                    )}">${getStatusText(item.status)}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem('${
+                          item.code
+                        }')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('${
+                          item.code
+                        }')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function getCategoryText(category) {
+        const categoryMap = {
+          electronics: 'Điện tử',
+          clothing: 'Quần áo',
+          food: 'Thực phẩm',
+          furniture: 'Nội thất',
+        };
+        return categoryMap[category] || category;
+      }
+
+      function getStatusColor(status) {
+        const colorMap = {
+          'in-stock': 'success',
+          'low-stock': 'warning',
+          'out-of-stock': 'danger',
+        };
+        return colorMap[status] || 'secondary';
+      }
+
+      function initializeCharts() {
+        // Utilization Chart
+        const utilizationCtx = document
+          .getElementById('utilizationChart')
+          ?.getContext('2d');
+        if (utilizationCtx) {
+          new Chart(utilizationCtx, {
+            type: 'line',
+            data: {
+              labels: [
+                'T1',
+                'T2',
+                'T3',
+                'T4',
+                'T5',
+                'T6',
+                'T7',
+                'T8',
+                'T9',
+                'T10',
+                'T11',
+                'T12',
+              ],
+              datasets: [
+                {
+                  label: 'Tỷ lệ sử dụng (%)',
+                  data: [65, 72, 68, 75, 80, 78, 82, 85, 83, 88, 86, 90],
+                  borderColor: '#2c5aa0',
+                  backgroundColor: 'rgba(44, 90, 160, 0.1)',
+                  tension: 0.4,
+                  fill: true,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              // maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  max: 100,
+                },
+              },
+            },
+          });
+        }
+
+        // Category Chart
+        const categoryCtx = document
+          .getElementById('categoryChart')
+          ?.getContext('2d');
+        if (categoryCtx) {
+          new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+              labels: ['Điện tử', 'Quần áo', 'Thực phẩm', 'Nội thất'],
+              datasets: [
+                {
+                  data: [30, 25, 25, 20],
+                  backgroundColor: ['#2c5aa0', '#28a745', '#ffc107', '#dc3545'],
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              // maintainAspectRatio: false
+            },
+          });
+        }
+
+        // Initialize other charts when sections are shown
+        setTimeout(() => {
+          initializeTrendChart();
+          initializeZoneChart();
+        }, 1000);
+      }
+
+      function initializeTrendChart() {
+        const trendCtx = document
+          .getElementById('trendChart')
+          ?.getContext('2d');
+        if (trendCtx) {
+          new Chart(trendCtx, {
+            type: 'bar',
+            data: {
+              labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+              datasets: [
+                {
+                  label: 'Nhập kho',
+                  data: [120, 150, 180, 160],
+                  backgroundColor: '#28a745',
+                },
+                {
+                  label: 'Xuất kho',
+                  data: [100, 130, 145, 155],
+                  backgroundColor: '#dc3545',
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              // maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        }
+      }
+
+      function initializeZoneChart() {
+        const zoneCtx = document.getElementById('zoneChart')?.getContext('2d');
+        if (zoneCtx) {
+          new Chart(zoneCtx, {
+            type: 'pie',
+            data: {
+              labels: ['Khu A', 'Khu B', 'Khu C', 'Khu D'],
+              datasets: [
+                {
+                  data: [35, 28, 22, 15],
+                  backgroundColor: ['#2c5aa0', '#28a745', '#ffc107', '#dc3545'],
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              // maintainAspectRatio: false
+            },
+          });
+        }
+      }
+
+      // Event Handlers
+      function setupEventListeners() {
+        // File input change event
+        document
+          .getElementById('fileInput')
+          ?.addEventListener('change', handleFileSelect);
+
+        // Drag and drop events
+        const dropZone = document.getElementById('fileDropZone');
+        if (dropZone) {
+          dropZone.addEventListener('dragover', handleDragOver);
+          dropZone.addEventListener('drop', handleFileDrop);
+          dropZone.addEventListener('click', () =>
+            document.getElementById('fileInput').click()
+          );
+        }
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+        e.currentTarget.classList.add('dragover');
+      }
+
+      function handleFileDrop(e) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        processFiles(files);
+      }
+
+      function handleFileSelect(e) {
+        const files = e.target.files;
+        processFiles(files);
+      }
+
+      function processFiles(files) {
+        Array.from(files).forEach((file) => {
+          if (
+            file.type.includes('spreadsheet') ||
+            file.name.endsWith('.csv') ||
+            file.name.endsWith('.xlsx') ||
+            file.name.endsWith('.xls')
+          ) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              try {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                importData(jsonData, file.name);
+              } catch (error) {
+                showAlert('Lỗi khi đọc file: ' + error.message, 'danger');
+              }
+            };
+            reader.readAsArrayBuffer(file);
+          } else {
+            showAlert(
+              'Định dạng file không được hỗ trợ. Vui lòng chọn file Excel hoặc CSV.',
+              'warning'
+            );
+          }
+        });
+      }
+
+      function importData(data, filename) {
+        try {
+          // Detect data type based on headers
+          if (data.length > 0) {
+            const headers = Object.keys(data[0]).map((h) => h.toLowerCase());
+
+            if (
+              headers.includes('code') ||
+              headers.includes('mã') ||
+              headers.includes('location')
+            ) {
+              // This is location data
+              importLocationData(data);
+            } else if (
+              headers.includes('name') ||
+              headers.includes('tên') ||
+              headers.includes('product')
+            ) {
+              // This is inventory data
+              importInventoryData(data);
+            } else {
+              showAlert(
+                'Không thể xác định loại dữ liệu. Vui lòng kiểm tra định dạng file.',
+                'warning'
+              );
+            }
+          }
+        } catch (error) {
+          showAlert('Lỗi khi import dữ liệu: ' + error.message, 'danger');
+        }
+      }
+
+      function importLocationData(data) {
+        let imported = 0;
+        data.forEach((row) => {
+          const location = {
+            code: row.code || row.mã || `LOC-${Date.now()}-${imported}`,
+            zone: row.zone || row.khu || 'A',
+            floor: parseInt(row.floor || row.tầng || 1),
+            status: row.status || row.trạng_thái || 'available',
+            type: row.type || row.loại || 'storage',
+          };
+
+          // Check if location already exists
+          const existingIndex = warehouseData.findIndex(
+            (loc) => loc.code === location.code
+          );
+          if (existingIndex >= 0) {
+            warehouseData[existingIndex] = location;
+          } else {
+            warehouseData.push(location);
+          }
+          imported++;
+        });
+
+        updateStatistics();
+        createWarehouseGrid();
+        showAlert(`Đã import thành công ${imported} vị trí kho.`, 'success');
+      }
+
+      function importInventoryData(data) {
+        let imported = 0;
+        data.forEach((row) => {
+          const item = {
+            code: row.code || row.mã || `SP-${Date.now()}-${imported}`,
+            name: row.name || row.tên || `Sản phẩm ${imported}`,
+            category: row.category || row.danh_mục || 'electronics',
+            location: row.location || row.vị_trí || 'A1-001',
+            quantity: parseInt(row.quantity || row.số_lượng || 0),
+            unit: row.unit || row.đơn_vị || 'Cái',
+            status: row.status || row.trạng_thái || 'in-stock',
+            description: row.description || row.mô_tả || '',
+          };
+
+          const existingIndex = inventoryData.findIndex(
+            (itm) => itm.code === item.code
+          );
+          if (existingIndex >= 0) {
+            inventoryData[existingIndex] = item;
+          } else {
+            inventoryData.push(item);
+          }
+          imported++;
+        });
+
+        populateInventoryTable();
+        updateStatistics();
+        showAlert(`Đã import thành công ${imported} sản phẩm.`, 'success');
+      }
+
+      // Modal Functions
+      function showAddLocationModal() {
+        const modal = new bootstrap.Modal(
+          document.getElementById('addLocationModal')
+        );
+        modal.show();
+      }
+
+      function showAddItemModal() {
+        const modal = new bootstrap.Modal(
+          document.getElementById('addItemModal')
+        );
+        modal.show();
+      }
+
+      function saveLocation() {
+        const form = document.getElementById('addLocationForm');
+        const formData = new FormData(form);
+
+        const location = {
+          code: document.getElementById('locationCode').value,
+          zone: document.getElementById('locationZone').value,
+          floor: parseInt(document.getElementById('locationFloor').value),
+          type: document.getElementById('locationType').value,
+          status: 'available',
+          row: 1,
+          col: warehouseData.length + 1,
+        };
+
+        if (location.code) {
+          warehouseData.push(location);
+          updateStatistics();
+          createWarehouseGrid();
+
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById('addLocationModal')
+          );
+          modal.hide();
+
+          showAlert('Đã thêm vị trí kho thành công!', 'success');
+          form.reset();
+        } else {
+          showAlert('Vui lòng nhập mã vị trí!', 'warning');
+        }
+      }
+
+      function saveItem() {
+        const item = {
+          code: document.getElementById('itemCode').value,
+          name: document.getElementById('itemName').value,
+          category: document.getElementById('itemCategory').value,
+          location: document.getElementById('itemLocation').value,
+          quantity: parseInt(document.getElementById('itemQuantity').value),
+          unit: document.getElementById('itemUnit').value,
+          description: document.getElementById('itemDescription').value,
+          status:
+            parseInt(document.getElementById('itemQuantity').value) > 20
+              ? 'in-stock'
+              : 'low-stock',
+        };
+
+        if (item.code && item.name) {
+          inventoryData.push(item);
+          populateInventoryTable();
+
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById('addItemModal')
+          );
+          modal.hide();
+
+          showAlert('Đã thêm sản phẩm thành công!', 'success');
+          document.getElementById('addItemForm').reset();
+        } else {
+          showAlert('Vui lòng nhập đầy đủ thông tin!', 'warning');
+        }
+      }
+
+      // Search and Filter Functions
+      function filterInventory() {
+        const searchTerm = document
+          .getElementById('inventorySearch')
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+
+        const filteredData = inventoryData.filter((item) => {
+          const matchesSearch =
+            item.name.toLowerCase().includes(searchTerm) ||
+            item.code.toLowerCase().includes(searchTerm);
+          const matchesCategory =
+            !categoryFilter || item.category === categoryFilter;
+          const matchesStatus = !statusFilter || item.status === statusFilter;
+
+          return matchesSearch && matchesCategory && matchesStatus;
+        });
+
+        updateInventoryTable(filteredData);
+      }
+
+      function updateInventoryTable(data) {
+        const tbody = document.getElementById('inventoryTableBody');
+        tbody.innerHTML = '';
+
+        data.forEach((item) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${getCategoryText(item.category)}</td>
+                    <td>${item.location}</td>
+                    <td>${item.quantity} ${item.unit}</td>
+                    <td><span class="badge bg-${getStatusColor(
+                      item.status
+                    )}">${getStatusText(item.status)}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem('${
+                          item.code
+                        }')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('${
+                          item.code
+                        }')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function performAdvancedSearch() {
+        const keyword = document
+          .getElementById('advancedSearchKeyword')
+          .value.toLowerCase();
+        const category = document.getElementById(
+          'advancedSearchCategory'
+        ).value;
+        const zone = document.getElementById('advancedSearchZone').value;
+        const status = document.getElementById('advancedSearchStatus').value;
+        const quantityMin =
+          parseInt(document.getElementById('quantityMin').value) || 0;
+        const quantityMax =
+          parseInt(document.getElementById('quantityMax').value) || Infinity;
+
+        const results = inventoryData.filter((item) => {
+          const matchesKeyword =
+            !keyword ||
+            item.name.toLowerCase().includes(keyword) ||
+            item.code.toLowerCase().includes(keyword) ||
+            item.description.toLowerCase().includes(keyword);
+
+          const matchesCategory = !category || item.category === category;
+          const matchesZone = !zone || item.location.startsWith(zone);
+          const matchesStatus = !status || item.status === status;
+          const matchesQuantity =
+            item.quantity >= quantityMin && item.quantity <= quantityMax;
+
+          return (
+            matchesKeyword &&
+            matchesCategory &&
+            matchesZone &&
+            matchesStatus &&
+            matchesQuantity
+          );
+        });
+
+        updateSearchResults(results);
+      }
+
+      function updateSearchResults(results) {
+        const tbody = document.getElementById('searchResultsBody');
+        const countElement = document.getElementById('searchResultCount');
+
+        tbody.innerHTML = '';
+        countElement.textContent = `${results.length} kết quả`;
+
+        if (results.length === 0) {
+          tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            <i class="fas fa-search fa-2x mb-3"></i>
+                            <p>Không tìm thấy kết quả nào phù hợp</p>
+                        </td>
+                    </tr>
+                `;
+          return;
+        }
+
+        results.forEach((item) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${getCategoryText(item.category)}</td>
+                    <td>${item.location}</td>
+                    <td>${item.quantity} ${item.unit}</td>
+                    <td><span class="badge bg-${getStatusColor(
+                      item.status
+                    )}">${getStatusText(item.status)}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editItem('${
+                          item.code
+                        }')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-info" onclick="viewItemDetails('${
+                          item.code
+                        }')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function resetSearch() {
+        document.getElementById('advancedSearchKeyword').value = '';
+        document.getElementById('advancedSearchCategory').value = '';
+        document.getElementById('advancedSearchZone').value = '';
+        document.getElementById('advancedSearchStatus').value = '';
+        document.getElementById('quantityMin').value = '';
+        document.getElementById('quantityMax').value = '';
+
+        const tbody = document.getElementById('searchResultsBody');
+        const countElement = document.getElementById('searchResultCount');
+
+        tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="fas fa-search fa-2x mb-3"></i>
+                        <p>Sử dụng bộ lọc trên để tìm kiếm dữ liệu</p>
+                    </td>
+                </tr>
+            `;
+        countElement.textContent = '0 kết quả';
+      }
+
+      // Export Functions
+      function downloadSample(type) {
+        let data, filename;
+
+        if (type === 'inventory') {
+          data = [
+            {
+              'Mã SP': 'SP-001',
+              'Tên Sản Phẩm': 'Laptop Dell Inspiron',
+              'Danh Mục': 'electronics',
+              'Vị Trí': 'A1-001',
+              'Số Lượng': 10,
+              'Đơn Vị': 'Cái',
+              'Trạng Thái': 'in-stock',
+              'Mô Tả': 'Laptop văn phòng',
+            },
+            {
+              'Mã SP': 'SP-002',
+              'Tên Sản Phẩm': 'Áo Sơ Mi Nam',
+              'Danh Mục': 'clothing',
+              'Vị Trí': 'B2-015',
+              'Số Lượng': 50,
+              'Đơn Vị': 'Cái',
+              'Trạng Thái': 'in-stock',
+              'Mô Tả': 'Áo sơ mi công sở',
+            },
+          ];
+          filename = 'mau_hang_ton_kho.xlsx';
+        } else if (type === 'locations') {
+          data = [
+            {
+              'Mã Vị Trí': 'A1-001',
+              'Khu Vực': 'A',
+              Tầng: 1,
+              Loại: 'storage',
+              'Trạng Thái': 'available',
+            },
+            {
+              'Mã Vị Trí': 'B2-015',
+              'Khu Vực': 'B',
+              Tầng: 2,
+              Loại: 'storage',
+              'Trạng Thái': 'occupied',
+            },
+          ];
+          filename = 'mau_vi_tri_kho.xlsx';
+        }
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Mau Du Lieu');
+        XLSX.writeFile(workbook, filename);
+
+        showAlert('Đã tải xuống file mẫu thành công!', 'success');
+      }
+
+      function exportToExcel() {
+        const includeInventory =
+          document.getElementById('exportInventory').checked;
+        const includeLocations =
+          document.getElementById('exportLocations').checked;
+        const includeReports = document.getElementById('exportReports').checked;
+
+        const workbook = XLSX.utils.book_new();
+
+        if (includeInventory) {
+          const inventorySheet = XLSX.utils.json_to_sheet(
+            inventoryData.map((item) => ({
+              'Mã SP': item.code,
+              'Tên Sản Phẩm': item.name,
+              'Danh Mục': getCategoryText(item.category),
+              'Vị Trí': item.location,
+              'Số Lượng': item.quantity,
+              'Đơn Vị': item.unit,
+              'Trạng Thái': getStatusText(item.status),
+              'Mô Tả': item.description,
+            }))
+          );
+          XLSX.utils.book_append_sheet(
+            workbook,
+            inventorySheet,
+            'Hang Ton Kho'
+          );
+        }
+
+        if (includeLocations) {
+          const locationSheet = XLSX.utils.json_to_sheet(
+            warehouseData.map((loc) => ({
+              'Mã Vị Trí': loc.code,
+              'Khu Vực': loc.zone,
+              Tầng: loc.floor,
+              Loại: loc.type,
+              'Trạng Thái': getStatusText(loc.status),
+            }))
+          );
+          XLSX.utils.book_append_sheet(workbook, locationSheet, 'Vi Tri Kho');
+        }
+
+        if (includeReports) {
+          const reportData = [
+            {
+              'Chỉ Số': 'Tổng vị trí',
+              'Giá Trị': warehouseData.length,
+              'Đơn Vị': 'vị trí',
+            },
+            {
+              'Chỉ Số': 'Vị trí đã sử dụng',
+              'Giá Trị': warehouseData.filter(
+                (loc) => loc.status === 'occupied'
+              ).length,
+              'Đơn Vị': 'vị trí',
+            },
+            {
+              'Chỉ Số': 'Tỷ lệ sử dụng',
+              'Giá Trị': Math.round(
+                (warehouseData.filter((loc) => loc.status === 'occupied')
+                  .length /
+                  warehouseData.length) *
+                  100
+              ),
+              'Đơn Vị': '%',
+            },
+          ];
+          const reportSheet = XLSX.utils.json_to_sheet(reportData);
+          XLSX.utils.book_append_sheet(workbook, reportSheet, 'Bao Cao');
+        }
+
+        const timestamp = new Date().toISOString().slice(0, 10);
+        XLSX.writeFile(workbook, `bao_cao_kho_${timestamp}.xlsx`);
+
+        showAlert('Đã xuất file Excel thành công!', 'success');
+      }
+
+      function exportToCSV() {
+        const data = inventoryData.map((item) => ({
+          'Mã SP': item.code,
+          'Tên Sản Phẩm': item.name,
+          'Danh Mục': getCategoryText(item.category),
+          'Vị Trí': item.location,
+          'Số Lượng': item.quantity,
+          'Đơn Vị': item.unit,
+          'Trạng Thái': getStatusText(item.status),
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        const csv = XLSX.utils.sheet_to_csv(worksheet);
+
+        const blob = new Blob(['\uFEFF' + csv], {
+          type: 'text/csv;charset=utf-8;',
+        });
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0, 10);
+
+        link.href = URL.createObjectURL(blob);
+        link.download = `hang_ton_kho_${timestamp}.csv`;
+        link.click();
+
+        showAlert('Đã xuất file CSV thành công!', 'success');
+      }
+
+      function exportToPDF() {
+        // This would require a PDF library like jsPDF
+        showAlert('Chức năng xuất PDF đang được phát triển...', 'info');
+      }
+
+      // Report Functions
+      function generateCustomReport() {
+        const reportType = document.getElementById('reportType')?.value;
+        const dateFrom = document.getElementById('reportDateFrom')?.value;
+        const dateTo = document.getElementById('reportDateTo')?.value;
+
+        // Update top products list
+        updateTopProductsList();
+
+        // Update stock alerts
+        updateStockAlerts();
+
+        showAlert('Đã tạo báo cáo thành công!', 'success');
+      }
+
+      function updateTopProductsList() {
+        const topProducts = inventoryData
+          .sort((a, b) => b.quantity - a.quantity)
+          .slice(0, 5);
+
+        const container = document.getElementById('topProductsList');
+        if (container) {
+          container.innerHTML = topProducts
+            .map(
+              (item, index) => `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <span class="badge bg-primary me-2">${
+                              index + 1
+                            }</span>
+                            <strong>${item.name}</strong>
+                        </div>
+                        <span class="text-muted">${item.quantity} ${
+                item.unit
+              }</span>
+                    </div>
+                `
+            )
+            .join('');
+        }
+      }
+
+      function updateStockAlerts() {
+        const lowStockItems = inventoryData
+          .filter(
+            (item) =>
+              item.status === 'low-stock' || item.status === 'out-of-stock'
+          )
+          .slice(0, 5);
+
+        const container = document.getElementById('stockAlertsList');
+        if (container) {
+          container.innerHTML =
+            lowStockItems.length > 0
+              ? lowStockItems
+                  .map(
+                    (item) => `
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                                <strong>${item.name}</strong>
+                            </div>
+                            <span class="badge bg-${getStatusColor(
+                              item.status
+                            )}">${item.quantity} ${item.unit}</span>
+                        </div>
+                    `
+                  )
+                  .join('')
+              : '<p class="text-muted text-center"><i class="fas fa-check text-success me-2"></i>Không có cảnh báo hàng tồn</p>';
+        }
+      }
+
+      // Quick Action Functions
+      function importSampleData() {
+        // Add some sample data
+        const sampleInventory = [
+          {
+            code: 'SP-DEMO-001',
+            name: 'Máy tính bảng iPad Pro',
+            category: 'electronics',
+            location: 'A1-010',
+            quantity: 25,
+            unit: 'Cái',
+            status: 'in-stock',
+            description: 'Máy tính bảng cao cấp',
+          },
+          {
+            code: 'SP-DEMO-002',
+            name: 'Giày thể thao Nike',
+            category: 'clothing',
+            location: 'B2-020',
+            quantity: 15,
+            unit: 'Đôi',
+            status: 'low-stock',
+            description: 'Giày thể thao chuyên nghiệp',
+          },
+        ];
+
+        sampleInventory.forEach((item) => {
+          const existingIndex = inventoryData.findIndex(
+            (existing) => existing.code === item.code
+          );
+          if (existingIndex === -1) {
+            inventoryData.push(item);
+          }
+        });
+
+        populateInventoryTable();
+        updateStatistics();
+        showAlert('Đã import dữ liệu mẫu thành công!', 'success');
+      }
+
+      function generateReport() {
+        showSection('reports');
+        generateCustomReport();
+      }
+
+      function backupData() {
+        const backupData = {
+          warehouse: warehouseData,
+          inventory: inventoryData,
+          timestamp: new Date().toISOString(),
+          version: '1.0',
+        };
+
+        const dataStr = JSON.stringify(backupData, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const link = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0, 10);
+
+        link.href = URL.createObjectURL(blob);
+        link.download = `backup_kho_${timestamp}.json`;
+        link.click();
+
+        showAlert('Đã sao lưu dữ liệu thành công!', 'success');
+      }
+
+      // Utility Functions
+      function showAlert(message, type = 'info') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText =
+          'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+        document.body.appendChild(alertDiv);
+
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+          }
+        }, 5000);
+      }
+
+      function searchLocation(searchTerm) {
+        const cells = document.querySelectorAll('.warehouse-cell');
+        cells.forEach((cell) => {
+          const locationCode = cell.getAttribute('data-location');
+          if (
+            locationCode &&
+            locationCode.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            cell.style.border = '3px solid #ffc107';
+            cell.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.7)';
+          } else {
+            cell.style.border = '1px solid #dee2e6';
+            cell.style.boxShadow = 'none';
+          }
+        });
+      }
+
+      function changeFloor() {
+        createWarehouseGrid();
+      }
+
+      function filterByZone() {
+        const selectedZone = document.getElementById('zoneSelect').value;
+        const cells = document.querySelectorAll('.warehouse-cell');
+
+        cells.forEach((cell) => {
+          const locationCode = cell.getAttribute('data-location');
+          if (selectedZone === 'all' || locationCode.startsWith(selectedZone)) {
+            cell.style.display = 'block';
+          } else {
+            cell.style.display = 'none';
+          }
+        });
+      }
+
+      function toggleGrid() {
+        gridVisible = !gridVisible;
+        const cells = document.querySelectorAll('.warehouse-cell');
+        const icon = document.getElementById('gridIcon');
+
+        cells.forEach((cell) => {
+          cell.style.border = gridVisible ? '1px solid #dee2e6' : 'none';
+        });
+
+        icon.className = gridVisible ? 'fas fa-grid' : 'fas fa-border-none';
+      }
+
+      function refreshMap() {
+        createWarehouseGrid();
+        showAlert('Đã làm mới sơ đồ kho!', 'success');
+      }
+
+      function editItem(code) {
+        const item = inventoryData.find((item) => item.code === code);
+        if (item) {
+          // Populate modal with item data
+          document.getElementById('itemCode').value = item.code;
+          document.getElementById('itemName').value = item.name;
+          document.getElementById('itemCategory').value = item.category;
+          document.getElementById('itemLocation').value = item.location;
+          document.getElementById('itemQuantity').value = item.quantity;
+          document.getElementById('itemUnit').value = item.unit;
+          document.getElementById('itemDescription').value = item.description;
+
+          showAddItemModal();
+        }
+      }
+
+      function deleteItem(code) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+          const index = inventoryData.findIndex((item) => item.code === code);
+          if (index >= 0) {
+            inventoryData.splice(index, 1);
+            populateInventoryTable();
+            showAlert('Đã xóa sản phẩm thành công!', 'success');
+          }
+        }
+      }
+
+      function viewItemDetails(code) {
+        const item = inventoryData.find((item) => item.code === code);
+        if (item) {
+          showAlert(
+            `Chi tiết: ${item.name} - ${item.quantity} ${item.unit} tại ${item.location}`,
+            'info'
+          );
+        }
+      }
+
+      function exportData() {
+        exportToExcel();
+      }
+
+      function showSettings() {
+        showAlert('Chức năng cài đặt đang được phát triển...', 'info');
+      }
+
+      // Add some CSS animations and transitions for better UX
+      document.addEventListener('DOMContentLoaded', function () {
+        // Add loading animation to cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Add hover effects to buttons
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach((button) => {
+          button.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateY(-2px)';
+          });
+
+          button.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0)';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
