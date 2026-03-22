@@ -98,7 +98,7 @@ Ant Design's responsiveObserver cần matchMedia mock được setup trước kh
 - Mock matchMedia trước khi import Ant Design components
 - Hoặc sử dụng ConfigProvider với disable responsive features trong tests
 
-### Next Steps:
+### Next Steps
 
 1. ✅ Fix matchMedia mock issue
 2. ⏳ Run tests để verify
@@ -108,7 +108,7 @@ Ant Design's responsiveObserver cần matchMedia mock được setup trước kh
 
 ## 🚀 How to Use
 
-### Run Tests:
+### Run Tests
 
 ```bash
 # Run Login component tests
@@ -121,13 +121,13 @@ npm test
 npm run test:coverage
 ```
 
-### Import Test Utilities:
+### Import Test Utilities
 
 ```javascript
 import { renderWithProviders, setupLocalStorageMock } from "../utils/test-utils";
 ```
 
-### Use Mock Data:
+### Use Mock Data
 
 ```javascript
 import { mockUser, mockLoginResponse } from "../__fixtures__/auth";

@@ -214,6 +214,7 @@
   "overrides": {
     "rimraf": "5.0.10",
     "glob": "10.5.0",
+    "nth-check": "^2.1.1",
     "source-map-explorer": {
       "glob": "7.2.3"
     }

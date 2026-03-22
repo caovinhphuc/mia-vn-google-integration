@@ -21,6 +21,7 @@ Frontend ở mục Google Sheets đang hiển thị **MOCK DATA** thay vì data 
   - `GET /api/sheets/metadata/:sheetId?` (dòng 825)
   - `GET /api/sheets/read` (dòng 745)
 - **Status**: ❌ **Đang trả về MOCK DATA**
+
   ```javascript
   // Mock data (dòng 750-756)
   const mockData = [
@@ -32,7 +33,7 @@ Frontend ở mục Google Sheets đang hiển thị **MOCK DATA** thay vì data 
 
 ## ✅ Giải Pháp
 
-### Backend đã có sẵn helpers:
+### Backend đã có sẵn helpers
 
 - **File**: `backend/utils/googleSheetsHelpers.js`
 - **Functions**:
@@ -44,7 +45,7 @@ Frontend ở mục Google Sheets đang hiển thị **MOCK DATA** thay vì data 
   - `../../mia-logistics-469406-eec521c603c0.json`
 - **Default Spreadsheet ID**: `18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As`
 
-### Cần làm:
+### Cần làm
 
 1. **Update `/api/sheets/read` endpoint**:
    - Sử dụng Google Sheets API thật
