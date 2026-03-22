@@ -86,6 +86,57 @@ export const navigationData = {
       description: "MFA, SSO, RBAC, Audit Logs",
     },
   ],
+
+  warehouse: [
+    {
+      icon: "📦",
+      label: "Đơn hàng",
+      path: "/orders",
+      description: "Quản lý đơn hàng",
+    },
+    {
+      icon: "🏪",
+      label: "Tồn kho",
+      path: "/inventory",
+      description: "Quản lý tồn kho",
+    },
+    {
+      icon: "🚚",
+      label: "Vận chuyển",
+      path: "/transport",
+      description: "Quản lý vận chuyển",
+    },
+    {
+      icon: "👥",
+      label: "Nhân sự",
+      path: "/staff",
+      description: "Quản lý nhân sự",
+    },
+    {
+      icon: "📊",
+      label: "SLA & KPI",
+      path: "/shipping-sla",
+      description: "Theo dõi SLA vận chuyển",
+    },
+    {
+      icon: "🗺️",
+      label: "Sơ đồ kho",
+      path: "/warehouse-map",
+      description: "Bản đồ kho hàng",
+    },
+    {
+      icon: "📋",
+      label: "Picking",
+      path: "/picking",
+      description: "Quản lý picking",
+    },
+    {
+      icon: "📈",
+      label: "Analytics",
+      path: "/analytics",
+      description: "Phân tích dữ liệu kho",
+    },
+  ],
   tools: [
     {
       icon: "📈",
