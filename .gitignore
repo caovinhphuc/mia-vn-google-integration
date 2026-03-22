@@ -180,3 +180,6 @@ firestore-debug.log
 logs/
 *.log
 
+mia-warehouse-management-v2/
+React-OAS-Integration-v4.0/
+React-OAS-Integration-v4.0-1/
