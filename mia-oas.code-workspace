@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "name": "Frontend",
+      "path": "."
+    },
+    {
+      "name": "Backend",
+      "path": "backend"
+    },
+    {
+      "name": "AI Service",
+      "path": "ai-service"
+    },
+    {
+      "name": "Automation",
+      "path": "automation"
+    }
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.osx": "zsh"
+  }
+}
