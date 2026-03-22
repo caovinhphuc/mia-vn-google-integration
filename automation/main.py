@@ -81,7 +81,7 @@ async def startup_event():
     try:
         # Initialize Google Sheets service
         google_service = GoogleSheetsService()
-        await google_service.initialize()
+        # await google_service.initialize()
         logger.info("✅ Google Sheets service initialized")
 
         # Initialize Email service
