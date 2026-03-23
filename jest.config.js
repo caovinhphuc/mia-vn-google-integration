@@ -36,6 +36,8 @@ module.exports = {
     // Fix react-router-dom v7 ESM issue
     "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",
     "^react-router$": "<rootDir>/node_modules/react-router/dist/index.js",
+  },
+
   transformIgnorePatterns: [
     "node_modules/(?!(react-router|react-router-dom|react-dnd|dnd-core|@react-dnd|@ant-design|antd)/)",
   ],
