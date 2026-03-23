@@ -27,7 +27,7 @@
 
 ## 📋 Scripts Mới
 
-> **Zsh / copy-paste:** Đừng copy cả phần `# ...` **cùng dòng** với lệnh (vd. `eslint ... # Lint`). Nếu shell không bật `setopt interactivecomments`, ký tự `#` có thể bị coi là đối số → lỗi ESLint _pattern "#"_ hoặc _unknown file attribute_.  
+> **Zsh / copy-paste:** Đừng copy cả phần `# ...` **cùng dòng** với lệnh (vd. `eslint ... # Lint`). Nếu shell không bật `setopt interactivecomments`, ký tự `#` có thể bị coi là đối số → lỗi ESLint _pattern "#"_ hoặc _unknown file attribute_.
 > An toàn: chỉ copy lệnh, hoặc dùng khối bên dưới (ghi chú ở **dòng riêng**).
 
 > **Prettier:** `npx prettier` **không kèm file/glob** chỉ in help (đúng CLI). Trong repo: **`npm run format`** hoặc **`npm run prettier`** (cùng glob `src/**/*.{js,jsx,json,css,md}`), **`npm run format:check`** / **`npm run prettier:check`**. Một file: `npx prettier --write path/to/file.jsx`.
@@ -314,8 +314,8 @@ pip install uvicorn fastapi python-dotenv gspread \
 
 ---
 
-**Date**: December 25, 2025  
-**Updated**: March 20, 2026 — Husky 9 `prepare`, pre-commit bật, alias `npm run prettier`, artefact perf/Lighthouse trong `.gitignore` (xem `Document/DEV_SCRIPTS_NOTES.md`)  
-**Status**: ✅ **Complete**  
-**Tools**: ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (`one_automation_system/venv`)  
+**Date**: December 25, 2025
+**Updated**: March 20, 2026 — Husky 9 `prepare`, pre-commit bật, alias `npm run prettier`, artefact perf/Lighthouse trong `.gitignore` (xem `Document/DEV_SCRIPTS_NOTES.md`)
+**Status**: ✅ **Complete**
+**Tools**: ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (`one_automation_system/venv`)
 **Môi trường tổng quát:** [ENV_SETUP.md](./ENV_SETUP.md)
