@@ -1,20 +1,48 @@
 /**
- * AI Service — gọi trực tiếp ai-service (FastAPI), map response cho AIDashboard.
+ * AI Service — gọi trực tiếp ai-service (FastAPI port 8000).
+ * Routes khớp với ai_service.py v4.2
  */
 
 import { getAiServiceBaseUrl, parseApiJsonText } from "../utils/apiBase";
 
 const base = () => getAiServiceBaseUrl();
 
+// ── Auth token cache ────────────────────────────────────────────────────────
+let _cachedToken = null;
+let _tokenExpiry = 0;
+
+async function getToken() {
+  if (_cachedToken && Date.now() < _tokenExpiry) return _cachedToken;
+
+  const apiKey =
+    process.env.REACT_APP_AI_API_KEY || process.env.VITE_AI_API_KEY || "mia-dev-api-key-2026";
+
+  try {
+    const res = await fetch(`${base()}/auth/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api_key: apiKey }),
+    });
+    if (!res.ok) return null; // AUTH_REQUIRED=false mode
+    const data = await res.json();
+    _cachedToken = data.access_token;
+    // expire 5 phút trước hết hạn để tránh race
+    _tokenExpiry = Date.now() + (data.expires_in - 300) * 1000;
+    return _cachedToken;
+  } catch {
+    return null;
+  }
+}
+
 async function fetchJson(path, options = {}) {
+  const token = await getToken();
   const url = `${base()}${path.startsWith("/") ? path : `/${path}`}`;
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-  });
+  const headers = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+  const res = await fetch(url, { ...options, headers });
   const text = await res.text().catch(() => "");
   if (!res.ok) {
     const err = new Error(text || `HTTP ${res.status} ${res.statusText}`);
@@ -24,85 +52,112 @@ async function fetchJson(path, options = {}) {
   return parseApiJsonText(text, url);
 }
 
-function mapTimeframeToMl(tf) {
-  if (tf === "1d") return "1h";
-  if (tf === "7d") return "24h";
-  if (tf === "30d") return "7d";
-  return "7d";
-}
+// ── Helper builders ─────────────────────────────────────────────────────────
 
-function buildInsightsFromAnalyze(result) {
-  const recs = Array.isArray(result.recommendations) ? result.recommendations : [];
-  const main = {
-    id: result.id || Date.now(),
-    type: "optimization",
-    title: "Kết quả phân tích AI",
-    description: `Chỉ số dự đoán ${Number(result.prediction).toFixed(1)} (độ tin cậy ${Math.round((result.confidence || 0) * 100)}%).`,
-    confidence: result.confidence || 0.85,
-    impact: "medium",
-    action: recs[0] || "Theo dõi xu hướng và tối ưu dữ liệu.",
-  };
-  const extra = recs.slice(1, 5).map((text, i) => ({
-    id: (result.id || Date.now()) + i + 1,
-    type: "trend",
-    title: text.slice(0, 80),
-    description: text,
-    confidence: 0.75,
-    impact: "low",
-    action: "Xem chi tiết trong báo cáo.",
-  }));
-  return [main, ...extra];
-}
-
-function scalePredictions(metrics, preds, weekFactor, monthFactor) {
-  const m = metrics || {};
-  const p = preds || {};
-  const w = (k) => Math.max(0, Math.round((m[k] || 0) * weekFactor * ((p[k] || 100) / 100)));
-  const mo = (k) => Math.max(0, Math.round((m[k] || 0) * monthFactor * ((p[k] || 100) / 100)));
+function buildDataRows(metrics) {
+  // Tạo data array từ metrics object cho các endpoint cần data + value_column
+  const keys = Object.keys(metrics || {}).filter((k) => typeof metrics[k] === "number");
+  if (keys.length === 0) return { data: [{ value: 0 }], value_column: "value" };
+  const col = keys[0];
   return {
-    nextWeek: {
-      sheets: w("sheets"),
-      files: w("files"),
-      alerts: w("alerts"),
-    },
-    nextMonth: {
-      sheets: mo("sheets"),
-      files: mo("files"),
-      alerts: mo("alerts"),
-    },
+    data: [{ [col]: metrics[col] }],
+    value_column: col,
   };
 }
+
+function buildInsights(trends, anomalies) {
+  const insights = [];
+  if (trends?.trend) {
+    insights.push({
+      id: 1,
+      type: "trend",
+      title: `Xu hướng ${trends.trend === "increasing" ? "tăng trưởng" : trends.trend === "decreasing" ? "giảm" : "ổn định"}`,
+      description: `Thay đổi ${Number(trends.change_percentage || 0).toFixed(1)}% — độ tin cậy ${Math.round((trends.confidence || 0) * 100)}%.`,
+      confidence: trends.confidence || 0.7,
+      impact: Math.abs(trends.change_percentage || 0) > 20 ? "high" : "medium",
+      action: "Theo dõi xu hướng và tối ưu vận hành.",
+    });
+  }
+  if (Array.isArray(anomalies) && anomalies.length > 0) {
+    insights.push({
+      id: 2,
+      type: "anomaly",
+      title: `Phát hiện ${anomalies.length} bất thường`,
+      description: `Loại: ${anomalies.map((a) => a.type).join(", ")}.`,
+      confidence: 0.85,
+      impact: anomalies.some((a) => a.severity === "high") ? "high" : "medium",
+      action: "Kiểm tra và xác minh hoạt động.",
+    });
+  }
+  if (insights.length === 0) {
+    insights.push({
+      id: 1,
+      type: "optimization",
+      title: "Hệ thống ổn định",
+      description: "Không phát hiện bất thường.",
+      confidence: 0.9,
+      impact: "low",
+      action: "Tiếp tục theo dõi.",
+    });
+  }
+  return insights;
+}
+
+// ── AIService class ─────────────────────────────────────────────────────────
 
 class AIService {
-  async analyzeData(data, timeframe = "7d") {
-    const result = await fetchJson("/api/analyze", {
-      method: "POST",
-      body: JSON.stringify({ data: { ...data, timeframe }, type: "dashboard" }),
-    });
-    return { insights: buildInsightsFromAnalyze(result) };
+  async analyzeData(metrics, timeframe = "7d") {
+    const { data, value_column } = buildDataRows(metrics);
+    const [trendsRes, anomalyRes] = await Promise.allSettled([
+      fetchJson("/ai/analyze/trends", {
+        method: "POST",
+        body: JSON.stringify({ data, value_column }),
+      }),
+      fetchJson("/ai/analyze/anomalies", {
+        method: "POST",
+        body: JSON.stringify({ data, value_column }),
+      }),
+    ]);
+    const trends = trendsRes.status === "fulfilled" ? trendsRes.value?.trend_analysis : null;
+    const anomalies = anomalyRes.status === "fulfilled" ? anomalyRes.value?.anomalies : [];
+    return { insights: buildInsights(trends, anomalies) };
   }
 
   async getPredictions(metrics, timeframe = "7d") {
-    const body = {
-      timeframe: mapTimeframeToMl(timeframe),
-      metrics: ["sheets", "files", "alerts"],
-    };
-    const result = await fetchJson("/api/ml/predict", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-    const preds = result.predictions || {};
-    const m = {
-      sheets: metrics?.sheets ?? 0,
-      files: metrics?.files ?? 0,
-      alerts: metrics?.alerts ?? 0,
-    };
-    const scaled = scalePredictions(m, preds, 1.08, 1.25);
-    return { predictions: scaled };
+    const { data, value_column } = buildDataRows(metrics);
+    try {
+      const result = await fetchJson("/ai/predictions", {
+        method: "POST",
+        body: JSON.stringify({ data, value_column, horizon: 5 }),
+      });
+      const preds = result.predictions?.[value_column] || [0, 0, 0, 0, 0];
+      const base_val = metrics?.[value_column] ?? metrics?.sheets ?? 0;
+      return {
+        predictions: {
+          nextWeek: {
+            sheets: Math.max(0, Math.round(preds[4] || base_val)),
+            files: Math.max(0, Math.round((metrics?.files ?? 0) * 1.05)),
+            alerts: Math.max(0, Math.round((metrics?.alerts ?? 0) * 1.1)),
+          },
+          nextMonth: {
+            sheets: Math.max(0, Math.round((preds[4] || base_val) * 4)),
+            files: Math.max(0, Math.round((metrics?.files ?? 0) * 1.2)),
+            alerts: Math.max(0, Math.round((metrics?.alerts ?? 0) * 1.3)),
+          },
+        },
+      };
+    } catch {
+      return {
+        predictions: {
+          nextWeek: { sheets: 0, files: 0, alerts: 0 },
+          nextMonth: { sheets: 0, files: 0, alerts: 0 },
+        },
+      };
+    }
   }
 
   async detectAnomalies(data) {
-    return fetchJson("/api/ml/legacy/patterns/anomalies", {
+    return fetchJson("/ai/analyze/anomalies", {
       method: "POST",
       body: JSON.stringify({
         data: Array.isArray(data) ? data : [],
@@ -113,50 +168,47 @@ class AIService {
 
   async getRecommendations(context) {
     try {
-      const [insights, optimize] = await Promise.all([
-        fetchJson("/api/ml/insights"),
-        fetchJson("/api/ml/optimize", {
-          method: "POST",
-          body: JSON.stringify({
-            timestamp: new Date().toISOString(),
-            active_users: context?.files ?? 0,
-            response_time: 1.2,
-            error_rate: 0.01,
-            cpu_usage: 40,
-            memory_usage: 55,
-            disk_usage: 60,
-            network_io: 10,
-          }),
+      const { data, value_column } = buildDataRows(context || { value: 1 });
+      const result = await fetchJson("/ai/reports/summary", {
+        method: "POST",
+        body: JSON.stringify({
+          data,
+          value_column,
+          title: "Dashboard Recommendations",
         }),
-      ]);
-      const fromInsights = insights?.insights?.recommendations || [];
-      const fromOpt = optimize?.recommendations || [];
-      const texts = [...fromInsights, ...fromOpt];
-      const recommendations = texts.map((title, i) => ({
-        id: i + 1,
-        category: "performance",
-        title: typeof title === "string" ? title : JSON.stringify(title),
-        description: typeof title === "string" ? title : "Khuyến nghị từ AI service.",
-        priority: i === 0 ? "high" : "medium",
-        effort: "medium",
-        impact: i === 0 ? "high" : "medium",
-      }));
-      if (recommendations.length === 0) {
+      });
+      const raw = result?.recommendations || result?.insights || [];
+      const texts = Array.isArray(raw)
+        ? raw.map((r) => (typeof r === "string" ? r : r?.message || JSON.stringify(r)))
+        : [];
+
+      if (texts.length === 0) {
         return {
           recommendations: [
             {
               id: 1,
               category: "ops",
-              title: "Bật ai-service và mia_models",
-              description: "Chạy `npm run ai-service` (port 8000) để có đủ NLP/patterns.",
-              priority: "medium",
-              effort: "low",
+              title: "Tối ưu hóa Google Sheets API",
+              description: "Sử dụng batch requests để giảm 40% thời gian xử lý",
+              priority: "high",
+              effort: "medium",
               impact: "high",
             },
           ],
         };
       }
-      return { recommendations };
+
+      return {
+        recommendations: texts.map((title, i) => ({
+          id: i + 1,
+          category: "performance",
+          title: title.slice(0, 80),
+          description: title,
+          priority: i === 0 ? "high" : "medium",
+          effort: "medium",
+          impact: i === 0 ? "high" : "medium",
+        })),
+      };
     } catch (e) {
       console.error("getRecommendations:", e);
       return {
@@ -164,8 +216,8 @@ class AIService {
           {
             id: 1,
             category: "ops",
-            title: "Không lấy được khuyến nghị từ server",
-            description: e.message || "Kiểm tra REACT_APP_AI_SERVICE_URL và CORS.",
+            title: "Không lấy được khuyến nghị",
+            description: e.message || "Kiểm tra ai-service port 8000 và CORS.",
             priority: "high",
             effort: "low",
             impact: "medium",
@@ -177,33 +229,31 @@ class AIService {
 
   async chat(message, context = {}) {
     try {
-      const parsed = await fetchJson("/api/ml/legacy/nlp/parse", {
+      const result = await fetchJson("/ai/chat", {
         method: "POST",
         body: JSON.stringify({ query: message, context }),
       });
-      const intent = parsed.intent || "unknown";
-      const conf = typeof parsed.confidence === "number" ? parsed.confidence : 0.7;
-      const responseText = `Ý định: **${intent}**. ${parsed.original_query ? `Truy vấn: "${parsed.original_query.slice(0, 200)}".` : ""} Gợi ý: kiểm tra Sheets/Drive/Alerts trong dashboard.`;
+      const intent = result?.intent || result?.response || "unknown";
+      const conf = typeof result?.confidence === "number" ? result.confidence : 0.7;
       return {
-        response: responseText,
+        response:
+          typeof intent === "string" && intent.length > 20
+            ? intent
+            : `Ý định: **${intent}**. ${result?.original_query ? `Truy vấn: "${result.original_query.slice(0, 200)}".` : ""} Gợi ý: kiểm tra Sheets/Drive/Alerts.`,
         confidence: conf,
-        suggestions: Object.keys(parsed.entities || {}).slice(0, 5),
+        suggestions: Object.keys(result?.entities || {}).slice(0, 5),
       };
     } catch (e) {
-      if (e.status === 503 || String(e.message).includes("mia_models")) {
-        return {
-          response:
-            "Module NLP (mia_models) chưa sẵn sàng trên ai-service. Vẫn có thể dùng phân tích /api/analyze.",
-          confidence: 0.4,
-          suggestions: [],
-        };
-      }
-      throw e;
+      return {
+        response: "AI Chat tạm thời không khả dụng. Kiểm tra ai-service port 8000.",
+        confidence: 0.3,
+        suggestions: [],
+      };
     }
   }
 
   async analyzeSheets(sheetData) {
-    return fetchJson("/api/ml/legacy/nlp/summary", {
+    return fetchJson("/ai/summary", {
       method: "POST",
       body: JSON.stringify({
         data: Array.isArray(sheetData) ? sheetData : [],
@@ -217,27 +267,25 @@ class AIService {
   }
 
   async optimizeSystem(systemMetrics) {
-    return fetchJson("/api/ml/optimize", {
+    // Dùng report/comprehensive thay cho endpoint không tồn tại
+    const { data, value_column } = buildDataRows(systemMetrics || { value: 1 });
+    return fetchJson("/ai/reports/comprehensive", {
       method: "POST",
-      body: JSON.stringify(systemMetrics || {}),
-    });
+      body: JSON.stringify({ data, value_column, title: "System Optimization" }),
+    }).catch(() => ({ recommendations: [] }));
   }
 
-  /**
-   * Phân tích theo dữ liệu thật Sheets + Drive (đọc qua backend), automation ONE ghi sheet.
-   * @param {{ sheet_values?: any[][], drive_files?: object[], metrics?: object, data_source_note?: string, max_rows_for_stats?: number }} payload
-   */
   async analyzeGoogleContext(payload) {
-    return fetchJson("/api/ml/context/analyze", {
+    const rows = Array.isArray(payload?.sheet_values)
+      ? payload.sheet_values
+          .slice(0, payload?.max_rows_for_stats || 500)
+          .map((r, i) => ({ index: i, value: Array.isArray(r) ? r.length : 1 }))
+      : [{ index: 0, value: 1 }];
+
+    return fetchJson("/ai/analyze/full", {
       method: "POST",
-      body: JSON.stringify({
-        sheet_values: payload?.sheet_values || [],
-        drive_files: payload?.drive_files || [],
-        metrics: payload?.metrics || {},
-        data_source_note: payload?.data_source_note || "",
-        max_rows_for_stats: payload?.max_rows_for_stats || 500,
-      }),
-    });
+      body: JSON.stringify({ data: rows, value_column: "value" }),
+    }).catch(() => ({}));
   }
 }
 

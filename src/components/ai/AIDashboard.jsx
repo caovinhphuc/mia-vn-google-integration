@@ -423,35 +423,35 @@ const AIDashboard = () => {
 
           {/* Prediction Chart */}
           {predictionChartData.length > 0 && (
-            <div
-              className="prediction-chart-container"
-              style={{ width: "100%", minWidth: 0, height: 270, minHeight: 270 }}
-            >
+            <div className="prediction-chart-container" style={{ marginBottom: 16 }}>
               <h4>📊 Dự đoán Tăng Trưởng</h4>
-              <div style={{ width: "100%", minWidth: 0, height: 250, minHeight: 250 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={predictionChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="period" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="sheets" fill="#3b82f6" name="Sheets" />
-                    <Bar dataKey="files" fill="#10b981" name="Files" />
-                    <Bar dataKey="alerts" fill="#f59e0b" name="Alerts" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+              {sheets.length === 0 && files.length === 0 && alerts.length === 0 ? (
+                <div className="empty-chart">
+                  Chưa có dữ liệu — kết nối Sheets/Drive để xem dự đoán
+                </div>
+              ) : (
+                <div style={{ width: "100%", minWidth: 0, height: 220 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={predictionChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="period" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="sheets" fill="#3b82f6" name="Sheets" />
+                      <Bar dataKey="files" fill="#10b981" name="Files" />
+                      <Bar dataKey="alerts" fill="#f59e0b" name="Alerts" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
             </div>
           )}
 
           {/* Trend Chart */}
           {trendChartData.length > 0 && (
-            <div
-              className="trend-chart-container"
-              style={{ width: "100%", minWidth: 0, height: 270, minHeight: 270 }}
-            >
+            <div className="trend-chart-container" style={{ marginBottom: 16 }}>
               <h4>📈 Xu Hướng 7 Ngày Tới</h4>
-              <div style={{ width: "100%", minWidth: 0, height: 250, minHeight: 250 }}>
+              <div style={{ width: "100%", minWidth: 0, height: 220 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={trendChartData}>
                     <CartesianGrid strokeDasharray="3 3" />
@@ -585,10 +585,12 @@ const AIDashboard = () => {
                     {rec.priority}
                   </span>
                 </div>
-                <p className="rec-description">{rec.description}</p>
+                {rec.description && rec.description !== rec.title && (
+                  <p className="rec-description">{rec.description}</p>
+                )}
                 <div className="rec-meta">
-                  <span className="effort">Effort: {rec.effort}</span>
-                  <span className="impact">Impact: {rec.impact}</span>
+                  {rec.effort && <span>Effort: {rec.effort}</span>}
+                  {rec.impact && <span>Impact: {rec.impact}</span>}
                 </div>
                 <button
                   className="implement-btn"
@@ -601,24 +603,24 @@ const AIDashboard = () => {
           </div>
         </div>
 
-        {/* AI Performance */}
-        <div className="performance-section">
+        {/* AI Performance — số thực từ insights */}
+        <div className="performance-section" style={{ gridColumn: "1 / -1" }}>
           <h3>⚡ AI Performance</h3>
           <div className="performance-metrics">
             <div className="metric">
-              <div className="metric-label">Accuracy</div>
-              <div className="metric-value">94.2%</div>
-              <div className="metric-trend">↗️ +2.1%</div>
+              <div className="metric-label">Insights</div>
+              <div className="metric-value">{aiInsights.length}</div>
+              <div className="metric-trend">phân tích này</div>
             </div>
             <div className="metric">
-              <div className="metric-label">Response Time</div>
-              <div className="metric-value">1.2s</div>
-              <div className="metric-trend">↘️ -0.3s</div>
+              <div className="metric-label">Recommendations</div>
+              <div className="metric-value">{recommendations.length}</div>
+              <div className="metric-trend">đề xuất</div>
             </div>
             <div className="metric">
-              <div className="metric-label">Insights Generated</div>
-              <div className="metric-value">47</div>
-              <div className="metric-trend">↗️ +12</div>
+              <div className="metric-label">Dữ liệu</div>
+              <div className="metric-value">{sheets.length + files.length + alerts.length}</div>
+              <div className="metric-trend">items phân tích</div>
             </div>
           </div>
         </div>
