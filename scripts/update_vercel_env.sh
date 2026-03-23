@@ -1,10 +1,15 @@
 #!/bin/bash
 
 # =============================================================================
-# Update Vercel Environment Variables - React OAS Integration v4.0
+# Update Vercel Environment Variables - React OAS Integration
+# Chạy từ root repo: bash scripts/update_vercel_env.sh [project-name] [environment]
 # =============================================================================
 
 set -e
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
 
 # Colors
 readonly GREEN='\033[0;32m'
@@ -14,161 +19,126 @@ readonly RED='\033[0;31m'
 readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
-# Configuration - Load from .env if exists
-if [ -f "../.env" ]; then
-    source ../.env
+# Backend production (khớp src/utils/apiBase.js)
+readonly DEFAULT_RAILWAY_API='https://react-oas-integration-backend-production.up.railway.app'
+
+# Load .env từ root project (trước đây ../.env sai khi CWD = repo root)
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  set -a
+  # shellcheck source=/dev/null
+  source "$PROJECT_ROOT/.env"
+  set +a
+fi
+if [ -f "$PROJECT_ROOT/.env.production" ]; then
+  set -a
+  # shellcheck source=/dev/null
+  source "$PROJECT_ROOT/.env.production"
+  set +a
 fi
 
-# Environment variables to update
-REACT_APP_API_URL=${REACT_APP_API_URL:-"http://localhost:3001"}
-REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL:-"http://localhost:3001/api"}
-REACT_APP_AI_SERVICE_URL=${REACT_APP_AI_SERVICE_URL:-"http://localhost:8000"}
-GOOGLE_SHEETS_ID=${GOOGLE_SHEETS_ID:-"1TFNZPLY89E0gFJAdmgLLKY-IIfV35TJPzNTPthCgchA"}
-GOOGLE_DRIVE_FOLDER_ID=${GOOGLE_DRIVE_FOLDER_ID:-"1dYpDBXzwNnLitUcbh8n3k7OceS62a1JV"}
+# Mặc định production: Railway (không dùng localhost trên Vercel)
+REACT_APP_API_URL=${REACT_APP_API_URL:-$DEFAULT_RAILWAY_API}
+REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL:-$DEFAULT_RAILWAY_API/api}
+# Socket.IO (LiveDashboard…): mặc định = API URL (https, không dùng wss:// cho io())
+REACT_APP_WS_URL=${REACT_APP_WS_URL:-$REACT_APP_API_URL}
+# AI (FastAPI): chỉ đẩy lên Vercel nếu có URL public (không phải localhost)
+if [[ "${REACT_APP_AI_SERVICE_URL:-}" =~ localhost ]] || [[ -z "${REACT_APP_AI_SERVICE_URL:-}" ]]; then
+  REACT_APP_AI_SERVICE_URL=""
+fi
 
-# Project configuration
-PROJECT_NAME=${1:-"react-oas-integration"}
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=${REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID:-${REACT_APP_GOOGLE_SHEET_ID:-${GOOGLE_SHEETS_ID:-18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As}}}
+REACT_APP_GOOGLE_DRIVE_FOLDER_ID=${REACT_APP_GOOGLE_DRIVE_FOLDER_ID:-${GOOGLE_DRIVE_FOLDER_ID:-}}
+
+# Project: link Vercel thực tế (có thể override tham số 1)
+PROJECT_NAME=${1:-"oas-integration"}
 ENVIRONMENT=${2:-"production"}
 
-# Banner
 echo -e "${CYAN}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║        🚀 Update Vercel Environment Variables              ║${NC}"
-echo -e "${CYAN}║           React OAS Integration v4.0                       ║${NC}"
+echo -e "${CYAN}║        Update Vercel Environment Variables                    ║${NC}"
 echo -e "${CYAN}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-
-# Show current configuration
-echo -e "${YELLOW}📋 Environment Variables to Update:${NC}"
+echo -e "${BLUE}Project root:${NC} $PROJECT_ROOT"
+echo -e "${YELLOW}📋 Sẽ ghi lên Vercel (env: $ENVIRONMENT):${NC}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo -e "${BLUE}Project:${NC} $PROJECT_NAME"
-echo -e "${BLUE}Environment:${NC} $ENVIRONMENT"
+echo -e "${BLUE}Project (CLI link):${NC} $PROJECT_NAME"
 echo ""
-echo -e "${BLUE}Variables:${NC}"
-echo "  • REACT_APP_API_URL = $REACT_APP_API_URL"
-echo "  • REACT_APP_API_BASE_URL = $REACT_APP_API_BASE_URL"
-echo "  • REACT_APP_AI_SERVICE_URL = $REACT_APP_AI_SERVICE_URL"
-echo "  • GOOGLE_SHEETS_ID = $GOOGLE_SHEETS_ID"
-echo "  • GOOGLE_DRIVE_FOLDER_ID = $GOOGLE_DRIVE_FOLDER_ID"
+echo "  REACT_APP_API_URL = $REACT_APP_API_URL"
+echo "  REACT_APP_API_BASE_URL = $REACT_APP_API_BASE_URL"
+echo "  REACT_APP_WS_URL = $REACT_APP_WS_URL"
+if [ -n "$REACT_APP_AI_SERVICE_URL" ]; then
+  echo "  REACT_APP_AI_SERVICE_URL = $REACT_APP_AI_SERVICE_URL"
+else
+  echo "  REACT_APP_AI_SERVICE_URL = (bỏ qua — set URL public AI trong .env rồi chạy lại)"
+fi
+echo "  REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID = $REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID"
+if [ -n "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" ]; then
+  echo "  REACT_APP_GOOGLE_DRIVE_FOLDER_ID = $REACT_APP_GOOGLE_DRIVE_FOLDER_ID"
+fi
 echo ""
 
-# Function to update single env var
 update_env_var() {
-    local var_name=$1
-    local var_value=$2
-    local env_type=$3
+  local var_name=$1
+  local var_value=$2
+  local env_type=$3
 
-    echo -e "${BLUE}Updating $var_name...${NC}"
+  echo -e "${BLUE}Updating $var_name...${NC}"
+  vercel env rm "$var_name" "$env_type" -y 2>/dev/null || true
+  echo "$var_value" | vercel env add "$var_name" "$env_type" --force
 
-    # Remove existing variable if exists
-    vercel env rm "$var_name" "$env_type" -y 2>/dev/null || true
-
-    # Add new value
-    echo "$var_value" | vercel env add "$var_name" "$env_type" --force
-
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ $var_name updated${NC}"
-    else
-        echo -e "${RED}❌ Failed to update $var_name${NC}"
-        return 1
-    fi
+  if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ $var_name${NC}"
+  else
+    echo -e "${RED}❌ $var_name${NC}"
+    return 1
+  fi
 }
 
-# Check if vercel CLI is installed
 if ! command -v vercel &> /dev/null; then
-    echo -e "${RED}❌ Vercel CLI not installed${NC}"
-    echo ""
-    echo -e "${YELLOW}📦 Install Vercel CLI:${NC}"
-    echo "   npm install -g vercel"
-    echo ""
-    echo -e "${YELLOW}🌐 Or update manually via Web Dashboard:${NC}"
-    echo "   1. Go to: https://vercel.com/dashboard"
-    echo "   2. Select your project"
-    echo "   3. Go to Settings > Environment Variables"
-    echo "   4. Update the variables listed above"
-    echo "   5. Redeploy your application"
-    exit 1
+  echo -e "${RED}❌ Cài Vercel CLI: npm i -g vercel${NC}"
+  exit 1
 fi
 
-echo -e "${GREEN}✅ Vercel CLI is installed${NC}"
+echo -e "${GREEN}✅ Vercel CLI OK${NC}"
+echo -e "${YELLOW}💡 Đảm bảo đã: cd $PROJECT_ROOT && npx vercel link${NC}"
 echo ""
 
-# Confirm before proceeding
-read -p "Do you want to update environment variables now? (y/n): " -n 1 -r
+read -p "Cập nhật env trên Vercel? (y/n): " -n 1 -r
 echo ""
-
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo -e "${YELLOW}👍 Update cancelled${NC}"
-    echo ""
-    echo -e "${BLUE}💡 To update manually:${NC}"
-    echo "   1. Go to: https://vercel.com/dashboard"
-    echo "   2. Select project: $PROJECT_NAME"
-    echo "   3. Settings > Environment Variables"
-    echo "   4. Update the variables"
-    exit 0
+  echo -e "${YELLOW}Đã hủy.${NC}"
+  exit 0
 fi
 
 echo ""
-echo -e "${CYAN}🔧 Updating environment variables...${NC}"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo -e "${CYAN}🔧 Đang cập nhật...${NC}"
 echo ""
 
-# Update each variable
 update_env_var "REACT_APP_API_URL" "$REACT_APP_API_URL" "$ENVIRONMENT"
 update_env_var "REACT_APP_API_BASE_URL" "$REACT_APP_API_BASE_URL" "$ENVIRONMENT"
-update_env_var "REACT_APP_AI_SERVICE_URL" "$REACT_APP_AI_SERVICE_URL" "$ENVIRONMENT"
-update_env_var "GOOGLE_SHEETS_ID" "$GOOGLE_SHEETS_ID" "$ENVIRONMENT"
-update_env_var "GOOGLE_DRIVE_FOLDER_ID" "$GOOGLE_DRIVE_FOLDER_ID" "$ENVIRONMENT"
+update_env_var "REACT_APP_WS_URL" "$REACT_APP_WS_URL" "$ENVIRONMENT"
+if [ -n "$REACT_APP_AI_SERVICE_URL" ]; then
+  update_env_var "REACT_APP_AI_SERVICE_URL" "$REACT_APP_AI_SERVICE_URL" "$ENVIRONMENT"
+fi
+update_env_var "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$ENVIRONMENT"
+if [ -n "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" ]; then
+  update_env_var "REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$ENVIRONMENT"
+fi
 
 echo ""
-echo -e "${GREEN}✅ All environment variables updated!${NC}"
+echo -e "${GREEN}✅ Đã cập nhật env.${NC}"
 echo ""
 
-# Ask about redeployment
-read -p "Do you want to trigger a redeploy now? (y/n): " -n 1 -r
+read -p "Redeploy production ngay? (y/n): " -n 1 -r
 echo ""
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo ""
-    echo -e "${CYAN}🚀 Triggering redeploy...${NC}"
-    vercel --prod
-
-    if [ $? -eq 0 ]; then
-        echo ""
-        echo -e "${GREEN}✅ Deployment triggered successfully!${NC}"
-    else
-        echo ""
-        echo -e "${RED}❌ Deployment failed${NC}"
-        exit 1
-    fi
+  echo -e "${CYAN}🚀 vercel --prod${NC}"
+  npx vercel --prod --yes
 else
-    echo ""
-    echo -e "${YELLOW}⚠️  Remember to redeploy manually:${NC}"
-    echo "   vercel --prod"
-    echo ""
-    echo "   Or via dashboard:"
-    echo "   https://vercel.com/dashboard → Deployments → Redeploy"
+  echo -e "${YELLOW}Nhớ redeploy: npx vercel --prod hoặc Dashboard → Redeploy${NC}"
 fi
 
 echo ""
-echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}🎯 Next Steps:${NC}"
-echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BLUE}Kiểm tra:${NC} vercel env ls"
+echo -e "${BLUE}Health API:${NC} curl -sS ${DEFAULT_RAILWAY_API}/health"
 echo ""
-echo "1. ✅ Environment variables updated in Vercel"
-echo "2. 🔄 Redeploy application (if not done above)"
-echo "3. 🧪 Test application functionality"
-echo "4. 🔒 Configure API restrictions (recommended)"
-echo "5. 📊 Monitor application logs"
-echo ""
-echo -e "${BLUE}📚 Useful Commands:${NC}"
-echo "   vercel env ls                    # List all env vars"
-echo "   vercel env pull                  # Pull env vars to local"
-echo "   vercel logs                      # View deployment logs"
-echo "   vercel --prod                    # Deploy to production"
-echo ""
-echo -e "${BLUE}🌐 Dashboard:${NC}"
-echo "   https://vercel.com/dashboard"
-echo ""
-echo -e "${GREEN}✨ Update completed! ✨${NC}"
-echo ""
-
