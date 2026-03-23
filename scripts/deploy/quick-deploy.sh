@@ -161,27 +161,23 @@ else
     exit 1
 fi
 
-# Step 5: Deploy Frontend to Vercel
-print "Deploy frontend lên Vercel..."
-if command -v vercel &> /dev/null; then
-    # Deploy từ thư mục gốc, Vercel sẽ tự động detect build output từ vercel.json
-    # Vercel sẽ chỉ deploy các file cần thiết cho frontend
-    if VERCEL_OUTPUT=$(vercel --prod --yes 2>&1); then
-        echo "$VERCEL_OUTPUT" | tail -12
+# Step 5: Deploy Frontend to Netlify (Production: leafy-baklava-595711.netlify.app)
+print "Deploy frontend lên Netlify..."
+if command -v netlify &> /dev/null; then
+    if NETLIFY_OUTPUT=$(netlify deploy --prod --dir=build 2>&1); then
+        echo "$NETLIFY_OUTPUT" | tail -12
         FRONTEND_DEPLOYED=true
-        FRONTEND_URL=$(echo "$VERCEL_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1 || true)
-        print_success "Frontend đã deploy lên Vercel"
+        FRONTEND_URL=$(echo "$NETLIFY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.netlify\.app' | tail -1 || echo "https://leafy-baklava-595711.netlify.app/")
+        print_success "Frontend đã deploy lên Netlify"
     else
-        echo "$VERCEL_OUTPUT" | tail -20
-        if echo "$VERCEL_OUTPUT" | grep -q "api-deployments-free-per-day"; then
-            print_warning "Vercel quota exceeded (free deployments/day). Chưa deploy mới được."
-        else
-            print_warning "Vercel deploy thất bại, kiểm tra logs trên"
-        fi
+        echo "$NETLIFY_OUTPUT" | tail -20
+        print_warning "Netlify deploy thất bại. Deploy qua Git: push lên GitHub → Netlify auto-deploy"
+        FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
     fi
 else
-    print_warning "Vercel CLI chưa cài đặt. Cài đặt: npm i -g vercel"
-    print "Hoặc deploy qua Vercel Dashboard: https://vercel.com/dashboard"
+    print_warning "Netlify CLI chưa cài. Cài: npm i -g netlify-cli"
+    print "Hoặc push lên GitHub → Netlify tự động deploy khi repo được connect"
+    FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
 fi
 
 # Step 6: Deploy Backend to Railway (optional)
@@ -246,9 +242,9 @@ else
     echo "   ⚠️  Bỏ qua push (secret scanning)"
 fi
 if [ "$FRONTEND_DEPLOYED" = "true" ]; then
-    echo "   ✅ Đã deploy frontend (Vercel)"
+    echo "   ✅ Đã deploy frontend (Netlify)"
 else
-    echo "   ⚠️  Frontend chưa deploy mới lên Vercel"
+    echo "   ⚠️  Frontend chưa deploy mới lên Netlify"
 fi
 if [ "$BACKEND_DEPLOYED" = "true" ]; then
     echo "   ✅ Đã deploy backend (Railway)"
@@ -260,7 +256,7 @@ echo "🌐 Kiểm tra:"
 if [ -n "$FRONTEND_URL" ]; then
     echo "   Frontend: $FRONTEND_URL"
 else
-    echo "   Frontend: (xem URL mới bằng: vercel ls)"
+    echo "   Frontend: https://leafy-baklava-595711.netlify.app/"
 fi
 if [ -n "$BACKEND_URL" ]; then
     echo "   Backend:  $BACKEND_URL"
