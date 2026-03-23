@@ -693,4 +693,6 @@ User → Frontend → Backend → AI Service
 **Last Updated**: January 21, 2026
 **Version**: 4.0
 **Status**: ✅ 97% Complete (up from 95%)
-**Next Focus**: One Page integration + Real Google Sheets + Production deployment
+**Next Focus**: Recommendations API + Netlify deploy link + Data pipeline E2E
+
+**📋 Kế hoạch chi tiết:** [Document/NEXT_STEPS_ACTION_PLAN.md](./Document/NEXT_STEPS_ACTION_PLAN.md)
