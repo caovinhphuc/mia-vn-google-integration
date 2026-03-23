@@ -2,7 +2,9 @@
 
 # =============================================================================
 # Update Vercel Environment Variables - React OAS Integration
-# Chạy từ root repo: bash scripts/update_vercel_env.sh [project-name] [environment]
+# Chạy từ root repo:
+#   bash scripts/update_vercel_env.sh [project-name] [production|preview|all]
+#   bash scripts/update_vercel_env.sh all   → project mặc định, ghi production + preview
 # =============================================================================
 
 set -e
@@ -49,16 +51,26 @@ fi
 REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=${REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID:-${REACT_APP_GOOGLE_SHEET_ID:-${GOOGLE_SHEETS_ID:-18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As}}}
 REACT_APP_GOOGLE_DRIVE_FOLDER_ID=${REACT_APP_GOOGLE_DRIVE_FOLDER_ID:-${GOOGLE_DRIVE_FOLDER_ID:-}}
 
-# Project: link Vercel thực tế (có thể override tham số 1)
-PROJECT_NAME=${1:-"react-oas-integration-v4-0"}
-ENVIRONMENT=${2:-"production"}
+# Project + môi trường Vercel
+if [[ "${1:-}" == "all" ]]; then
+  PROJECT_NAME="react-oas-integration-v4-0"
+  ENVIRONMENTS=(production preview)
+elif [[ "${2:-}" == "all" ]]; then
+  PROJECT_NAME=${1:-"react-oas-integration-v4-0"}
+  ENVIRONMENTS=(production preview)
+else
+  PROJECT_NAME=${1:-"react-oas-integration-v4-0"}
+  ENVIRONMENTS=("${2:-production}")
+fi
+
+ENV_LABEL=$(IFS=,; echo "${ENVIRONMENTS[*]}")
 
 echo -e "${CYAN}╔══════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${CYAN}║        Update Vercel Environment Variables                    ║${NC}"
 echo -e "${CYAN}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${BLUE}Project root:${NC} $PROJECT_ROOT"
-echo -e "${YELLOW}📋 Sẽ ghi lên Vercel (env: $ENVIRONMENT):${NC}"
+echo -e "${YELLOW}📋 Sẽ ghi lên Vercel (env: ${ENV_LABEL}):${NC}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${BLUE}Project (CLI link):${NC} $PROJECT_NAME"
 echo ""
@@ -113,19 +125,22 @@ echo ""
 echo -e "${CYAN}🔧 Đang cập nhật...${NC}"
 echo ""
 
-update_env_var "REACT_APP_API_URL" "$REACT_APP_API_URL" "$ENVIRONMENT"
-update_env_var "REACT_APP_API_BASE_URL" "$REACT_APP_API_BASE_URL" "$ENVIRONMENT"
-update_env_var "REACT_APP_WS_URL" "$REACT_APP_WS_URL" "$ENVIRONMENT"
-if [ -n "$REACT_APP_AI_SERVICE_URL" ]; then
-  update_env_var "REACT_APP_AI_SERVICE_URL" "$REACT_APP_AI_SERVICE_URL" "$ENVIRONMENT"
-fi
-update_env_var "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$ENVIRONMENT"
-if [ -n "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" ]; then
-  update_env_var "REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$ENVIRONMENT"
-fi
+for ENVIRONMENT in "${ENVIRONMENTS[@]}"; do
+  echo -e "${YELLOW}─── $ENVIRONMENT ───${NC}"
+  update_env_var "REACT_APP_API_URL" "$REACT_APP_API_URL" "$ENVIRONMENT"
+  update_env_var "REACT_APP_API_BASE_URL" "$REACT_APP_API_BASE_URL" "$ENVIRONMENT"
+  update_env_var "REACT_APP_WS_URL" "$REACT_APP_WS_URL" "$ENVIRONMENT"
+  if [ -n "$REACT_APP_AI_SERVICE_URL" ]; then
+    update_env_var "REACT_APP_AI_SERVICE_URL" "$REACT_APP_AI_SERVICE_URL" "$ENVIRONMENT"
+  fi
+  update_env_var "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" "$ENVIRONMENT"
+  if [ -n "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" ]; then
+    update_env_var "REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$REACT_APP_GOOGLE_DRIVE_FOLDER_ID" "$ENVIRONMENT"
+  fi
+  echo ""
+done
 
-echo ""
-echo -e "${GREEN}✅ Đã cập nhật env.${NC}"
+echo -e "${GREEN}✅ Đã cập nhật env (${ENV_LABEL}).${NC}"
 echo ""
 
 read -p "Redeploy production ngay? (y/n): " -n 1 -r

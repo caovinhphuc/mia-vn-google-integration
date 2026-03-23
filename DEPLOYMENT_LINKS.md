@@ -67,6 +67,8 @@ README/badge trong repo: cập nhật link production trong [`README.md`](./READ
 - Trong container Railway thường đặt **`PORT=8080`** (hoặc giá trị khác). Log kiểu `http://localhost:8080/health` là **bên trong container**.
 - Trình duyệt / Vercel chỉ dùng **`https://…up.railway.app`** (cổng 443, HTTPS). **Không** thêm `:8080` vào `REACT_APP_API_URL`.
 
+**Biến môi trường (bảng đầy đủ):** [Document/ENV_PRODUCTION_REFERENCE.md](./Document/ENV_PRODUCTION_REFERENCE.md)
+
 ### Đồng bộ frontend (Vercel) → backend này
 
 Đặt trong **Vercel → Environment Variables → Production**, rồi **Redeploy**:

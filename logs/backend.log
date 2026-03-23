@@ -5,4 +5,3 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-::1 - - [23/Mar/2026:02:57:40 +0000] "GET /health HTTP/1.1" 200 104 "-" "curl/8.7.1"
