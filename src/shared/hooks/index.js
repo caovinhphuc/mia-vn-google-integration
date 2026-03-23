@@ -5,41 +5,9 @@
  * Cập nhật: 08/06/2025 - Trưởng phòng Kho vận
  */
 
-import React, { createContext, useContext, useState } from "react";
-import NotificationContainer from "./NotificationContainer";
-import { CheckCircle, XCircle, AlertTriangle, Info } from "lucide-react";
 import PropTypes from "prop-types";
-
-// PropTypes cho NotificationProvider
-NotificationProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-// PropTypes cho NotificationContext
-NotificationContext.propTypes = {
-  notifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      timestamp: PropTypes.instanceOf(Date).isRequired,
-      type: PropTypes.oneOf(["success", "error", "warning", "info"]).isRequired,
-      message: PropTypes.string.isRequired,
-      details: PropTypes.string,
-      action: PropTypes.shape({
-        label: PropTypes.string,
-        href: PropTypes.string,
-      }),
-    })
-  ).isRequired,
-  addNotification: PropTypes.func.isRequired,
-  removeNotification: PropTypes.func.isRequired,
-  clearAll: PropTypes.func.isRequired,
-  notifySuccess: PropTypes.func.isRequired,
-  notifyError: PropTypes.func.isRequired,
-  notifyWarning: PropTypes.func.isRequired,
-  notifyInfo: PropTypes.func.isRequired,
-  notifySLAAlert: PropTypes.func.isRequired,
-  notifySyncStatus: PropTypes.func.isRequired,
-};
+import { createContext, useContext, useState } from "react";
+import NotificationContainer from "./NotificationContainer";
 
 const NotificationContext = createContext();
 
@@ -128,6 +96,10 @@ export const NotificationProvider = ({ children }) => {
       <NotificationContainer />
     </NotificationContext.Provider>
   );
+};
+
+NotificationProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 // Hook sử dụng notification

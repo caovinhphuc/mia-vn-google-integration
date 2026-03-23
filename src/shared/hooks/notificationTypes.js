@@ -1,7 +1,7 @@
 // src/shared/hooks/notificationTypes.ts
-import React, { createContext, useState, useContext } from "react";
+import { AlertTriangle, CheckCircle, Info, XCircle } from "lucide-react";
 import PropTypes from "prop-types";
-import { CheckCircle, XCircle, AlertTriangle, Info } from "lucide-react";
+import { createContext, useState } from "react";
 
 // Định nghĩa các kiểu thông báo
 const notificationTypes = {
