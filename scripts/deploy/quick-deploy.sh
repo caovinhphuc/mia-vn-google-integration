@@ -161,23 +161,23 @@ else
     exit 1
 fi
 
-# Step 5: Deploy Frontend to Netlify (Production: leafy-baklava-595711.netlify.app)
-print "Deploy frontend lên Netlify..."
-if command -v netlify &> /dev/null || [ -f "node_modules/.bin/netlify" ]; then
-    if NETLIFY_OUTPUT=$(npx netlify deploy --prod --dir=build 2>&1); then
-        echo "$NETLIFY_OUTPUT" | tail -12
+# Step 5: Deploy Frontend to Vercel
+print "Deploy frontend lên Vercel..."
+if command -v vercel &> /dev/null || [ -f "node_modules/.bin/vercel" ]; then
+    if VERCEL_OUTPUT=$(npx vercel --prod --yes 2>&1); then
+        echo "$VERCEL_OUTPUT" | tail -15
         FRONTEND_DEPLOYED=true
-        FRONTEND_URL=$(echo "$NETLIFY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.netlify\.app' | tail -1 || echo "https://leafy-baklava-595711.netlify.app/")
-        print_success "Frontend đã deploy lên Netlify"
+        FRONTEND_URL=$(echo "$VERCEL_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1 || echo "https://react-oas-integration-v4-0.vercel.app")
+        print_success "Frontend đã deploy lên Vercel"
     else
-        echo "$NETLIFY_OUTPUT" | tail -20
-        print_warning "Netlify deploy thất bại. Deploy qua Git: push lên GitHub → Netlify auto-deploy"
-        FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
+        echo "$VERCEL_OUTPUT" | tail -20
+        print_warning "Vercel deploy thất bại. Chạy: npx vercel login && npx vercel --prod"
+        FRONTEND_URL="https://react-oas-integration-v4-0.vercel.app"
     fi
 else
-    print_warning "Netlify CLI chưa cài. Cài: npm i netlify-cli"
-    print "Hoặc push lên GitHub → Netlify tự động deploy khi repo được connect"
-    FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
+    print_warning "Vercel CLI chưa cài. Cài: npm i -g vercel"
+    print "Hoặc push lên GitHub → Connect repo với Vercel để auto-deploy"
+    FRONTEND_URL="https://react-oas-integration-v4-0.vercel.app"
 fi
 
 # Step 6: Deploy Backend to Railway (optional)
@@ -242,9 +242,9 @@ else
     echo "   ⚠️  Bỏ qua push (secret scanning)"
 fi
 if [ "$FRONTEND_DEPLOYED" = "true" ]; then
-    echo "   ✅ Đã deploy frontend (Netlify)"
+    echo "   ✅ Đã deploy frontend (Vercel)"
 else
-    echo "   ⚠️  Frontend chưa deploy mới lên Netlify"
+    echo "   ⚠️  Frontend chưa deploy mới lên Vercel"
 fi
 if [ "$BACKEND_DEPLOYED" = "true" ]; then
     echo "   ✅ Đã deploy backend (Railway)"
@@ -256,12 +256,12 @@ echo "🌐 Kiểm tra:"
 if [ -n "$FRONTEND_URL" ]; then
     echo "   Frontend: $FRONTEND_URL"
 else
-    echo "   Frontend: https://leafy-baklava-595711.netlify.app/"
+    echo "   Frontend: https://react-oas-integration-v4-0.vercel.app"
 fi
 if [ -n "$BACKEND_URL" ]; then
     echo "   Backend:  $BACKEND_URL"
 else
-    echo "   Backend:  (xem URL mới bằng Railway dashboard/CLI)"
+    echo "   Backend:  https://react-oas-integration-backend-production.up.railway.app"
 fi
 echo ""
 

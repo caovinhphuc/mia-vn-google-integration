@@ -4,13 +4,13 @@
 
 **Production Ready** | **100% Test Coverage** | **All Services Operational**
 
-### 🌐 Production URLs (Netlify + Render)
+### 🌐 Production URLs (Vercel + Railway)
 
-| Service  | URL                                              |
-| -------- | ------------------------------------------------ |
-| Frontend | https://leafy-baklava-595711.netlify.app/        |
-| Backend  | https://react-google-backend.onrender.com        |
-| Health   | https://react-google-backend.onrender.com/health |
+| Service  | URL                                                                      |
+| -------- | ------------------------------------------------------------------------ |
+| Frontend | <https://react-oas-integration-v4-0.vercel.app>                          |
+| Backend  | <https://react-oas-integration-backend-production.up.railway.app>        |
+| Health   | <https://react-oas-integration-backend-production.up.railway.app/health> |
 
 - ✅ AI Service (FastAPI) - Port 8001
 - ✅ Backend API (Node.js) - Port 3001

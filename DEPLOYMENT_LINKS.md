@@ -23,9 +23,9 @@
 
 | Loại                                               | URL                                                                        |
 | -------------------------------------------------- | -------------------------------------------------------------------------- |
-| **Production (domain chính)**                      | https://react-oas-integration-v4-0.vercel.app                              |
+| **Production (domain chính)**                      | <https://react-oas-integration-v4-0.vercel.app>                            |
 | **Deployment cụ thể** (mỗi lần build, có thể khác) | Ví dụ: `https://react-oas-integration-v4-0-clei55unl-git-react.vercel.app` |
-| **Dashboard**                                      | https://vercel.com/dashboard                                               |
+| **Dashboard**                                      | <https://vercel.com/dashboard>                                             |
 
 - **Production** = alias ổn định trỏ bản **Ready** mới nhất.
 - **Deployment URL** = link riêng từng lần deploy (preview/history); Vercel tạo slug theo branch/commit — **không** dùng làm “website chính” trên GitHub.
@@ -58,7 +58,7 @@ README/badge trong repo: cập nhật link production trong [`README.md`](./READ
 | --------------------------------- | ----------------------------------------------------------- |
 | **Public API (ví dụ trong repo)** | `https://mia-backend-production-7e56.up.railway.app`        |
 | **Health**                        | `https://mia-backend-production-7e56.up.railway.app/health` |
-| **Dashboard**                     | https://railway.app/dashboard                               |
+| **Dashboard**                     | <https://railway.app/dashboard>                             |
 
 > **Xác minh URL đang chạy:** trong thư mục đã `railway link`, chạy `cd backend && railway domain` (hoặc xem tab **Settings → Networking** của service). Nếu Railway đổi domain, sửa bảng trên + env Vercel bên dưới.
 
@@ -81,7 +81,7 @@ README/badge trong repo: cập nhật link production trong [`README.md`](./READ
 ### Quick deploy + Railway (`quick-deploy.sh`)
 
 - **Mặc định:** `cd backend && railway up` (không `--service`) — dùng khi project **chỉ có một** service.
-- **Nhiều service:** bắt buộc đặt tên khớp Dashboard (tab **Services**), ví dụ:  
+- **Nhiều service:** bắt buộc đặt tên khớp Dashboard (tab **Services**), ví dụ:
   `RAILWAY_SERVICE=mia-backend ./quick-deploy.sh "message"`
 - Lỗi **`Service not found`:** trước đó script mặc định `--service backend` nhưng project bạn **không** có service tên đó — giờ đã bỏ mặc định; nếu vẫn lỗi, kiểm tra tên trên Dashboard hoặc unset `RAILWAY_SERVICE`.
 
@@ -173,17 +173,16 @@ Cần cấu hình trong Railway Dashboard:
 
 ## 🔗 Quick Links (Production đang chạy)
 
-- **Frontend**: https://leafy-baklava-595711.netlify.app/
-- **Backend**: https://react-google-backend.onrender.com
-- **Backend Health**: https://react-google-backend.onrender.com/health
+- **Frontend**: <https://react-oas-integration-v4-0.vercel.app> (Vercel)
+- **Backend**: <https://react-oas-integration-backend-production.up.railway.app> (Railway)
+- **Backend Health**: <https://react-oas-integration-backend-production.up.railway.app/health>
 
-### Các setup khác (Vercel + Railway)
+### Setup legacy (Netlify đã ngừng – vượt giới hạn credit)
 
-- **Frontend (Vercel)**: https://react-oas-integration-v4-0.vercel.app
-- **Backend (Railway)**: https://mia-backend-production-7e56.up.railway.app/health
-- **GitHub Repo**: https://github.com/caovinhphuc/React-OAS-Integration-v4.0
-- **Vercel Dashboard**: https://vercel.com/dashboard
-- **Railway Dashboard**: https://railway.app/dashboard
+- ~~Frontend (Netlify)~~: <https://leafy-baklava-595711.netlify.app/> (paused)
+- **GitHub Repo**: <https://github.com/caovinhphuc/React-OAS-Integration-v4.0>
+- **Vercel Dashboard**: <https://vercel.com/dashboard>
+- **Railway Dashboard**: <https://railway.app/dashboard>
 
 ---
 

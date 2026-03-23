@@ -8,24 +8,24 @@
 
 ### ✅ Đã hoàn thành (97%)
 
-| Component                 | Trạng thái           | Ghi chú                           |
-| ------------------------- | -------------------- | --------------------------------- |
-| Frontend (React)          | ✅ Stable            | Dashboard, AI, Analytics, Alerts  |
-| Backend (Node.js)         | ✅ Stable            | Auth, API, Reports, Sheets, Drive |
-| AI Service                | ✅ Stable            | main_simple.py, mia_models        |
-| Automation                | ✅ Stable            | automation.py, Selenium           |
-| Google Sheets             | ✅ Active            | Proxy qua backend                 |
-| Security (MFA, SSO, RBAC) | ✅ Implemented       |                                   |
-| WebSocket Real-time       | ✅ Active            | ai:update, notify:alert, metrics  |
-| Dev Workflow              | ✅ Active            | Husky, Prettier, ESLint           |
-| Deploy                    | ✅ Netlify + Railway | Frontend + Backend                |
+| Component                 | Trạng thái          | Ghi chú                           |
+| ------------------------- | ------------------- | --------------------------------- |
+| Frontend (React)          | ✅ Stable           | Dashboard, AI, Analytics, Alerts  |
+| Backend (Node.js)         | ✅ Stable           | Auth, API, Reports, Sheets, Drive |
+| AI Service                | ✅ Stable           | main_simple.py, mia_models        |
+| Automation                | ✅ Stable           | automation.py, Selenium           |
+| Google Sheets             | ✅ Active           | Proxy qua backend                 |
+| Security (MFA, SSO, RBAC) | ✅ Implemented      |                                   |
+| WebSocket Real-time       | ✅ Active           | ai:update, notify:alert, metrics  |
+| Dev Workflow              | ✅ Active           | Husky, Prettier, ESLint           |
+| Deploy                    | ✅ Vercel + Railway | Frontend + Backend                |
 
 ### 🚧 Còn thiếu / Chưa hoàn thiện
 
 | Hạng mục            | Mô tả                                                  | Ưu tiên    |
 | ------------------- | ------------------------------------------------------ | ---------- |
 | Recommendations API | Backend endpoint `/api/recommendations` thống nhất     | **Cao**    |
-| Netlify Link        | `npx netlify link` để deploy CLI thành công            | Cao        |
+| Vercel Link         | `npx vercel link` để deploy CLI thành công             | Cao        |
 | Data Pipeline E2E   | Automation → Sheets → AI → Analytics (end-to-end test) | Trung bình |
 | AI ↔ Google Sheets  | AI Service đọc trực tiếp từ Sheets                     | Trung bình |
 | Monitoring/Alerts   | Prometheus, health metrics chi tiết                    | Thấp       |
@@ -36,13 +36,13 @@
 
 ### Phase 1: Hoàn thiện Deploy & Kết nối (1–2 ngày)
 
-#### 1.1 Sửa Netlify deploy
+#### 1.1 Deploy frontend lên Vercel
 
 ```bash
 cd /Users/phuccao/Projects/mia/oas-integration
-npx netlify login
-npx netlify link   # Chọn site leafy-baklava-595711
-./quick-deploy.sh "Fix Netlify deploy"
+npx vercel login
+npx vercel link   # Chọn project react-oas-integration-v4-0
+./scripts/deploy/quick-deploy.sh "Deploy to Vercel"
 ```
 
 #### 1.2 Lấy Railway backend URL
@@ -55,24 +55,23 @@ railway domain
 
 Copy URL dạng `https://react-oas-integration-backend-production.up.railway.app` (không có `/api` cuối).
 
-#### 1.3 Thêm biến môi trường trên Netlify
+#### 1.3 Thêm biến môi trường trên Vercel
 
-1. Vào https://app.netlify.com → Site **leafy-baklava-595711** → **Site settings**
-2. **Environment variables** → **Add a variable** / **Edit variables**
-3. Thêm:
+1. Vào <https://vercel.com/dashboard>d> → Project **react-oas-integration-v4-0** → **Settings** → **Environment Variables**
+2. Thêm:
 
-| Key                      | Value                       | Scopes                      |
-| ------------------------ | --------------------------- | --------------------------- |
-| `REACT_APP_API_URL`      | `https://[railway-url]`     | Production, Deploy previews |
-| `REACT_APP_API_BASE_URL` | `https://[railway-url]/api` | Production, Deploy previews |
+| Key                      | Value                                                                 | Scopes              |
+| ------------------------ | --------------------------------------------------------------------- | ------------------- |
+| `REACT_APP_API_URL`      | `https://react-oas-integration-backend-production.up.railway.app`     | Production, Preview |
+| `REACT_APP_API_BASE_URL` | `https://react-oas-integration-backend-production.up.railway.app/api` | Production, Preview |
 
-4. **Save** → **Trigger deploy** (Deploys → Trigger deploy)
+1. **Save** → **Redeploy** (Deployments → ... → Redeploy)
 
 #### 1.4 Kiểm tra Production
 
-- Frontend: https://leafy-baklava-595711.netlify.app/
-- Backend: `https://[railway-domain]/health`
-- Sau khi thêm env, Netlify cần **rebuild** (Deploy mới) để áp dụng
+- Frontend: <https://react-oas-integration-v4-0.vercel.app>p>
+- Backend: <https://react-oas-integration-backend-production.up.railway.app/health>h>
+- Sau khi thêm env, Vercel cần **Redeploy** để áp dụng
 
 ---
 
@@ -136,8 +135,8 @@ Frontend hiển thị real-time
 
 ### Tuần này
 
-- [ ] `npx netlify link` → deploy frontend CLI thành công
-- [ ] Cập nhật env Netlify (REACT_APP_API_URL → Railway)
+- [ ] `npx vercel link` → deploy frontend CLI thành công
+- [ ] Cập nhật env Vercel (REACT_APP_API_URL → Railway)
 - [ ] Thêm `GET /api/recommendations` trong backend
 - [ ] AIDashboard gọi API thay vì generate local
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 🚀 React OAS Integration v4.0 - Main Deployment Script
-# Deploy to Netlify + Render (auto-deploy from GitHub)
+# Deploy: push GitHub → Vercel (frontend) + Railway (backend) auto-deploy
 
 # Get script directory and change to project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -78,7 +78,7 @@ if [ -z "$(git status --porcelain)" ]; then
     git commit --allow-empty -m "${COMMIT_MESSAGE}"
 else
     echo -e "${GREEN}${CHECK} Changes detected${NC}"
-    
+
     # Step 2: Build frontend
     echo -e "${CYAN}${PACKAGE} Step 2: Building frontend...${NC}"
     npm run build
@@ -87,12 +87,12 @@ else
         exit 1
     fi
     echo -e "${GREEN}${CHECK} Frontend build successful${NC}"
-    
+
     # Step 3: Add all changes
     echo -e "${CYAN}${PACKAGE} Step 3: Adding changes to git...${NC}"
     git add .
     echo -e "${GREEN}${CHECK} All changes added${NC}"
-    
+
     # Step 4: Commit changes
     echo -e "${CYAN}${PACKAGE} Step 4: Committing changes...${NC}"
     git commit -m "${COMMIT_MESSAGE}"
@@ -109,10 +109,10 @@ CURRENT_BRANCH=$(git branch --show-current)
 if git fetch origin "$CURRENT_BRANCH" 2>/dev/null; then
     LOCAL=$(git rev-parse @)
     REMOTE=$(git rev-parse @{u} 2>/dev/null || echo "")
-    
+
     if [ -n "$REMOTE" ] && [ "$LOCAL" != "$REMOTE" ]; then
         echo -e "${YELLOW}${WARNING} Local branch is behind remote. Attempting to merge...${NC}"
-        
+
         # Try to merge
         if git pull --no-rebase origin "$CURRENT_BRANCH" 2>&1 | tee /tmp/git-pull.log; then
             echo -e "${GREEN}${CHECK} Successfully merged remote changes${NC}"
@@ -159,15 +159,15 @@ fi
 
 echo ""
 echo -e "${PURPLE}${CLOUD} Deployment Status:${NC}"
-echo -e "${GREEN}${CHECK} Frontend: Will auto-deploy to Netlify (3-5 minutes)${NC}"
-echo -e "${GREEN}${CHECK} Backend: Will auto-deploy to Render (5-10 minutes)${NC}"
+echo -e "${GREEN}${CHECK} Frontend: Will auto-deploy to Vercel (1-3 minutes)${NC}"
+echo -e "${GREEN}${CHECK} Backend: Will auto-deploy to Railway (nếu connect GitHub)${NC}"
 echo ""
 
 echo -e "${BLUE}${ROCKET} Production URLs:${NC}"
-echo -e "${CYAN}Frontend: https://leafy-baklava-595711.netlify.app/${NC}"
-echo -e "${CYAN}Backend:  https://react-google-backend.onrender.com${NC}"
+echo -e "${CYAN}Frontend: https://react-oas-integration-v4-0.vercel.app${NC}"
+echo -e "${CYAN}Backend:  https://react-oas-integration-backend-production.up.railway.app${NC}"
 echo ""
 
 echo -e "${GREEN}${CHECK} Deployment completed successfully!${NC}"
-echo -e "${YELLOW}💡 Tip: Monitor deployment status on Netlify and Render dashboards${NC}"
+echo -e "${YELLOW}💡 Tip: Theo dõi deploy tại Vercel & Railway dashboards${NC}"
 echo ""

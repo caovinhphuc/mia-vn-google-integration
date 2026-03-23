@@ -30,7 +30,7 @@
 
 ### 🌐 Deploy production
 
-- **Frontend:** [leafy-baklava-595711.netlify.app](https://leafy-baklava-595711.netlify.app/)
+- **Frontend:** [react-oas-integration-v4-0.vercel.app](https://react-oas-integration-v4-0.vercel.app)
 - **Backend:** [react-google-backend.onrender.com](https://react-google-backend.onrender.com)
 - **Chi tiết:** [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md)
 

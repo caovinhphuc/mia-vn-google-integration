@@ -22,8 +22,8 @@ export function parseApiJsonText(text, urlHint = "") {
   }
 }
 
-/** Node API (auth, health, sheets proxy…) */
-const PRODUCTION_API = "https://react-google-backend.onrender.com";
+/** Node API (auth, health, sheets proxy…) — Railway backend */
+const PRODUCTION_API = "https://react-oas-integration-backend-production.up.railway.app";
 
 export function getMainApiBaseUrl() {
   return trimSlash(
