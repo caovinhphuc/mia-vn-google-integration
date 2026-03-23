@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  AreaChart,
   Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
 } from "recharts";
-import Loading from "../Common/Loading";
 import { aiService } from "../../services/aiService";
+import Loading from "../Common/Loading";
 import "./AIDashboard.css";
 
 const AIDashboard = () => {
@@ -120,7 +120,7 @@ const AIDashboard = () => {
     } catch (err) {
       console.error("AI Analysis Error:", err);
       setError(
-        "Không thể phân tích dữ liệu. Kiểm tra ai-service (port 8001) và biến REACT_APP_AI_SERVICE_URL."
+        "Không thể phân tích dữ liệu. Kiểm tra ai-service (port 8000) và biến REACT_APP_AI_SERVICE_URL."
       );
 
       // Fallback to sample data if API fails
