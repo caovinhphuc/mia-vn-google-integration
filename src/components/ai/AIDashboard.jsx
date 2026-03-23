@@ -12,6 +12,8 @@ import {
   YAxis,
 } from "recharts";
 import { aiService } from "../../services/aiService";
+import { googleDriveApiService } from "../../services/googleDriveApi";
+import { googleSheetsApiService } from "../../services/googleSheetsApi";
 import Loading from "../Common/Loading";
 import "./AIDashboard.css";
 
@@ -36,6 +38,35 @@ const AIDashboard = () => {
   const [isChatting, setIsChatting] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
+  /** Đọc grid Sheets + list Drive qua backend (dữ liệu automation ONE thường nằm trên sheet). */
+  const fetchLiveGoogleContext = useCallback(async () => {
+    const range =
+      process.env.REACT_APP_AI_CONTEXT_RANGE || process.env.VITE_AI_CONTEXT_RANGE || "A1:Z500";
+    const out = { sheet_values: [], drive_files: [] };
+    try {
+      const sh = await googleSheetsApiService.readSheet(range);
+      if (sh?.data && Array.isArray(sh.data)) {
+        out.sheet_values = sh.data;
+      }
+    } catch (e) {
+      console.warn("[AI] Sheets context:", e?.message || e);
+    }
+    try {
+      const folderId =
+        process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID || process.env.VITE_GOOGLE_DRIVE_FOLDER_ID;
+      const dr = await googleDriveApiService.listFiles(folderId || undefined, 40);
+      out.drive_files = (dr.files || []).map((f) => ({
+        id: f.id,
+        name: f.name,
+        mimeType: f.mimeType,
+        modifiedTime: f.modifiedTime,
+      }));
+    } catch (e) {
+      console.warn("[AI] Drive context:", e?.message || e);
+    }
+    return out;
+  }, []);
+
   // Real AI analysis using aiService
   const analyzeData = useCallback(async () => {
     setIsAnalyzing(true);
@@ -49,6 +80,25 @@ const AIDashboard = () => {
         alerts: alerts.length,
         timestamp: new Date().toISOString(),
       };
+
+      const live = await fetchLiveGoogleContext();
+      let contextBlock = { insights: [], recommendations: [] };
+      if (live.sheet_values.length > 0 || live.drive_files.length > 0) {
+        try {
+          contextBlock = await aiService.analyzeGoogleContext({
+            sheet_values: live.sheet_values.slice(0, 501),
+            drive_files: live.drive_files,
+            metrics: {
+              sheets: sheets.length,
+              files: files.length,
+              alerts: alerts.length,
+            },
+            data_source_note: "ONE automation → Google Sheets / Drive → Dashboard",
+          });
+        } catch (ctxErr) {
+          console.warn("[AI] context/analyze:", ctxErr?.message || ctxErr);
+        }
+      }
 
       // Call AI service
       const [insightsResult, predictionsResult, recommendationsResult] = await Promise.all([
@@ -68,9 +118,20 @@ const AIDashboard = () => {
         }),
       ]);
 
-      setAiInsights(insightsResult.insights || []);
+      const fromContext = contextBlock.insights || [];
+      const fromGeneric = insightsResult.insights || [];
+      setAiInsights([...fromContext, ...fromGeneric]);
       setPredictions(predictionsResult.predictions || {});
-      setRecommendations(recommendationsResult.recommendations || []);
+      const ctxRecs = (contextBlock.recommendations || []).map((r, i) => ({
+        id: 1000 + i,
+        category: r.category || "ops",
+        title: typeof r.title === "string" ? r.title : "Đề xuất",
+        description: typeof r.title === "string" ? r.title : JSON.stringify(r),
+        priority: "high",
+        effort: "low",
+        impact: "medium",
+      }));
+      setRecommendations([...ctxRecs, ...(recommendationsResult.recommendations || [])]);
 
       // Generate chart data for predictions
       if (predictionsResult.predictions) {
@@ -176,7 +237,7 @@ const AIDashboard = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  }, [sheets.length, files.length, alerts.length, selectedTimeframe]);
+  }, [sheets.length, files.length, alerts.length, selectedTimeframe, fetchLiveGoogleContext]);
 
   // AI Chat handler
   const handleChatSend = async () => {

@@ -105,15 +105,18 @@ Entry **chuẩn** hiện tại: **`main_simple:app`** (không phải `ai_service
 
 ### Các route mà `src/services/aiService.js` đang dùng
 
-| Frontend method      | Method + path                                    | Ghi chú                                             |
-| -------------------- | ------------------------------------------------ | --------------------------------------------------- |
-| `analyzeData`        | `POST /api/analyze`                              | Mock phân tích, trả `prediction`, `recommendations` |
-| `getPredictions`     | `POST /api/ml/predict`                           | Body: `timeframe`, `metrics[]`                      |
-| `getRecommendations` | `GET /api/ml/insights` + `POST /api/ml/optimize` | Gộp khuyến nghị                                     |
-| `detectAnomalies`    | `POST /api/ml/legacy/patterns/anomalies`         | Cần **mia_models**                                  |
-| `chat`               | `POST /api/ml/legacy/nlp/parse`                  | Cần **mia_models**                                  |
-| `analyzeSheets`      | `POST /api/ml/legacy/nlp/summary`                | Cần **mia_models**                                  |
-| `optimizeSystem`     | `POST /api/ml/optimize`                          | Giống optimize trong recommendations                |
+| Frontend method        | Method + path                                    | Ghi chú                                             |
+| ---------------------- | ------------------------------------------------ | --------------------------------------------------- |
+| `analyzeData`          | `POST /api/analyze`                              | Mock phân tích, trả `prediction`, `recommendations` |
+| `getPredictions`       | `POST /api/ml/predict`                           | Body: `timeframe`, `metrics[]`                      |
+| `getRecommendations`   | `GET /api/ml/insights` + `POST /api/ml/optimize` | Gộp khuyến nghị                                     |
+| `detectAnomalies`      | `POST /api/ml/legacy/patterns/anomalies`         | Cần **mia_models**                                  |
+| `chat`                 | `POST /api/ml/legacy/nlp/parse`                  | Cần **mia_models**                                  |
+| `analyzeSheets`        | `POST /api/ml/legacy/nlp/summary`                | Cần **mia_models**                                  |
+| `optimizeSystem`       | `POST /api/ml/optimize`                          | Giống optimize trong recommendations                |
+| `analyzeGoogleContext` | `POST /api/ml/context/analyze`                   | Dữ liệu thật: grid Sheets + Drive (ONE automation)  |
+
+Luồng chi tiết: [AI_AUTOMATION_SHEETS_PIPELINE.md](AI_AUTOMATION_SHEETS_PIPELINE.md).
 
 ### Endpoint bổ sung (test / debug)
 

@@ -222,6 +222,23 @@ class AIService {
       body: JSON.stringify(systemMetrics || {}),
     });
   }
+
+  /**
+   * Phân tích theo dữ liệu thật Sheets + Drive (đọc qua backend), automation ONE ghi sheet.
+   * @param {{ sheet_values?: any[][], drive_files?: object[], metrics?: object, data_source_note?: string, max_rows_for_stats?: number }} payload
+   */
+  async analyzeGoogleContext(payload) {
+    return fetchJson("/api/ml/context/analyze", {
+      method: "POST",
+      body: JSON.stringify({
+        sheet_values: payload?.sheet_values || [],
+        drive_files: payload?.drive_files || [],
+        metrics: payload?.metrics || {},
+        data_source_note: payload?.data_source_note || "",
+        max_rows_for_stats: payload?.max_rows_for_stats || 500,
+      }),
+    });
+  }
 }
 
 export const aiService = new AIService();

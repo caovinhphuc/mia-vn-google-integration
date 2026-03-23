@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 import uvicorn
@@ -79,6 +79,172 @@ class AnalysisResponse(BaseModel):
     timestamp: str
     analysis_type: str
     recommendations: list
+
+
+class ContextAnalyzeRequest(BaseModel):
+    """Dữ liệu thật từ Google Sheets + Drive (automation ONE ghi sheet)."""
+
+    sheet_values: List[List[Any]] = []
+    drive_files: List[Dict[str, Any]] = []
+    metrics: Dict[str, Any] = {}
+    data_source_note: str = ""
+    max_rows_for_stats: int = Field(default=500, ge=1, le=5000)
+
+
+def _sheet_grid_to_rows(sheet_values: List[List[Any]], max_rows: int) -> List[Dict[str, Any]]:
+    if not sheet_values or len(sheet_values) < 2:
+        return []
+    headers: List[str] = []
+    for i, h in enumerate(sheet_values[0]):
+        hs = str(h).strip() if h is not None else ""
+        headers.append(hs or f"col_{i}")
+    out: List[Dict[str, Any]] = []
+    for row in sheet_values[1 : 1 + max_rows]:
+        d: Dict[str, Any] = {}
+        for i, h in enumerate(headers):
+            d[h] = row[i] if i < len(row) else None
+        out.append(d)
+    return out
+
+
+def _coerce_float(val: Any) -> Optional[float]:
+    if isinstance(val, (int, float)) and not isinstance(val, bool):
+        return float(val)
+    if isinstance(val, str):
+        try:
+            return float(val.replace(",", "").strip())
+        except ValueError:
+            return None
+    return None
+
+
+def _build_context_analysis(req: ContextAnalyzeRequest) -> Dict[str, Any]:
+    rows = _sheet_grid_to_rows(req.sheet_values, req.max_rows_for_stats)
+    n_rows = len(rows)
+    n_drive = len(req.drive_files)
+    summary: Dict[str, Any] = {
+        "sheet_row_count": n_rows,
+        "drive_file_count": n_drive,
+        "numeric_columns": {},
+        "data_source_note": req.data_source_note or None,
+        "redux_metrics": req.metrics or {},
+    }
+
+    numeric_cols: Dict[str, Dict[str, float]] = {}
+    if rows:
+        for col in rows[0].keys():
+            nums: List[float] = []
+            for r in rows:
+                f = _coerce_float(r.get(col))
+                if f is not None:
+                    nums.append(f)
+            if len(nums) >= 2:
+                numeric_cols[col] = {
+                    "min": min(nums),
+                    "max": max(nums),
+                    "avg": sum(nums) / len(nums),
+                    "count": float(len(nums)),
+                }
+    summary["numeric_columns"] = numeric_cols
+
+    insights: List[Dict[str, Any]] = []
+    recs: List[str] = []
+    ts = int(datetime.now().timestamp() * 1000)
+
+    if n_rows == 0:
+        insights.append(
+            {
+                "id": ts,
+                "type": "data",
+                "title": "Chưa có dữ liệu sheet trong ngữ cảnh",
+                "description": "Automation có thể chưa ghi sheet hoặc range đọc sai. Kiểm tra tab/range và quyền service account.",
+                "confidence": 0.55,
+                "impact": "high",
+                "action": "Đặt REACT_APP_AI_CONTEXT_RANGE đúng tab (vd. Orders!A1:Z500).",
+            }
+        )
+        recs.append("Xác nhận ONE automation đang append đúng spreadsheet.")
+    else:
+        insights.append(
+            {
+                "id": ts + 1,
+                "type": "volume",
+                "title": f"{n_rows} dòng dữ liệu từ Sheets",
+                "description": req.data_source_note
+                or "Nguồn: Google Sheets (thường do automation đồng bộ).",
+                "confidence": 0.82,
+                "impact": "medium",
+                "action": "So khớp với dashboard vận hành (SLA, đơn).",
+            }
+        )
+        if numeric_cols:
+            top = sorted(
+                numeric_cols.items(),
+                key=lambda x: x[1].get("count", 0),
+                reverse=True,
+            )[:3]
+            parts = [f"{k}: trung bình {v['avg']:.2f} (n={int(v['count'])})" for k, v in top]
+            insights.append(
+                {
+                    "id": ts + 2,
+                    "type": "metrics",
+                    "title": "Chỉ số số học từ các cột",
+                    "description": "; ".join(parts),
+                    "confidence": 0.78,
+                    "impact": "high",
+                    "action": "Gắn tên cột chuẩn (số lượng, doanh thu, SLA phút) để AI/ML sau này học tốt hơn.",
+                }
+            )
+            recs.append("Chuẩn hoá header tiếng Việt/Anh thống nhất trên sheet nguồn.")
+        else:
+            recs.append("Thêm cột số (số đơn, phí ship, thời gian) để phân tích sâu hơn.")
+
+    if n_drive > 0:
+        mime_counts: Dict[str, int] = {}
+        for f in req.drive_files:
+            mt = (f.get("mimeType") or "unknown") if isinstance(f, dict) else "unknown"
+            mime_counts[mt] = mime_counts.get(mt, 0) + 1
+        insights.append(
+            {
+                "id": ts + 3,
+                "type": "drive",
+                "title": f"{n_drive} file Drive trong ngữ cảnh",
+                "description": f"Phân loại MIME (top): {', '.join(f'{k}:{v}' for k, v in list(mime_counts.items())[:5])}",
+                "confidence": 0.72,
+                "impact": "low",
+                "action": "Liên kết file báo cáo/export với đơn trên sheet nếu cần trace.",
+            }
+        )
+
+    extra_report: Optional[Dict[str, Any]] = None
+    if MIA_MODELS_AVAILABLE and report_generator and rows:
+        try:
+            extra_report = report_generator.generate_summary_report(
+                rows[: min(200, len(rows))], "Automation / Sheets"
+            )
+        except Exception as ex:  # noqa: BLE001
+            logger.warning("report_generator failed: %s", ex)
+
+    if extra_report and extra_report.get("sections"):
+        insights.append(
+            {
+                "id": ts + 4,
+                "type": "report",
+                "title": "Tóm tắt mia_models",
+                "description": f"{len(extra_report.get('sections', []))} section trong báo cáo tự động.",
+                "confidence": 0.8,
+                "impact": "medium",
+                "action": "Xem chi tiết trong response.summary / report.",
+            }
+        )
+
+    return {
+        "insights": insights,
+        "recommendations": [{"title": t, "category": "ops"} for t in recs],
+        "summary": summary,
+        "report": extra_report,
+        "timestamp": datetime.now().isoformat(),
+    }
 
 
 # --- Requests for mia_models (legacy analytics modules) ---
@@ -162,6 +328,7 @@ async def root():
             "/api/ml/insights",
             "POST /api/analyze",
             "POST /api/ml/predict",
+            "POST /api/ml/context/analyze",
         ],
         "mia_models_loaded": MIA_MODELS_AVAILABLE,
     }
@@ -330,6 +497,19 @@ async def ml_optimize(request: OptimizeRequest):
         "recommendations": ["Enable caching", "Optimize queries"],
         "timestamp": datetime.now().isoformat(),
     }
+
+
+@app.post("/api/ml/context/analyze")
+async def ml_context_analyze(request: ContextAnalyzeRequest):
+    """
+    Phân tích chỉ số + đề xuất dựa trên grid Sheets và metadata Drive.
+    Frontend gom dữ liệu (đọc qua backend 3001) rồi POST sang đây.
+    """
+    try:
+        return _build_context_analysis(request)
+    except Exception as e:  # noqa: BLE001
+        logger.exception("context analyze failed")
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @app.get("/api/models")
