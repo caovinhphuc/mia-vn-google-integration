@@ -38,7 +38,8 @@ const handleNetworkError = (error, operation) => {
       `Không thể kết nối đến backend server.\n` +
       `Vui lòng kiểm tra:\n` +
       `1. Backend có đang chạy không? (${API_BASE_URL})\n` +
-      `2. Kiểm tra kết nối mạng\n` +
+      `   → Local: cd backend && npm start (port 3001)\n` +
+      `2. Kiểm tra .env: REACT_APP_API_BASE_URL phải trỏ đúng (local: localhost:3001/api)\n` +
       `3. Kiểm tra CORS settings`;
 
     console.error(`Error ${operation}:`, friendlyMessage);

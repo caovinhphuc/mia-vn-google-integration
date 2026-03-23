@@ -6,8 +6,12 @@
 
 import { io } from "socket.io-client";
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL || process.env.VITE_API_URL || "http://localhost:3001";
+/** Socket.IO: cùng origin với REST hoặc override qua REACT_APP_WS_URL (https://... trên production) */
+const SOCKET_IO_URL =
+  process.env.REACT_APP_WS_URL ||
+  process.env.REACT_APP_API_URL ||
+  process.env.VITE_API_URL ||
+  "http://localhost:3001";
 
 class WebSocketService {
   constructor() {
@@ -29,7 +33,7 @@ class WebSocketService {
     }
 
     try {
-      this.socket = io(API_BASE_URL, {
+      this.socket = io(SOCKET_IO_URL, {
         transports: ["websocket", "polling"],
         reconnection: true,
         reconnectionAttempts: this.maxReconnectAttempts,

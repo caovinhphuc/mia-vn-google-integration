@@ -263,9 +263,18 @@ let wsClientInstance = null;
 /**
  * Get WebSocket client instance
  */
+/** URL cho WebSocket API trình duyệt (ws: / wss:). Không dùng https:// (đó là Socket.IO — xem websocketService). */
+function resolveNativeWebSocketUrl() {
+  const native = process.env.REACT_APP_NATIVE_WS_URL;
+  if (native && /^wss?:\/\//i.test(String(native).trim())) return String(native).trim();
+  const legacy = process.env.REACT_APP_WS_URL;
+  if (legacy && /^wss?:\/\//i.test(String(legacy).trim())) return String(legacy).trim();
+  return "ws://localhost:3002/ws";
+}
+
 export function getWebSocketClient(url = null) {
   if (!wsClientInstance) {
-    const wsUrl = url || process.env.REACT_APP_WS_URL || "ws://localhost:3002/ws";
+    const wsUrl = url || resolveNativeWebSocketUrl();
     wsClientInstance = new WebSocketClient(wsUrl);
   }
   return wsClientInstance;

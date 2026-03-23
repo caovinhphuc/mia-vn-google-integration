@@ -2,7 +2,7 @@
 
 Tài liệu ngắn: **Vercel chỉ host frontend**; Sheet/Drive hiển thị khi **backend + env production** khớp.
 
-**URL ví dụ:** `https://react-oas-integration-v4-0.vercel.app`
+**URL ví dụ:** `https://oas-integration.vercel.app`
 
 ---
 

@@ -63,4 +63,68 @@ Các file sau **không** đưa vào git (nặng, tạo lại được):
 
 ---
 
-_Cập nhật: 2026-03-20_
+---
+
+## npm: cảnh báo `ajv` / `ajv-keywords` (ERESOLVE)
+
+- **Không phải thiếu package** nếu `Compiled successfully` — chỉ là peer dependency tree của webpack/CRA.
+- Trước đây `devDependencies` có `ajv@^8` **không dùng trong source** → kéo xung đột với `schema-utils` / `ajv-keywords@3` (cần ajv 6). Đã **gỡ `ajv` khỏi devDependencies**; chạy lại `npm install`.
+- **Không** thêm `overrides` `ajv-keywords@5` bừa với CRA 5 — dễ lỗi `Unknown keyword formatMinimum` lúc build.
+
+`npm audit` (27+ issues) là chuyện khác; **không** chạy `npm audit fix --force` trên CRA nếu chưa test kỹ.
+
+---
+
+## `REACT_APP_WS_URL` (Socket.IO vs WebSocket thuần)
+
+| Biến                      | Dùng cho                                                         | Giá trị production (Railway)                                                             |
+| ------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `REACT_APP_WS_URL`        | **Socket.IO** (`websocketService.js`, LiveDashboard)             | Cùng `REACT_APP_API_URL`: `https://…up.railway.app` (**không** dùng `wss://` cho `io()`) |
+| `REACT_APP_NATIVE_WS_URL` | **WebSocket** trình duyệt (`utils/websocket.js`, `useWebSocket`) | Chỉ khi có server `ws:`/`wss:` (vd. `backend/ws-server.js` public) — vd. `wss://host/ws` |
+
+Nếu không set `REACT_APP_WS_URL`, Socket.IO vẫn dùng `REACT_APP_API_URL`. Script `scripts/update_vercel_env.sh` mặc định gán `REACT_APP_WS_URL` = API URL.
+
+---
+
+## Vercel CLI: cảnh báo & `Unexpected error`
+
+### Cảnh báo `Did you mean to deploy the subdirectory "build"?`
+
+- Luôn chạy CLI từ **root repo** (thư mục có `package.json` + `vercel.json`), **không** `cd build`.
+- Nếu lỡ gõ kiểu `vercel build` khi cwd sai hoặc alias `vc` trỏ nhầm path, CLI có thể hiểu nhầm tên thư mục `build`.
+
+### `Build not running on Vercel. System environment variables will not be available`
+
+- `vercel build --prod` chạy **trên máy bạn** → **không** inject biến Production từ Dashboard vào CRA.
+- Bundle có thể thiếu `REACT_APP_*` đúng nếu chỉ dựa vào Vercel cloud.
+- **Cách ổn:** trước khi build local, kéo env production (hoặc dùng file local đã đúng):
+
+```bash
+cd /path/to/oas-integration
+npx vercel@latest env pull .env.production.local --environment production -y
+npm run build   # hoặc: npx vercel@latest build --prod
+```
+
+(Hoặc để Vercel **build trên cloud** khi push Git — env Production áp dụng tự động.)
+
+### `Error: Unexpected error. Please try again later. ()`
+
+Sau khi in **Inspect** + URL ~5–8s — kể cả `deploy --prebuilt --prod --yes` **đúng** vẫn có thể báo lỗi; deployment **có thể vẫn Ready** (bước cuối CLI / API Vercel).
+
+1. Mở link **Inspect** → xem **Ready** hay **Error**.
+2. **Prebuilt + preview vs production:** `.vercel/output` phải khớp target — `vercel build --prod` → bắt buộc `vercel deploy --prebuilt --prod`. Nếu chỉ `deploy --prebuilt` (preview) sẽ lỗi _prebuilt-environment-mismatch_; khi đó `rm -rf .vercel/output && vercel build && vercel deploy --prebuilt`.
+
+3. **Prebuilt preview + Promote:** chỉ khi build **không** `--prod`:
+
+```bash
+cd /path/to/oas-integration
+npx vercel@latest build
+npx vercel@latest deploy --prebuilt --yes
+```
+
+1. Hoặc **Git push** → build trên Vercel (env đúng, ít lỗi CLI).
+2. `vercel logs`: nếu cảnh báo subdirectory (`logs`, `build`), xem **Dashboard → Deployments**.
+
+---
+
+_Cập nhật: 2026-03-23_
