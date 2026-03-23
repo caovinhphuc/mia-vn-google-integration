@@ -6,7 +6,8 @@
   "packageManager": "npm@10.0.0",
   "scripts": {
     "dev": "concurrently \"npm run start\" \"npm run backend\" \"npm run ai-service\"",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build:web": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "react-scripts build",
     "analyze:bundle": "npm run webpack-bundle-analyzer",
     "build:wasm": "cargo build --target wasm32-unknown-unknown --release",
     "test:rust": "cargo test",

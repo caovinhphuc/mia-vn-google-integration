@@ -127,7 +127,8 @@ function runLighthouse(url = "http://localhost:3000", options = {}) {
         `--output=html,json ` +
         `--output-path=${reportBase} ` +
         `--only-categories=performance ` +
-        `--chrome-flags="--headless --no-sandbox" ` +
+        `--chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" ` +
+        `--preset=${process.env.LIGHTHOUSE_PRESET || "desktop"} ` +
         `--quiet`,
       { stdio: "inherit", env: envWithLighthouseNodeOptions() }
     );
