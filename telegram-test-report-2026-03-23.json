@@ -1,10 +1,10 @@
 {
   "title": "Telegram Integration Test Report",
-  "timestamp": "2026-03-23T00:14:14.835Z",
+  "timestamp": "2026-03-23T00:22:54.239Z",
   "summary": {
     "total_tests": 6,
-    "passed": 2,
-    "failed": 3,
+    "passed": 5,
+    "failed": 0,
     "warnings": 1
   },
   "configuration": {
@@ -20,7 +20,7 @@
       "details": {
         "required_count": 2
       },
-      "timestamp": "2026-03-23T00:14:12.944Z"
+      "timestamp": "2026-03-23T00:22:51.615Z"
     },
     {
       "test": "bot-info",
@@ -34,7 +34,7 @@
         "can_read_all_group_messages": false,
         "supports_inline_queries": true
       },
-      "timestamp": "2026-03-23T00:14:13.666Z"
+      "timestamp": "2026-03-23T00:22:52.394Z"
     },
     {
       "test": "webhook-info",
@@ -43,36 +43,45 @@
       "details": {
         "url": "",
         "has_custom_certificate": false,
-        "pending_update_count": 3
+        "pending_update_count": 6
       },
-      "timestamp": "2026-03-23T00:14:13.895Z"
+      "timestamp": "2026-03-23T00:22:52.619Z"
     },
     {
       "test": "chat-info",
-      "status": "error",
-      "message": "Không thể lấy thông tin chat: Request failed with status code 400",
+      "status": "success",
+      "message": "Thông tin chat lấy thành công: MIA Logistics Warehouse",
       "details": {
-        "error": "Request failed with status code 400"
+        "id": -5171917919,
+        "type": "group",
+        "title": "MIA Logistics Warehouse"
       },
-      "timestamp": "2026-03-23T00:14:14.119Z"
+      "timestamp": "2026-03-23T00:22:52.847Z"
     },
     {
       "test": "send-message",
-      "status": "error",
-      "message": "Không thể gửi tin nhắn test: Request failed with status code 400",
+      "status": "success",
+      "message": "Tin nhắn test đã được gửi thành công",
       "details": {
-        "error": "Request failed with status code 400"
+        "message_id": 44,
+        "chat_id": -5171917919,
+        "chat_type": "group",
+        "chat_title": "MIA Logistics Warehouse",
+        "date": "2026-03-23T00:22:53.000Z"
       },
-      "timestamp": "2026-03-23T00:14:14.384Z"
+      "timestamp": "2026-03-23T00:22:53.283Z"
     },
     {
       "test": "file-upload",
-      "status": "error",
-      "message": "Không thể upload file test: Request failed with status code 400",
+      "status": "success",
+      "message": "File test đã được upload thành công",
       "details": {
-        "error": "Request failed with status code 400"
+        "file_id": "BQACAgUAAxkDAAMtacCH3gvLmNB3HRj740Sa1VPWbnEAAmYdAAKe1ghWNmkQKaQz4VI6BA",
+        "file_name": "telegram-test-report.json",
+        "file_size": 1945,
+        "mime_type": "application/json"
       },
-      "timestamp": "2026-03-23T00:14:14.835Z"
+      "timestamp": "2026-03-23T00:22:54.238Z"
     }
   ]
 }
