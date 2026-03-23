@@ -3,7 +3,9 @@
   publish = "build"
 
 [build.environment]
-  NODE_VERSION = "16"
+  NODE_VERSION = "18"
+  REACT_APP_API_URL = "https://react-google-backend.onrender.com"
+  REACT_APP_API_BASE_URL = "https://react-google-backend.onrender.com/api"
 
 [[redirects]]
   from = "/*"

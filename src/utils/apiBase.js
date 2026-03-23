@@ -23,9 +23,13 @@ export function parseApiJsonText(text, urlHint = "") {
 }
 
 /** Node API (auth, health, sheets proxy…) */
+const PRODUCTION_API = "https://react-google-backend.onrender.com";
+
 export function getMainApiBaseUrl() {
   return trimSlash(
-    process.env.REACT_APP_API_URL || process.env.VITE_API_URL || "http://localhost:3001"
+    process.env.REACT_APP_API_URL ||
+      process.env.VITE_API_URL ||
+      (process.env.NODE_ENV === "production" ? PRODUCTION_API : "http://localhost:3001")
   );
 }
 
@@ -50,7 +54,9 @@ export function getGoogleProxyApiBase() {
     process.env.VITE_API_BASE_URL ||
     process.env.REACT_APP_API_URL ||
     process.env.VITE_API_URL;
-  if (!raw) return "http://localhost:3001/api";
+  const defaultBase =
+    process.env.NODE_ENV === "production" ? `${PRODUCTION_API}/api` : "http://localhost:3001/api";
+  if (!raw) return defaultBase;
 
   let s = String(raw)
     .trim()
