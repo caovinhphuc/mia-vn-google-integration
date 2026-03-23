@@ -163,8 +163,8 @@ fi
 
 # Step 5: Deploy Frontend to Netlify (Production: leafy-baklava-595711.netlify.app)
 print "Deploy frontend lên Netlify..."
-if command -v netlify &> /dev/null; then
-    if NETLIFY_OUTPUT=$(netlify deploy --prod --dir=build 2>&1); then
+if command -v netlify &> /dev/null || [ -f "node_modules/.bin/netlify" ]; then
+    if NETLIFY_OUTPUT=$(npx netlify deploy --prod --dir=build 2>&1); then
         echo "$NETLIFY_OUTPUT" | tail -12
         FRONTEND_DEPLOYED=true
         FRONTEND_URL=$(echo "$NETLIFY_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.netlify\.app' | tail -1 || echo "https://leafy-baklava-595711.netlify.app/")
@@ -175,7 +175,7 @@ if command -v netlify &> /dev/null; then
         FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
     fi
 else
-    print_warning "Netlify CLI chưa cài. Cài: npm i -g netlify-cli"
+    print_warning "Netlify CLI chưa cài. Cài: npm i netlify-cli"
     print "Hoặc push lên GitHub → Netlify tự động deploy khi repo được connect"
     FRONTEND_URL="https://leafy-baklava-595711.netlify.app/"
 fi
