@@ -187,12 +187,14 @@ async def analyze_anomalies(request: DataAnalysisRequest):
             drops = [a for a in anomalies if a.get("type") == "drop"]
             if spikes:
                 recommendations.append(
-                    f"Investigate {
-                        len(spikes)} spike(s) — may indicate exceptional events")
+                    f"Investigate {len(spikes)} spike(s)"
+                    " — may indicate exceptional events"
+                )
             if drops:
                 recommendations.append(
-                    f"Review {
-                        len(drops)} drop(s) — may indicate data issues or failures")
+                    f"Review {len(drops)} drop(s)"
+                    " — may indicate data issues or failures"
+                )
         else:
             recommendations.append("System is running optimally")
 
@@ -252,9 +254,11 @@ async def get_predictions(request: PredictionRequest):
         ]
 
         if not values:
+            col = request.value_column
             raise HTTPException(
-                status_code=400, detail=f"Column '{
-                    request.value_column}' not found in data")
+                status_code=400,
+                detail=f"Column '{col}' not found in data",
+            )
 
         last_value = values[-1]
         predicted = [round(last_value + slope * (i + 1), 2)
@@ -615,32 +619,30 @@ async def solve_optimization(request: OptimizationRequest):
             options=request.options or {},
         )
 
+        r = result
         return {
             "status": "success",
             "result": {
-                "optimal_point": result.x.tolist() if hasattr(
-                    result,
-                    "x") else None,
-                "optimal_value": float(
-                    result.fun) if hasattr(
-                    result,
-                    "fun") else None,
-                "success": bool(
-                    result.success) if hasattr(
-                    result,
-                    "success") else False,
-                "message": str(
-                    result.message) if hasattr(
-                    result,
-                    "message") else "Optimization completed",
-                "iterations": int(
-                    result.nit) if hasattr(
-                    result,
-                    "nit") else None,
-                "function_evaluations": int(
-                    result.nfev) if hasattr(
-                    result,
-                    "nfev") else None,
+                "optimal_point": (
+                    r.x.tolist() if hasattr(r, "x") else None
+                ),
+                "optimal_value": (
+                    float(r.fun) if hasattr(r, "fun") else None
+                ),
+                "success": (
+                    bool(r.success) if hasattr(r, "success") else False
+                ),
+                "message": (
+                    str(r.message)
+                    if hasattr(r, "message")
+                    else "Optimization completed"
+                ),
+                "iterations": (
+                    int(r.nit) if hasattr(r, "nit") else None
+                ),
+                "function_evaluations": (
+                    int(r.nfev) if hasattr(r, "nfev") else None
+                ),
             },
             "method": "COBYQA",
             "objective_type": request.objective_type,
@@ -651,8 +653,8 @@ async def solve_optimization(request: OptimizationRequest):
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Optimization failed: {
-                str(e)}")
+            detail="Optimization failed: " + str(e),
+        )
 
 
 @app.get("/ai/optimization/status")
