@@ -32,7 +32,7 @@ src/components/auth/__tests__/ProtectedRoute.test.jsx
 - ✅ Handles loading state
 - ✅ Role-based access control (if applicable)
 
-**Estimated Time**: 2-3 hours  
+**Estimated Time**: 2-3 hours
 **Coverage Impact**: +1-2%
 
 #### 2. ErrorBoundary Component Tests
@@ -52,7 +52,7 @@ src/components/Common/__tests__/ErrorBoundary.test.jsx
 - ✅ Logs errors properly
 - ✅ Reset error state functionality
 
-**Estimated Time**: 2-3 hours  
+**Estimated Time**: 2-3 hours
 **Coverage Impact**: +1%
 
 ---
@@ -78,7 +78,7 @@ src/store/reducers/__tests__/dashboardReducer.test.js
 - ✅ LOGOUT action
 - ✅ LOGIN_REQUEST action
 
-**Estimated Time**: 4-5 hours  
+**Estimated Time**: 4-5 hours
 **Coverage Impact**: +3-4%
 
 #### 4. Redux Actions Tests
@@ -90,7 +90,7 @@ src/store/reducers/__tests__/dashboardReducer.test.js
 src/store/__tests__/actions.test.js
 ```
 
-**Estimated Time**: 3-4 hours  
+**Estimated Time**: 3-4 hours
 **Coverage Impact**: +2-3%
 
 ---
@@ -115,7 +115,7 @@ src/services/__tests__/securityService.test.js
 - ✅ Token management
 - ✅ Error handling
 
-**Estimated Time**: 4-5 hours  
+**Estimated Time**: 4-5 hours
 **Coverage Impact**: +3-4%
 
 #### 6. Google Sheets API Service Tests
@@ -127,7 +127,7 @@ src/services/__tests__/securityService.test.js
 src/services/__tests__/googleSheetsApi.test.js
 ```
 
-**Estimated Time**: 5-6 hours  
+**Estimated Time**: 5-6 hours
 **Coverage Impact**: +4-5%
 
 ---
@@ -365,5 +365,5 @@ npm run test:ci
 
 ---
 
-**Last Updated**: March 20, 2026  
+**Last Updated**: March 20, 2026
 **Status**: ✅ Updated with current repo practices (wrapper guard + coverage caveat)

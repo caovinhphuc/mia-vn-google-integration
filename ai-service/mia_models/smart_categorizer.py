@@ -231,9 +231,23 @@ class SmartCategorizer:
                 groups[key].append(row)
             return {str(k): v for k, v in groups.items()}
         else:
-            # Auto-group by similarity
-            # Simple implementation: group by most common values
-            return {"all": data}  # Simplified for now
+            # Auto-group: tìm cột string đầu tiên có cardinality thấp (≤ 20 giá trị unique)
+            if not data:
+                return {"all": data}
+            sample = data[0]
+            candidate_cols = [
+                k for k, v in sample.items()
+                if isinstance(v, str) and v.strip()
+            ]
+            for col in candidate_cols:
+                unique_vals = {str(row.get(col, "")) for row in data}
+                if 2 <= len(unique_vals) <= 20:
+                    groups: Dict[str, List] = {}
+                    for row in data:
+                        key = str(row.get(col, "other"))
+                        groups.setdefault(key, []).append(row)
+                    return groups
+            return {"all": data}
 
 
 # Singleton instance

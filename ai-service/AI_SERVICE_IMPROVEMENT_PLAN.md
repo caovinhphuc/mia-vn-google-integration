@@ -391,9 +391,12 @@ HOTFIXES (2026-03-23)                                         ✅
 ├── SLACheckRequest.current_time: thêm parse ISO 8601
 └── SLA warning loop: thêm cutoff_time vào deadline keys
 
-TUẦN 3  ⏳ CHƯA LÀM
-├── [P3] Giai đoạn 5: Nâng cao NLP (Claude API hybrid)
-└── [P3] Giai đoạn 6: Fix minor issues
+TUẦN 3  ✅ PARTIAL (2026-03-24)
+├── [P3] Giai đoạn 6: Fix minor issues                        ✅
+│   ├── PredictiveAlerts — xoá dead mutable state (self.alerts, self.thresholds)
+│   ├── detect_cycles() — thêm daily cycle (lag-1, threshold 0.7)
+│   └── group_similar_items() — auto-group by first low-cardinality string col
+└── [P3] Giai đoạn 5: Nâng cao NLP (Claude API hybrid)        ⏳ CHƯA LÀM
 ```
 
 ---
@@ -411,10 +414,10 @@ TUẦN 3  ⏳ CHƯA LÀM
 - [x] `.env` được load đúng cách (`load_dotenv()`)
 - [x] SLA check chấp nhận ISO 8601 cho `current_time`
 - [x] SLA warning bao gồm `cutoff_time` approaching
+- [x] `SmartCategorizer.group_similar_items()` — implement real grouping (2026-03-24)
+- [x] `PredictiveAlerts` — loại bỏ mutable singleton state (2026-03-24)
+- [x] `PatternRecognizer.detect_cycles()` — thêm daily cycle detection (2026-03-24)
 - [ ] Unit tests cho `PatternRecognizer`, `NLPProcessor`
-- [ ] `SmartCategorizer.group_similar_items()` — implement real grouping
-- [ ] `PredictiveAlerts` — loại bỏ mutable singleton state
-- [ ] `PatternRecognizer.detect_cycles()` — thêm daily cycle detection
 - [ ] NLP hybrid: Claude API fallback khi confidence < 0.6
 
 ---

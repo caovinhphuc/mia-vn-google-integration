@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-03-23T03:34:37.372Z",
+  "timestamp": "2026-03-23T16:40:30.079Z",
   "envFile": "✅ Exists",
-  "dependencies": "✅ Installed",
-  "build": "✅ Built",
+  "dependencies": "❌ Missing",
+  "build": "❌ Not built",
   "services": {
-    "google": "✅ Configured",
-    "email": "✅ SendGrid",
+    "google": "❌ Not configured",
+    "email": "⚠️  Thiếu biến (SendGrid: FROM_EMAIL; SMTP: HOST,USER,PASS)",
     "telegram": "✅ Configured"
   }
 }

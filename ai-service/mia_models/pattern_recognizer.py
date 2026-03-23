@@ -110,6 +110,20 @@ class PatternRecognizer:
         values = [float(row.get(value_column, 0)) for row in data]
         values_array = np.array(values)
 
+        # Daily cycle — lag-1 (cần ≥ 2 điểm)
+        if len(values) >= 2:
+            lag_1 = values_array[1:]
+            original_1 = values_array[:-1]
+            if np.std(original_1) > 0 and np.std(lag_1) > 0:
+                correlation_1 = float(np.corrcoef(original_1, lag_1)[0, 1])
+                if correlation_1 > 0.7:
+                    return {
+                        "cycle": "daily",
+                        "period": 1,
+                        "confidence": round(correlation_1, 4),
+                        "pattern": "repeating_daily",
+                    }
+
         if len(values) >= 14:
             lag_7 = values_array[7:]
             original = values_array[:-7]

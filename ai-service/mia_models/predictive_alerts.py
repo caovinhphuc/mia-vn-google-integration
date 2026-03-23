@@ -18,17 +18,9 @@ class PredictiveAlerts:
     - Pattern-based forecasting
     """
 
-    def __init__(self):
-        self.alerts = []
-        self.thresholds = {}
-
-    def set_threshold(self, metric: str, min_value: float = None, max_value: float = None, alert_type: str = "warning"):
-        """Set threshold for a metric"""
-        self.thresholds[metric] = {
-            "min": min_value,
-            "max": max_value,
-            "type": alert_type
-        }
+    def set_threshold(self, metric: str, min_value: float = None, max_value: float = None, alert_type: str = "warning") -> dict:
+        """Return a threshold config dict (stateless — caller stores it)."""
+        return {"metric": metric, "min": min_value, "max": max_value, "type": alert_type}
 
     def predict_threshold_crossing(self, data: List[Dict[str, Any]], value_column: str,
                                    threshold: float, direction: str = "above") -> Optional[Dict[str, Any]]:
