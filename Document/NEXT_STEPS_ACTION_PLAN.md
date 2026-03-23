@@ -41,7 +41,7 @@
 ```bash
 cd /Users/phuccao/Projects/mia/oas-integration
 npx vercel login
-npx vercel link   # Chọn project oas-integration
+npx vercel link   # Chọn project react-oas-integration-v4-0
 ./scripts/deploy/quick-deploy.sh "Deploy to Vercel"
 ```
 
@@ -69,7 +69,7 @@ Copy URL dạng `https://react-oas-integration-backend-production.up.railway.app
 
 #### 1.4 Kiểm tra Production
 
-- Frontend: <https://oas-integration.vercel.app>
+- Frontend: <https://react-oas-integration-v4-0.vercel.app>
 - Backend: <https://react-oas-integration-backend-production.up.railway.app/health>
 - Sau khi thêm env, Vercel cần **Redeploy** để áp dụng
 

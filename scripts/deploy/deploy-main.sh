@@ -164,7 +164,7 @@ echo -e "${GREEN}${CHECK} Backend: Will auto-deploy to Railway (nếu connect Gi
 echo ""
 
 echo -e "${BLUE}${ROCKET} Production URLs:${NC}"
-echo -e "${CYAN}Frontend: https://oas-integration.vercel.app${NC}"
+echo -e "${CYAN}Frontend: https://react-oas-integration-v4-0.vercel.app${NC}"
 echo -e "${CYAN}Backend:  https://react-oas-integration-backend-production.up.railway.app${NC}"
 echo ""
 

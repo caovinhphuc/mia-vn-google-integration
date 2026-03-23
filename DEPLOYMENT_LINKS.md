@@ -4,9 +4,9 @@
 
 ## 📍 Thông Tin Repository
 
-- **GitHub Repository**: `https://github.com/caovinhphuc/React-OAS-Integration-v4.0`
+- **GitHub Repository**: `https://github.com/caovinhphuc/react-oas-integration-x`
 - **Branch**: `main`
-- **Remote**: `origin` → `https://github.com/caovinhphuc/React-OAS-Integration-v4.0`
+- **Remote**: `origin` → (kiểm tra `git remote -v` trên máy)
 
 ---
 
@@ -16,16 +16,16 @@
 
 - **Project ID**: `prj_7AjXluQWQGPIIyJ3qwnDrfAVeAO0`
 - **Organization ID**: `team_2QxVAInW2KD0ATucWbe7WjVw`
-- **Project Name**: `oas-integration` (team `git-react`; preview: `*-git-react.vercel.app`)
+- **Project Name**: `react-oas-integration-v4-0` (team `git-react`; production alias bên dưới)
 - **Nguồn**: File `.vercel/project.json` (thư mục root của project)
 
 ### URLs & Domains
 
-| Loại                                               | URL                                                             |
-| -------------------------------------------------- | --------------------------------------------------------------- |
-| **Production (domain chính)**                      | <https://oas-integration.vercel.app>                            |
-| **Deployment cụ thể** (mỗi lần build, có thể khác) | Ví dụ: `https://oas-integration-psjj1wdyg-git-react.vercel.app` |
-| **Dashboard**                                      | <https://vercel.com/dashboard>                                  |
+| Loại                                               | URL                                                                        |
+| -------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Production (domain chính)**                      | <https://react-oas-integration-v4-0.vercel.app>                            |
+| **Deployment cụ thể** (mỗi lần build, có thể khác) | Ví dụ: `https://react-oas-integration-v4-0-jvnn1da6m-git-react.vercel.app` |
+| **Dashboard**                                      | <https://vercel.com/dashboard>                                             |
 
 - **Production** = alias ổn định trỏ bản **Ready** mới nhất.
 - **Deployment URL** = link riêng từng lần deploy (preview/history); Vercel tạo slug theo branch/commit — **không** dùng làm “website chính” trên GitHub.
@@ -35,7 +35,7 @@
 GitHub **không** tự lấy domain từ Vercel. Sau mỗi lần đổi project/domain:
 
 1. Vào repo → **Settings** → **General** → mục **Website** (hoặc phần **About** trên trang repo → ✏️ → **Website**).
-2. Đặt: `https://oas-integration.vercel.app` (hoặc custom domain nếu có).
+2. Đặt: `https://react-oas-integration-v4-0.vercel.app` (hoặc custom domain nếu có).
 3. Nếu vẫn thấy URL cũ (vd. `logistics-dashboard-final-xi.vercel.app`) — đó là project/link cũ; sửa tay như trên.
 
 README/badge trong repo: cập nhật link production trong [`README.md`](./README.md) (mục Deploy production) cho đồng bộ với Vercel.
@@ -173,14 +173,14 @@ Cần cấu hình trong Railway Dashboard:
 
 ## 🔗 Quick Links (Production đang chạy)
 
-- **Frontend**: <https://oas-integration.vercel.app> (Vercel)
+- **Frontend**: <https://react-oas-integration-v4-0.vercel.app> (Vercel)
 - **Backend**: <https://react-oas-integration-backend-production.up.railway.app> (Railway)
 - **Backend Health**: <https://react-oas-integration-backend-production.up.railway.app/health>
 
 ### Setup legacy (Netlify đã ngừng – vượt giới hạn credit)
 
 - ~~Frontend (Netlify)~~: <https://leafy-baklava-595711.netlify.app/> (paused)
-- **GitHub Repo**: <https://github.com/caovinhphuc/React-OAS-Integration-v4.0>
+- **GitHub Repo**: <https://github.com/caovinhphuc/react-oas-integration-x>
 - **Vercel Dashboard**: <https://vercel.com/dashboard>
 - **Railway Dashboard**: <https://railway.app/dashboard>
 
@@ -188,7 +188,7 @@ Cần cấu hình trong Railway Dashboard:
 
 ## ⚠️ Lưu Ý
 
-1. **Vercel Project**: Đã được link và cấu hình đầy đủ
+1. **Vercel Project**: Production dùng **`react-oas-integration-v4-0`** → **<https://react-oas-integration-v4-0.vercel.app>**. Nếu CLI báo _Due to `builds` existing…_: xóa key `builds` (legacy) trong `vercel.json` trên repo đang deploy, chỉ giữ `framework` / `buildCommand` / `outputDirectory`.
 2. **Railway Project**: Cần xác minh `railway link` theo môi trường máy hiện tại
 3. **Environment Variables**: Cần kiểm tra và cập nhật trong cả Vercel và Railway dashboards
 4. **Script standards**: Root `*.sh` nên chỉ là wrapper, xem `SHELL_SCRIPT_STANDARDS.md`

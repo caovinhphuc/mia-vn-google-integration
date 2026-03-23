@@ -167,17 +167,17 @@ if command -v vercel &> /dev/null || [ -f "node_modules/.bin/vercel" ]; then
     if VERCEL_OUTPUT=$(npx vercel --prod --yes 2>&1); then
         echo "$VERCEL_OUTPUT" | tail -15
         FRONTEND_DEPLOYED=true
-        FRONTEND_URL=$(echo "$VERCEL_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1 || echo "https://oas-integration.vercel.app")
+        FRONTEND_URL=$(echo "$VERCEL_OUTPUT" | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1 || echo "https://react-oas-integration-v4-0.vercel.app")
         print_success "Frontend đã deploy lên Vercel"
     else
         echo "$VERCEL_OUTPUT" | tail -20
         print_warning "Vercel deploy thất bại. Chạy: npx vercel login && npx vercel --prod"
-        FRONTEND_URL="https://oas-integration.vercel.app"
+        FRONTEND_URL="https://react-oas-integration-v4-0.vercel.app"
     fi
 else
     print_warning "Vercel CLI chưa cài. Cài: npm i -g vercel"
     print "Hoặc push lên GitHub → Connect repo với Vercel để auto-deploy"
-    FRONTEND_URL="https://oas-integration.vercel.app"
+    FRONTEND_URL="https://react-oas-integration-v4-0.vercel.app"
 fi
 
 # Step 6: Deploy Backend to Railway (optional)
@@ -256,7 +256,7 @@ echo "🌐 Kiểm tra:"
 if [ -n "$FRONTEND_URL" ]; then
     echo "   Frontend: $FRONTEND_URL"
 else
-    echo "   Frontend: https://oas-integration.vercel.app"
+    echo "   Frontend: https://react-oas-integration-v4-0.vercel.app"
 fi
 if [ -n "$BACKEND_URL" ]; then
     echo "   Backend:  $BACKEND_URL"

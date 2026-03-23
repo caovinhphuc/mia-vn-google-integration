@@ -50,7 +50,7 @@ REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=${REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID:
 REACT_APP_GOOGLE_DRIVE_FOLDER_ID=${REACT_APP_GOOGLE_DRIVE_FOLDER_ID:-${GOOGLE_DRIVE_FOLDER_ID:-}}
 
 # Project: link Vercel thực tế (có thể override tham số 1)
-PROJECT_NAME=${1:-"oas-integration"}
+PROJECT_NAME=${1:-"react-oas-integration-v4-0"}
 ENVIRONMENT=${2:-"production"}
 
 echo -e "${CYAN}╔══════════════════════════════════════════════════════════════╗${NC}"

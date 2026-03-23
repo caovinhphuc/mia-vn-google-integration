@@ -8,7 +8,7 @@
 
 | Service  | URL                                                                      |
 | -------- | ------------------------------------------------------------------------ |
-| Frontend | <https://oas-integration.vercel.app>                                     |
+| Frontend | <https://react-oas-integration-v4-0.vercel.app>                          |
 | Backend  | <https://react-oas-integration-backend-production.up.railway.app>        |
 | Health   | <https://react-oas-integration-backend-production.up.railway.app/health> |
 
