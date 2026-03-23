@@ -37,7 +37,7 @@
 
 ## 📋 Scripts Mới Đã Thêm
 
-> **Zsh:** Tránh copy `lệnh  # ghi chú` một dòng — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) (mục Scripts).  
+> **Zsh:** Tránh copy `lệnh  # ghi chú` một dòng — xem [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md) (mục Scripts).
 > **Prettier:** `npx prettier` không đối số → chỉ hiện help (đúng CLI). Dùng `npm run prettier` (= `format`) hoặc `npx prettier --write <file>`.
 
 ### Linting
@@ -215,7 +215,7 @@ git push origin main
 
 ---
 
-**Date**: January 21, 2026  
-**Updated**: March 20, 2026 — Quick Reference (prettier alias, Husky 9, pre-commit), Troubleshooting `npx prettier`  
-**Status**: ✅ **Complete**  
+**Date**: January 21, 2026
+**Updated**: March 20, 2026 — Quick Reference (prettier alias, Husky 9, pre-commit), Troubleshooting `npx prettier`
+**Status**: ✅ **Complete**
 **Chi tiết:** [DEVELOPMENT_TOOLS_SETUP.md](./DEVELOPMENT_TOOLS_SETUP.md)
