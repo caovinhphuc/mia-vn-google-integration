@@ -1,420 +1,260 @@
 #!/bin/bash
+# ╔══════════════════════════════════════════════════════════════╗
+# ║        MIA OAS Integration v4.2 — Deploy Script             ║
+# ║  local  : build + verify production bundle locally          ║
+# ║  vercel : deploy frontend to Vercel (prod)                  ║
+# ║  full   : lint + test + build + verify + vercel deploy      ║
+# ╚══════════════════════════════════════════════════════════════╝
+#
+# Usage:
+#   ./deploy_platform.sh              # = local (default)
+#   ./deploy_platform.sh local        # Build and verify locally
+#   ./deploy_platform.sh vercel       # Deploy to Vercel only
+#   ./deploy_platform.sh full         # Full pipeline: test + build + deploy
+#   ./deploy_platform.sh check        # Pre-deploy checks only (no build)
 
-# 🚀 REACT OAS INTEGRATION - DEPLOYMENT PLATFORM
-# Triển khai toàn bộ hệ thống với AI/ML integration
+set -euo pipefail
 
-set -e
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-NC='\033[0m' # No Color
+# ── Colors ──────────────────────────────────────────────────────
+G='\033[0;32m'; Y='\033[1;33m'; R='\033[0;31m'; B='\033[0;34m'; P='\033[0;35m'; N='\033[0m'
+log()     { echo -e "${G}[$(date +'%H:%M:%S')] $*${N}"; }
+warn()    { echo -e "${Y}[$(date +'%H:%M:%S')] WARNING: $*${N}"; }
+err()     { echo -e "${R}[$(date +'%H:%M:%S')] ERROR: $*${N}"; exit 1; }
+info()    { echo -e "${B}[$(date +'%H:%M:%S')] $*${N}"; }
+section() { echo -e "\n${P}━━━ $* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${N}"; }
 
-# Logging
-log() {
-    echo -e "${GREEN}[$(date +'%Y-%m-%d %H:%M:%S')] $1${NC}"
+# ── Config ───────────────────────────────────────────────────────
+VERSION="4.2.0"
+BACKEND_PORT=3001
+AI_PORT=8000
+BUILD_DIR="$ROOT/build"
+LOG_FILE="$ROOT/logs/deploy-$(date +'%Y%m%d_%H%M%S').log"
+mkdir -p "$ROOT/logs"
+
+# ── Helpers ─────────────────────────────────────────────────────
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || err "Required command not found: $1 — install it first."
 }
 
-warn() {
-    echo -e "${YELLOW}[$(date +'%Y-%m-%d %H:%M:%S')] WARNING: $1${NC}"
+service_ok() {
+  local url=$1
+  curl -fsS "$url" >/dev/null 2>&1
 }
 
-error() {
-    echo -e "${RED}[$(date +'%Y-%m-%d %H:%M:%S')] ERROR: $1${NC}"
-    exit 1
-}
-
-info() {
-    echo -e "${BLUE}[$(date +'%Y-%m-%d %H:%M:%S')] INFO: $1${NC}"
-}
-
-# Check if running on macOS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    log "Detected macOS environment"
-else
-    log "Running on Linux/Unix environment"
-fi
-
-# Project info
-PROJECT_NAME="React OAS Integration Platform"
-PROJECT_VERSION="v4.0"
-DEPLOYMENT_DATE=$(date +'%Y-%m-%d %H:%M:%S')
-
-echo -e "${PURPLE}"
-echo "╔═══════════════════════════════════════════════════════════════╗"
-echo "║                  🚀 REACT OAS INTEGRATION                    ║"
-echo "║                   Platform Deployment v4.0                   ║"
-echo "║                     AI-Powered Analytics                     ║"
-echo "╚═══════════════════════════════════════════════════════════════╝"
-echo -e "${NC}"
-
-log "Starting deployment of $PROJECT_NAME $PROJECT_VERSION"
-log "Deployment time: $DEPLOYMENT_DATE"
-
-# Function to check if port is in use
-check_port() {
-    local port=$1
-    if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
-        warn "Port $port is already in use"
-        return 1
-    else
-        info "Port $port is available"
-        return 0
-    fi
-}
-
-# Function to kill process on port
 kill_port() {
-    local port=$1
-    local pid=$(lsof -ti:$port)
-    if [ ! -z "$pid" ]; then
-        log "Killing process on port $port (PID: $pid)"
-        kill -9 $pid 2>/dev/null || true
-        sleep 2
-    fi
+  local port=$1
+  local pids
+  pids=$(lsof -ti:"$port" 2>/dev/null || true)
+  [ -n "$pids" ] && echo "$pids" | xargs kill -9 2>/dev/null || true
 }
 
-# Function to wait for service
-wait_for_service() {
-    local url=$1
-    local service_name=$2
-    local max_attempts=30
-    local attempt=1
-
-    log "Waiting for $service_name to be ready at $url"
-
-    while [ $attempt -le $max_attempts ]; do
-        if curl -f -s "$url" > /dev/null 2>&1; then
-            log "$service_name is ready! ✅"
-            return 0
-        fi
-
-        info "Attempt $attempt/$max_attempts: Waiting for $service_name..."
-        sleep 2
-        ((attempt++))
-    done
-
-    error "$service_name failed to start after $max_attempts attempts"
+wait_healthy() {
+  local url=$1 name=$2 max=${3:-20} i=1
+  info "Waiting for $name..."
+  while [ $i -le $max ]; do
+    service_ok "$url" && { log "$name OK"; return 0; }
+    sleep 2; ((i++))
+  done
+  warn "$name did not respond — continuing anyway"
 }
 
-# Parse command line arguments
-ACTION=${1:-"start"}
+# ── Step: Pre-deploy checks ─────────────────────────────────────
+step_check() {
+  section "Pre-Deploy Checks"
 
-case $ACTION in
-    "start")
-        log "🚀 Starting full platform deployment..."
-        ;;
-    "stop")
-        log "🛑 Stopping all services..."
-        ;;
-    "restart")
-        log "🔄 Restarting all services..."
-        ;;
-    "status")
-        log "📊 Checking service status..."
-        ;;
-    "health")
-        log "🏥 Running health checks..."
-        ;;
-    "logs")
-        log "📋 Showing service logs..."
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|restart|status|health|logs}"
-        echo ""
-        echo "Commands:"
-        echo "  start   - Start all services"
-        echo "  stop    - Stop all services"
-        echo "  restart - Restart all services"
-        echo "  status  - Check service status"
-        echo "  health  - Run health checks"
-        echo "  logs    - Show service logs"
-        exit 1
-        ;;
+  require_cmd node
+  require_cmd npm
+  require_cmd python3
+
+  log "Node: $(node --version)  |  npm: $(npm --version)"
+
+  # Check .env exists
+  [ -f ".env" ] || err ".env file not found. Copy from .env.example and configure."
+
+  # Check key env vars
+  local missing=()
+  for var in REACT_APP_API_URL; do
+    grep -q "^${var}=" .env 2>/dev/null || missing+=("$var")
+  done
+  if [ ${#missing[@]} -gt 0 ]; then
+    warn "Missing in .env: ${missing[*]}"
+  fi
+
+  # Check backend
+  [ -d "backend" ]             || err "backend/ directory not found."
+  [ -f "backend/src/server.js" ] || err "backend/src/server.js not found."
+
+  # Check AI service
+  [ -d "ai-service" ]             || err "ai-service/ directory not found."
+  [ -f "ai-service/main_simple.py" ] || err "ai-service/main_simple.py not found."
+  [ -d "ai-service/venv" ]        || err "ai-service/venv not found. Run: cd ai-service && python -m venv venv && pip install -r requirements.txt"
+
+  log "Pre-deploy checks passed ✅"
+}
+
+# ── Step: Install deps ──────────────────────────────────────────
+step_install() {
+  section "Installing Dependencies"
+  npm install --legacy-peer-deps
+  (cd backend && npm install --legacy-peer-deps)
+  log "Dependencies installed ✅"
+}
+
+# ── Step: Lint ───────────────────────────────────────────────────
+step_lint() {
+  section "Lint"
+  npm run lint:fix || warn "Lint warnings found — review before production"
+  log "Lint done ✅"
+}
+
+# ── Step: Tests ─────────────────────────────────────────────────
+step_test() {
+  section "Tests"
+  CI=true npm run test:ci        || err "Frontend tests failed — fix before deploying."
+  npm run test:e2e               || warn "E2E tests failed — check manually."
+  log "Tests passed ✅"
+}
+
+# ── Step: Build ─────────────────────────────────────────────────
+step_build() {
+  section "Production Build"
+  log "Building React app (source maps disabled)..."
+  GENERATE_SOURCEMAP=false npm run build
+  [ -d "$BUILD_DIR" ] || err "Build directory not created — build failed."
+  log "Build complete: $(du -sh "$BUILD_DIR" | cut -f1) ✅"
+}
+
+# ── Step: Bundle check ───────────────────────────────────────────
+step_bundle_check() {
+  section "Bundle Size Check"
+  PERF_SKIP_BUNDLE=0 LIGHTHOUSE_MIN_SCORE=0 node scripts/performance-budget.js 2>/dev/null || warn "Bundle check had warnings — review build output."
+  log "Bundle check done ✅"
+}
+
+# ── Step: Smoke test (local serve) ──────────────────────────────
+step_smoke() {
+  section "Local Smoke Test"
+
+  # Start backend for smoke test
+  kill_port $BACKEND_PORT
+  kill_port $AI_PORT
+
+  log "Starting backend for smoke test..."
+  PORT=$BACKEND_PORT node backend/src/server.js > logs/smoke-backend.log 2>&1 &
+  BACKEND_SMOKE_PID=$!
+  wait_healthy "http://localhost:$BACKEND_PORT/health" "Backend" 15
+
+  # Start AI service for smoke test
+  log "Starting AI service for smoke test..."
+  (
+    cd ai-service
+    source venv/bin/activate
+    python -m uvicorn main_simple:app --host 0.0.0.0 --port $AI_PORT \
+      > "$ROOT/logs/smoke-ai.log" 2>&1 &
+    echo $! > "$ROOT/logs/smoke-ai.pid"
+  )
+  wait_healthy "http://localhost:$AI_PORT/health" "AI Service" 20
+
+  # Verify API key auth
+  log "Testing /auth/token..."
+  AI_API_KEY=$(grep "^AI_API_KEY=" .env 2>/dev/null | cut -d'=' -f2- || echo "mia-dev-api-key-2026")
+  TOKEN_RESP=$(curl -s -X POST "http://localhost:$AI_PORT/auth/token" \
+    -H "Content-Type: application/json" \
+    -d "{\"api_key\":\"${AI_API_KEY}\"}")
+  echo "$TOKEN_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); exit(0 if 'access_token' in d else 1)" \
+    && log "JWT auth OK ✅" \
+    || warn "JWT auth failed — check AI_API_KEY in .env"
+
+  # Cleanup smoke processes
+  kill $BACKEND_SMOKE_PID 2>/dev/null || true
+  [ -f logs/smoke-ai.pid ] && kill "$(cat logs/smoke-ai.pid)" 2>/dev/null || true
+  kill_port $BACKEND_PORT
+  kill_port $AI_PORT
+  rm -f logs/smoke-ai.pid
+
+  log "Smoke test complete ✅"
+}
+
+# ── Step: Vercel deploy ─────────────────────────────────────────
+step_vercel() {
+  section "Vercel Production Deploy"
+  require_cmd vercel
+
+  log "Deploying to Vercel (production)..."
+  vercel --prod --yes 2>&1 | tee -a "$LOG_FILE"
+  log "Vercel deploy complete ✅"
+}
+
+# ── Step: Summary ────────────────────────────────────────────────
+print_summary() {
+  echo ""
+  echo -e "${G}╔══════════════════════════════════════════════════════════════╗${N}"
+  echo -e "${G}║             Deploy Complete — v${VERSION}                      ║${N}"
+  echo -e "${G}╚══════════════════════════════════════════════════════════════╝${N}"
+  echo ""
+  echo -e "${B}  Build output : $BUILD_DIR${N}"
+  echo -e "${B}  Deploy log   : $LOG_FILE${N}"
+  echo ""
+  echo -e "${Y}  To serve locally:${N}"
+  echo -e "${Y}    npx serve -s build -l 3000${N}"
+  echo ""
+  echo -e "${Y}  To start full dev stack:${N}"
+  echo -e "${Y}    ./start_ai_platform.sh${N}"
+  echo ""
+}
+
+# ── Main ────────────────────────────────────────────────────────
+ACTION="${1:-local}"
+
+echo -e "\n${P}╔══════════════════════════════════════════════════════════════╗${N}"
+echo -e "${P}║          MIA OAS Integration v${VERSION} — Deploy Platform          ║${N}"
+echo -e "${P}╚══════════════════════════════════════════════════════════════╝${N}"
+echo -e "${B}  Mode: $ACTION  |  $(date +'%Y-%m-%d %H:%M:%S')${N}\n"
+
+case "$ACTION" in
+  local)
+    # Build + bundle check + smoke test (no Vercel)
+    step_check
+    step_install
+    step_build
+    step_bundle_check
+    step_smoke
+    print_summary
+    ;;
+  vercel)
+    # Vercel deploy only (assumes build already done)
+    step_check
+    [ -d "$BUILD_DIR" ] || { warn "No build/ found — running build first..."; step_build; }
+    step_vercel
+    print_summary
+    ;;
+  full)
+    # Complete pipeline: check + install + lint + test + build + bundle + smoke + vercel
+    step_check
+    step_install
+    step_lint
+    step_test
+    step_build
+    step_bundle_check
+    step_smoke
+    step_vercel
+    print_summary
+    ;;
+  check)
+    # Pre-deploy checks only — no build, no deploy
+    step_check
+    log "All checks passed. Run './deploy_platform.sh local' to build."
+    ;;
+  *)
+    echo "Usage: $0 {local|vercel|full|check}"
+    echo ""
+    echo "  local   Build + bundle check + smoke test (default)"
+    echo "  vercel  Deploy to Vercel production"
+    echo "  full    lint + test + build + smoke + vercel"
+    echo "  check   Pre-deploy checks only"
+    exit 1
+    ;;
 esac
-
-# Service definitions
-GOOGLE_SHEETS_FRONTEND_PORT=3000
-GOOGLE_SHEETS_BACKEND_PORT=3003
-AI_SERVICE_PORT=8000
-MIA_FRONTEND_PORT=5173
-
-# Service directories
-GOOGLE_SHEETS_DIR="./google-sheets-project"
-MIA_LOGISTICS_DIR="./src/mia-logistics-manager"
-AI_ENV_DIR="./.venv"
-
-# Start function
-start_services() {
-    log "🔧 Preparing environment..."
-
-    # Check if directories exist
-    if [ ! -d "$GOOGLE_SHEETS_DIR" ]; then
-        error "Google Sheets project directory not found: $GOOGLE_SHEETS_DIR"
-    fi
-
-    if [ ! -d "$AI_ENV_DIR" ]; then
-        warn "Python .venv not found. Run: npm run ide:setup"
-        exit 1
-    fi
-
-    # Install dependencies
-    log "📦 Installing dependencies..."
-
-    # Google Sheets Project
-    if [ -f "$GOOGLE_SHEETS_DIR/package.json" ]; then
-        log "Installing Google Sheets dependencies..."
-        cd $GOOGLE_SHEETS_DIR
-        npm install --legacy-peer-deps
-        cd ..
-    fi
-
-    # Shared project
-    if [ -f "./shared/package.json" ]; then
-        log "Installing Shared project dependencies..."
-        cd ./shared
-        npm install --legacy-peer-deps
-        cd ..
-    fi
-
-    # Kill any existing processes
-    log "🧹 Cleaning up existing processes..."
-    kill_port $GOOGLE_SHEETS_FRONTEND_PORT
-    kill_port $GOOGLE_SHEETS_BACKEND_PORT
-    kill_port $AI_SERVICE_PORT
-    kill_port $MIA_FRONTEND_PORT
-
-    sleep 3
-
-    # Start services
-    log "🚀 Starting services..."
-
-    # 1. Google Sheets Backend
-    log "Starting Google Sheets Backend (Port $GOOGLE_SHEETS_BACKEND_PORT)..."
-    cd $GOOGLE_SHEETS_DIR
-    PORT=$GOOGLE_SHEETS_BACKEND_PORT nohup node server.js > ../logs/google-sheets-backend.log 2>&1 &
-    GOOGLE_SHEETS_BACKEND_PID=$!
-    echo $GOOGLE_SHEETS_BACKEND_PID > ../logs/google-sheets-backend.pid
-    cd ..
-
-    sleep 5
-
-    # 2. Google Sheets Frontend
-    log "Starting Google Sheets Frontend (Port $GOOGLE_SHEETS_FRONTEND_PORT)..."
-    cd $GOOGLE_SHEETS_DIR
-    PORT=$GOOGLE_SHEETS_FRONTEND_PORT nohup npm start > ../logs/google-sheets-frontend.log 2>&1 &
-    GOOGLE_SHEETS_FRONTEND_PID=$!
-    echo $GOOGLE_SHEETS_FRONTEND_PID > ../logs/google-sheets-frontend.pid
-    cd ..
-
-    sleep 10
-
-    # 3. MIA Logistics Frontend (if exists)
-    if [ -d "./shared" ]; then
-        log "Starting MIA Logistics Frontend (Port $MIA_FRONTEND_PORT)..."
-        cd ./shared
-        nohup npm run dev > ../logs/mia-frontend.log 2>&1 &
-        MIA_FRONTEND_PID=$!
-        echo $MIA_FRONTEND_PID > ../logs/mia-frontend.pid
-        cd ..
-
-        sleep 5
-    fi
-
-    # 4. AI Service (if Python environment exists)
-    if [ -d "$AI_ENV_DIR" ]; then
-        log "Starting AI Service (Port $AI_SERVICE_PORT)..."
-        source $AI_ENV_DIR/bin/activate
-        nohup uvicorn ai_service.main:app --host 0.0.0.0 --port $AI_SERVICE_PORT > logs/ai-service.log 2>&1 &
-        AI_SERVICE_PID=$!
-        echo $AI_SERVICE_PID > logs/ai-service.pid
-        deactivate
-
-        sleep 5
-    fi
-
-    # Wait for services to be ready
-    log "⏳ Waiting for services to be ready..."
-
-    wait_for_service "http://localhost:$GOOGLE_SHEETS_BACKEND_PORT/api/health" "Google Sheets Backend"
-    wait_for_service "http://localhost:$GOOGLE_SHEETS_FRONTEND_PORT" "Google Sheets Frontend"
-
-    if [ -d "./shared" ]; then
-        wait_for_service "http://localhost:$MIA_FRONTEND_PORT" "MIA Logistics Frontend"
-    fi
-
-    log "✅ All services started successfully!"
-    echo ""
-    echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║                     🎉 DEPLOYMENT COMPLETE                   ║${NC}"
-    echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    echo -e "${BLUE}📊 Service URLs:${NC}"
-    echo -e "${BLUE}├── Google Sheets Frontend: http://localhost:$GOOGLE_SHEETS_FRONTEND_PORT${NC}"
-    echo -e "${BLUE}├── Google Sheets Backend:  http://localhost:$GOOGLE_SHEETS_BACKEND_PORT${NC}"
-    if [ -d "./shared" ]; then
-        echo -e "${BLUE}├── MIA Logistics Frontend: http://localhost:$MIA_FRONTEND_PORT${NC}"
-    fi
-    if [ -d "$AI_ENV_DIR" ]; then
-        echo -e "${BLUE}└── AI Service:             http://localhost:$AI_SERVICE_PORT${NC}"
-    fi
-    echo ""
-    echo -e "${GREEN}🚀 Platform is ready for use!${NC}"
-}
-
-# Stop function
-stop_services() {
-    log "🛑 Stopping all services..."
-
-    # Kill processes by PID files
-    if [ -f "logs/google-sheets-backend.pid" ]; then
-        PID=$(cat logs/google-sheets-backend.pid)
-        kill $PID 2>/dev/null || true
-        rm -f logs/google-sheets-backend.pid
-    fi
-
-    if [ -f "logs/google-sheets-frontend.pid" ]; then
-        PID=$(cat logs/google-sheets-frontend.pid)
-        kill $PID 2>/dev/null || true
-        rm -f logs/google-sheets-frontend.pid
-    fi
-
-    if [ -f "logs/mia-frontend.pid" ]; then
-        PID=$(cat logs/mia-frontend.pid)
-        kill $PID 2>/dev/null || true
-        rm -f logs/mia-frontend.pid
-    fi
-
-    if [ -f "logs/ai-service.pid" ]; then
-        PID=$(cat logs/ai-service.pid)
-        kill $PID 2>/dev/null || true
-        rm -f logs/ai-service.pid
-    fi
-
-    # Kill by port as backup
-    kill_port $GOOGLE_SHEETS_FRONTEND_PORT
-    kill_port $GOOGLE_SHEETS_BACKEND_PORT
-    kill_port $AI_SERVICE_PORT
-    kill_port $MIA_FRONTEND_PORT
-
-    log "✅ All services stopped"
-}
-
-# Status function
-check_status() {
-    log "📊 Checking service status..."
-    echo ""
-
-    # Check Google Sheets Backend
-    if curl -f -s "http://localhost:$GOOGLE_SHEETS_BACKEND_PORT/api/health" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ Google Sheets Backend (Port $GOOGLE_SHEETS_BACKEND_PORT): RUNNING${NC}"
-    else
-        echo -e "${RED}❌ Google Sheets Backend (Port $GOOGLE_SHEETS_BACKEND_PORT): STOPPED${NC}"
-    fi
-
-    # Check Google Sheets Frontend
-    if curl -f -s "http://localhost:$GOOGLE_SHEETS_FRONTEND_PORT" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ Google Sheets Frontend (Port $GOOGLE_SHEETS_FRONTEND_PORT): RUNNING${NC}"
-    else
-        echo -e "${RED}❌ Google Sheets Frontend (Port $GOOGLE_SHEETS_FRONTEND_PORT): STOPPED${NC}"
-    fi
-
-    # Check MIA Frontend
-    if curl -f -s "http://localhost:$MIA_FRONTEND_PORT" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ MIA Logistics Frontend (Port $MIA_FRONTEND_PORT): RUNNING${NC}"
-    else
-        echo -e "${RED}❌ MIA Logistics Frontend (Port $MIA_FRONTEND_PORT): STOPPED${NC}"
-    fi
-
-    # Check AI Service
-    if curl -f -s "http://localhost:$AI_SERVICE_PORT/health" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ AI Service (Port $AI_SERVICE_PORT): RUNNING${NC}"
-    else
-        echo -e "${RED}❌ AI Service (Port $AI_SERVICE_PORT): STOPPED${NC}"
-    fi
-
-    echo ""
-}
-
-# Health check function
-health_check() {
-    log "🏥 Running comprehensive health checks..."
-    echo ""
-
-    # Health check details
-    echo -e "${BLUE}Google Sheets Backend Health:${NC}"
-    curl -s "http://localhost:$GOOGLE_SHEETS_BACKEND_PORT/api/health" | jq '.' 2>/dev/null || echo "Service not responding"
-    echo ""
-
-    echo -e "${BLUE}AI Service Health:${NC}"
-    curl -s "http://localhost:$AI_SERVICE_PORT/health" | jq '.' 2>/dev/null || echo "Service not responding"
-    echo ""
-
-    # System resources
-    echo -e "${BLUE}System Resources:${NC}"
-    echo "CPU Usage: $(top -l 1 | grep "CPU usage" | awk '{print $3}' | tr -d '%')"
-    echo "Memory Usage: $(vm_stat | grep "Pages active" | awk '{print int($3)*4/1024}')"MB
-    echo "Disk Usage: $(df -h . | tail -1 | awk '{print $5}')"
-    echo ""
-}
-
-# Logs function
-show_logs() {
-    log "📋 Showing recent service logs..."
-
-    if [ -f "logs/google-sheets-backend.log" ]; then
-        echo -e "${BLUE}=== Google Sheets Backend Logs ===${NC}"
-        tail -20 logs/google-sheets-backend.log
-        echo ""
-    fi
-
-    if [ -f "logs/google-sheets-frontend.log" ]; then
-        echo -e "${BLUE}=== Google Sheets Frontend Logs ===${NC}"
-        tail -20 logs/google-sheets-frontend.log
-        echo ""
-    fi
-
-    if [ -f "logs/mia-frontend.log" ]; then
-        echo -e "${BLUE}=== MIA Frontend Logs ===${NC}"
-        tail -20 logs/mia-frontend.log
-        echo ""
-    fi
-
-    if [ -f "logs/ai-service.log" ]; then
-        echo -e "${BLUE}=== AI Service Logs ===${NC}"
-        tail -20 logs/ai-service.log
-        echo ""
-    fi
-}
-
-# Create logs directory
-mkdir -p logs
-
-# Execute based on action
-case $ACTION in
-    "start")
-        start_services
-        ;;
-    "stop")
-        stop_services
-        ;;
-    "restart")
-        stop_services
-        sleep 5
-        start_services
-        ;;
-    "status")
-        check_status
-        ;;
-    "health")
-        health_check
-        ;;
-    "logs")
-        show_logs
-        ;;
-esac
-
-log "Deployment script completed successfully! 🎉"

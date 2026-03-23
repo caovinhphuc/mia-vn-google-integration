@@ -1,12 +1,39 @@
 """
 Natural Language Processing Model
-NLP capabilities for chat, voice, summaries, and search
+NLP capabilities for chat, voice, summaries, and search.
+
+Hybrid mode: regex-first, Claude API fallback when confidence < 0.6.
+Set ANTHROPIC_API_KEY to enable; falls back gracefully if not set.
 """
 
+import json
+import logging
+import os
 import re
 from collections import Counter
 from datetime import datetime
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
+
+# ---------------------------------------------------------------------------
+# Optional Claude API client — loaded once at module import
+# ---------------------------------------------------------------------------
+
+_claude_client = None
+_CLAUDE_MODEL = "claude-haiku-4-5-20251001"
+_CONFIDENCE_THRESHOLD = 0.6  # Below this → use Claude fallback
+
+try:
+    import anthropic as _anthropic
+    _api_key = os.getenv("ANTHROPIC_API_KEY", "")
+    if _api_key:
+        _claude_client = _anthropic.Anthropic(api_key=_api_key)
+        logger.info("NLP hybrid: Claude API enabled (%s)", _CLAUDE_MODEL)
+    else:
+        logger.info("NLP hybrid: ANTHROPIC_API_KEY not set — regex-only mode")
+except ImportError:
+    logger.info("NLP hybrid: anthropic SDK not installed — regex-only mode")
 
 try:
     import numpy as np
@@ -103,28 +130,73 @@ class NLPProcessor:
         }
 
     def process_chat_query(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
-        """Process natural language query"""
+        """Process natural language query — regex first, Claude fallback if confidence < threshold."""
         query_lower = query.lower().strip()
 
-        # Extract intent
         intent = self._detect_intent(query_lower)
-
-        # Extract entities
         entities = self._extract_entities(query_lower)
+        confidence = self._calculate_confidence(query_lower, intent)
 
-        # Parse query structure
         parsed = {
             "intent": intent,
             "entities": entities,
             "original_query": query,
-            "confidence": self._calculate_confidence(query_lower, intent),
+            "confidence": confidence,
             "timestamp": datetime.now().isoformat(),
+            "source": "regex",
         }
-
-        # Generate SQL-like or query structure
         parsed["query_structure"] = self._generate_query_structure(parsed, context)
 
+        # Hybrid fallback: use Claude when regex confidence is too low
+        if confidence < _CONFIDENCE_THRESHOLD and _claude_client is not None:
+            try:
+                claude_result = self._claude_parse(query, context)
+                if claude_result:
+                    claude_result["source"] = "claude"
+                    return claude_result
+            except Exception as exc:
+                logger.warning("Claude NLP fallback failed: %s", exc)
+
         return parsed
+
+    def _claude_parse(self, query: str, context: Dict[str, Any] = None) -> Optional[Dict[str, Any]]:
+        """Call Claude haiku to parse intent/entities when regex confidence is low."""
+        system_prompt = (
+            "You are a data query intent parser. "
+            "Given a user query, return ONLY valid JSON with these fields:\n"
+            "  intent: one of [query_data, filter, aggregate, compare, trend, search, unknown]\n"
+            "  entities: {dates: [], numbers: [], columns: [], keywords: []}\n"
+            "  confidence: float 0.0-1.0\n"
+            "  response: short natural-language answer (1-2 sentences, Vietnamese or English matching the query)\n"
+            "Return nothing except the JSON object."
+        )
+        context_note = ""
+        if context:
+            context_note = f"\nContext: {json.dumps(context, ensure_ascii=False)[:300]}"
+
+        message = _claude_client.messages.create(
+            model=_CLAUDE_MODEL,
+            max_tokens=400,
+            system=system_prompt,
+            messages=[{"role": "user", "content": f"Query: {query}{context_note}"}],
+        )
+        raw = message.content[0].text.strip()
+        # Strip markdown code fences if present
+        if raw.startswith("```"):
+            raw = re.sub(r"^```[a-z]*\n?", "", raw).rstrip("`").strip()
+        data = json.loads(raw)
+        return {
+            "intent": data.get("intent", "unknown"),
+            "entities": data.get("entities", {"dates": [], "numbers": [], "columns": [], "keywords": []}),
+            "original_query": query,
+            "confidence": float(data.get("confidence", 0.75)),
+            "response": data.get("response", ""),
+            "timestamp": datetime.now().isoformat(),
+            "query_structure": self._generate_query_structure(
+                {"intent": data.get("intent", "unknown"), "entities": data.get("entities", {})},
+                context,
+            ),
+        }
 
     def _detect_intent(self, query: str) -> str:
         """Detect user intent from query"""

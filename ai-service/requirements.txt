@@ -13,3 +13,6 @@ scipy>=1.10.0
 
 # Security & rate limiting
 slowapi>=0.1.9
+
+# Claude API hybrid NLP fallback (optional — needs ANTHROPIC_API_KEY)
+anthropic>=0.86.0

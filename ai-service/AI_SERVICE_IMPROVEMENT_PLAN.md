@@ -126,7 +126,7 @@ Body: { "data": [...], "value_column": "value", "horizon": 5 }
 
 **Logic projection:**
 
-```
+```text
 predicted[t+n] = last_value + slope * n
 confidence = trend.confidence * decay_factor
 ```
@@ -187,7 +187,7 @@ POST /ai/sla/alerts         # Lấy danh sách SLA alerts sắp đến deadline
 
 **Logic check Shopee SLA:**
 
-```
+```text
 Nếu current_time > cutoff_time (18:00) và order chưa confirm
 → Alert: "Shopee order #{id} missed cutoff"
 ```
@@ -359,7 +359,7 @@ if len(values) >= 2:
 
 ## Roadmap Tổng Hợp
 
-```
+```text
 TUẦN 1  ✅ HOÀN THÀNH
 ├── [P0] Giai đoạn 1: Expose mia_models vào FastAPI          ✅
 │   ├── POST /ai/analyze/* (PatternRecognizer)
@@ -391,12 +391,24 @@ HOTFIXES (2026-03-23)                                         ✅
 ├── SLACheckRequest.current_time: thêm parse ISO 8601
 └── SLA warning loop: thêm cutoff_time vào deadline keys
 
-TUẦN 3  ✅ PARTIAL (2026-03-24)
+TUẦN 3  ✅ HOÀN THÀNH (2026-03-24)
 ├── [P3] Giai đoạn 6: Fix minor issues                        ✅
 │   ├── PredictiveAlerts — xoá dead mutable state (self.alerts, self.thresholds)
 │   ├── detect_cycles() — thêm daily cycle (lag-1, threshold 0.7)
 │   └── group_similar_items() — auto-group by first low-cardinality string col
-└── [P3] Giai đoạn 5: Nâng cao NLP (Claude API hybrid)        ⏳ CHƯA LÀM
+├── [P3] Giai đoạn 5: Nâng cao NLP (Claude API hybrid)        ✅
+│   ├── anthropic>=0.86.0 thêm vào requirements.txt
+│   ├── _claude_client khởi tạo từ ANTHROPIC_API_KEY (graceful if not set)
+│   ├── process_chat_query: regex → confidence check → Claude fallback (< 0.6)
+│   └── _claude_parse: haiku-4-5, returns intent/entities/response/confidence
+├── Frontend / routes                                          ✅
+│   ├── main_simple.py: thêm /auth/token + toàn bộ /ai/* routes
+│   ├── aiService.js rewrite: gọi đúng FastAPI routes + JWT caching
+│   └── AIDashboard: layout, duplicate text, real metrics fixed
+└── Ops                                                        ✅
+    ├── automation/.env Telegram tokens đã copy từ root .env
+    ├── venv backups: 10 bản cũ đã xóa, giữ 1 bản mới nhất
+    └── Lighthouse NO_FCP: --headless=new --preset=desktop (score 100/100)
 ```
 
 ---
