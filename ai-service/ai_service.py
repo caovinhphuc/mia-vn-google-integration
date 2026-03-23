@@ -1,6 +1,14 @@
-from fastapi import FastAPI, HTTPException
+from datetime import datetime, timedelta
+
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 from pydantic import BaseModel
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from typing import Optional, List, Dict, Any
 import uvicorn
 import time
@@ -8,6 +16,9 @@ import json
 import logging
 import os
 import numpy as np
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env before reading os.getenv() calls below
 
 # Try to import optimization module
 try:
@@ -29,8 +40,69 @@ from mia_models import (
 
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
 logger = logging.getLogger("ai_service")
+
+# ─── Auth Config ─────────────────────────────────────────────────────────
+# Set AUTH_REQUIRED=true in production to enforce JWT on all POST endpoints.
+# Set AUTH_SECRET_KEY to a long random string (e.g. openssl rand -hex 32).
+# Set API_KEY to a secret shared with clients that call POST /auth/token.
+
+_AUTH_REQUIRED = os.getenv("AUTH_REQUIRED", "false").lower() == "true"
+_SECRET_KEY = os.getenv(
+    "AUTH_SECRET_KEY",
+    "dev-secret-change-me-in-production-use-openssl-rand-hex-32",
+)
+_ALGORITHM = "HS256"
+_TOKEN_EXPIRE_MINUTES = int(os.getenv("TOKEN_EXPIRE_MINUTES", "60"))
+_API_KEY = os.getenv("API_KEY", "dev-api-key")
+
+_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+_bearer_scheme = HTTPBearer(auto_error=False)
+
+
+def _create_token(sub: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=_TOKEN_EXPIRE_MINUTES)
+    return jwt.encode(
+        {"sub": sub, "exp": expire},
+        _SECRET_KEY,
+        algorithm=_ALGORITHM,
+    )
+
+
+def _verify_token(
+    credentials: Optional[HTTPAuthorizationCredentials],
+) -> Dict[str, Any]:
+    """Verify JWT bearer token. Raises 401 on failure."""
+    if not _AUTH_REQUIRED:
+        return {"sub": "anonymous"}
+    if credentials is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Authorization header missing",
+        )
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            _SECRET_KEY,
+            algorithms=[_ALGORITHM],
+        )
+        return payload
+    except JWTError:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid or expired token",
+        )
+
+
+async def _auth(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(
+        _bearer_scheme
+    ),
+) -> Dict[str, Any]:
+    """FastAPI dependency — injects verified JWT payload."""
+    return _verify_token(credentials)
 
 # ─── SLA Config ─────────────────────────────────────────────────────────
 
@@ -46,9 +118,15 @@ try:
 except Exception as _e:
     logger.warning("Could not load SLA config: %s", _e)
 
-# ─── App ────────────────────────────────────────────────────────────────
+# ─── Rate Limiter ────────────────────────────────────────────────────────
 
-app = FastAPI(title="React OAS AI Service", version="4.1")
+limiter = Limiter(key_func=get_remote_address)
+
+# ─── App ─────────────────────────────────────────────────────────────────
+
+app = FastAPI(title="React OAS AI Service", version="4.2")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 app.add_middleware(
@@ -58,6 +136,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def _log_requests(request: Request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    ms = round((time.time() - start) * 1000, 1)
+    logger.info(
+        "%s %s → %s  (%.1fms)",
+        request.method,
+        request.url.path,
+        response.status_code,
+        ms,
+    )
+    return response
 
 # ─── Pydantic Models ────────────────────────────────────────────────────
 
@@ -131,14 +224,40 @@ class SLACheckRequest(BaseModel):
     current_time: Optional[str] = None  # "HH:MM", defaults to now
 
 
-# ─── Health ─────────────────────────────────────────────────────────────
+class TokenRequest(BaseModel):
+    api_key: str
+
+
+# ─── Auth Endpoint ───────────────────────────────────────────────────────
+
+
+@app.post("/auth/token", tags=["auth"])
+async def get_token(body: TokenRequest):
+    """
+    Exchange API key for a JWT bearer token.
+
+    The API key is set via the API_KEY environment variable
+    (default: "dev-api-key" for local development).
+    """
+    if body.api_key != _API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    token = _create_token(sub="api-client")
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "expires_in": _TOKEN_EXPIRE_MINUTES * 60,
+        "auth_required": _AUTH_REQUIRED,
+    }
+
+
+# ─── Health ──────────────────────────────────────────────────────────────
 
 @app.get("/health")
 async def health_check():
     return {
         "status": "healthy",
         "timestamp": time.time(),
-        "version": "4.1",
+        "version": "4.2",
         "models": {
             "pattern_recognizer": True,
             "predictive_alerts": True,
@@ -148,26 +267,37 @@ async def health_check():
             "optimizer": COBYQA_AVAILABLE,
         },
         "sla_config_loaded": bool(SLA_CONFIG),
+        "auth_required": _AUTH_REQUIRED,
     }
 
 
 # ─── Pattern Analysis ───────────────────────────────────────────────────
 
 @app.post("/ai/analyze/trends")
-async def analyze_trends(request: DataAnalysisRequest):
+@limiter.limit("60/minute")
+async def analyze_trends(
+    body: DataAnalysisRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         result = pattern_recognizer.recognize_trends(
-            request.data, request.value_column)
+            body.data, body.value_column)
         return {"trend_analysis": result, "timestamp": time.time()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/analyze/anomalies")
-async def analyze_anomalies(request: DataAnalysisRequest):
+@limiter.limit("60/minute")
+async def analyze_anomalies(
+    body: DataAnalysisRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         anomalies = pattern_recognizer.detect_anomalies(
-            request.data, request.value_column)
+            body.data, body.value_column)
 
         if any(
             a.get("severity") == "high" and a.get(
@@ -210,30 +340,45 @@ async def analyze_anomalies(request: DataAnalysisRequest):
 
 
 @app.post("/ai/analyze/cycles")
-async def analyze_cycles(request: DataAnalysisRequest):
+@limiter.limit("60/minute")
+async def analyze_cycles(
+    body: DataAnalysisRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         result = pattern_recognizer.detect_cycles(
-            request.data, request.value_column, request.date_column)
+            body.data, body.value_column, body.date_column)
         return {"cycle_analysis": result, "timestamp": time.time()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/analyze/correlations")
-async def analyze_correlations(request: CorrelationRequest):
+@limiter.limit("60/minute")
+async def analyze_correlations(
+    body: CorrelationRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         result = pattern_recognizer.find_correlations(
-            request.data, request.columns)
+            body.data, body.columns)
         return {**result, "timestamp": time.time()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/analyze/full")
-async def analyze_full(request: DataAnalysisRequest):
+@limiter.limit("30/minute")
+async def analyze_full(
+    body: DataAnalysisRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         return pattern_recognizer.analyze_patterns(
-            request.data, request.value_column, request.date_column)
+            body.data, body.value_column, body.date_column)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -241,20 +386,25 @@ async def analyze_full(request: DataAnalysisRequest):
 # ─── Predictions ────────────────────────────────────────────────────────
 
 @app.post("/ai/predictions")
-async def get_predictions(request: PredictionRequest):
+@limiter.limit("30/minute")
+async def get_predictions(
+    body: PredictionRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     """Real predictions using linear regression on input data."""
     try:
         trend = pattern_recognizer.recognize_trends(
-            request.data, request.value_column)
+            body.data, body.value_column)
         slope = trend.get("slope", 0)
         values = [
-            float(row[request.value_column])
-            for row in request.data
-            if request.value_column in row
+            float(row[body.value_column])
+            for row in body.data
+            if body.value_column in row
         ]
 
         if not values:
-            col = request.value_column
+            col = body.value_column
             raise HTTPException(
                 status_code=400,
                 detail=f"Column '{col}' not found in data",
@@ -262,15 +412,15 @@ async def get_predictions(request: PredictionRequest):
 
         last_value = values[-1]
         predicted = [round(last_value + slope * (i + 1), 2)
-                     for i in range(request.horizon)]
+                     for i in range(body.horizon)]
 
         base_confidence = trend.get("confidence", 0.5)
         confidence_scores = [round(base_confidence * (0.95 ** i), 3)
-                             for i in range(request.horizon)]
+                             for i in range(body.horizon)]
 
         return {
-            "predictions": {request.value_column: predicted},
-            "confidence_scores": {request.value_column: confidence_scores},
+            "predictions": {body.value_column: predicted},
+            "confidence_scores": {body.value_column: confidence_scores},
             "trend": trend.get("trend"),
             "slope": slope,
             "method": "linear_regression",
@@ -307,22 +457,32 @@ async def detect_anomalies_legacy():
 # ─── NLP / Chat ─────────────────────────────────────────────────────────
 
 @app.post("/ai/chat")
-async def chat_query(request: ChatRequest):
+@limiter.limit("30/minute")
+async def chat_query(
+    body: ChatRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
-        return nlp_processor.process_chat_query(request.query, request.context)
+        return nlp_processor.process_chat_query(body.query, body.context)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/search")
-async def smart_search(request: SearchRequest):
+@limiter.limit("30/minute")
+async def smart_search(
+    body: SearchRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         results = nlp_processor.smart_search(
-            request.query, request.data, request.columns)
+            body.query, body.data, body.columns)
         return {
             "results": results,
             "count": len(results),
-            "query": request.query,
+            "query": body.query,
             "timestamp": time.time(),
         }
     except Exception as e:
@@ -330,10 +490,15 @@ async def smart_search(request: SearchRequest):
 
 
 @app.post("/ai/summary")
-async def generate_summary(request: SummaryRequest):
+@limiter.limit("30/minute")
+async def generate_summary(
+    body: SummaryRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         summary = nlp_processor.generate_summary(
-            request.data, request.max_length)
+            body.data, body.max_length)
         return {"summary": summary, "timestamp": time.time()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -342,10 +507,15 @@ async def generate_summary(request: SummaryRequest):
 # ─── Alerts ─────────────────────────────────────────────────────────────
 
 @app.post("/ai/alerts")
-async def generate_alerts(request: AlertRequest):
+@limiter.limit("30/minute")
+async def generate_alerts(
+    body: AlertRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         alerts = predictive_alerts.analyze_and_alert(
-            request.data, request.value_column, request.metric_name, request.threshold)
+            body.data, body.value_column, body.metric_name, body.threshold)
         return {
             "alerts": alerts,
             "count": len(alerts),
@@ -357,13 +527,18 @@ async def generate_alerts(request: AlertRequest):
 
 
 @app.post("/ai/alerts/threshold")
-async def predict_threshold(request: AlertRequest):
-    if request.threshold is None:
+@limiter.limit("30/minute")
+async def predict_threshold(
+    body: AlertRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
+    if body.threshold is None:
         raise HTTPException(status_code=400,
                             detail="'threshold' field is required")
     try:
         prediction = predictive_alerts.predict_threshold_crossing(
-            request.data, request.value_column, request.threshold
+            body.data, body.value_column, body.threshold
         )
         return {"prediction": prediction, "timestamp": time.time()}
     except Exception as e:
@@ -373,10 +548,15 @@ async def predict_threshold(request: AlertRequest):
 # ─── Categorization ─────────────────────────────────────────────────────
 
 @app.post("/ai/categorize")
-async def categorize_data(request: CategorizationRequest):
+@limiter.limit("60/minute")
+async def categorize_data(
+    body: CategorizationRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         categorized = smart_categorizer.categorize_rows(
-            request.data, request.category_rules)
+            body.data, body.category_rules)
         return {
             "categorized": categorized,
             "count": len(categorized),
@@ -389,43 +569,63 @@ async def categorize_data(request: CategorizationRequest):
 # ─── Reports ────────────────────────────────────────────────────────────
 
 @app.post("/ai/reports/summary")
-async def generate_summary_report(request: ReportRequest):
+@limiter.limit("20/minute")
+async def generate_summary_report(
+    body: ReportRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         return report_generator.generate_summary_report(
-            request.data, request.title or "Data Summary")
+            body.data, body.title or "Data Summary")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/reports/trend")
-async def generate_trend_report(request: ReportRequest):
+@limiter.limit("20/minute")
+async def generate_trend_report(
+    body: ReportRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         return report_generator.generate_trend_report(
-            request.data,
-            request.value_column,
-            request.date_column,
-            request.title or "Trend Analysis")
+            body.data,
+            body.value_column,
+            body.date_column,
+            body.title or "Trend Analysis")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/reports/anomaly")
-async def generate_anomaly_report(request: ReportRequest):
+@limiter.limit("20/minute")
+async def generate_anomaly_report(
+    body: ReportRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         return report_generator.generate_anomaly_report(
-            request.data, request.value_column, request.title or "Anomaly Detection")
+            body.data, body.value_column, body.title or "Anomaly Detection")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/ai/reports/comprehensive")
-async def generate_comprehensive_report(request: ReportRequest):
+@limiter.limit("10/minute")
+async def generate_comprehensive_report(
+    body: ReportRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     try:
         return report_generator.generate_comprehensive_report(
-            request.data,
-            request.value_column,
-            request.date_column,
-            request.title or "Comprehensive Report")
+            body.data,
+            body.value_column,
+            body.date_column,
+            body.title or "Comprehensive Report")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -438,15 +638,23 @@ async def get_sla_config():
 
 
 @app.post("/ai/sla/check")
-async def check_sla(request: SLACheckRequest):
+@limiter.limit("60/minute")
+async def check_sla(
+    body: SLACheckRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     """Check orders against SLA deadlines for a given platform."""
     try:
-        from datetime import datetime
-
-        platform_key = request.platform.lower()
+        platform_key = body.platform.lower()
         config = SLA_CONFIG.get(platform_key) or SLA_CONFIG.get(
             "other_platforms", {})
-        current_time_str = request.current_time or datetime.now().strftime("%H:%M")
+        raw_time = body.current_time or datetime.now().strftime("%H:%M")
+        # Accept both "HH:MM" and ISO 8601 "YYYY-MM-DDTHH:MM:SS"
+        if "T" in raw_time:
+            current_time_str = raw_time.split("T")[1][:5]
+        else:
+            current_time_str = raw_time[:5]
 
         current_h, current_m = map(int, current_time_str.split(":"))
         current_minutes = current_h * 60 + current_m
@@ -458,7 +666,7 @@ async def check_sla(request: SLACheckRequest):
             h, m = map(int, t.split(":"))
             return h * 60 + m
 
-        for order in request.orders:
+        for order in body.orders:
             order_id = order.get("id", "unknown")
             status = str(order.get("status", "")).lower()
             inactive = status not in {
@@ -470,13 +678,14 @@ async def check_sla(request: SLACheckRequest):
                         "order_id": order_id,
                         "type": "cutoff_missed",
                         "deadline": config["cutoff_time"],
-                        "message": f"Order {order_id} missed {request.platform} cutoff ({config['cutoff_time']})",
+                        "message": f"Order {order_id} missed {body.platform} cutoff ({config['cutoff_time']})",
                     })
 
             for deadline_key in [
+                "cutoff_time",
                 "confirm_deadline",
                 "handover_deadline",
-                    "default_deadline"]:
+                "default_deadline"]:
                 if deadline_key not in config:
                     continue
                 deadline_minutes = _to_minutes(config[deadline_key])
@@ -494,12 +703,12 @@ async def check_sla(request: SLACheckRequest):
                     break  # One warning per order is enough
 
         return {
-            "platform": request.platform,
+            "platform": body.platform,
             "current_time": current_time_str,
             "violations": violations,
             "warnings": warnings,
             "total_orders": len(
-                request.orders),
+                body.orders),
             "violation_count": len(violations),
             "warning_count": len(warnings),
             "status": "critical" if violations else (
@@ -511,16 +720,25 @@ async def check_sla(request: SLACheckRequest):
 
 
 @app.post("/ai/sla/alerts")
-async def get_sla_alerts(request: SLACheckRequest):
+@limiter.limit("60/minute")
+async def get_sla_alerts(
+    body: SLACheckRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     """Get upcoming SLA deadlines within the warning window."""
     try:
         from datetime import datetime
 
-        current_time_str = request.current_time or datetime.now().strftime("%H:%M")
+        raw_time = body.current_time or datetime.now().strftime("%H:%M")
+        if "T" in raw_time:
+            current_time_str = raw_time.split("T")[1][:5]
+        else:
+            current_time_str = raw_time[:5]
         warning_hours = SLA_CONFIG.get("warning_hours", [2, 1, 0.5])
         max_warning_minutes = max(warning_hours) * 60
 
-        platform_key = request.platform.lower()
+        platform_key = body.platform.lower()
         config = SLA_CONFIG.get(platform_key) or SLA_CONFIG.get(
             "other_platforms", {})
 
@@ -542,12 +760,12 @@ async def get_sla_alerts(request: SLACheckRequest):
                     "deadline_type": deadline_key,
                     "deadline_time": config[deadline_key],
                     "minutes_remaining": remaining,
-                    "affected_orders": len(request.orders),
+                    "affected_orders": len(body.orders),
                     "urgency": "high" if remaining <= 30 else "medium" if remaining <= 60 else "low",
                 })
 
         return {
-            "platform": request.platform,
+            "platform": body.platform,
             "upcoming_deadlines": upcoming,
             "current_time": current_time_str,
             "timestamp": time.time(),
@@ -572,7 +790,12 @@ async def get_optimization():
 
 
 @app.post("/ai/optimization/solve")
-async def solve_optimization(request: OptimizationRequest):
+@limiter.limit("10/minute")
+async def solve_optimization(
+    body: OptimizationRequest,
+    request: Request,
+    _: Dict = Depends(_auth),
+):
     """
     Solve optimization problem using COBYQA.
 
@@ -591,8 +814,8 @@ async def solve_optimization(request: OptimizationRequest):
         from scipy.optimize import Bounds
 
         bounds_obj = None
-        if request.bounds:
-            bounds_array = np.array(request.bounds)
+        if body.bounds:
+            bounds_array = np.array(body.bounds)
             bounds_obj = Bounds(bounds_array[:, 0], bounds_array[:, 1])
 
         def _make_objective(obj_type: str, coefficients=None):
@@ -608,15 +831,15 @@ async def solve_optimization(request: OptimizationRequest):
                 return lambda x: float(np.sum(x ** 2))
 
         objective = _make_objective(
-            request.objective_type,
-            request.coefficients)
+            body.objective_type,
+            body.coefficients)
 
         result = cobyqa_minimize(
             fun=objective,
-            x0=np.array(request.initial_guess),
+            x0=np.array(body.initial_guess),
             bounds=bounds_obj,
-            constraints=request.constraints or [],
-            options=request.options or {},
+            constraints=body.constraints or [],
+            options=body.options or {},
         )
 
         r = result
@@ -645,7 +868,7 @@ async def solve_optimization(request: OptimizationRequest):
                 ),
             },
             "method": "COBYQA",
-            "objective_type": request.objective_type,
+            "objective_type": body.objective_type,
             "timestamp": time.time(),
         }
     except HTTPException:

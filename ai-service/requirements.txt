@@ -10,3 +10,6 @@ python-dotenv==1.0.0
 # Optimization dependencies
 numpy>=1.24.0
 scipy>=1.10.0
+
+# Security & rate limiting
+slowapi>=0.1.9

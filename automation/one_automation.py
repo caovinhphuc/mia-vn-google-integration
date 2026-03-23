@@ -21,6 +21,25 @@ from scripts.pagination_handler import PaginationHandler
 from scripts.enhanced_scraper import EnhancedScraper
 
 
+def _load_date_range():
+    """Load date range from daterange_config.json; fall back to current month."""
+    config_path = os.path.join(
+        os.path.dirname(__file__), "config", "daterange_config.json"
+    )
+    try:
+        with open(config_path, encoding="utf-8") as f:
+            cfg = json.load(f)
+        dr = cfg.get("date_range", {})
+        start = dr.get("start_date")
+        end = dr.get("end_date")
+        if start and end:
+            return start, end
+    except Exception:
+        pass
+    now = datetime.now()
+    return now.replace(day=1).strftime("%Y-%m-%d"), now.strftime("%Y-%m-%d")
+
+
 class JuneFreshSessionWithProducts:
     """🔄 Fresh session per page processor WITH product analysis"""
 
@@ -47,9 +66,10 @@ class JuneFreshSessionWithProducts:
             driver = components['driver']
             logger = components['logger']
 
-            # Setup date range
+            # Setup date range — reads from config/daterange_config.json
+            start_date, end_date = _load_date_range()
             date_customizer = DateCustomizer(driver, logger)
-            if not date_customizer.set_date_range('2025-06-01', '2025-06-30', 'ecom'):
+            if not date_customizer.set_date_range(start_date, end_date, 'ecom'):
                 return None, None, None, None, None
             if not date_customizer.set_display_limit(2000):
                 return None, None, None, None, None

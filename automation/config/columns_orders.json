@@ -1,0 +1,27 @@
+{
+  "_comment": "Column mapping cho bảng đơn hàng ONE (/so/). Cập nhật col_N theo header thực tế nếu bảng thay đổi.",
+  "col_mapping": {
+    "col_1": "order_code",
+    "col_2": "order_id_raw",
+    "col_3": "created_date",
+    "col_4": "customer_name",
+    "col_5": "platform",
+    "col_6": "status",
+    "col_7": "amount_display",
+    "col_8": "warehouse_note"
+  },
+  "primary_id_field": "id",
+  "date_field": "created_date",
+  "amount_field": "api_amount",
+  "platform_field": "col_5",
+  "status_field": "col_6",
+  "inactive_statuses": ["pending", "chờ xác nhận", "chờ xuất kho", "draft"],
+  "known_platforms": ["shopee", "tiktok", "lazada", "website", "tiki", "other"],
+  "platform_keywords": {
+    "shopee": ["shopee", "SP"],
+    "tiktok": ["tiktok", "TT", "tik tok"],
+    "lazada": ["lazada", "LZ"],
+    "website": ["website", "web", "WEB"],
+    "tiki": ["tiki", "TK"]
+  }
+}

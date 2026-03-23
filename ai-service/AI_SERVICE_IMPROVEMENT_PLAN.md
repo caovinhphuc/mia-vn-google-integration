@@ -360,28 +360,38 @@ if len(values) >= 2:
 ## Roadmap Tổng Hợp
 
 ```
-TUẦN 1
-├── [P0] Giai đoạn 1: Expose mia_models vào FastAPI
+TUẦN 1  ✅ HOÀN THÀNH
+├── [P0] Giai đoạn 1: Expose mia_models vào FastAPI          ✅
 │   ├── POST /ai/analyze/* (PatternRecognizer)
 │   ├── POST /ai/chat, /ai/search (NLP)
 │   ├── POST /ai/alerts (PredictiveAlerts)
 │   └── POST /ai/reports/* (ReportGenerator)
 │
-└── [P1] Giai đoạn 2: Fix mock data
-    ├── Fix /ai/predictions → real projection
-    └── Fix /ai/anomalies → real detection
+└── [P1] Giai đoạn 2: Fix mock data                          ✅
+    ├── Fix /ai/predictions → linear regression (np.polyfit)
+    └── Fix /ai/anomalies → z-score detection
 
-TUẦN 2
-├── [P1] Giai đoạn 3: SLA Integration
-│   ├── Load sla_config.json
-│   └── POST /ai/sla/check, /ai/sla/alerts
+TUẦN 2  ✅ HOÀN THÀNH
+├── [P1] Giai đoạn 3: SLA Integration                        ✅
+│   ├── Load sla_config.json khi startup
+│   ├── GET  /ai/sla/config
+│   ├── POST /ai/sla/check  (cutoff + warning + deadline)
+│   └── POST /ai/sla/alerts
 │
-└── [P2] Giai đoạn 4: Bảo mật
-    ├── JWT authentication
-    ├── CORS restrict
-    └── Request logging
+└── [P2] Giai đoạn 4: Bảo mật                               ✅
+    ├── JWT authentication (python-jose HS256)
+    ├── Opt-in auth (AUTH_REQUIRED env var)
+    ├── POST /auth/token — exchange API key → JWT
+    ├── CORS đọc từ ALLOWED_ORIGINS env var
+    ├── Request logging middleware
+    └── Rate limiting (slowapi, tiered: 10–60/min)
 
-TUẦN 3
+HOTFIXES (2026-03-23)                                         ✅
+├── load_dotenv() thiếu → .env không được load
+├── SLACheckRequest.current_time: thêm parse ISO 8601
+└── SLA warning loop: thêm cutoff_time vào deadline keys
+
+TUẦN 3  ⏳ CHƯA LÀM
 ├── [P3] Giai đoạn 5: Nâng cao NLP (Claude API hybrid)
 └── [P3] Giai đoạn 6: Fix minor issues
 ```
@@ -390,16 +400,68 @@ TUẦN 3
 
 ## Checklist Trước Khi Deploy Production
 
-- [ ] Tất cả endpoints có real data (không còn `random.randint`)
-- [ ] `/ai/anomalies` dùng `pattern_recognizer.detect_anomalies()`
-- [ ] `mia_models` có ít nhất 1 endpoint expose mỗi module
-- [ ] SLA config được load và có endpoint `/ai/sla/check`
-- [ ] JWT auth trên các POST endpoints
-- [ ] `ALLOWED_ORIGINS` đọc từ environment variable
-- [ ] Request logging hoạt động
+- [x] Tất cả endpoints có real data (không còn `random.randint`)
+- [x] `/ai/anomalies` dùng `pattern_recognizer.detect_anomalies()`
+- [x] `mia_models` có ít nhất 1 endpoint expose mỗi module
+- [x] SLA config được load và có endpoint `/ai/sla/check`
+- [x] JWT auth trên các POST endpoints
+- [x] `ALLOWED_ORIGINS` đọc từ environment variable
+- [x] Request logging hoạt động
+- [x] `COBYQA_AVAILABLE=False` fallback được test
+- [x] `.env` được load đúng cách (`load_dotenv()`)
+- [x] SLA check chấp nhận ISO 8601 cho `current_time`
+- [x] SLA warning bao gồm `cutoff_time` approaching
 - [ ] Unit tests cho `PatternRecognizer`, `NLPProcessor`
-- [ ] `COBYQA_AVAILABLE=False` fallback được test
+- [ ] `SmartCategorizer.group_similar_items()` — implement real grouping
+- [ ] `PredictiveAlerts` — loại bỏ mutable singleton state
+- [ ] `PatternRecognizer.detect_cycles()` — thêm daily cycle detection
+- [ ] NLP hybrid: Claude API fallback khi confidence < 0.6
 
 ---
 
-_Tạo ngày: 2026-03-23 | Dựa trên code review ai-service v4.0_
+## Hotfixes Chi Tiết (2026-03-23)
+
+### HF-1: load_dotenv() chưa được gọi
+
+**Triệu chứng:** `auth_required: false` dù `.env` có `AUTH_REQUIRED=true`
+
+**Root cause:** `_AUTH_REQUIRED = os.getenv(...)` chạy lúc import, trước khi `.env` được đọc.
+`load_dotenv()` phải gọi **trước** tất cả `os.getenv()`.
+
+**Fix:**
+
+```python
+from dotenv import load_dotenv
+load_dotenv()  # Thêm ngay sau imports, trước os.getenv()
+```
+
+---
+
+### HF-2: SLA current_time không nhận ISO 8601
+
+**Triệu chứng:** Pass `"2025-01-15T19:00:00"` → server dùng thời gian thực thay vì 19:00.
+
+**Root cause:** Parser `split(":")` trả `("2025-01", "15T19", "00", "00")` → parse sai giờ.
+
+**Fix:**
+
+```python
+if "T" in raw_time:
+    current_time_str = raw_time.split("T")[1][:5]  # "19:00"
+else:
+    current_time_str = raw_time[:5]
+```
+
+---
+
+### HF-3: SLA warning không cảnh báo cutoff sắp đến
+
+**Triệu chứng:** Shopee order lúc 17:30 (cutoff 18:00) → không có warning.
+
+**Root cause:** Warning loop chỉ kiểm tra `confirm_deadline`, `handover_deadline`, `default_deadline` — bỏ qua `cutoff_time`.
+
+**Fix:** Thêm `"cutoff_time"` vào đầu danh sách deadline keys trong warning loop.
+
+---
+
+Tạo ngày: 2026-03-23 | Cập nhật: 2026-03-23 | ai-service v4.2
