@@ -281,7 +281,9 @@ show_summary() {
     if [[ "$DOCKER_AVAILABLE" == "true" ]]; then
         echo -e "${BLUE}🐳 Docker Services:${NC}"
         echo -e "  • Frontend: http://localhost:3000"
-        echo -e "  • Backend: http://localhost:8000"
+        echo -e "  • Backend (Node API): http://localhost:3001"
+        echo -e "  • AI Service (FastAPI): http://localhost:8000"
+        echo -e "  • Automation (optional): http://localhost:8001"
         echo -e "  • Monitoring: http://localhost:8080"
     else
         echo -e "${BLUE}🖥️  Traditional Deployment:${NC}"
@@ -299,7 +301,8 @@ show_summary() {
     echo ""
     echo -e "${CYAN}🔗 Quick Links:${NC}"
     echo -e "  • Frontend: http://localhost:3000"
-    echo -e "  • Health Check: http://localhost:3000/health"
+    echo -e "  • Backend health: http://localhost:3001/health"
+    echo -e "  • AI health: http://localhost:8000/health"
     echo -e "  • Monitoring: http://localhost:8080"
 }
 

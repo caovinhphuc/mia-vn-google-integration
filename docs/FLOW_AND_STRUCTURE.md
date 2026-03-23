@@ -8,11 +8,11 @@ npm run dev
 
 Chạy **3 process song song**:
 
-| Process     | Lệnh                                         | Port |
-|------------|-----------------------------------------------|------|
-| Frontend   | `react-scripts start`                         | 3000 |
-| Backend    | `cd backend && npm start`                     | 3001 |
-| AI Service | `cd ai-service && uvicorn main_simple:app --port 8001` | 8001 |
+| Process    | Lệnh                                                           | Port |
+| ---------- | -------------------------------------------------------------- | ---- |
+| Frontend   | `react-scripts start`                                          | 3000 |
+| Backend    | `cd backend && npm start`                                      | 3001 |
+| AI Service | `cd ai-service && uvicorn main:app --host 0.0.0.0 --port 8000` | 8000 |
 
 ---
 
@@ -62,12 +62,12 @@ Chạy **3 process song song**:
 cd automation && python -m uvicorn main:app --port 8001
 ```
 
-⚠️ **Lưu ý:** Automation cũng dùng port 8001 → **không chạy cùng lúc** với AI Service. Chọn một trong hai.
+✅ **Lưu ý:** AI **8000** và Automation **8001** — cổng khác nhau, có thể chạy song song nếu cần.
 
-| Khi cần           | Chạy gì          |
-|-------------------|------------------|
-| Dev full (AI)     | `npm run dev`    |
-| Automation/Sheets | `start_dev_servers.sh` hoặc automation |
+| Khi cần         | Chạy gì                                                    |
+| --------------- | ---------------------------------------------------------- |
+| Dev (FE+BE+AI)  | `npm run dev` (+ AI nếu script có)                         |
+| Thêm automation | `start_dev_servers.sh` hoặc `automation-service` cổng 8001 |
 
 ---
 
@@ -93,7 +93,7 @@ Frontend lắng nghe và cập nhật UI
 
 ```
 Frontend → Backend /api/analytics/...
-Backend  → Gọi AI Service (8001) /api/ml/insights
+Backend  → Gọi AI Service (8000) /api/ml/insights
 AI       → Trả kết quả → Backend → Frontend
 ```
 
@@ -111,13 +111,15 @@ Scheduler/Cron → automation/main.py
 
 ## 5. File cấu hình quan trọng
 
-| File        | Vai trò                                           |
-|-------------|---------------------------------------------------|
-| `.env`      | Biến môi trường (ports, Google, Telegram, Email). Backend load từ root |
-| `config/google-credentials.json` | Service Account Google (Drive, Sheets)   |
-| `package.json` | Scripts `dev`, `start`, `backend`, `ai-service` |
+| File                             | Vai trò                                                                |
+| -------------------------------- | ---------------------------------------------------------------------- |
+| `.env`                           | Biến môi trường (ports, Google, Telegram, Email). Backend load từ root |
+| `config/google-credentials.json` | Service Account Google (Drive, Sheets)                                 |
+| `package.json`                   | Scripts `dev`, `start`, `backend`, `ai-service`                        |
 
 **Google dữ liệu thật:** Xem [docs/GOOGLE_CREDENTIALS_SETUP.md](GOOGLE_CREDENTIALS_SETUP.md).
+
+**AI Service (chi tiết API, env, troubleshooting):** [Document/AI_SERVICE_GUIDE.md](../Document/AI_SERVICE_GUIDE.md).
 
 ---
 
@@ -130,5 +132,6 @@ npm run health:quick
 # Hoặc thủ công:
 curl http://localhost:3000    # Frontend
 curl http://localhost:3001/health   # Backend
-curl http://localhost:8001/health   # AI Service
+curl http://localhost:8000/health   # AI Service
+curl http://localhost:8001/health   # Automation (optional)
 ```

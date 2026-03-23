@@ -6,17 +6,17 @@
 
 **Overall System Score: 100.0%**
 
-| Test Category | Score | Status |
-|---------------|-------|--------|
+| Test Category              | Score  | Status       |
+| -------------------------- | ------ | ------------ |
 | Advanced Integration Tests | 100.0% | 🟢 EXCELLENT |
-| Frontend Connection Tests | 100.0% | 🟢 EXCELLENT |
-| End-to-End Tests | 100.0% | 🟢 EXCELLENT |
+| Frontend Connection Tests  | 100.0% | 🟢 EXCELLENT |
+| End-to-End Tests           | 100.0% | 🟢 EXCELLENT |
 
 ## 🔧 System Components Status
 
 ### ✅ All Services Operational
 
-1. **AI Service (FastAPI)** - Port 8001
+1. **AI Service (FastAPI)** - Port 8000
    - ✅ Health endpoint working
    - ✅ ML predictions functional
    - ✅ AI insights generation active
@@ -48,7 +48,7 @@
 - ✅ End-to-End Data Flow
 - ✅ Performance Testing
 
-### Frontend Connection: 11/11 ✅
+### Frontend Connection: 12/12 ✅
 
 - ✅ Build verification
 - ✅ Configuration validation

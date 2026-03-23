@@ -239,7 +239,8 @@ git checkout [previous-commit-hash]
 # Local/VPS Deployment
 Frontend:  http://localhost/
 Backend:   http://localhost:3001/
-AI API:    http://localhost:8001/
+AI API:    http://localhost:8000/
+Automation: http://localhost:8001/  # optional
 
 # Cloud Deployment
 Frontend:  https://[app-name].vercel.app
@@ -278,7 +279,7 @@ LOG_LEVEL=INFO
 node complete_system_test.js      # 6/6 tests
 node integration_test.js          # 5/5 tests
 node advanced_integration.js      # 7/7 tests
-node frontend_connection_test.js  # 11/11 tests
+node frontend_connection_test.js  # 12/12 checks khi đủ service
 node end_to_end_test.js           # 6/6 tests
 ```
 
@@ -287,7 +288,8 @@ node end_to_end_test.js           # 6/6 tests
 ```bash
 # Health endpoints
 curl http://localhost:3001/health  # Backend
-curl http://localhost:8001/health  # AI Service
+curl http://localhost:8000/health  # AI Service
+curl http://localhost:8001/health  # Automation (optional)
 curl http://localhost/             # Frontend
 
 # Automated monitoring

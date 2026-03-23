@@ -93,7 +93,7 @@ chmod +x deploy.sh
 # ✅ Complete System Test: 6/6 passed
 # ✅ Integration Tests: 5/5 passed
 # ✅ Advanced Integration: 7/7 passed
-# ✅ Frontend Connection: 11/11 passed
+# ✅ Frontend Connection: 12/12 passed (khi optional OK)
 # ✅ End-to-End Tests: 6/6 passed
 ```
 
@@ -102,7 +102,8 @@ chmod +x deploy.sh
 ```bash
 ./deploy.sh health
 # ✅ Backend: http://localhost:3001/health
-# ✅ AI Service: http://localhost:8001/health
+# ✅ AI Service: http://localhost:8000/health
+# ✅ Automation (optional): http://localhost:8001/health
 # ✅ Frontend: http://localhost/
 ```
 

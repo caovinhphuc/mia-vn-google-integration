@@ -12,7 +12,7 @@
 | Backend  | <https://react-oas-integration-backend-production.up.railway.app>        |
 | Health   | <https://react-oas-integration-backend-production.up.railway.app/health> |
 
-- ✅ AI Service (FastAPI) - Port 8001
+- ✅ AI Service (FastAPI) - Port 8000
 - ✅ Backend API (Node.js) - Port 3001
 - ✅ Frontend (React) - Build Ready
 - ✅ Automation Service - Active
@@ -169,7 +169,8 @@ File: `nginx.prod.conf` (already configured)
 
 # Individual service checks
 curl http://localhost:3001/health    # Backend
-curl http://localhost:8001/health    # AI Service
+curl http://localhost:8000/health    # AI Service
+curl http://localhost:8001/health    # Automation (optional)
 curl http://localhost/               # Frontend
 ```
 
@@ -413,7 +414,7 @@ docker-compose -f docker-compose.prod.yml up -d --scale backend=3 --scale ai-ser
 
 # Performance metrics
 curl http://localhost:3001/metrics
-curl http://localhost:8001/metrics
+curl http://localhost:8000/metrics
 ```
 
 ---

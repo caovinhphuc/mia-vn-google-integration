@@ -1,5 +1,14 @@
 # Ghi chú script dev (chắc cú để tra)
 
+## Cổng chuẩn (local)
+
+| Dịch vụ      | Port | Ghi chú                         |
+| ------------ | ---- | ------------------------------- |
+| Frontend     | 3000 | CRA / Vite                      |
+| Backend      | 3001 | API chính                       |
+| AI (FastAPI) | 8000 | `ai-service`                    |
+| Automation   | 8001 | `automation-service` (tùy chọn) |
+
 ## `scripts/fix/fix-missing-files.sh`
 
 **Mục đích:** So sánh **một danh sách file cố định** trên branch hiện tại với branch nguồn (`main` hoặc branch bạn truyền), rồi **tùy chọn** lấy lại bản từ nguồn nếu file **thiếu** hoặc **khác nội dung**.

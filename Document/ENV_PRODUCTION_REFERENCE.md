@@ -15,14 +15,14 @@
 
 **Settings → Environment Variables** — bật **Production** và **Preview** (cùng giá trị để preview không gọi nhầm localhost).
 
-| Biến                                     | Giá trị (production)                                                  | Ghi chú                                         |
-| ---------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------- |
-| `REACT_APP_API_URL`                      | `https://react-oas-integration-backend-production.up.railway.app`     | Không có `/api` cuối                            |
-| `REACT_APP_API_BASE_URL`                 | `https://react-oas-integration-backend-production.up.railway.app/api` | Sheets/Drive proxy                              |
-| `REACT_APP_WS_URL`                       | `https://react-oas-integration-backend-production.up.railway.app`     | Socket.IO = host REST                           |
-| `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID` | `<spreadsheet-id>`                                                    | Trùng spreadsheet backend dùng                  |
-| `REACT_APP_GOOGLE_DRIVE_FOLDER_ID`       | `<folder-id>`                                                         | Tuỳ chọn                                        |
-| `REACT_APP_AI_SERVICE_URL`               | `https://<ai-public-url>` hoặc bỏ                                     | Chỉ khi AI deploy public; **không** `localhost` |
+| Biến                                     | Giá trị (production)                                                  | Ghi chú                                                                                                |
+| ---------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `REACT_APP_API_URL`                      | `https://react-oas-integration-backend-production.up.railway.app`     | Không có `/api` cuối                                                                                   |
+| `REACT_APP_API_BASE_URL`                 | `https://react-oas-integration-backend-production.up.railway.app/api` | Sheets/Drive proxy                                                                                     |
+| `REACT_APP_WS_URL`                       | `https://react-oas-integration-backend-production.up.railway.app`     | Socket.IO = host REST                                                                                  |
+| `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID` | `<spreadsheet-id>`                                                    | Trùng spreadsheet backend dùng                                                                         |
+| `REACT_APP_GOOGLE_DRIVE_FOLDER_ID`       | `<folder-id>`                                                         | Tuỳ chọn                                                                                               |
+| `REACT_APP_AI_SERVICE_URL`               | `https://<ai-public-url>` hoặc bỏ                                     | Chỉ khi AI deploy public; **không** `localhost` — chi tiết: [AI_SERVICE_GUIDE.md](AI_SERVICE_GUIDE.md) |
 
 **CLI (đồng bộ hàng loạt):**
 

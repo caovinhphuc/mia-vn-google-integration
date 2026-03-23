@@ -4,13 +4,13 @@ Module analytics dùng trong **ai-service** (`main_simple.py`), endpoint `/api/m
 
 ## Đã tích hợp
 
-| Module | Mô tả | Phụ thuộc |
-|--------|--------|-----------|
-| `nlp_processor` | Parse intent, summary, smart search | stdlib (+ numpy optional) |
-| `pattern_recognizer` | Xu hướng, anomaly, cycle, correlation | numpy |
-| `predictive_alerts` | Cảnh báo trend / anomaly / threshold | numpy (qua pattern) |
-| `smart_categorizer` | Phân loại cột / hàng | stdlib |
-| `report_generator` | Báo cáo summary / trend / comprehensive | (dùng pattern + categorizer) |
+| Module               | Mô tả                                   | Phụ thuộc                    |
+| -------------------- | --------------------------------------- | ---------------------------- |
+| `nlp_processor`      | Parse intent, summary, smart search     | stdlib (+ numpy optional)    |
+| `pattern_recognizer` | Xu hướng, anomaly, cycle, correlation   | numpy                        |
+| `predictive_alerts`  | Cảnh báo trend / anomaly / threshold    | numpy (qua pattern)          |
+| `smart_categorizer`  | Phân loại cột / hàng                    | stdlib                       |
+| `report_generator`   | Báo cáo summary / trend / comprehensive | (dùng pattern + categorizer) |
 
 ## sklearn (chưa wire API)
 
@@ -43,5 +43,5 @@ Prefix: `/api/ml/legacy/`
 Chạy service từ thư mục `ai-service/`:
 
 ```bash
-cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8001
+cd ai-service && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000
 ```

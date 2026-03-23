@@ -2,12 +2,12 @@
 
 ## Các lỗi trong Console
 
-| Lỗi | Nguyên nhân | Cách sửa |
-|-----|-------------|----------|
-| `:3003/api/sheets/metadata` ERR_CONNECTION_REFUSED | Build dùng `.env.production` → API = 3003, nhưng không có service chạy trên 3003 | Chạy Backend hoặc build với API = 3001 |
-| `ws://localhost:3002/ws` failed | WebSocket mặc định = 3002, nhưng port 3002 đang dùng cho `serve` (static), không có WS server | Chạy ws-server hoặc dùng Backend Socket.IO |
-| `Unexpected token '<', "<!doctype "` (AI) | AI Service không chạy → trả HTML 404 thay vì JSON | Chạy `npm run ai-service` hoặc bỏ qua AI |
-| Chart width/height -1 | Recharts container chưa có kích thước khi render | Thêm `minHeight` cho container chart |
+| Lỗi                                                | Nguyên nhân                                                                                   | Cách sửa                                   |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| `:3003/api/sheets/metadata` ERR_CONNECTION_REFUSED | Build dùng `.env.production` → API = 3003, nhưng không có service chạy trên 3003              | Chạy Backend hoặc build với API = 3001     |
+| `ws://localhost:3002/ws` failed                    | WebSocket mặc định = 3002, nhưng port 3002 đang dùng cho `serve` (static), không có WS server | Chạy ws-server hoặc dùng Backend Socket.IO |
+| `Unexpected token '<', "<!doctype "` (AI)          | AI Service không chạy → trả HTML 404 thay vì JSON                                             | Chạy `npm run ai-service` hoặc bỏ qua AI   |
+| Chart width/height -1                              | Recharts container chưa có kích thước khi render                                              | Thêm `minHeight` cho container chart       |
 
 ## Kiến trúc hiện tại
 
@@ -54,7 +54,7 @@ node server/websocket-server.js
 ./test-service-worker.sh
 ```
 
-→ App mở tại http://localhost:3005 (hoặc 3006/3007 nếu 3005 bận)
+→ App mở tại <http://localhost:3005> (hoặc 3006/3007 nếu 3005 bận)
 
 ### Bước 2: Chạy Backend trước khi test PWA
 
@@ -77,7 +77,8 @@ Sửa `test-service-worker.sh` dùng port 3005 thay vì 3002, để 3002 dành c
 - [ ] Backend đang chạy (3001)
 - [ ] Build dùng API URL = 3001 (hoặc 3003 nếu chạy Google Sheets Backend)
 - [ ] WebSocket: Dashboard dùng Socket.IO (Backend) hoặc ws-server chạy riêng
-- [ ] AI Service (8001): optional, có thể bỏ qua
+- [ ] AI Service (8000): optional, có thể bỏ qua
+- [ ] Automation (8001): optional
 
 ---
 

@@ -91,9 +91,11 @@
 
 #### 🧠 **AI Service** (`ai-service/`)
 
-- **Nhiệm vụ**: Phân tích thông minh, dự đoán, tối ưu hóa
-- **Công nghệ**: FastAPI, scikit-learn, COBYQA
-- **Endpoints**: `/ai/analyze`, `/ai/predictions`, `/ai/optimization`
+- **Nhiệm vụ**: Phân tích thông minh, dự đoán, tối ưu (mock + optional `mia_models`)
+- **Công nghệ**: FastAPI, uvicorn; mở rộng: scikit-learn, COBYQA (xem `ai-service/OPTIMIZATION_INTEGRATION.md`)
+- **Entry chạy dev**: `main_simple:app` — port **8000** (`npm run ai-service` / `npm run dev`)
+- **UI**: `/ai-analytics` → `AIDashboard` gọi trực tiếp AI qua `REACT_APP_AI_SERVICE_URL`
+- **📘 Hướng dẫn đầy đủ**: [Document/AI_SERVICE_GUIDE.md](Document/AI_SERVICE_GUIDE.md)
 
 #### 📈 **Analytics Module** (`analytics/`) ⚠️ **Đang phát triển**
 

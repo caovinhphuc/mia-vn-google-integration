@@ -36,7 +36,7 @@ Load Testing:            ❌ FAIL
 #### 1. AI Analytics Workflow ❌
 
 **Status:** FAIL
-**Why:** No AI Service running on port 8001
+**Why:** No AI Service running on port 8000
 **Required:** **NO - OPTIONAL**
 
 **Details:**
@@ -126,7 +126,7 @@ Monitoring:   ✅ Working
 ### ⚠️ What's Not Working (Optional)
 
 ```
-AI Service:        ❌ Not running (Port 8001)
+AI Service:        ❌ Not running (Port 8000)
   - Analytics:     ❌ Not available
   - ML Insights:   ❌ Not available
   - AI Features:   ❌ Not available

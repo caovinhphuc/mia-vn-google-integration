@@ -96,15 +96,21 @@ async function testAPIConnectivity() {
     },
     {
       name: "AI Service Root",
-      url: "http://localhost:8001/",
+      url: "http://localhost:8000/",
       required: false,
-      note: "Optional - AI/Automation features",
+      note: "Optional - FastAPI root (AI trên 8000)",
     },
     {
-      name: "AI Insights",
+      name: "Automation Health",
+      url: "http://localhost:8001/health",
+      required: false,
+      note: "Optional - automation-service trên 8001",
+    },
+    {
+      name: "AI ML Insights",
       url: "http://localhost:8000/api/ml/insights",
       required: false,
-      note: "Optional - AI/Automation features",
+      note: "Optional - endpoint ML trên AI service",
     },
   ];
 
@@ -116,11 +122,13 @@ async function testAPIConnectivity() {
       console.log(`✅ ${endpoint.name}: Connected`);
       results[endpoint.name] = true;
     } catch (error) {
+      const errMsg =
+        error?.message || error?.code || (typeof error === "string" ? error : "") || "unreachable";
       if (endpoint.required) {
-        console.log(`❌ ${endpoint.name}: ${error.message}`);
+        console.log(`❌ ${endpoint.name}: ${errMsg}`);
         results[endpoint.name] = false;
       } else {
-        console.log(`⚠️  ${endpoint.name}: ${error.message} (Optional - OK to skip)`);
+        console.log(`⚠️  ${endpoint.name}: ${errMsg} (Optional - OK to skip)`);
         if (endpoint.note) {
           console.log(`   Note: ${endpoint.note}`);
         }

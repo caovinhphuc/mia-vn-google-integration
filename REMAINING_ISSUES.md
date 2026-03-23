@@ -8,7 +8,8 @@
 ❌ Backend Reports: HTTP 404
 ❌ AI Service Health: ECONNREFUSED
 ❌ AI Service Root: ECONNREFUSED
-❌ AI Insights: ECONNREFUSED
+❌ Automation Health: ECONNREFUSED
+❌ AI ML Insights: ECONNREFUSED
 ```
 
 ---
@@ -137,8 +138,8 @@ const endpoints = [
 
 **Problem:**
 
-- AI Service không chạy trên port 8001
-- Hoặc không có AI Service trong architecture hiện tại
+- AI Service (FastAPI) chạy port **8000** (`npm run ai-service`), không phải 8001
+- Port **8001** là Automation (optional), tách biệt
 - ECONNREFUSED = service not running
 
 **Impact:** Low
@@ -150,9 +151,10 @@ const endpoints = [
 **Current Architecture:**
 
 ```
-Port 3000 - Frontend (React)        ✅ REQUIRED
-Port 3001 - Backend (Node.js)       ✅ REQUIRED
-Port 8001 - Automation (FastAPI)    ⚠️ OPTIONAL (Google Sheets only)
+Port 3000 - Frontend (React)         ✅ REQUIRED
+Port 3001 - Backend (Node.js)        ✅ REQUIRED
+Port 8000 - AI Service (FastAPI)     ⚠️ OPTIONAL (`ai-service/`)
+Port 8001 - Automation (FastAPI)     ⚠️ OPTIONAL (Google Sheets / Selenium)
 ```
 
 **Solution:**
@@ -166,21 +168,21 @@ const endpoints = [
   { name: "Backend Reports", url: "http://localhost:3001/api/reports", required: true },
   {
     name: "AI Service Health",
-    url: "http://localhost:8001/health",
+    url: "http://localhost:8000/health",
     required: false,
-    note: "Optional - AI/Automation features",
+    note: "Optional - ai-service (port 8000)",
   },
   {
     name: "AI Service Root",
-    url: "http://localhost:8001/",
+    url: "http://localhost:8000/",
     required: false,
-    note: "Optional - AI/Automation features",
+    note: "Optional - ai-service",
   },
   {
-    name: "AI Insights",
-    url: "http://localhost:8001/api/insights",
+    name: "Automation Health",
+    url: "http://localhost:8001/health",
     required: false,
-    note: "Optional - AI/Automation features",
+    note: "Optional - automation (port 8001)",
   },
 ];
 ```
@@ -240,7 +242,8 @@ python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
 | Backend Reports   | 🔴 High  | Medium | Low    | **Fix Now**    |
 | AI Service Health | 🟡 Low   | Low    | Medium | Mark Optional  |
 | AI Service Root   | 🟡 Low   | Low    | Medium | Mark Optional  |
-| AI Insights       | 🟡 Low   | Low    | Medium | Mark Optional  |
+| Automation Health | 🟡 Low   | Low    | Medium | Mark Optional  |
+| AI ML Insights    | 🟡 Low   | Low    | Medium | Mark Optional  |
 
 ---
 
@@ -270,9 +273,10 @@ python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
 ✅ Backend Reports: Connected
 ⚠️  AI Service Health: Not running (Optional - OK)
 ⚠️  AI Service Root: Not running (Optional - OK)
-⚠️  AI Insights: Not running (Optional - OK)
+⚠️  Automation Health: Not running (Optional - OK)
+⚠️  AI ML Insights: Not running (Optional - OK)
 
-API Connectivity: 2/2 required ✅ (3 optional skipped)
+API Connectivity: 2/2 required ✅ (4 optional skipped)
 ```
 
 ### Phase 2: Optional Enhancements (Later)
@@ -321,24 +325,24 @@ async function testAPIConnectivity() {
       required: true,
     },
 
-    // Optional endpoints
+    // Optional — AI port 8000, Automation port 8001
     {
       name: "AI Service Health",
-      url: "http://localhost:8001/health",
+      url: "http://localhost:8000/health",
       required: false,
-      note: "Optional - AI features",
+      note: "Optional - ai-service",
     },
     {
       name: "AI Service Root",
-      url: "http://localhost:8001/",
+      url: "http://localhost:8000/",
       required: false,
-      note: "Optional - AI features",
+      note: "Optional - ai-service",
     },
     {
-      name: "AI Insights",
-      url: "http://localhost:8001/api/insights",
+      name: "Automation Health",
+      url: "http://localhost:8001/health",
       required: false,
-      note: "Optional - AI features",
+      note: "Optional - automation",
     },
   ];
 
@@ -382,8 +386,8 @@ node frontend_connection_test.js
    Note: Optional - AI features
 ⚠️  AI Service Root: ECONNREFUSED (Optional - OK to skip)
    Note: Optional - AI features
-⚠️  AI Insights: ECONNREFUSED (Optional - OK to skip)
-   Note: Optional - AI features
+⚠️  Automation Health: ECONNREFUSED (Optional - OK to skip)
+   Note: Optional - automation
 
 API Connectivity: 2/2 required ✅
 ```
@@ -400,22 +404,24 @@ API Connectivity: 1/5 ✅
   Backend Reports: ❌
   AI Service Health: ❌
   AI Service Root: ❌
-  AI Insights: ❌
+  Automation Health: ❌
+  AI ML Insights: ❌
 
-🎯 Frontend Ready: 7/11 checks passed
+🎯 Frontend Ready: 7/12 checks passed
 ```
 
 ### After Fixes
 
 ```
-API Connectivity: 2/2 required ✅ (3 optional skipped)
+API Connectivity: 2/2 required ✅ (4 optional skipped)
   Backend Health: ✅
   Backend Reports: ✅
   AI Service Health: ⚠️ (Optional)
   AI Service Root: ⚠️ (Optional)
-  AI Insights: ⚠️ (Optional)
+  Automation Health: ⚠️ (Optional)
+  AI ML Insights: ⚠️ (Optional)
 
-🎯 Frontend Ready: 8/8 required checks passed ✅
+🎯 Frontend Ready: 12/12 checks passed ✅
 ```
 
 ---
@@ -433,9 +439,8 @@ API Connectivity: 2/2 required ✅ (3 optional skipped)
 
 **Optional:**
 
-- ⚠️ AI Service (Port 8001)
-- ⚠️ Automation Service (Google Sheets)
-- ⚠️ AI Insights features
+- ⚠️ AI Service (port **8000**)
+- ⚠️ Automation Service (port **8001**, Google Sheets / Selenium)
 
 ### 2. Test Strategy
 

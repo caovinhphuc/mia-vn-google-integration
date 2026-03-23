@@ -9,7 +9,8 @@
 - Port 3000 (React dev server)
 - Port 3001 (Backend API)
 - Port 3002 (Alternative frontend)
-- Port 8000 (AI Service)
+- Port 8000 (AI Service — FastAPI)
+- Port 8001 (Automation — optional)
 - Port 8080 (Alternative server)
 
 ### 2. Code Optimization

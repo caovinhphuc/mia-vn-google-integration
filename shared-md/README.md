@@ -1,14 +1,14 @@
 # 🚀 React OAS Integration Platform
 
 > **Production-ready full-stack platform với AI integration, automation và real-time analytics**
-[![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com/your-repo)
-[![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/your-repo)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://github.com/your-repo)
-[![Deploy](https://img.shields.io/badge/Deploy-1%20Command-orange.svg)](https://github.com/your-repo)
-[![React](https://img.shields.io/badge/React-18.0-blue.svg)](https://reactjs.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18.0-green.svg)](https://nodejs.org/)
-[![Python](https://img.shields.io/badge/Python-3.9-yellow.svg)](https://python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.68-red.svg)](https://fastapi.tiangolo.com/)
+> [![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com/your-repo)
+> [![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/your-repo)
+> [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://github.com/your-repo)
+> [![Deploy](https://img.shields.io/badge/Deploy-1%20Command-orange.svg)](https://github.com/your-repo)
+> [![React](https://img.shields.io/badge/React-18.0-blue.svg)](https://reactjs.org/)
+> [![Node.js](https://img.shields.io/badge/Node.js-18.0-green.svg)](https://nodejs.org/)
+> [![Python](https://img.shields.io/badge/Python-3.9-yellow.svg)](https://python.org/)
+> [![FastAPI](https://img.shields.io/badge/FastAPI-0.68-red.svg)](https://fastapi.tiangolo.com/)
 
 ## 📊 Project Overview
 
@@ -49,7 +49,7 @@ Hoặc từng bước:
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend      │    │    Backend      │    │   AI Service    │
 │   (React)       │◄──►│   (Node.js)     │◄──►│   (FastAPI)     │
-│   Port: 80      │    │   Port: 3001    │    │   Port: 8001    │
+│   Port: 80      │    │   Port: 3001    │    │   Port: 8000    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
          └───────────────────────┼───────────────────────┘
@@ -57,7 +57,7 @@ Hoặc từng bước:
                     ┌─────────────────┐
                     │   Automation    │
                     │   (Python)      │
-                    │   Background    │
+                    │   Port: 8001 ⚠️ │
                     └─────────────────┘
 ```
 
@@ -152,15 +152,16 @@ cd react-oas-integration
 - **Complete System Test**: 6/6 passed
 - **Integration Tests**: 5/5 passed
 - **Advanced Integration**: 7/7 passed
-- **Frontend Connection**: 11/11 passed
+- **Frontend Connection**: 12/12 passed
 - **End-to-End Tests**: 6/6 passed
 
 ### 🩺 Health Endpoints
 
 - Frontend: `http://localhost/`
 - Backend: `http://localhost:3001/health`
-- AI Service: `http://localhost:8001/health`
-- API Docs: `http://localhost:8001/docs`
+- AI Service: `http://localhost:8000/health`
+- AI API Docs: `http://localhost:8000/docs` (tuỳ cấu hình FastAPI)
+- Automation (optional): `http://localhost:8001/health`
 
 ## 🔧 Development
 
@@ -175,7 +176,7 @@ cd ai-service && pip3 install -r requirements.txt && cd ..
 # Run in development mode
 npm start                    # Frontend (port 3000)
 npm run dev:backend          # Backend (port 3001)
-python ai-service/main.py    # AI Service (port 8001)
+npm run ai-service             # AI Service (uvicorn port 8000, khớp package.json)
 ```
 
 ### 📁 Project Structure

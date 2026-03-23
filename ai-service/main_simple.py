@@ -145,11 +145,25 @@ def _require_mia_models():
 
 @app.get("/")
 async def root():
+    """Metadata + liên kết tài liệu cho dev/ops."""
     return {
         "service": "React OAS AI Service",
         "version": "3.0.0",
         "status": "operational",
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "docs": {
+            "swagger_ui": "/docs",
+            "openapi_json": "/openapi.json",
+            "guide_md": "Document/AI_SERVICE_GUIDE.md (trong repo)",
+        },
+        "quick_paths": [
+            "/health",
+            "/api/status",
+            "/api/ml/insights",
+            "POST /api/analyze",
+            "POST /api/ml/predict",
+        ],
+        "mia_models_loaded": MIA_MODELS_AVAILABLE,
     }
 
 @app.get("/health")
