@@ -86,6 +86,7 @@ python3 test_sheets_connection.py
    ```
 
 2. Edit `.env` với thông tin của bạn:
+
    ```bash
    # Required
    GOOGLE_SHEET_ID=your_sheet_id_here

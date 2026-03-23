@@ -4,6 +4,22 @@
 
 Checklist này giúp bạn kiểm tra và triển khai Google Sheets Integration cho OneAutomationSystem một cách đầy đủ và chính xác.
 
+### 📦 Gói Python cơ bản (bắt buộc)
+
+Các gói sau đã nằm trong `requirements-basic.txt` — được cài khi chạy `./setup.sh` hoặc `./setup-and-seed.sh`:
+
+| Gói                        | Mục đích                          |
+| -------------------------- | --------------------------------- |
+| `gspread`                  | Google Sheets API client          |
+| `google-auth`              | Xác thực Google (service account) |
+| `google-api-python-client` | Google APIs nền tảng              |
+
+**Kiểm tra nhanh:**
+
+```bash
+python3 -c "import gspread, google.auth; print('✅ OK')"
+```
+
 ---
 
 ## ✅ Pre-deployment Checklist
@@ -277,11 +293,11 @@ curl http://localhost:3001/api/sheets/data | jq .
 which python3
 source venv/bin/activate  # If using venv
 
-# Check 2: Install dependencies
-pip install -r requirements.txt
+# Check 2: Install dependencies (requirements-basic đã bao gồm gspread, google-auth)
+pip install -r requirements-basic.txt
 
 # Check 3: Verify installation
-python3 -c "import gspread; import google.auth; print('✅ All modules OK')"
+python3 -c "import gspread, google.auth; print('✅ OK')"
 
 # Check 4: Reinstall if needed
 pip install --upgrade gspread google-auth google-api-python-client
@@ -433,7 +449,7 @@ top  # CPU and memory usage
 
 ## 🎯 Success Criteria
 
-### ✅ System is working correctly when:
+### ✅ System is working correctly when
 
 1. **Health Check** returns 200 OK
 
@@ -483,6 +499,7 @@ top  # CPU and memory usage
    ```
 
 7. **Performance** is acceptable (< 2s API response time)
+
    ```bash
    time curl http://localhost:3001/api/sheets/data
    ```
@@ -590,15 +607,15 @@ tail -f logs/automation.log
 
 ## ✅ Checklist Summary
 
-**Pre-deployment:** 4 sections, ~15 items  
-**Testing:** 6 sections, ~20 test commands  
-**Troubleshooting:** 7 common issues with solutions  
-**Production:** 5 sections, ~20 items  
+**Pre-deployment:** 4 sections, ~15 items
+**Testing:** 6 sections, ~20 test commands
+**Troubleshooting:** 7 common issues with solutions
+**Production:** 5 sections, ~20 items
 **Success Criteria:** 7 verification steps
 
 ---
 
 ✅ **Remember:** Test each step thoroughly before moving to the next!
 
-**Last Updated:** 2025-01-03  
+**Last Updated:** 2025-01-03
 **Version:** 2.0

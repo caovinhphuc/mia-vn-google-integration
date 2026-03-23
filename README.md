@@ -82,6 +82,7 @@
 - **Công nghệ**: Python, Selenium, Pandas
 - **Chức năng**: Login, Scrape, Process, Export to Sheets
 - **Lịch trình**: Cron jobs (6:00 AM daily) hoặc manual trigger
+- **📘 Cài đặt + tra cứu script Python**: [Document/AUTOMATION_PYTHON_GUIDE.md](Document/AUTOMATION_PYTHON_GUIDE.md)
 
 #### 📊 **Google Sheets** (`shared-services/google-sheets/`)
 

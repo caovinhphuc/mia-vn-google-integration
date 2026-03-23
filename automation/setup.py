@@ -10,10 +10,32 @@ import sys
 import time
 import subprocess
 from pathlib import Path
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+
+
+def _ensure_minimal_deps_for_cli():
+    """Cài thiếu các gói verify_dependencies cần — tránh crash khi `python setup.py`."""
+    checks = [
+        ("selenium", "selenium"),
+        ("webdriver_manager", "webdriver-manager"),
+        ("pandas", "pandas"),
+        ("requests", "requests"),
+        ("dotenv", "python-dotenv"),
+        ("bs4", "beautifulsoup4"),
+        ("openpyxl", "openpyxl"),
+        ("schedule", "schedule"),
+        ("loguru", "loguru"),
+    ]
+    missing = []
+    for mod, pip_name in checks:
+        try:
+            __import__(mod)
+        except ImportError:
+            missing.append(pip_name)
+    if missing:
+        print(f"📦 Thiếu gói — đang cài: {' '.join(missing)}")
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "-q"] + missing,
+        )
 
 
 class SystemSetup:
@@ -42,6 +64,11 @@ class SystemSetup:
     def setup_driver(self, headless=True):
         """Setup Chrome WebDriver với tối ưu performance"""
         try:
+            from selenium import webdriver
+            from selenium.webdriver.chrome.options import Options
+            from selenium.webdriver.chrome.service import Service
+            from webdriver_manager.chrome import ChromeDriverManager
+
             if self.logger:
                 self.logger.info("🌐 Setting up WebDriver...")
 
@@ -285,9 +312,13 @@ def setup_automation_system(logger=None, headless=True):
 
 
 if __name__ == "__main__":
-    # Simple test setup
-    import sys
     sys.path.append(os.path.dirname(__file__))
+    try:
+        _ensure_minimal_deps_for_cli()
+    except subprocess.CalledProcessError as e:
+        print(f"❌ pip install thất bại: {e}")
+        print("   Chạy: pip install -r requirements-basic.txt")
+        sys.exit(1)
 
     # Simple logger for testing
     class SimpleLogger:

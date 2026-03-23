@@ -85,6 +85,7 @@ REACT_APP_GOOGLE_DRIVE_FOLDER_ID=   # optional, folder chứa export
 
 ## 5. File tham chiếu
 
+- **Automation Python (cài đặt, script, cập nhật):** [AUTOMATION_PYTHON_GUIDE.md](AUTOMATION_PYTHON_GUIDE.md)
 - `src/components/ai/AIDashboard.jsx` — gọi `fetchLiveGoogleContext` + `analyzeGoogleContext`
 - `src/services/aiService.js` — `analyzeGoogleContext`
 - `ai-service/main_simple.py` — `_build_context_analysis`, route `context/analyze`

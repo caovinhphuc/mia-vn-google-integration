@@ -2,8 +2,10 @@
   "system": {
     "one_url": "https://one.tga.com.vn",
     "orders_url": "https://one.tga.com.vn/so/",
-    "implicit_wait": 3,
-    "page_load_timeout": 15,
+    "inventory_url": "https://one.tga.com.vn/bi_inventory/sale/?name=&limit=-1&category=all&location=all&type=old",
+    "implicit_wait": 5,
+    "page_load_timeout": 60,
+    "inventory_table_timeout": 90,
     "login_timeout": 8,
     "use_javascript_optimization": true,
     "session_timeout": 3600
@@ -16,6 +18,7 @@
     "level": "INFO"
   },
   "data_processing": {
+    "data_dir": "data",
     "max_rows_for_testing": 2000,
     "enable_fast_mode": false,
     "export_formats": ["json", "excel"]

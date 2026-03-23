@@ -4,9 +4,51 @@ All-in-One Demo Script
 Chạy tất cả các tính năng Google Sheets integration và automation
 """
 import os
+import subprocess
 import sys
 import time
 from datetime import datetime
+
+
+def _ensure_gspread():
+    """Demo cần gspread + google-auth — tự cài nếu thiếu."""
+    try:
+        import gspread  # noqa: F401
+        import google.auth  # noqa: F401
+        return True
+    except ImportError:
+        print("📦 Thiếu gspread/google-auth — đang cài...")
+        rc = subprocess.call(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-q",
+                "gspread",
+                "google-auth",
+                "google-api-python-client",
+            ]
+        )
+        if rc != 0:
+            print("❌ pip install thất bại. Chạy thủ công:")
+            print(
+                "   pip install gspread google-auth google-api-python-client"
+            )
+            return False
+        try:
+            import gspread  # noqa: F401
+            import google.auth  # noqa: F401
+        except ImportError:
+            print("❌ Import failed sau khi cài. Thử:")
+            print("   source venv/bin/activate && pip install -r requirements-basic.txt")
+            return False
+        print("✅ Đã cài gspread / google-auth")
+        return True
+
+
+if not _ensure_gspread():
+    sys.exit(1)
 
 print("🚀 WAREHOUSE AUTOMATION SYSTEM - COMPLETE DEMO")
 print("📊 Google Sheets Integration & Logging Features")

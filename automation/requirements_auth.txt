@@ -19,6 +19,7 @@ openpyxl==3.1.2
 # Utilities
 python-dotenv==1.0.0
 requests==2.31.0
+schedule==1.2.2
 
 # Development and testing
 pytest==7.4.3

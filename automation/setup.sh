@@ -141,6 +141,8 @@ declare -A packages=(
     ["loguru"]="loguru"
     ["rich"]="rich"
     ["colorlog"]="colorlog"
+    ["gspread"]="gspread"
+    ["google-auth"]="google.auth"
 )
 
 failed_packages=()

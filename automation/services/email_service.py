@@ -13,14 +13,25 @@ from email import encoders
 from typing import Optional
 
 class EmailService:
-    """Service for sending emails"""
+    """Service for sending emails (SMTP). Hỗ trợ nhiều tên biến env."""
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.smtp_host = os.getenv("SMTP_HOST", "smtp.gmail.com")
         self.smtp_port = int(os.getenv("SMTP_PORT", "587"))
-        self.smtp_user = os.getenv("SMTP_USER", "")
-        self.smtp_password = os.getenv("SMTP_PASSWORD", "")
+        # Ưu tiên SMTP_* rồi EMAIL_* (tương thích notifier.py)
+        self.smtp_user = (
+            os.getenv("SMTP_USER")
+            or os.getenv("EMAIL_ADDRESS")
+            or os.getenv("EMAIL_USERNAME")
+            or ""
+        )
+        self.smtp_password = (
+            os.getenv("SMTP_PASSWORD")
+            or os.getenv("EMAIL_PASSWORD")
+            or os.getenv("EMAIL_APP_PASSWORD")
+            or ""
+        )
         self._configured = bool(self.smtp_user and self.smtp_password)
 
     async def send_email(
