@@ -1,6 +1,6 @@
 {
   "framework": "create-react-app",
-  "installCommand": "npm install",
+  "installCommand": "npm install --include=dev --no-audit --no-fund",
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "build"
 }

@@ -13,7 +13,7 @@
     "build:rust": "cargo build --release",
     "analyze:rust": "cargo clippy && cargo audit",
     "start": "react-scripts start",
-    "prepare": "husky",
+    "prepare": "node -e \"process.exit(process.env.VERCEL||process.env.CI?0:1)\" || husky",
     "build:prod": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:maps": "GENERATE_SOURCEMAP=true react-scripts build",
     "analyze:maps": "npm run build:maps && node scripts/source-map-explore-chunk.js",

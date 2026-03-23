@@ -65,6 +65,13 @@ Các file sau **không** đưa vào git (nặng, tạo lại được):
 
 ---
 
+## Vercel: `husky: command not found` (npm install exit 127)
+
+- **Nguyên nhân:** script `prepare` gọi `husky` trong khi build cloud không có binary / hoặc thiếu devDependencies.
+- **Đã xử lý:** `prepare` bỏ qua khi `VERCEL` hoặc `CI`; `vercel.json` dùng `npm install --include=dev`.
+
+---
+
 ## npm: cảnh báo `ajv` / `ajv-keywords` (ERESOLVE)
 
 - **Không phải thiếu package** nếu `Compiled successfully` — chỉ là peer dependency tree của webpack/CRA.
