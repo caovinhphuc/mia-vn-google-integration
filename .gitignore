@@ -183,3 +183,6 @@ logs/
 mia-warehouse-management-v2/
 React-OAS-Integration-v4.0/
 React-OAS-Integration-v4.0-1/
+
+# Local Netlify folder
+.netlify
