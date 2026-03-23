@@ -666,6 +666,159 @@ async def mia_categorize_column(request: CategorizeColumnRequest):
     )
 
 
+# ---------------------------------------------------------------------------
+# Auth endpoint — API key → simple bearer token (dev/prod opt-in)
+# ---------------------------------------------------------------------------
+
+import os as _os
+
+_VALID_API_KEY = _os.getenv("AI_API_KEY", "mia-dev-api-key-2026")
+
+
+class TokenRequest(BaseModel):
+    api_key: str
+
+
+@app.post("/auth/token")
+async def get_auth_token(request: TokenRequest):
+    if request.api_key != _VALID_API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    return {
+        "access_token": "mia-dev-bearer-2026",
+        "token_type": "bearer",
+        "expires_in": 3600,
+    }
+
+
+# ---------------------------------------------------------------------------
+# /ai/* — routes matched by src/services/aiService.js
+# ---------------------------------------------------------------------------
+
+
+class AIDataRequest(BaseModel):
+    data: List[Dict[str, Any]]
+    value_column: str = "value"
+    date_column: Optional[str] = None
+
+
+class AIPredictionsRequest(BaseModel):
+    data: List[Dict[str, Any]]
+    value_column: str = "value"
+    horizon: int = 5
+
+
+class AIChatRequest(BaseModel):
+    query: str
+    context: Optional[Dict[str, Any]] = None
+
+
+class AISummaryRequest(BaseModel):
+    data: List[Dict[str, Any]]
+    max_length: int = 400
+
+
+class AIReportRequest(BaseModel):
+    data: List[Dict[str, Any]]
+    value_column: str = "value"
+    title: str = "Report"
+
+
+@app.post("/ai/analyze/trends")
+async def ai_analyze_trends(request: AIDataRequest):
+    _require_mia_models()
+    result = pattern_recognizer.recognize_trends(request.data, request.value_column)
+    return {"trend_analysis": result}
+
+
+@app.post("/ai/analyze/anomalies")
+async def ai_analyze_anomalies(request: AIDataRequest):
+    _require_mia_models()
+    anomalies = pattern_recognizer.detect_anomalies(request.data, request.value_column)
+    if any(a.get("z_score", 0) > 3 for a in anomalies):
+        risk = "critical"
+    elif any(a.get("severity") == "high" for a in anomalies):
+        risk = "high"
+    elif any(a.get("severity") == "medium" for a in anomalies):
+        risk = "medium"
+    else:
+        risk = "low"
+    return {"anomalies": anomalies, "risk_level": risk}
+
+
+@app.post("/ai/predictions")
+async def ai_predictions_v2(request: AIPredictionsRequest):
+    _require_mia_models()
+    trend = pattern_recognizer.recognize_trends(request.data, request.value_column)
+    slope = trend.get("slope", 0.0)
+    last_value = 0.0
+    if request.data:
+        try:
+            last_value = float(request.data[-1].get(request.value_column, 0) or 0)
+        except (TypeError, ValueError):
+            last_value = 0.0
+    preds = [max(0.0, round(last_value + slope * (i + 1), 4)) for i in range(request.horizon)]
+    return {
+        "predictions": {request.value_column: preds},
+        "trend": trend.get("trend", "unknown"),
+        "confidence": round(float(trend.get("confidence", 0.5)), 4),
+    }
+
+
+@app.post("/ai/chat")
+async def ai_chat(request: AIChatRequest):
+    _require_mia_models()
+    return nlp_processor.process_chat_query(request.query, request.context or {})
+
+
+@app.post("/ai/summary")
+async def ai_summary(request: AISummaryRequest):
+    _require_mia_models()
+    text = nlp_processor.generate_summary(request.data, request.max_length)
+    return {"summary": text, "rows": len(request.data)}
+
+
+@app.post("/ai/reports/summary")
+async def ai_reports_summary(request: AIReportRequest):
+    _require_mia_models()
+    report = report_generator.generate_summary_report(request.data, request.title)
+    recs: List[str] = []
+    for section in report.get("sections", []):
+        content = section.get("content", {})
+        if isinstance(content, dict):
+            for k, v in content.items():
+                if isinstance(v, dict) and "avg" in v:
+                    recs.append(f"{k}: trung bình {v['avg']:.2f}")
+    if not recs:
+        recs = [f"Phân tích {len(request.data)} điểm dữ liệu hoàn thành."]
+    return {"recommendations": recs, "insights": [], "report": report}
+
+
+@app.post("/ai/reports/comprehensive")
+async def ai_reports_comprehensive(request: AIReportRequest):
+    _require_mia_models()
+    report = report_generator.generate_summary_report(request.data, request.title)
+    trend = pattern_recognizer.recognize_trends(request.data, request.value_column)
+    anomalies = pattern_recognizer.detect_anomalies(request.data, request.value_column)
+    recs = [
+        f"Xu hướng: {trend.get('trend', 'không rõ')} (confidence {trend.get('confidence', 0):.0%})",
+        f"Phát hiện {len(anomalies)} bất thường trong dữ liệu.",
+    ]
+    return {
+        "recommendations": recs,
+        "trend": trend,
+        "anomaly_count": len(anomalies),
+        "report": report,
+    }
+
+
+@app.post("/ai/analyze/full")
+async def ai_analyze_full(request: AIDataRequest):
+    _require_mia_models()
+    return pattern_recognizer.analyze_patterns(
+        request.data, request.value_column, request.date_column
+    )
+
+
 if __name__ == "__main__":
     import os
     port = int(os.getenv("AI_SERVICE_PORT", "8000"))

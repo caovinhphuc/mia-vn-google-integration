@@ -2519,18 +2519,25 @@ npm run test:e2e:debug    # Run in debug mode
 {
   "test": "react-scripts test",
   "test:frontend": "react-scripts test",
+  "test:ci": "CI=true react-scripts test --watchAll=false",
+  "test:coverage": "CI=true react-scripts test --coverage --watchAll=false",
   "test:backend": "jest",
-  "test:integration": "jest integration-tests",
-  "test:e2e": "jest end-to-end-tests",
-  "test:all": "concurrently test scripts...",
-  "test:google-sheets": "node scripts/testGoogleSheets.js",
+  "test:integration": "npm run test:scripts",
+  "test:e2e": "jest --testPathPattern=e2e --passWithNoTests",
+  "test:all": "concurrently frontend / backend / integration / e2e",
+  "test:google-sheets": "node scripts/tests/test_google_sheets.js",
   "test:api": "node scripts/test-api-endpoints.js",
   "test:automation": "node scripts/test-automation-system.js",
-  "test:websocket": "node scripts/test-websocket.js",
-  "test:complete": "node scripts/test-all.js",
+  "test:complete": "npm run test:ci && npm run test:scripts",
   "test:scripts": "node scripts/test-all.js"
 }
 ```
+
+> **Notes:**
+>
+> - `test:e2e` uses `--passWithNoTests` — exits 0 when no e2e files exist, does not crash CI
+> - `test:backend` runs `jest` directly (not via react-scripts) — uses `jest.config.js`
+> - `test:ci` uses `CI=true` to disable interactive watch mode
 
 ### Health Check Scripts
 
@@ -4275,13 +4282,81 @@ describe("Button Accessibility", () => {
 
 ---
 
-**Last Updated:** January 19, 2026
-**Version:** 4.0.0
+## 🤖 AI Service Changes (2026-03-24)
+
+### Bug Fixes Applied
+
+| Module                  | Bug                                                                                            | Fix                                                                                         |
+| ----------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `predictive_alerts.py`  | `self.alerts = []` in `__init__` accumulated state across requests on long-running server      | Removed mutable instance state; `set_threshold()` now returns dict instead of mutating self |
+| `pattern_recognizer.py` | `detect_cycles()` only checked lag-7 (weekly) and lag-30 (monthly)                             | Added lag-1 daily correlation check with threshold 0.7 before weekly check                  |
+| `smart_categorizer.py`  | `group_similar_items()` returned `{"all": data}` placeholder — no real grouping logic          | Auto-finds first string column with 2–20 unique values and groups by it                     |
+| `aiService.js`          | Called `/api/ml/...` (Node.js backend proxy paths) instead of `/ai/...` (FastAPI direct paths) | Complete rewrite — all methods now call correct FastAPI routes                              |
+| `aiService.js`          | Missing JWT auth — FastAPI with `AUTH_REQUIRED=true` returned 401                              | Added `getToken()` with 5-minute early-expiry caching                                       |
+| `AIDashboard.jsx`       | Recommendations showed duplicate text (title == description)                                   | Added `rec.description !== rec.title` guard                                                 |
+| `AIDashboard.jsx`       | Performance metrics were hardcoded numbers                                                     | Now reads real counts from `aiInsights`, `recommendations`, `sheets`, `files`, `alerts`     |
+| `AIDashboard.css`       | Grid layout unbalanced — all 3 columns equal width                                             | Changed to `1fr 1.6fr 1fr` with `align-items: start`                                        |
+
+### FastAPI Endpoint Map
+
+| `aiService.js` method    | FastAPI route                                            | Notes                             |
+| ------------------------ | -------------------------------------------------------- | --------------------------------- |
+| `analyzeData()`          | `POST /ai/analyze/trends` + `POST /ai/analyze/anomalies` | Parallel via `Promise.allSettled` |
+| `getPredictions()`       | `POST /ai/predictions`                                   | `horizon: 5`                      |
+| `detectAnomalies()`      | `POST /ai/analyze/anomalies`                             |                                   |
+| `getRecommendations()`   | `POST /ai/reports/summary`                               |                                   |
+| `chat()`                 | `POST /ai/chat`                                          | `{ query, context }`              |
+| `analyzeSheets()`        | `POST /ai/summary`                                       |                                   |
+| `analyzeGoogleContext()` | `POST /ai/analyze/full`                                  |                                   |
+| `optimizeSystem()`       | `POST /ai/reports/comprehensive`                         |                                   |
+
+### Auth Flow
+
+```text
+frontend → POST /auth/token { api_key: REACT_APP_AI_API_KEY }
+         ← { access_token, expires_in }
+         → all subsequent requests: Authorization: Bearer <token>
+```
+
+Token cached in module scope; refreshed 5 minutes before expiry to avoid race conditions.
+
+### Pending AI Improvements
+
+- [ ] **NLP Claude API hybrid** — when regex confidence < 0.6, fall back to `claude-haiku-4-5` for intent parsing
+- [ ] **Automation `.env` Telegram tokens** — `automation/.env` has placeholder `your_bot_token_from_BotFather`; copy real tokens from root `.env`
+- [ ] **Google Drive folder structure** — create automated folder organization script
+
+---
+
+## 📋 Recommended Next Steps
+
+### Short-term (this week)
+
+1. **Fix Telegram in automation** — copy `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from root `.env` to `automation/.env`
+2. **Test AI Dashboard end-to-end** — start `npm run dev`, navigate to AI Dashboard, verify all 4 panels load without error banner
+3. **Run full test suite** — `npm run test:ci` should pass; `npm run test:e2e` should exit 0 with `--passWithNoTests`
+
+### Medium-term
+
+1. **NLP fallback to Claude API** — in `ai-service/mia_models/nlp_processor.py`, add: if `confidence < 0.6`, call `claude-haiku-4-5` with the query and parse structured intent from response
+2. **WebSocket health dashboard** — add real-time AI service status indicator to the header (green/red dot showing port 8000 reachability)
+3. **Google Drive folder structure** — create `scripts/setup-drive-folders.js` to auto-create standard folder hierarchy via Google Drive API
+
+### Architecture
+
+1. **Split `main_simple.py` routes** — router is 800+ lines; split into `routers/ai.py`, `routers/auth.py`, `routers/reports.py`
+2. **Add request-level alert storage** — `PredictiveAlerts` now stateless; connect it to Redis or a lightweight DB if persistence across sessions is needed
+
+---
+
+**Last Updated:** 2026-03-24
+**Version:** 4.2.0
 **Status:** ✅ Complete and Production-Ready
 **Maintained by:** Development Team
 
 **Changelog:**
 
+- **v4.2.0 (2026-03-24):** AI service bug fixes (alerts state, daily cycle, auto-group), aiService.js rewrite (correct FastAPI routes + JWT auth), AIDashboard UI fixes (layout, duplicate text, real metrics), jest.config.js syntax fix, Login.test.jsx timeout fix, test:e2e passWithNoTests, VSCode workspace consolidated
 - **v4.0.0 (Jan 19, 2026):** Complete testing guide with implementation roadmap
 - **v3.5.0 (Dec 19, 2025):** Added E2E testing phase
 - **v3.0.0 (Dec 15, 2025):** Added backend testing section

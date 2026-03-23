@@ -1,6 +1,6 @@
 {
   "title": "Telegram Integration Test Report",
-  "timestamp": "2026-03-23T18:44:20.514Z",
+  "timestamp": "2026-03-23T19:37:16.441Z",
   "summary": {
     "total_tests": 6,
     "passed": 5,
@@ -20,7 +20,7 @@
       "details": {
         "required_count": 2
       },
-      "timestamp": "2026-03-23T18:44:17.730Z"
+      "timestamp": "2026-03-23T19:37:13.678Z"
     },
     {
       "test": "bot-info",
@@ -34,7 +34,7 @@
         "can_read_all_group_messages": false,
         "supports_inline_queries": true
       },
-      "timestamp": "2026-03-23T18:44:18.551Z"
+      "timestamp": "2026-03-23T19:37:14.523Z"
     },
     {
       "test": "webhook-info",
@@ -45,7 +45,7 @@
         "has_custom_certificate": false,
         "pending_update_count": 17
       },
-      "timestamp": "2026-03-23T18:44:18.776Z"
+      "timestamp": "2026-03-23T19:37:14.746Z"
     },
     {
       "test": "chat-info",
@@ -56,32 +56,32 @@
         "type": "group",
         "title": "MIA Logistics Group Bot"
       },
-      "timestamp": "2026-03-23T18:44:19.004Z"
+      "timestamp": "2026-03-23T19:37:15.027Z"
     },
     {
       "test": "send-message",
       "status": "success",
       "message": "Tin nhắn test đã được gửi thành công",
       "details": {
-        "message_id": 93,
+        "message_id": 105,
         "chat_id": -5255250720,
         "chat_type": "group",
         "chat_title": "MIA Logistics Group Bot",
-        "date": "2026-03-23T18:44:19.000Z"
+        "date": "2026-03-23T19:37:15.000Z"
       },
-      "timestamp": "2026-03-23T18:44:19.478Z"
+      "timestamp": "2026-03-23T19:37:15.474Z"
     },
     {
       "test": "file-upload",
       "status": "success",
       "message": "File test đã được upload thành công",
       "details": {
-        "file_id": "BQACAgUAAxkDAANeacGKBPhoKL9V3aHtfer7pqkQZw4AAu4dAAIawhBWMGkiKc6PKzs6BA",
+        "file_id": "BQACAgUAAxkDAANqacGWbMk4yAL7OYhTPQ7Qt9ajyD0AAvYdAAIawhBWGjotwUhLL1g6BA",
         "file_name": "telegram-test-report.json",
-        "file_size": 1946,
+        "file_size": 1947,
         "mime_type": "application/json"
       },
-      "timestamp": "2026-03-23T18:44:20.513Z"
+      "timestamp": "2026-03-23T19:37:16.441Z"
     }
   ]
 }

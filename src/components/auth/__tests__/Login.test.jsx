@@ -512,7 +512,7 @@ describe("Login Component", () => {
     });
 
     it("should allow closing error message", async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       loginUser.mockRejectedValue(new Error("Login failed"));
 
       renderWithProviders(<Login />);
