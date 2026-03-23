@@ -28,10 +28,11 @@
 - 📈 **Analytics & Reports**: Thống kê và báo cáo tự động
 - 💡 **Recommendations Engine**: Đề xuất giải pháp tối ưu
 
-### 🌐 Deploy production (Vercel)
+### 🌐 Deploy production
 
-- **Frontend:** [react-oas-integration-v4-0.vercel.app](https://react-oas-integration-v4-0.vercel.app)
-- **Domain / GitHub About / preview:** [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md)
+- **Frontend:** [leafy-baklava-595711.netlify.app](https://leafy-baklava-595711.netlify.app/)
+- **Backend:** [react-google-backend.onrender.com](https://react-google-backend.onrender.com)
+- **Chi tiết:** [`DEPLOYMENT_LINKS.md`](./DEPLOYMENT_LINKS.md)
 
 ---
 

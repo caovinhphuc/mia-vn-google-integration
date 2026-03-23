@@ -4,6 +4,14 @@
 
 **Production Ready** | **100% Test Coverage** | **All Services Operational**
 
+### 🌐 Production URLs (Netlify + Render)
+
+| Service  | URL                                              |
+| -------- | ------------------------------------------------ |
+| Frontend | https://leafy-baklava-595711.netlify.app/        |
+| Backend  | https://react-google-backend.onrender.com        |
+| Health   | https://react-google-backend.onrender.com/health |
+
 - ✅ AI Service (FastAPI) - Port 8001
 - ✅ Backend API (Node.js) - Port 3001
 - ✅ Frontend (React) - Build Ready

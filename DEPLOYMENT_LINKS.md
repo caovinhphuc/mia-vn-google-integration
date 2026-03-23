@@ -171,10 +171,16 @@ Cần cấu hình trong Railway Dashboard:
 
 ---
 
-## 🔗 Quick Links
+## 🔗 Quick Links (Production đang chạy)
 
-- **Frontend (production)**: https://react-oas-integration-v4-0.vercel.app
-- **Backend Health**: https://mia-backend-production-7e56.up.railway.app/health
+- **Frontend**: https://leafy-baklava-595711.netlify.app/
+- **Backend**: https://react-google-backend.onrender.com
+- **Backend Health**: https://react-google-backend.onrender.com/health
+
+### Các setup khác (Vercel + Railway)
+
+- **Frontend (Vercel)**: https://react-oas-integration-v4-0.vercel.app
+- **Backend (Railway)**: https://mia-backend-production-7e56.up.railway.app/health
 - **GitHub Repo**: https://github.com/caovinhphuc/React-OAS-Integration-v4.0
 - **Vercel Dashboard**: https://vercel.com/dashboard
 - **Railway Dashboard**: https://railway.app/dashboard
