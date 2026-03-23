@@ -45,15 +45,34 @@ npx netlify link   # Chọn site leafy-baklava-595711
 ./quick-deploy.sh "Fix Netlify deploy"
 ```
 
-#### 1.2 Cập nhật REACT_APP_API_URL trên Netlify
+#### 1.2 Lấy Railway backend URL
 
-- Netlify Dashboard → Site settings → Environment variables
-- Thêm `REACT_APP_API_URL` = URL Railway backend (sau `railway domain`)
+```bash
+cd backend
+railway domain
+# Hoặc: railway status  # xem thông tin service
+```
 
-#### 1.3 Kiểm tra Production
+Copy URL dạng `https://react-oas-integration-backend-production.up.railway.app` (không có `/api` cuối).
 
-- Frontend: <https://leafy-baklava-595711.netlify.app/>
-- Backend: Railway URL từ `railway domain`
+#### 1.3 Thêm biến môi trường trên Netlify
+
+1. Vào https://app.netlify.com → Site **leafy-baklava-595711** → **Site settings**
+2. **Environment variables** → **Add a variable** / **Edit variables**
+3. Thêm:
+
+| Key                      | Value                       | Scopes                      |
+| ------------------------ | --------------------------- | --------------------------- |
+| `REACT_APP_API_URL`      | `https://[railway-url]`     | Production, Deploy previews |
+| `REACT_APP_API_BASE_URL` | `https://[railway-url]/api` | Production, Deploy previews |
+
+4. **Save** → **Trigger deploy** (Deploys → Trigger deploy)
+
+#### 1.4 Kiểm tra Production
+
+- Frontend: https://leafy-baklava-595711.netlify.app/
+- Backend: `https://[railway-domain]/health`
+- Sau khi thêm env, Netlify cần **rebuild** (Deploy mới) để áp dụng
 
 ---
 
