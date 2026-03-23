@@ -22,7 +22,7 @@ import {
   Tooltip,
   message,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import securityService from "../../services/securityService";
 import { exportToCSV } from "../../utils/exportUtils";
 import "./Security.css";

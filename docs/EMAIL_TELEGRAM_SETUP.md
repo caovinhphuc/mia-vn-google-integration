@@ -42,8 +42,8 @@ EMAIL_FROM=kho.1@mia.vn
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_SECURE=false
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=xxxx xxxx xxxx xxxx
+SMTP_USER=warehouse@mia.vn
+SMTP_PASS=cbue qdsh ecdr aimx
 ```
 
 #### Outlook / Office 365
@@ -112,10 +112,10 @@ TELEGRAM_WEBHOOK_URL=
 
 ### Lỗi 401 thường gặp
 
-| Nguyên nhân | Cách xử lý |
-|-------------|------------|
-| Token sai / đã revoke | Tạo bot mới với @BotFather, dùng token mới |
-| Copy thiếu ký tự | Kiểm tra token có dạng `số:chuỗi` đầy đủ |
+| Nguyên nhân           | Cách xử lý                                       |
+| --------------------- | ------------------------------------------------ |
+| Token sai / đã revoke | Tạo bot mới với @BotFather, dùng token mới       |
+| Copy thiếu ký tự      | Kiểm tra token có dạng `số:chuỗi` đầy đủ         |
 | Không gửi tin cho bot | Phải gửi ít nhất 1 tin cho bot trước khi gọi API |
 
 ---

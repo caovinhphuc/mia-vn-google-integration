@@ -31,10 +31,7 @@ const log = {
   warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
   error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
   step: (msg) => console.log(`${colors.cyan}🚀 ${msg}${colors.reset}`),
-  header: (msg) =>
-    console.log(
-      `\n${colors.bright}${colors.cyan}${"=".repeat(60)}${colors.reset}`
-    ),
+  header: (msg) => console.log(`\n${colors.bright}${colors.cyan}${"=".repeat(60)}${colors.reset}`),
 };
 
 // Check if file exists
@@ -154,8 +151,7 @@ const main = async () => {
 
   // Check if these are already set
   const needsUpdate = Object.keys(envUpdates).some(
-    (key) =>
-      !currentEnv || !currentEnv[key] || currentEnv[key].includes("your_")
+    (key) => !currentEnv || !currentEnv[key] || currentEnv[key].includes("your_")
   );
 
   if (needsUpdate) {
@@ -195,21 +191,35 @@ const main = async () => {
 
   // Step 5: Create summary report
   log.step("Bước 5: Tạo báo cáo tổng hợp...");
+
+  const hasGoogleKey = currentEnv?.GOOGLE_SERVICE_ACCOUNT_EMAIL && currentEnv?.GOOGLE_PRIVATE_KEY;
+  const hasEmailSendGrid = currentEnv?.SENDGRID_API_KEY && currentEnv?.SENDGRID_FROM_EMAIL;
+  const hasEmailSMTP = currentEnv?.SMTP_HOST && currentEnv?.SMTP_USER && currentEnv?.SMTP_PASS;
+  const hasTelegram = currentEnv?.TELEGRAM_BOT_TOKEN && currentEnv?.TELEGRAM_CHAT_ID;
+
   const report = {
     timestamp: new Date().toISOString(),
     envFile: fileExists(".env") ? "✅ Exists" : "❌ Missing",
     dependencies: fileExists("node_modules") ? "✅ Installed" : "❌ Missing",
     build: fileExists("build") ? "✅ Built" : "❌ Not built",
     services: {
-      google: currentEnv?.GOOGLE_SERVICE_ACCOUNT_EMAIL
-        ? "⚠️  Needs private key"
-        : "❌ Not configured",
-      email: currentEnv?.SENDGRID_API_KEY
-        ? "⚠️  Check API key"
-        : "❌ Not configured",
-      telegram: currentEnv?.TELEGRAM_BOT_TOKEN
-        ? "⚠️  Check token"
-        : "❌ Not configured",
+      google: hasGoogleKey
+        ? "✅ Configured"
+        : currentEnv?.GOOGLE_SERVICE_ACCOUNT_EMAIL
+          ? "⚠️  Needs GOOGLE_PRIVATE_KEY"
+          : "❌ Not configured",
+      email: hasEmailSendGrid
+        ? "✅ SendGrid"
+        : hasEmailSMTP
+          ? "✅ SMTP"
+          : currentEnv?.SENDGRID_API_KEY || currentEnv?.SMTP_USER
+            ? "⚠️  Thiếu biến (SendGrid: FROM_EMAIL; SMTP: HOST,USER,PASS)"
+            : "❌ Not configured",
+      telegram: hasTelegram
+        ? "✅ Configured"
+        : currentEnv?.TELEGRAM_BOT_TOKEN
+          ? "⚠️  Cần TELEGRAM_CHAT_ID"
+          : "❌ Not configured",
     },
   };
 
@@ -232,9 +242,9 @@ ${colors.yellow}⚠️  Cần kiểm tra:${colors.reset}
   • Telegram Bot: ${report.services.telegram}
 
 ${colors.cyan}📝 Lưu ý:${colors.reset}
-  • Để test Google APIs, cần cấu hình GOOGLE_PRIVATE_KEY trong .env
-  • Để test Email, cần cấu hình SENDGRID_API_KEY trong .env
-  • Để test Telegram, cần cấu hình TELEGRAM_BOT_TOKEN trong .env
+  • Google: GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_PRIVATE_KEY
+  • Email: SendGrid (API_KEY + FROM_EMAIL) hoặc SMTP (HOST, USER, PASS)
+  • Telegram: TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID
 
 ${colors.blue}🚀 Tiếp theo:${colors.reset}
   1. Cập nhật .env với các credentials thực tế

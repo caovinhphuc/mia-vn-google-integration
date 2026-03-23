@@ -12,17 +12,6 @@ import { LayoutProvider } from "./contexts/LayoutContext";
 import "./global.css"; /* ✅ Import global styles first */
 import { store } from "./store/store";
 
-// Enhanced lazy loading with route-based code splitting
-const OrdersPage = lazy(() => import('./modules/orders/OrdersPage'));
-const InventoryPage = lazy(() => import('./modules/inventory/InventoryPage'));
-const TransportPage = lazy(() => import('./modules/transport/TransportPage'));
-const StaffPage = lazy(() => import('./modules/staff/StaffPage'));
-const PickingPage = lazy(() => import('./modules/picking/PickingPage'));
-const AnalyticsPage = lazy(() => import('./modules/analytics/AnalyticsPage'));
-const AlertsModule = lazy(() => import('./modules/alerts/AlertsPage'));
-
-// Each lazy import creates a separate chunk, reducing main bundle size
-
 // Authentication (load immediately)
 const Login = lazy(() => import("./components/auth/Login"));
 const Layout = lazy(() => import(/* webpackChunkName: "layout" */ "./components/layout/Layout"));
@@ -239,14 +228,8 @@ function App() {
                                 }
                               />
 
-                              
-                                <Route path="/orders" element={<OrdersPage />} />
-                                <Route path="/inventory" element={<InventoryPage />} />
-                                <Route path="/transport" element={<TransportPage />} />
-                                <Route path="/staff" element={<StaffPage />} />
-                                <Route path="/picking" element={<PickingPage />} />
-                                <Route path="/analytics" element={<AnalyticsPage />} />
-                              <Route path="*" element={<Navigate to="/" replace />} />
+                              {/* Catch-all route */}
+                              <Route path="*" element={<Navigate to="/" />} />
                             </Routes>
                           </Layout>
                         }

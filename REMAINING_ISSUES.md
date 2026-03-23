@@ -168,19 +168,19 @@ const endpoints = [
     name: "AI Service Health",
     url: "http://localhost:8001/health",
     required: false,
-    note: "Optional - AI/Automation features"
+    note: "Optional - AI/Automation features",
   },
   {
     name: "AI Service Root",
     url: "http://localhost:8001/",
     required: false,
-    note: "Optional - AI/Automation features"
+    note: "Optional - AI/Automation features",
   },
   {
     name: "AI Insights",
     url: "http://localhost:8001/api/insights",
     required: false,
-    note: "Optional - AI/Automation features"
+    note: "Optional - AI/Automation features",
   },
 ];
 ```
@@ -228,19 +228,19 @@ async def get_insights():
 
 ```bash
 cd ai-service
-python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 ---
 
 ## 📊 Priority Matrix
 
-| Issue | Priority | Impact | Effort | Recommendation |
-|-------|----------|--------|--------|----------------|
-| Backend Reports | 🔴 High | Medium | Low | **Fix Now** |
-| AI Service Health | 🟡 Low | Low | Medium | Mark Optional |
-| AI Service Root | 🟡 Low | Low | Medium | Mark Optional |
-| AI Insights | 🟡 Low | Low | Medium | Mark Optional |
+| Issue             | Priority | Impact | Effort | Recommendation |
+| ----------------- | -------- | ------ | ------ | -------------- |
+| Backend Reports   | 🔴 High  | Medium | Low    | **Fix Now**    |
+| AI Service Health | 🟡 Low   | Low    | Medium | Mark Optional  |
+| AI Service Root   | 🟡 Low   | Low    | Medium | Mark Optional  |
+| AI Insights       | 🟡 Low   | Low    | Medium | Mark Optional  |
 
 ---
 
@@ -313,12 +313,12 @@ async function testAPIConnectivity() {
     {
       name: "Backend Health",
       url: "http://localhost:3001/health",
-      required: true
+      required: true,
     },
     {
       name: "Backend Reports",
       url: "http://localhost:3001/api/reports",
-      required: true
+      required: true,
     },
 
     // Optional endpoints
@@ -326,19 +326,19 @@ async function testAPIConnectivity() {
       name: "AI Service Health",
       url: "http://localhost:8001/health",
       required: false,
-      note: "Optional - AI features"
+      note: "Optional - AI features",
     },
     {
       name: "AI Service Root",
       url: "http://localhost:8001/",
       required: false,
-      note: "Optional - AI features"
+      note: "Optional - AI features",
     },
     {
       name: "AI Insights",
       url: "http://localhost:8001/api/insights",
       required: false,
-      note: "Optional - AI features"
+      note: "Optional - AI features",
     },
   ];
 

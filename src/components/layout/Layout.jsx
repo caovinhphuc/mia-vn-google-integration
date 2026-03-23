@@ -250,7 +250,11 @@ const Layout = ({ children }) => {
               collapsed={sidebarCollapsed}
               isActive={isActive}
             />
-            <NavSection title="Kho Vận" items={navigationData.warehouse} collapsed={sidebarCollapsed} />
+            <NavSection
+              title="Kho Vận"
+              items={navigationData.warehouse}
+              collapsed={sidebarCollapsed}
+            />
             <NavSection title="Công cụ" items={navigationData.tools} collapsed={sidebarCollapsed} />
             <NavSection
               title="Hỗ trợ"

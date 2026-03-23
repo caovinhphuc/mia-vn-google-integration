@@ -1,0 +1,651 @@
+/* ==================== MIA DESIGN SYSTEM CSS ==================== */
+/* Custom CSS cho Warehouse Management System */
+/* Định nghĩa biến CSS, animations và utilities bổ sung */
+
+:root {
+  /* ==================== COLOR VARIABLES ==================== */
+  /* Brand Colors */
+  --mia-primary-50: #eff6ff;
+  --mia-primary-100: #dbeafe;
+  --mia-primary-200: #bfdbfe;
+  --mia-primary-300: #93c5fd;
+  --mia-primary-400: #60a5fa;
+  --mia-primary-500: #3b82f6;
+  --mia-primary-600: #2563eb;
+  --mia-primary-700: #1d4ed8;
+  --mia-primary-800: #1e40af;
+  --mia-primary-900: #1e3a8a;
+
+  /* Gray Scale */
+  --mia-gray-50: #f8fafc;
+  --mia-gray-100: #f1f5f9;
+  --mia-gray-200: #e2e8f0;
+  --mia-gray-300: #cbd5e1;
+  --mia-gray-400: #94a3b8;
+  --mia-gray-500: #64748b;
+  --mia-gray-600: #475569;
+  --mia-gray-700: #334155;
+  --mia-gray-800: #1e293b;
+  --mia-gray-900: #0f172a;
+
+  /* Accent colors - xanh lam warehouse */
+  --mia-accent-50: #f0f9ff;
+  --mia-accent-100: #e0f2fe;
+  --mia-accent-200: #bae6fd;
+  --mia-accent-300: #7dd3fc;
+  --mia-accent-400: #38bdf8;
+  --mia-accent-500: #0ea5e9;
+  --mia-accent-600: #0284c7;
+  --mia-accent-700: #0369a1;
+  --mia-accent-800: #075985;
+  --mia-accent-900: #0c4a6e;
+
+  /* Semantic Colors - màu có ý nghĩa */
+  --mia-success: #16a34a;
+  --mia-success-light: #dcfce7;
+  --mia-success-dark: #15803d;
+  --mia-warning: #f59e0b;
+  --mia-warning-light: #fef3c7;
+  --mia-warning-dark: #d97706;
+  --mia-error: #dc2626;
+  --mia-error-light: #fee2e2;
+  --mia-error-dark: #b91c1c;
+  --mia-info: #2563eb;
+  --mia-info-light: #dbeafe;
+  --mia-info-dark: #1d4ed8;
+
+  /* ==================== TYPOGRAPHY VARIABLES ==================== */
+  --mia-font-family-primary:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mia-font-family-secondary: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mia-font-family-mono: "SF Mono", Consolas, "Liberation Mono", monospace;
+
+  /* Font Sizes */
+  --mia-text-xs: 0.75rem; /* 12px */
+  --mia-text-sm: 0.875rem; /* 14px */
+  --mia-text-base: 1rem; /* 16px */
+  --mia-text-lg: 1.125rem; /* 18px */
+  --mia-text-xl: 1.25rem; /* 20px */
+  --mia-text-2xl: 1.5rem; /* 24px */
+  --mia-text-3xl: 1.875rem; /* 30px */
+  --mia-text-4xl: 2.25rem; /* 36px */
+  --mia-text-5xl: 3rem; /* 48px */
+
+  /* Font Weights */
+  --mia-font-light: 300;
+  --mia-font-normal: 400;
+  --mia-font-medium: 500;
+  --mia-font-semibold: 600;
+  --mia-font-bold: 700;
+  --mia-font-extrabold: 800;
+
+  /* Line Heights */
+  --mia-leading-tight: 1.25;
+  --mia-leading-normal: 1.5;
+  --mia-leading-relaxed: 1.75;
+
+  /* ==================== SPACING VARIABLES ==================== */
+  --mia-spacing-xs: 0.25rem; /* 4px */
+  --mia-spacing-sm: 0.5rem; /* 8px */
+  --mia-spacing-md: 1rem; /* 16px */
+  --mia-spacing-lg: 1.5rem; /* 24px */
+  --mia-spacing-xl: 2rem; /* 32px */
+  --mia-spacing-2xl: 3rem; /* 48px */
+  --mia-spacing-3xl: 4rem; /* 64px */
+  --mia-spacing-4xl: 6rem; /* 96px */
+
+  /* ==================== BORDER RADIUS ==================== */
+  --mia-radius-sm: 0.375rem; /* 6px */
+  --mia-radius-md: 0.5rem; /* 8px */
+  --mia-radius-lg: 0.75rem; /* 12px */
+  --mia-radius-xl: 1rem; /* 16px */
+  --mia-radius-full: 9999px;
+
+  /* ==================== SHADOWS ==================== */
+  --mia-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --mia-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --mia-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --mia-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* ==================== TRANSITIONS ==================== */
+  --mia-transition-fast: 150ms ease-in-out;
+  --mia-transition-normal: 200ms ease-in-out;
+  --mia-transition-slow: 300ms ease-in-out;
+}
+
+/* ==================== DARK MODE VARIABLES ==================== */
+[data-theme="dark"] {
+  --mia-bg-primary: var(--mia-gray-900);
+  --mia-bg-secondary: var(--mia-gray-800);
+  --mia-bg-tertiary: var(--mia-gray-700);
+
+  --mia-surface-primary: var(--mia-gray-800);
+  --mia-surface-secondary: var(--mia-gray-700);
+  --mia-surface-elevated: var(--mia-gray-600);
+
+  --mia-text-primary: var(--mia-gray-50);
+  --mia-text-secondary: var(--mia-gray-300);
+  --mia-text-muted: var(--mia-gray-400);
+  --mia-text-disabled: var(--mia-gray-500);
+
+  --mia-border-primary: var(--mia-gray-600);
+  --mia-border-secondary: var(--mia-gray-700);
+}
+
+/* ==================== LIGHT MODE VARIABLES ==================== */
+[data-theme="light"] {
+  --mia-bg-primary: #ffffff;
+  --mia-bg-secondary: var(--mia-gray-50);
+  --mia-bg-tertiary: var(--mia-gray-100);
+
+  --mia-surface-primary: #ffffff;
+  --mia-surface-secondary: var(--mia-gray-50);
+  --mia-surface-elevated: #ffffff;
+
+  --mia-text-primary: var(--mia-gray-900);
+  --mia-text-secondary: var(--mia-gray-600);
+  --mia-text-muted: var(--mia-gray-500);
+  --mia-text-disabled: var(--mia-gray-400);
+
+  --mia-border-primary: var(--mia-gray-200);
+  --mia-border-secondary: var(--mia-gray-300);
+}
+
+/* ==================== GLOBAL STYLES ==================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--mia-font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: var(--mia-text-base);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-primary);
+  background-color: var(--mia-bg-primary);
+  transition:
+    background-color var(--mia-transition-normal),
+    color var(--mia-transition-normal);
+}
+
+/* ==================== TYPOGRAPHY CLASSES ==================== */
+.mia-heading-1 {
+  font-size: var(--mia-text-5xl);
+  font-weight: var(--mia-font-bold);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-heading-2 {
+  font-size: var(--mia-text-4xl);
+  font-weight: var(--mia-font-bold);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-heading-3 {
+  font-size: var(--mia-text-3xl);
+  font-weight: var(--mia-font-semibold);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-heading-4 {
+  font-size: var(--mia-text-2xl);
+  font-weight: var(--mia-font-semibold);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-heading-5 {
+  font-size: var(--mia-text-xl);
+  font-weight: var(--mia-font-medium);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-heading-6 {
+  font-size: var(--mia-text-lg);
+  font-weight: var(--mia-font-medium);
+  line-height: var(--mia-leading-tight);
+  color: var(--mia-text-primary);
+}
+
+.mia-body-large {
+  font-size: var(--mia-text-lg);
+  font-weight: var(--mia-font-normal);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-secondary);
+}
+
+.mia-body {
+  font-size: var(--mia-text-base);
+  font-weight: var(--mia-font-normal);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-secondary);
+}
+
+.mia-body-small {
+  font-size: var(--mia-text-sm);
+  font-weight: var(--mia-font-normal);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-secondary);
+}
+
+.mia-caption {
+  font-size: var(--mia-text-sm);
+  font-weight: var(--mia-font-normal);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-muted);
+}
+
+.mia-caption-small {
+  font-size: var(--mia-text-xs);
+  font-weight: var(--mia-font-normal);
+  line-height: var(--mia-leading-normal);
+  color: var(--mia-text-muted);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.mia-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--mia-spacing-md);
+}
+
+.mia-section {
+  padding: var(--mia-spacing-2xl) 0;
+}
+
+.mia-card {
+  background-color: var(--mia-surface-primary);
+  border: 1px solid var(--mia-border-primary);
+  border-radius: var(--mia-radius-lg);
+  box-shadow: var(--mia-shadow-sm);
+  transition: box-shadow var(--mia-transition-normal);
+}
+
+.mia-card:hover {
+  box-shadow: var(--mia-shadow-md);
+}
+
+.mia-card-elevated {
+  background-color: var(--mia-surface-elevated);
+  border: 1px solid var(--mia-border-primary);
+  border-radius: var(--mia-radius-lg);
+  box-shadow: var(--mia-shadow-lg);
+}
+
+/* ==================== MIA COMPONENT STYLES ==================== */
+/* Styles cho các component classes đã định nghĩa trong designSystem.js */
+
+/* ==================== BUTTON STYLES ==================== */
+.mia-btn {
+  font-family: var(--mia-font-family-primary);
+  font-weight: var(--mia-font-medium);
+  transition: var(--mia-transition-normal);
+  border-radius: var(--mia-radius-md);
+}
+
+.mia-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--mia-primary-500);
+}
+
+.mia-btn-primary {
+  background-color: var(--mia-primary-500);
+  color: white;
+  border-color: var(--mia-primary-500);
+}
+
+.mia-btn-primary:hover {
+  background-color: var(--mia-primary-600);
+  border-color: var(--mia-primary-600);
+}
+
+.mia-btn-primary:active {
+  background-color: var(--mia-primary-700);
+  border-color: var(--mia-primary-700);
+}
+
+.mia-btn-secondary {
+  background-color: var(--mia-bg-primary);
+  color: var(--mia-text-primary);
+  border-color: var(--mia-border-primary);
+}
+
+.mia-btn-secondary:hover {
+  background-color: var(--mia-bg-secondary);
+  border-color: var(--mia-border-secondary);
+}
+
+.mia-btn-success {
+  background-color: var(--mia-success);
+  color: white;
+  border-color: var(--mia-success);
+}
+
+.mia-btn-success:hover {
+  background-color: var(--mia-success-dark);
+  border-color: var(--mia-success-dark);
+}
+
+.mia-btn-warning {
+  background-color: var(--mia-warning);
+  color: white;
+  border-color: var(--mia-warning);
+}
+
+.mia-btn-warning:hover {
+  background-color: var(--mia-warning-dark);
+  border-color: var(--mia-warning-dark);
+}
+
+.mia-btn-error {
+  background-color: var(--mia-error);
+  color: white;
+  border-color: var(--mia-error);
+}
+
+.mia-btn-error:hover {
+  background-color: var(--mia-error-dark);
+  border-color: var(--mia-error-dark);
+}
+
+.mia-btn-ghost {
+  background-color: transparent;
+  color: var(--mia-text-primary);
+  border: none;
+}
+
+.mia-btn-ghost:hover {
+  background-color: var(--mia-bg-secondary);
+}
+
+.mia-btn-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==================== CARD STYLES ==================== */
+.mia-card {
+  transition: var(--mia-transition-normal);
+  border-radius: var(--mia-radius-lg);
+}
+
+.mia-card-elevated {
+  box-shadow: var(--mia-shadow-lg);
+}
+
+.mia-card-elevated:hover {
+  box-shadow: var(--mia-shadow-xl);
+}
+
+.mia-card-outlined {
+  border-width: 2px;
+}
+
+.mia-card-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ==================== BADGE STYLES ==================== */
+.mia-badge {
+  font-family: var(--mia-font-family-primary);
+  font-weight: var(--mia-font-medium);
+  transition: var(--mia-transition-fast);
+}
+
+.mia-badge-success {
+  background-color: var(--mia-success-light);
+  color: var(--mia-success-dark);
+}
+
+.mia-badge-warning {
+  background-color: var(--mia-warning-light);
+  color: var(--mia-warning-dark);
+}
+
+.mia-badge-error {
+  background-color: var(--mia-error-light);
+  color: var(--mia-error-dark);
+}
+
+.mia-badge-info {
+  background-color: var(--mia-info-light);
+  color: var(--mia-info-dark);
+}
+
+.mia-badge-primary {
+  background-color: var(--mia-primary-100);
+  color: var(--mia-primary-800);
+}
+
+/* ==================== INPUT STYLES ==================== */
+.mia-input {
+  font-family: var(--mia-font-family-primary);
+  transition: var(--mia-transition-normal);
+  border-radius: var(--mia-radius-md);
+}
+
+.mia-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--mia-primary-500);
+}
+
+.mia-input-error {
+  border-color: var(--mia-error);
+}
+
+.mia-input-error:focus {
+  box-shadow: 0 0 0 2px var(--mia-error);
+}
+
+.mia-input-success {
+  border-color: var(--mia-success);
+}
+
+.mia-input-success:focus {
+  box-shadow: 0 0 0 2px var(--mia-success);
+}
+
+/* ==================== AVATAR STYLES ==================== */
+.mia-avatar {
+  border: 2px solid var(--mia-border-primary);
+  transition: var(--mia-transition-fast);
+}
+
+.mia-avatar:hover {
+  border-color: var(--mia-primary-500);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+.mia-focus:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--mia-primary-500);
+}
+
+.mia-glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.mia-shadow-smooth {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.mia-transition-smooth {
+  transition: all var(--mia-transition-normal);
+}
+
+/* ==================== ANIMATION CLASSES ==================== */
+@keyframes mia-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mia-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.mia-animate-fade-in {
+  animation: mia-fade-in 0.2s ease-out;
+}
+
+.mia-animate-scale-in {
+  animation: mia-scale-in 0.15s ease-out;
+}
+
+/* ==================== STATUS COLORS ==================== */
+.mia-status-success {
+  color: var(--mia-success);
+}
+
+.mia-status-warning {
+  color: var(--mia-warning);
+}
+
+.mia-status-error {
+  color: var(--mia-error);
+}
+
+.mia-status-info {
+  color: var(--mia-info);
+}
+
+.mia-bg-success {
+  background-color: var(--mia-success-light);
+  color: var(--mia-success);
+}
+
+.mia-bg-warning {
+  background-color: var(--mia-warning-light);
+  color: var(--mia-warning);
+}
+
+.mia-bg-error {
+  background-color: var(--mia-error-light);
+  color: var(--mia-error);
+}
+
+.mia-bg-info {
+  background-color: var(--mia-info-light);
+  color: var(--mia-info);
+}
+
+/* ==================== RESPONSIVE UTILITIES ==================== */
+@media (max-width: 640px) {
+  .mia-container {
+    padding: 0 var(--mia-spacing-sm);
+  }
+
+  .mia-section {
+    padding: var(--mia-spacing-xl) 0;
+  }
+
+  .mia-heading-1 {
+    font-size: var(--mia-text-3xl);
+  }
+
+  .mia-heading-2 {
+    font-size: var(--mia-text-2xl);
+  }
+
+  .mia-heading-3 {
+    font-size: var(--mia-text-xl);
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .mia-no-print {
+    display: none !important;
+  }
+
+  .mia-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .mia-heading-1,
+  .mia-heading-2,
+  .mia-heading-3,
+  .mia-heading-4,
+  .mia-heading-5,
+  .mia-heading-6 {
+    color: #000;
+    page-break-after: avoid;
+  }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .mia-card {
+    border-width: 2px;
+  }
+
+  .mia-focus:focus {
+    box-shadow: 0 0 0 3px var(--mia-primary-500);
+  }
+}
+
+/* ==================== SCROLLBAR STYLING ==================== */
+/* Webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mia-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mia-border-secondary);
+  border-radius: var(--mia-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mia-text-muted);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mia-border-secondary) var(--mia-bg-secondary);
+}
