@@ -28,14 +28,14 @@ react-oas-integration/
 
 ### 📊 Số Liệu Chi Tiết
 
-| Metric | Số Lượng |
-|--------|----------|
-| **Tổng thư mục** | 12 thư mục chính |
-| **File code** | 86 files |
-| **Tổng file** | 143,349 files (bao gồm node_modules) |
-| **Kích thước** | 3.1GB |
-| **Ngôn ngữ** | JavaScript, Python, TypeScript |
-| **Services** | 4 services (Frontend, Backend, AI, Automation) |
+| Metric           | Số Lượng                                       |
+| ---------------- | ---------------------------------------------- |
+| **Tổng thư mục** | 12 thư mục chính                               |
+| **File code**    | 86 files                                       |
+| **Tổng file**    | 143,349 files (bao gồm node_modules)           |
+| **Kích thước**   | 3.1GB                                          |
+| **Ngôn ngữ**     | JavaScript, Python, TypeScript                 |
+| **Services**     | 4 services (Frontend, Backend, AI, Automation) |
 
 ### 🔧 Công Nghệ Sử Dụng
 
@@ -79,11 +79,12 @@ react-oas-integration/
 ### 🚀 1-Command Setup
 
 ```bash
-# Clone và setup toàn bộ
-git clone [your-repo-url] react-oas-integration
+# Clone và setup
+git clone https://github.com/caovinhphuc/React-OAS-Integration-v4.0 react-oas-integration
 cd react-oas-integration
-chmod +x deploy.sh
-./deploy.sh start
+npm install --legacy-peer-deps
+cd backend && npm install && cd ..
+npm run dev
 ```
 
 ### 🛠️ Manual Setup (nếu cần)
@@ -97,24 +98,26 @@ cd ai-service && pip3 install -r requirements.txt && cd ..
 # 2. Build frontend
 npm run build
 
-# 3. Start all services
-./deploy.sh start
+# 3. Start dev (Frontend 3000 + Backend 3001 + AI 8000)
+npm run dev
+
+# Hoặc start full stack (bao gồm Automation 8001)
+./scripts/start-stop/start-all.sh
 ```
 
-### ✅ Kiểm Tra Deployment
+### ✅ Kiểm Tra & Deploy
 
 ```bash
-# Xem status
-./deploy.sh status
+# Health check
+npm run health-check
 
 # Chạy tests
-./deploy.sh test
+npm test
+# hoặc
+npm run test:integration
 
-# Xem logs
-./deploy.sh logs
-
-# Health check
-./deploy.sh health
+# Deploy lên Netlify + Render (commit + push)
+./deploy.sh "Fix: mô tả thay đổi"
 ```
 
 ## 🌐 Deploy Lên Cloud qua Git
@@ -128,7 +131,7 @@ npm run build
 name: Production Deploy
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -137,7 +140,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
       - name: Install & Build
         run: |
           npm install --legacy-peer-deps
