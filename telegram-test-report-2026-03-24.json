@@ -1,0 +1,87 @@
+{
+  "title": "Telegram Integration Test Report",
+  "timestamp": "2026-03-24T01:09:04.398Z",
+  "summary": {
+    "total_tests": 6,
+    "passed": 5,
+    "failed": 0,
+    "warnings": 1
+  },
+  "configuration": {
+    "bot_token": "configured",
+    "chat_id": "configured",
+    "api_url": "https://api.telegram.org/bot8626716610:AAHKdjfhhHniLUuTSLUPKJDHtxTS0om5sEo"
+  },
+  "results": [
+    {
+      "test": "environment-check",
+      "status": "success",
+      "message": "Tất cả environment variables cần thiết đã có",
+      "details": {
+        "required_count": 2
+      },
+      "timestamp": "2026-03-24T01:09:01.722Z"
+    },
+    {
+      "test": "bot-info",
+      "status": "success",
+      "message": "Bot kết nối thành công: MIA Logistics Bot",
+      "details": {
+        "id": 8626716610,
+        "username": "mia_logistics_bot",
+        "first_name": "MIA Logistics Bot",
+        "can_join_groups": true,
+        "can_read_all_group_messages": false,
+        "supports_inline_queries": true
+      },
+      "timestamp": "2026-03-24T01:09:02.473Z"
+    },
+    {
+      "test": "webhook-info",
+      "status": "warning",
+      "message": "Chưa cấu hình webhook",
+      "details": {
+        "url": "",
+        "has_custom_certificate": false,
+        "pending_update_count": 11
+      },
+      "timestamp": "2026-03-24T01:09:02.692Z"
+    },
+    {
+      "test": "chat-info",
+      "status": "success",
+      "message": "Thông tin chat lấy thành công: MIA Logistics Group Bot",
+      "details": {
+        "id": -5255250720,
+        "type": "group",
+        "title": "MIA Logistics Group Bot"
+      },
+      "timestamp": "2026-03-24T01:09:02.914Z"
+    },
+    {
+      "test": "send-message",
+      "status": "success",
+      "message": "Tin nhắn test đã được gửi thành công",
+      "details": {
+        "message_id": 107,
+        "chat_id": -5255250720,
+        "chat_type": "group",
+        "chat_title": "MIA Logistics Group Bot",
+        "date": "2026-03-24T01:09:03.000Z"
+      },
+      "timestamp": "2026-03-24T01:09:03.372Z"
+    },
+    {
+      "test": "file-upload",
+      "status": "success",
+      "message": "File test đã được upload thành công",
+      "details": {
+        "file_id": "BQACAgUAAxkDAANsacHkMGNvmJjTuXcOLqqshLQFUVcAAh8eAALhShFWG4G6qlspgjo6BA",
+        "file_name": "telegram-test-report.json",
+        "file_size": 1947,
+        "mime_type": "application/json"
+      },
+      "timestamp": "2026-03-24T01:09:04.397Z"
+    }
+  ]
+}
