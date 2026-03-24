@@ -10,7 +10,7 @@
     },
     {
       "name": "mia-warehouse-management-v2",
-      "path": "mia-warehouse-management-v2"
+      "path": "../mia-warehouse-management-v2"
     }
   ],
   "settings": {

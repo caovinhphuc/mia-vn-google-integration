@@ -49,16 +49,12 @@ const createImportMetaEnv = () => {
 
     // API URLs
     VITE_API_URL: process.env.REACT_APP_API_URL || "http://localhost:3001",
-    VITE_API_BASE_URL:
-      process.env.REACT_APP_API_URL || "http://localhost:3001/api",
-    VITE_AI_SERVICE_URL:
-      process.env.REACT_APP_AI_SERVICE_URL || "http://localhost:8000",
+    VITE_API_BASE_URL: process.env.REACT_APP_API_URL || "http://localhost:3001/api",
+    VITE_AI_SERVICE_URL: process.env.REACT_APP_AI_SERVICE_URL || "http://localhost:8000",
 
     // Google Services
-    VITE_GOOGLE_SHEETS_SPREADSHEET_ID:
-      process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID || "",
-    VITE_GOOGLE_DRIVE_FOLDER_ID:
-      process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID || "",
+    VITE_GOOGLE_SHEETS_SPREADSHEET_ID: process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID || "",
+    VITE_GOOGLE_DRIVE_FOLDER_ID: process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID || "",
 
     // External Services
     VITE_TELEGRAM_CHAT_ID: process.env.REACT_APP_TELEGRAM_CHAT_ID || "",
@@ -85,9 +81,7 @@ module.exports = {
   // Output configuration
   output: {
     path: paths.build,
-    filename: isProduction
-      ? "static/js/[name].[contenthash:8].js"
-      : "static/js/[name].js",
+    filename: isProduction ? "static/js/[name].[contenthash:8].js" : "static/js/[name].js",
     chunkFilename: isProduction
       ? "static/js/[name].[contenthash:8].chunk.js"
       : "static/js/[name].chunk.js",
@@ -146,11 +140,7 @@ module.exports = {
   // 📝 Devtool Configuration
   // ===========================================================================
 
-  devtool: generateSourceMap
-    ? isProduction
-      ? "source-map"
-      : "eval-source-map"
-    : false,
+  devtool: generateSourceMap ? (isProduction ? "source-map" : "eval-source-map") : false,
 
   // ===========================================================================
   // 🛠️ Module Rules
@@ -184,10 +174,7 @@ module.exports = {
             plugins: [
               ["@babel/plugin-transform-class-properties", { loose: true }],
               ["@babel/plugin-transform-private-methods", { loose: true }],
-              [
-                "@babel/plugin-transform-private-property-in-object",
-                { loose: true },
-              ],
+              ["@babel/plugin-transform-private-property-in-object", { loose: true }],
             ],
             cacheDirectory: true,
             cacheCompression: false,
@@ -215,10 +202,9 @@ module.exports = {
             loader: require.resolve("postcss-loader"),
             options: {
               postcssOptions: {
-                plugins: [
-                  require("autoprefixer"),
-                  isProduction && require("cssnano"),
-                ].filter(Boolean),
+                plugins: [require("autoprefixer"), isProduction && require("cssnano")].filter(
+                  Boolean
+                ),
               },
             },
           },
@@ -255,9 +241,7 @@ module.exports = {
                   "node_modules/gaxios",
                   "node_modules/google-auth-library",
                 ];
-                return !excludedPackages.some((pkg) =>
-                  resourcePath.includes(pkg)
-                );
+                return !excludedPackages.some((pkg) => resourcePath.includes(pkg));
               },
             },
           },
