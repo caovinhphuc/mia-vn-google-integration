@@ -408,7 +408,19 @@ TUẦN 3  ✅ HOÀN THÀNH (2026-03-24)
 └── Ops                                                        ✅
     ├── automation/.env Telegram tokens đã copy từ root .env
     ├── venv backups: 10 bản cũ đã xóa, giữ 1 bản mới nhất
-    └── Lighthouse NO_FCP: --headless=new --preset=desktop (score 100/100)
+    ├── Lighthouse NO_FCP: --headless=new --preset=desktop (score 100/100)
+    ├── start_ai_platform.sh: rewrite hoàn toàn (start/stop/restart/status/logs)
+    ├── deploy_platform.sh: rewrite hoàn toàn (local/vercel/full/check)
+    ├── AI_API_KEY thêm vào .env (mia-dev-api-key-2026)
+    └── QUICKSTART.md: tạo mới — cheatsheet lệnh nhanh
+
+TUẦN 4  📋 KẾ HOẠCH (bắt đầu 2026-03-25)
+├── [P0] Data pipeline: kết nối dữ liệu thực từ OAS platforms
+│   ├── Shopee / TikTok / Lazada orders → backend API
+│   ├── Đẩy data thực vào AI analysis endpoints
+│   └── Replace mock data trong frontend charts
+└── [P1] Activate Claude Haiku NLP hybrid
+    └── Thêm ANTHROPIC_API_KEY vào .env → restart AI service
 ```
 
 ---
@@ -429,8 +441,9 @@ TUẦN 3  ✅ HOÀN THÀNH (2026-03-24)
 - [x] `SmartCategorizer.group_similar_items()` — implement real grouping (2026-03-24)
 - [x] `PredictiveAlerts` — loại bỏ mutable singleton state (2026-03-24)
 - [x] `PatternRecognizer.detect_cycles()` — thêm daily cycle detection (2026-03-24)
+- [x] NLP hybrid: Claude API fallback khi confidence < 0.6 (2026-03-24)
 - [ ] Unit tests cho `PatternRecognizer`, `NLPProcessor`
-- [ ] NLP hybrid: Claude API fallback khi confidence < 0.6
+- [ ] Data pipeline: kết nối dữ liệu thực từ OAS platforms (Shopee, TikTok, ...)
 
 ---
 
@@ -479,4 +492,4 @@ else:
 
 ---
 
-Tạo ngày: 2026-03-23 | Cập nhật: 2026-03-24 | ai-service v4.2
+Tạo ngày: 2026-03-23 | Cập nhật: 2026-03-24 (cuối ngày) | ai-service v4.2
