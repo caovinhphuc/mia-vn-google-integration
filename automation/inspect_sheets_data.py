@@ -18,6 +18,25 @@ except ImportError as e:
     sys.exit(1)
 
 
+def _safe_float(value, default=0.0):
+    """Sheets / CSV thường trả số dạng str; tránh lỗi format ':.1f' trên str."""
+    if value is None or value == '':
+        return default
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _success_bool(value):
+    """Chuẩn hóa Success từ bool hoặc chuỗi TRUE/FALSE/1/0."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in ('true', '1', 'yes')
+    return bool(value)
+
+
 def inspect_sheets_data():
     """Kiểm tra và hiển thị dữ liệu từ Google Sheets"""
     print("🔍 Google Sheets Data Inspector")
@@ -66,8 +85,8 @@ def inspect_sheets_data():
             print("   " + "-" * 65)
             for run in history:
                 timestamp = run.get('Timestamp', 'N/A')[:19]
-                success = '✅' if run.get('Success') else '❌'
-                duration = f"{run.get('Duration_Seconds', 0):.1f}s"
+                success = '✅' if _success_bool(run.get('Success')) else '❌'
+                duration = f"{_safe_float(run.get('Duration_Seconds')):.1f}s"
                 orders = run.get('Order_Count', 'N/A')
                 version = run.get('Automation_Version', 'N/A')
                 print(f"   {timestamp} | {success:>7} | {duration:>8} | {orders:>6} | {version}")
@@ -112,10 +131,14 @@ def inspect_sheets_data():
         # Calculate statistics
         print("\n📊 Statistics:")
         if history:
-            successful_runs = sum(1 for run in history if run.get('Success'))
+            successful_runs = sum(1 for run in history if _success_bool(run.get('Success')))
             total_runs = len(history)
-            total_orders = sum(int(run.get('Order_Count', 0)) for run in history if run.get('Order_Count'))
-            avg_duration = sum(float(run.get('Duration_Seconds', 0)) for run in history) / len(history)
+            total_orders = sum(
+                int(_safe_float(run.get('Order_Count'), 0))
+                for run in history
+                if run.get('Order_Count') not in (None, '', '0', 0)
+            )
+            avg_duration = sum(_safe_float(run.get('Duration_Seconds')) for run in history) / len(history)
 
             print(f"   Success Rate: {successful_runs}/{total_runs} ({(successful_runs/total_runs*100):.1f}%)")
             print(f"   Total Orders Processed: {total_orders:,}")

@@ -3,9 +3,9 @@ const googleConfig = {
   // Service Account credentials (THỰC TẾ)
   client_email:
     process.env.REACT_APP_GOOGLE_CLIENT_EMAIL ||
-    "mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com",
+    "your-service-account@YOUR_GCP_PROJECT_ID.iam.gserviceaccount.com",
   private_key: process.env.REACT_APP_GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-  project_id: process.env.REACT_APP_GOOGLE_PROJECT_ID || "mia-logistics-469406",
+  project_id: process.env.REACT_APP_GOOGLE_PROJECT_ID || "YOUR_GCP_PROJECT_ID",
 
   // Google Sheets và Drive IDs (THỰC TẾ)
   spreadsheet_id:

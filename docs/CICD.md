@@ -117,7 +117,7 @@ SLACK_WEBHOOK_URL
 ```bash
 # Clone repository
 git clone <repository-url>
-cd mia-logistics-manager
+cd mia-vn-google-integration   # hoặc tên thư mục clone của bạn
 
 # Install dependencies
 npm install

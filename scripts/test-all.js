@@ -26,6 +26,11 @@ const testFiles = [
     type: "commonjs",
   },
   {
+    name: "Google Drive (via Backend API)",
+    file: path.join(__dirname, "tests", "test_google_drive.js"),
+    type: "commonjs",
+  },
+  {
     name: "Frontend API Connection",
     file: path.join(__dirname, "test_frontend_api_connection.js"),
     type: "commonjs",

@@ -269,6 +269,12 @@ function resolveNativeWebSocketUrl() {
   if (native && /^wss?:\/\//i.test(String(native).trim())) return String(native).trim();
   const legacy = process.env.REACT_APP_WS_URL;
   if (legacy && /^wss?:\/\//i.test(String(legacy).trim())) return String(legacy).trim();
+  // Dev: qua cùng host CRA + setupProxy.js (/ws → backend/ws-server.js :3002). Prod/build: gọi thẳng 3002 hoặc set REACT_APP_NATIVE_WS_URL.
+  if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+    const { protocol, host } = window.location;
+    const wsProto = protocol === "https:" ? "wss:" : "ws:";
+    return `${wsProto}//${host}/ws`;
+  }
   return "ws://localhost:3002/ws";
 }
 

@@ -12,6 +12,68 @@ const path = require("path");
 // Load environment variables
 require("dotenv").config();
 
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return val;
+  const t = String(val).trim();
+  if (t.length >= 2) {
+    const a = t[0];
+    const b = t[t.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) return t.slice(1, -1).trim();
+  }
+  return t;
+}
+
+/** ID thật từ URL Sheet (…/d/<id>/edit). Từ chối placeholder kiểu YOUR_SHEET_ID / your_… */
+function isPlaceholderSheetId(id) {
+  const s = String(id).trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  const substrings = [
+    "YOUR_SPREADSHEET",
+    "PLACEHOLDER",
+    "REPLACE_ME",
+    "CHANGEME",
+    "EXAMPLE_ID",
+    "TODO",
+    "YOUR-SHEET",
+  ];
+  if (substrings.some((x) => u.includes(x))) return true;
+  if (u === "YOUR_SPREADSHEET_ID" || u === "YOUR-SHEET-ID") return true;
+  if (s === "your-spreadsheet-id" || s === "your_spreadsheet_id") return true;
+  // ID Google Sheets thường dài ~40+ ký tự; chuỗi ngắn + chữ hoa toàn từ = gần như placeholder
+  if (s.length < 20 && /^[A-Z0-9_-]+$/i.test(s) && /YOUR|PLACEHOLDER|EXAMPLE/i.test(s)) return true;
+  return false;
+}
+
+const SHEET_ID_ENV_KEYS = [
+  "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEET_ID",
+  "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+];
+
+/** Khớp health-check / backend — ưu tiên biến thường dùng trong .env.example */
+function resolveSpreadsheetId() {
+  for (const k of SHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSheetId(v)) return { id: v, fromKey: k };
+  }
+  return { id: null, fromKey: null };
+}
+
+/** Biến đầu tiên có giá trị (kể cả placeholder) — để báo lỗi rõ */
+function firstSetSheetEnvRaw() {
+  for (const k of SHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v) return { key: k, value: v };
+  }
+  return null;
+}
+
 // Google Sheets configuration
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 const PROJECT_ROOT = path.join(__dirname, "../..");
@@ -59,18 +121,30 @@ async function testGoogleSheetsConnection() {
 
     // 2. Kiểm tra environment variables
     console.log("📋 Bước 2: Kiểm tra environment variables...");
-    const spreadsheetId = process.env.REACT_APP_GOOGLE_SHEET_ID || process.env.GOOGLE_SHEETS_ID;
+    const { id: spreadsheetId, fromKey } = resolveSpreadsheetId();
+    const rawFirst = firstSetSheetEnvRaw();
 
-    if (!spreadsheetId || spreadsheetId === "your-spreadsheet-id") {
-      console.log("⚠️  Chưa có Google Sheets ID thực tế");
-      console.log("📝 Hướng dẫn:");
-      console.log("   1. Tạo Google Sheets mới tại: https://sheets.google.com");
-      console.log("   2. Copy Sheet ID từ URL (giữa /d/ và /edit)");
-      console.log("   3. Cập nhật REACT_APP_GOOGLE_SHEET_ID trong .env file");
+    if (!spreadsheetId) {
+      if (rawFirst && isPlaceholderSheetId(rawFirst.value)) {
+        console.log(
+          `❌ ${rawFirst.key}="${rawFirst.value}" là placeholder — không phải ID file Google Sheet.`
+        );
+        console.log(
+          "   Lấy ID từ URL: https://docs.google.com/spreadsheets/d/<DÁN_ID_VÀO_ĐÂY>/edit"
+        );
+      } else {
+        console.log("⚠️  Chưa có Google Sheets ID thực tế");
+      }
+      console.log("📝 Đặt một trong các biến (ưu tiên):");
+      console.log(
+        "   REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID | REACT_APP_GOOGLE_SHEET_ID | GOOGLE_SHEETS_ID | VITE_GOOGLE_SHEETS_SPREADSHEET_ID"
+      );
+      console.log("   1. Tạo Google Sheets: https://sheets.google.com");
+      console.log("   2. Copy ID từ URL …/spreadsheets/d/<ID>/edit");
       console.log("");
       return false;
     }
-    console.log(`✅ Google Sheets ID: ${spreadsheetId}`);
+    console.log(`✅ Google Sheets ID (${fromKey}): ${spreadsheetId}`);
 
     // 3. Load credentials
     console.log("📋 Bước 3: Load Google credentials...");
@@ -193,12 +267,33 @@ async function testGoogleSheetsConnection() {
     return true;
   } catch (error) {
     console.error("❌ Lỗi:", error.message);
+    const sid = resolveSpreadsheetId();
+    if (error.message && String(error.message).includes("Requested entity was not found")) {
+      console.log("");
+      console.log(
+        "🔧 Lỗi này = Google không thấy spreadsheet (404) hoặc service account không có quyền."
+      );
+      if (sid.id) console.log(`   Đang dùng ID: ${sid.id} (từ ${sid.fromKey})`);
+      try {
+        const cp = CREDENTIALS_CANDIDATES.find((p) => fs.existsSync(path.resolve(p)));
+        if (cp) {
+          const j = JSON.parse(fs.readFileSync(path.resolve(cp), "utf8"));
+          if (j.client_email) {
+            console.log(`   Trong Sheet: Chia sẻ → thêm email: ${j.client_email} (Viewer trở lên)`);
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+      console.log(
+        "   Nếu có nhiều biến SHEET trong .env: xóa ID cũ / chỉ giữ một ID đúng với URL file Sheet."
+      );
+    }
     console.log("");
     console.log("🔧 TROUBLESHOOTING:");
-    console.log("1. Kiểm tra Google Sheets ID trong .env file");
-    console.log("2. Kiểm tra credentials file có đúng không");
-    console.log("3. Đảm bảo đã chia sẻ sheet với Service Account email");
-    console.log("4. Kiểm tra Google Sheets API đã được enable");
+    console.log("1. Khớp ID với URL Sheet; ưu tiên REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID");
+    console.log("2. Chia sẻ Sheet cho client_email trong JSON credentials");
+    console.log("3. Bật Google Sheets API trên đúng GCP project của key");
     return false;
   }
 }

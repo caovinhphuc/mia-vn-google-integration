@@ -25,12 +25,12 @@ Tài liệu cho thư mục **`automation/`** trong repo: cách cài, chạy, và
 
 ## 2. Yêu cầu hệ thống
 
-| Thành phần            | Ghi chú                                                         |
-| --------------------- | --------------------------------------------------------------- |
-| **Python**            | 3.10–3.12 khuyến nghị; `setup.sh` ưu tiên 3.11                  |
-| **Google Chrome**     | Cho mọi luồng Selenium                                          |
-| **ChromeDriver**      | Thường qua `webdriver-manager` (trong `requirements-basic.txt`) |
-| **Tài khoản / quyền** | Đăng nhập ONE + Service Account có quyền spreadsheet            |
+| Thành phần            | Ghi chú                                                                                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Python**            | **3.11** chuẩn (CI + `.python-version`); `setup.sh` ưu tiên 3.11→3.12→3.13; không tạo venv bằng **3.14+** |
+| **Google Chrome**     | Cho mọi luồng Selenium                                                                                    |
+| **ChromeDriver**      | Thường qua `webdriver-manager` (trong `requirements-basic.txt`)                                           |
+| **Tài khoản / quyền** | Đăng nhập ONE + Service Account có quyền spreadsheet                                                      |
 
 ---
 

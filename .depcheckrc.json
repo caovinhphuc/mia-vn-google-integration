@@ -1,0 +1,17 @@
+{
+  "ignoreMatches": [
+    "netlify-cli",
+    "depcheck",
+    "@fullhuman/postcss-purgecss",
+    "@size-limit/preset-app",
+    "@size-limit/preset-big-lib",
+    "@size-limit/preset-small-lib",
+    "babel-plugin-import",
+    "jest-environment-jsdom",
+    "sharp",
+    "size-limit",
+    "source-map-explorer",
+    "terser"
+  ],
+  "ignore": ["**/build/**", "**/coverage/**", "**/lighthouse-reports/**"]
+}

@@ -32,31 +32,29 @@ def test_env_vars():
     """Test environment variables"""
     print("\n🔍 Testing environment variables...")
     from dotenv import load_dotenv
+    from google_sheets_config import resolve_service_account_credentials_path
+
     load_dotenv()
-    
+
     sheet_id = os.getenv('GOOGLE_SHEET_ID')
-    service_account_file = os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE')
-    
+
     if not sheet_id:
         print("❌ GOOGLE_SHEET_ID not found in environment")
         print("   Set in .env file or export GOOGLE_SHEET_ID=your_sheet_id")
         return False
-    else:
-        print(f"✅ GOOGLE_SHEET_ID: {sheet_id[:20]}...")
-    
+    print(f"✅ GOOGLE_SHEET_ID: {sheet_id[:20]}...")
+
+    service_account_file = resolve_service_account_credentials_path()
     if not service_account_file:
-        # Try default path
-        default_path = "config/service_account.json"
-        if os.path.exists(default_path):
-            service_account_file = default_path
-            print(f"✅ Using default credentials path: {default_path}")
-        else:
-            print("❌ GOOGLE_SERVICE_ACCOUNT_FILE not found")
-            print("   Set in .env file or place credentials at config/service_account.json")
-            return False
-    else:
-        print(f"✅ GOOGLE_SERVICE_ACCOUNT_FILE: {service_account_file}")
-    
+        print("❌ Không tìm thấy service account JSON hợp lệ.")
+        print(
+            "   Đặt GOOGLE_SERVICE_ACCOUNT_FILE hoặc GOOGLE_APPLICATION_CREDENTIALS trong .env, "
+            "hoặc đặt key tại ~/.secrets/google/ (tên GCP dạng *.json), "
+            "hoặc config/service_account.json"
+        )
+        return False
+    print(f"✅ Service account: {service_account_file}")
+
     return True, sheet_id, service_account_file
 
 def test_credentials_file(credentials_path):

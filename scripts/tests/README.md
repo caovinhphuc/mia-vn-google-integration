@@ -1,7 +1,17 @@
+\_sourced=0
+(return 0 2>/dev/null) && \_sourced=1
+if [["${BASH_SOURCE[0]-}" == *.md]] || [["${BASH_SOURCE[0]-}" == *.MD]]; then
+printf '%s\n' "Lỗi: $(basename "${BASH_SOURCE[0]}") là Markdown, không phải shell script." >&2
+printf '%s\n' " → Đừng chạy: bash \"${BASH_SOURCE[0]}\"" >&2
+printf '%s\n' " → Mở trong editor / less; chạy test: node scripts/tests/frontend_connection_test.js" >&2
+((\_sourced)) && return 1 || exit 1
+fi
+
 # 🧪 Test Scripts - React OAS Integration v4.0
 
 > **Test files cho React OAS Integration v4.0**  
-> **Ngày cập nhật**: 2025-01-27
+> **Ngày cập nhật**: 2025-01-27  
+> **Quan trọng:** không chạy `bash scripts/tests/README.md` — file này chỉ để đọc; phần đầu có guard tránh gõ nhầm.
 
 ---
 
@@ -19,10 +29,11 @@
 
 ### Specific Tests
 
-| File                    | Mục đích                        | Status |
-| ----------------------- | ------------------------------- | ------ |
-| `test_google_sheets.js` | Google Sheets integration tests | ✅     |
-| `ws-test.js`            | WebSocket tests                 | ✅     |
+| File                    | Mục đích                                        | Status |
+| ----------------------- | ----------------------------------------------- | ------ |
+| `test_google_sheets.js` | Google Sheets integration tests                 | ✅     |
+| `test_google_drive.js`  | Google Drive qua backend `GET /api/drive/files` | ✅     |
+| `ws-test.js`            | WebSocket tests                                 | ✅     |
 
 ---
 
@@ -49,6 +60,10 @@ node scripts/tests/end_to_end_test.js
 
 # Integration test
 node scripts/tests/integration_test.js
+
+# Google Drive (cần backend :3001)
+npm run test:google-drive
+# hoặc: node scripts/tests/test_google_drive.js
 
 # Advanced integration test
 node scripts/tests/advanced_integration_test.js

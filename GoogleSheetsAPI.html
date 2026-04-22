@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Cấu Hình Google Sheets API - OneAutomationSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --light-bg: #f8fafc;
+            --dark-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container-fluid {
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            background: white;
+            margin: -50px auto 0;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+            padding: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+            border-left: 4px solid #059669;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+
+        .progress-bar-custom {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            height: 6px;
+            border-radius: 3px;
+        }
+
+        .nav-tabs-custom {
+            border: none;
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 0.5rem;
+        }
+
+        .nav-tabs-custom .nav-link {
+            border: none;
+            border-radius: 8px;
+            color: var(--secondary-color);
+            margin: 0 0.2rem;
+            padding: 0.8rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .tab-content {
+            padding: 2rem 0;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: var(--light-bg);
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: #e2e8f0;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            margin-right: 1rem;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin: -30px 1rem 0;
+                padding: 2rem 1rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .code-block {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-robot me-3"></i>OneAutomationSystem</h1>
+            <h3>Hướng Dẫn Cấu Hình Google Sheets API</h3>
+            <p class="mb-0">Thiết lập kết nối và tích hợp dữ liệu hoàn chỉnh</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="main-content">
+                
+                <!-- Progress Bar -->
+                <div class="mb-4">
+                    <h5>Tiến Độ Hoàn Thành</h5>
+                    <div class="progress" style="height: 8px; border-radius: 4px;">
+                        <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 0%" id="progressBar"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block">Hoàn thành từng bước để cập nhật tiến độ</small>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs nav-tabs-custom mb-4" id="mainTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="setup-tab" data-bs-toggle="tab" data-bs-target="#setup" type="button">
+                            <i class="fas fa-cog me-2"></i>Cấu Hình API
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="sheets-tab" data-bs-toggle="tab" data-bs-target="#sheets" type="button">
+                            <i class="fab fa-google me-2"></i>Google Sheets
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="testing-tab" data-bs-toggle="tab" data-bs-target="#testing" type="button">
+                            <i class="fas fa-vial me-2"></i>Kiểm Thử
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="deployment-tab" data-bs-toggle="tab" data-bs-target="#deployment" type="button">
+                            <i class="fas fa-rocket me-2"></i>Deploy
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" id="mainTabContent">
+                    
+                    <!-- Setup Tab -->
+                    <div class="tab-pane fade show active" id="setup" role="tabpanel">
+                        
+                        <!-- Step 1: Google Cloud Console Setup -->
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <h4><i class="fab fa-google-drive me-2"></i>Thiết Lập Google Cloud Console</h4>
+                            <p>Tạo project và bật Google Sheets API trong Google Cloud Console.</p>
+                            
+                            <div class="alert alert-info alert-custom">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Lưu ý:</strong> Bạn cần có tài khoản Google để thực hiện các bước này.
+                            </div>
+
+                            <h6 class="mt-4">Các bước thực hiện:</h6>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step1-1">
+                                <label for="step1-1">Truy cập <a href="https://console.cloud.google.com" target="_blank" class="text-primary">Google Cloud Console</a></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step1-2">
+                                <label for="step1-2">Tạo project mới hoặc chọn project hiện có</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step1-3">
+                                <label for="step1-3">Vào <strong>APIs & Services > Library</strong></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step1-4">
+                                <label for="step1-4">Tìm và bật <strong>Google Sheets API</strong></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step1-5">
+                                <label for="step1-5">Bật <strong>Google Drive API</strong> (cần thiết cho quyền truy cập)</label>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Service Account -->
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <h4><i class="fas fa-user-cog me-2"></i>Tạo Service Account</h4>
+                            <p>Service Account sẽ được sử dụng để xác thực và truy cập Google Sheets từ ứng dụng.</p>
+                            
+                            <h6 class="mt-4">Thực hiện:</h6>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step2-1">
+                                <label for="step2-1">Vào <strong>APIs & Services > Credentials</strong></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step2-2">
+                                <label for="step2-2">Click <strong>Create Credentials > Service Account</strong></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step2-3">
+                                <label for="step2-3">Điền tên Service Account: <code>oneautomation-sheets</code></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step2-4">
+                                <label for="step2-4">Tạo và download file JSON credentials</label>
+                            </div>
+                            
+                            <div class="alert alert-warning alert-custom mt-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Quan trọng:</strong> Lưu file JSON an toàn và đặt tên là <code>google-credentials.json</code>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Environment Configuration -->
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <h4><i class="fas fa-cogs me-2"></i>Cấu Hình Environment</h4>
+                            <p>Thiết lập các biến môi trường cần thiết cho dự án.</p>
+                            
+                            <h6>File .env cần có:</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Google Sheets Configuration
+GOOGLE_CREDENTIALS_PATH=./google-credentials.json
+GOOGLE_SHEET_ID=your_sheet_id_here
+GOOGLE_SHEET_NAME=OneAutomationData
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/oneautomation
+DB_NAME=oneautomation
+
+# JWT Authentication
+JWT_SECRET=your-super-secret-jwt-key-here
+JWT_EXPIRES_IN=7d
+
+# Server Configuration
+PORT=3001
+NODE_ENV=development
+
+# One.com API (sẽ cập nhật sau)
+ONE_API_KEY=your_one_api_key
+ONE_API_SECRET=your_one_api_secret
+ONE_BASE_URL=https://api.one.com
+
+# Email Service
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password</pre>
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step3-1">
+                                <label for="step3-1">Tạo file <code>.env</code> trong thư mục gốc</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step3-2">
+                                <label for="step3-2">Copy nội dung trên và cập nhật các giá trị</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step3-3">
+                                <label for="step3-3">Đặt file <code>google-credentials.json</code> vào thư mục gốc</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Sheets Tab -->
+                    <div class="tab-pane fade" id="sheets" role="tabpanel">
+                        
+                        <!-- Step 4: Create and Share Sheet -->
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <h4><i class="fas fa-table me-2"></i>Tạo và Chia Sẻ Google Sheet</h4>
+                            <p>Tạo Google Sheet và chia sẻ quyền truy cập cho Service Account.</p>
+                            
+                            <h6 class="mt-4">Thực hiện:</h6>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step4-1">
+                                <label for="step4-1">Tạo Google Sheet mới với tên <strong>"OneAutomationData"</strong></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step4-2">
+                                <label for="step4-2">Lấy Sheet ID từ URL (phần sau /d/ và trước /edit)</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step4-3">
+                                <label for="step4-3">Share Sheet với email Service Account (trong file JSON: client_email)</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step4-4">
+                                <label for="step4-4">Tạo các sheet con: Dashboard, UserData, Analytics</label>
+                            </div>
+                            
+                            <div class="alert alert-info alert-custom mt-3">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                <strong>Mẹo:</strong> URL Sheet có dạng: <code>https://docs.google.com/spreadsheets/d/SHEET_ID/edit</code>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Sample Data Structure -->
+                        <div class="step-card">
+                            <div class="step-number">5</div>
+                            <h4><i class="fas fa-database me-2"></i>Cấu Trúc Dữ Liệu Mẫu</h4>
+                            <p>Thiết lập cấu trúc dữ liệu trong Google Sheet để hệ thống có thể đọc và ghi.</p>
+                            
+                            <h6>Sheet "Dashboard" (A1:F1):</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre>Date | Users | Revenue | Domains | Orders | Status</pre>
+                            </div>
+
+                            <h6>Sheet "UserData" (A1:G1):</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre>UserID | Email | Name | Domain | Plan | CreatedDate | LastLogin</pre>
+                            </div>
+
+                            <h6>Sheet "Analytics" (A1:E1):</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre>Date | Event | Domain | User | Value</pre>
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step5-1">
+                                <label for="step5-1">Tạo header cho sheet "Dashboard"</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step5-2">
+                                <label for="step5-2">Tạo header cho sheet "UserData"</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step5-3">
+                                <label for="step5-3">Tạo header cho sheet "Analytics"</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step5-4">
+                                <label for="step5-4">Nhập 5-10 dòng dữ liệu mẫu cho mỗi sheet</label>
+                            </div>
+                        </div>
+
+                        <!-- Sample Data Examples -->
+                        <div class="step-card">
+                            <div class="step-number">6</div>
+                            <h4><i class="fas fa-chart-line me-2"></i>Dữ Liệu Mẫu Chi Tiết</h4>
+                            <p>Các mẫu dữ liệu để test hệ thống hoạt động đúng.</p>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                    </div>
+                                    <h6>Dashboard Sample:</h6>
+                                    <small class="text-muted">
+                                        2024-01-15 | 1250 | 15400.50 | 450 | 89 | Active<br>
+                                        2024-01-16 | 1340 | 16200.30 | 468 | 92 | Active
+                                    </small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h6>UserData Sample:</h6>
+                                    <small class="text-muted">
+                                        U001 | user@example.com | John Doe | example.com | Premium | 2024-01-10 | 2024-01-15
+                                    </small>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                    <h6>Analytics Sample:</h6>
+                                    <small class="text-muted">
+                                        2024-01-15 | Login | example.com | user@example.com | 1
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testing Tab -->
+                    <div class="tab-pane fade" id="testing" role="tabpanel">
+                        
+                        <!-- Step 7: Connection Test -->
+                        <div class="step-card">
+                            <div class="step-number">7</div>
+                            <h4><i class="fas fa-plug me-2"></i>Kiểm Tra Kết Nối</h4>
+                            <p>Test kết nối Google Sheets API và đảm bảo mọi thứ hoạt động đúng.</p>
+                            
+                            <h6>Script kiểm tra kết nối:</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre>// test-sheets-connection.js
+const { google } = require('googleapis');
+const fs = require('fs');
+require('dotenv').config();
+
+async function testSheetsConnection() {
+    try {
+        // Load credentials
+        const credentials = JSON.parse(fs.readFileSync(process.env.GOOGLE_CREDENTIALS_PATH));
+        
+        // Initialize auth
+        const auth = new google.auth.GoogleAuth({
+            credentials,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets']
+        });
+
+        // Create sheets service
+        const sheets = google.sheets({ version: 'v4', auth });
+        
+        // Test read operation
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.GOOGLE_SHEET_ID,
+            range: 'Dashboard!A1:F10'
+        });
+
+        console.log('✅ Connection successful!');
+        console.log('Rows returned:', response.data.values?.length || 0);
+        console.log('Sample data:', response.data.values?.[0] || 'No data');
+        
+        return true;
+    } catch (error) {
+        console.error('❌ Connection failed:', error.message);
+        return false;
+    }
+}
+
+testSheetsConnection();</pre>
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step7-1">
+                                <label for="step7-1">Tạo file <code>test-sheets-connection.js</code></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step7-2">
+                                <label for="step7-2">Chạy: <code>node test-sheets-connection.js</code></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step7-3">
+                                <label for="step7-3">Xác nhận thấy "Connection successful!"</label>
+                            </div>
+                        </div>
+
+                        <!-- Step 8: Integration Test -->
+                        <div class="step-card">
+                            <div class="step-number">8</div>
+                            <h4><i class="fas fa-cogs me-2"></i>Kiểm Tra Tích Hợp</h4>
+                            <p>Test đầy đủ hệ thống từ backend đến frontend.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Backend Test:</h6>
+                                    <div class="code-block">
+                                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Khởi động backend
+cd backend
+npm install
+npm start
+
+# Test API endpoints
+curl http://localhost:3001/api/health
+curl http://localhost:3001/api/dashboard/stats</pre>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Frontend Test:</h6>
+                                    <div class="code-block">
+                                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Khởi động frontend
+cd frontend
+npm install
+npm run dev
+
+# Truy cập: http://localhost:3000
+# Test login và dashboard</pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step8-1">
+                                <label for="step8-1">Backend khởi động thành công (port 3001)</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step8-2">
+                                <label for="step8-2">Frontend khởi động thành công (port 3000)</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step8-3">
+                                <label for="step8-3">API endpoints phản hồi đúng</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step8-4">
+                                <label for="step8-4">Dashboard hiển thị dữ liệu từ Google Sheets</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deployment Tab -->
+                    <div class="tab-pane fade" id="deployment" role="tabpanel">
+                        
+                        <!-- Step 9: Production Build -->
+                        <div class="step-card">
+                            <div class="step-number">9</div>
+                            <h4><i class="fas fa-hammer me-2"></i>Build Production</h4>
+                            <p>Chuẩn bị ứng dụng cho môi trường production.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Frontend Build:</h6>
+                                    <div class="code-block">
+                                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Build React app
+cd frontend
+npm run build
+
+# Verify build folder created
+ls -la dist/ # hoặc build/</pre>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Backend Setup:</h6>
+                                    <div class="code-block">
+                                        <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Install production dependencies
+cd backend
+npm ci --only=production
+
+# Set production environment
+export NODE_ENV=production</pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step9-1">
+                                <label for="step9-1">Frontend build thành công</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step9-2">
+                                <label for="step9-2">Backend production ready</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step9-3">
+                                <label for="step9-3">Environment variables được set đúng</label>
+                            </div>
+                        </div>
+
+                        <!-- Step 10: Docker Deploy -->
+                        <div class="step-card">
+                            <div class="step-number">10</div>
+                            <h4><i class="fab fa-docker me-2"></i>Docker Deployment</h4>
+                            <p>Sử dụng Docker để deploy ứng dụng.</p>
+                            
+                            <h6>Docker Compose:</h6>
+                            <div class="code-block">
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+<pre># Build và deploy với Docker
+docker-compose up --build -d
+
+# Kiểm tra containers
+docker-compose ps
+
+# Xem logs
+docker-compose logs -f
+
+# Dừng services
+docker-compose down</pre>
+                            </div>
+
+                            <div class="alert alert-success alert-custom">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>Hoàn thành!</strong> Hệ thống đã sẵn sàng hoạt động với Google Sheets integration.
+                            </div>
+
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step10-1">
+                                <label for="step10-1">Docker containers chạy thành công</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step10-2">
+                                <label for="step10-2">Frontend accessible tại port 80</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step10-3">
+                                <label for="step10-3">Backend API hoạt động tại port 3001</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="step10-4">
+                                <label for="step10-4">Google Sheets sync hoạt động đúng</label>
+                            </div>
+                        </div>
+
+                        <!-- Final Checklist -->
+                        <div class="step-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h4>Checklist Hoàn Thành</h4>
+                            <p>Kiểm tra cuối cùng để đảm bảo hệ thống hoạt động hoàn hảo:</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Chức năng cốt lõi:</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-1">
+                                        <label for="final-1">Google Sheets API kết nối thành công</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-2">
+                                        <label for="final-2">Đọc dữ liệu từ Sheets</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-3">
+                                        <label for="final-3">Ghi dữ liệu vào Sheets</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-4">
+                                        <label for="final-4">Dashboard hiển thị biểu đồ</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Security & Performance:</h6>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-5">
+                                        <label for="final-5">JWT Authentication hoạt động</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-6">
+                                        <label for="final-6">Environment variables an toàn</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-7">
+                                        <label for="final-7">API rate limiting</label>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="final-8">
+                                        <label for="final-8">Error handling đầy đủ</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="text-center mt-5">
+                    <button class="btn btn-custom me-3" onclick="downloadConfig()">
+                        <i class="fas fa-download me-2"></i>Download Cấu Hình
+                    </button>
+                    <button class="btn btn-custom me-3" onclick="resetForm()">
+                        <i class="fas fa-refresh me-2"></i>Reset Form
+                    </button>
+                    <button class="btn btn-custom" onclick="exportChecklist()">
+                        <i class="fas fa-file-export me-2"></i>Export Checklist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Progress tracking
+        function updateProgress() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            const progress = Math.round((checked.length / checkboxes.length) * 100);
+            
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').setAttribute('aria-valuenow', progress);
+            
+            // Save progress to localStorage
+            const checkedIds = Array.from(checked).map(cb => cb.id);
+            localStorage.setItem('oneautomation_progress', JSON.stringify(checkedIds));
+        }
+
+        // Load saved progress
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('oneautomation_progress');
+            if (savedProgress) {
+                const checkedIds = JSON.parse(savedProgress);
+                checkedIds.forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) checkbox.checked = true;
+                });
+                updateProgress();
+            }
+        }
+
+        // Copy code function
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = button.querySelector('i');
+                icon.className = 'fas fa-check';
+                button.style.background = '#059669';
+                
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Download configuration
+        function downloadConfig() {
+            const config = {
+                googleSheetsApi: {
+                    completed: document.querySelectorAll('input[type="checkbox"]:checked').length,
+                    total: document.querySelectorAll('input[type="checkbox"]').length,
+                    timestamp: new Date().toISOString()
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'oneautomation-config.json';
+            a.click();
+        }
+
+        // Reset form
+        function resetForm() {
+            if (confirm('Bạn có chắc muốn reset toàn bộ progress?')) {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                localStorage.removeItem('oneautomation_progress');
+                updateProgress();
+            }
+        }
+
+        // Export checklist
+        function exportChecklist() {
+            const checklistItems = Array.from(document.querySelectorAll('.checklist-item label')).map(label => {
+                const checkbox = label.previousElementSibling;
+                const status = checkbox.checked ? '[✓]' : '[ ]';
+                return status + ' ' + label.textContent.trim();
+            });
+            
+            const content = 'OneAutomationSystem - Google Sheets API Setup Checklist\n\n' + 
+                           checklistItems.join('\n');
+            
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'oneautomation-checklist.txt';
+            a.click();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', updateProgress);
+            });
+        });
+
+        // Tab switching animation
+        document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+            tab.addEventListener('shown.bs.tab', (e) => {
+                const target = document.querySelector(e.target.getAttribute('data-bs-target'));
+                target.style.opacity = '0';
+                setTimeout(() => {
+                    target.style.opacity = '1';
+                    target.style.transition = 'opacity 0.3s ease';
+                }, 50);
+            });
+        });
+    </script>
+</body>
+</html>

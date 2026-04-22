@@ -1,94 +1,33 @@
-# 🔌 Port Configuration Clarification
+# 🔌 Port — làm rõ (canonical)
 
-## 📋 Current System Architecture
+Tài liệu này là **nguồn chuẩn** cho cổng dịch vụ local; đồng bộ với `package.json`, `ENV_SETUP.md`, `Document/AI_SERVICE_GUIDE.md`.
 
-### Port Assignments (As Per User's Setup)
+## Kiến trúc & cổng
 
-```
-Port 3000 - Frontend (React)
-Port 3001 - Backend (Node.js + Express)
-Port 8001 - Automation Service (Python FastAPI) - OPTIONAL
-```
+| Dịch vụ                                   | Port     | Bắt buộc?       | Ghi chú                                     |
+| ----------------------------------------- | -------- | --------------- | ------------------------------------------- |
+| Frontend (CRA)                            | **3000** | Có (cho UI dev) | `npm start`                                 |
+| Backend (Node/Express)                    | **3001** | Có (cho API)    | `npm run backend` — `BACKEND_PORT` / `PORT` |
+| **AI Service** (FastAPI, `ai-service/`)   | **8000** | Tuỳ chọn        | `npm run ai-service` — `main_simple:app`    |
+| **Automation** (FastAPI, `automation/` …) | **8001** | Tuỳ chọn        | Service Python automation / one system      |
 
-### ⚠️ Important Note
+**Hai process Python khác nhau:** 8000 ≠ 8001. Frontend gọi AI qua `REACT_APP_AI_SERVICE_URL` (mặc định `http://localhost:8000`); automation dùng biến riêng (vd. `REACT_APP_AUTOMATION_API_URL` → 8001).
 
-**There is NO separate AI Service in the current setup.**
+## Health / kiểm tra nhanh
 
-The system has:
-1. ✅ **Frontend** (Port 3000) - Required
-2. ✅ **Backend** (Port 3001) - Required
-3. ⚠️ **Automation Service** (Port 8001) - Optional (for Google Sheets)
+- `npm run health:quick` → `scripts/health-quick.sh` (bảng màu: 3000, 3001, 8000, 8001).
+- `npm run health-check` — Node đầy đủ.
+- `npm run test:api` — phân tách URL AI vs Automation.
 
----
+## Lệnh port
 
-## 🔧 What Was Fixed
+- `npm run fix:ports` — giải phóng **3000, 3001, 8000** (xem `package.json`; cổng **8001** không nằm trong lệnh mặc định).
+- `npm run check:ports` — kiểm tra listen trên 3000/3001/8000.
 
-### Files That Were Updated:
+## Gỡ nhầm (tài liệu cũ)
 
-1. **`frontend_connection_test.js`** ✅ ALREADY CORRECT
-   - Tests automation service on port 8001 ✅
-   - Marks it as optional ✅
-
-2. **Documentation Files** ✅ FIXED
-   - `START_HERE.md` - ✅ Updated to reflect Automation on 8001
-   - `QUICK_REFERENCE.md` - ✅ Port table corrected
-   - `AUTOMATION_SETUP.md` - ✅ Port 8002 → 8001, clarified no AI Service
-   - `BACKEND_IMPROVEMENTS.md` - ⚠️ No changes needed (focus on Backend)
-   - `CORS_FIX.md` - ⚠️ No changes needed (already correct)
+Một số bản ghi cũ từng viết: _chỉ có Automation, không có AI_ hoặc _8001 = AI_ — **không còn đúng** với monorepo hiện tại (đã có `ai-service` trên **8000**).
 
 ---
 
-## ✅ Correct Port Configuration
-
-### Current System (User's Setup):
-
-```javascript
-// frontend_connection_test.js - CORRECT
-{
-  name: "Automation Health",
-  url: "http://localhost:8001/health",
-  required: false,
-  note: "Optional - for Google Sheets integration",
-}
-```
-
-### start_dev_servers.sh - CORRECT
-
-```bash
-# Line 215-216
-print_status "Starting FastAPI automation service on port 8001..."
-python -m uvicorn main:app --host 0.0.0.0 --port 8001
-```
-
----
-
-## 📊 Service Matrix
-
-| Service | Port | Status | Purpose |
-|---------|------|--------|---------|
-| Frontend | 3000 | ✅ Required | React UI |
-| Backend | 3001 | ✅ Required | API + WebSocket |
-| Automation | 8001 | ⚠️ Optional | Google Sheets integration |
-
----
-
-## 🎯 Conclusion
-
-**The bug report was INCORRECT for the current setup.**
-
-- ✅ `frontend_connection_test.js` is testing the CORRECT port (8001)
-- ✅ Port 8001 is for Automation Service (not AI Service)
-- ✅ Test correctly marks it as optional
-- ✅ Documentation files have been updated to reflect correct architecture
-
-**Actions Completed:**
-- ✅ Updated documentation to reflect current architecture
-- ✅ Removed references to separate "AI Service"
-- ✅ Clarified that port 8001 is for Automation Service
-- ✅ Created DOCUMENTATION_FIX_SUMMARY.md for details
-
----
-
-**Date:** December 11, 2025
-**Status:** ✅ Fixed and Documented
-
+_Cập nhật: 2026-04-22 — đồng bộ `QUICK_REFERENCE.md`, `ENV_SETUP.md`, `scripts/test-api-endpoints.js`._

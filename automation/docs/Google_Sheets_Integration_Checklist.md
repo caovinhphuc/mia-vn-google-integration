@@ -1,50 +1,67 @@
-# 🔍 OneAutomationSystem - Google Sheets Integration Checklist
+# 🔍 OneAutomationSystem — Google Sheets Integration Checklist
 
-## 📋 Tổng Quan
+## 📋 Tổng quan
 
-Checklist này giúp bạn kiểm tra và triển khai Google Sheets Integration cho OneAutomationSystem một cách đầy đủ và chính xác.
+Checklist kiểm tra tích hợp Google Sheets / Drive cho **automation/** (Python) và **one_automation_system/** (API port 8001 khi chạy `start.sh` từ root repo).
 
-### 📦 Gói Python cơ bản (bắt buộc)
+### 📦 Gói Python (automation)
 
-Các gói sau đã nằm trong `requirements-basic.txt` — được cài khi chạy `./setup.sh` hoặc `./setup-and-seed.sh`:
+Cài trong thư mục `automation/` (khuyến nghị `venv`):
 
-| Gói                        | Mục đích                          |
-| -------------------------- | --------------------------------- |
-| `gspread`                  | Google Sheets API client          |
-| `google-auth`              | Xác thực Google (service account) |
-| `google-api-python-client` | Google APIs nền tảng              |
+| Gói                        | Mục đích                                                            |
+| -------------------------- | ------------------------------------------------------------------- |
+| `gspread`                  | Client Sheets (read/write worksheet)                                |
+| `google-auth`              | Service account credentials                                         |
+| `google-api-python-client` | Discovery API (Sheets REST, Drive v3 trong `one_automation_system`) |
 
-**Kiểm tra nhanh:**
+File tham chiếu: `automation/requirements-basic.txt` hoặc `automation/requirements.txt` (tùy môi trường bạn dùng).
+
+**Kiểm tra nhanh** (sau `source venv/bin/activate`):
 
 ```bash
-python3 -c "import gspread, google.auth; print('✅ OK')"
+python3 -c "import gspread, google.auth, googleapiclient; print('OK')"
 ```
+
+### 🔑 Service account JSON — một trong các cách (ưu tiên từ trên xuống)
+
+Code Python (`automation/google_sheets_config.py`) và API `one_automation_system` (`utils/google_credentials.py`) **tự resolve** đường dẫn hợp lệ (`type: service_account` + có `client_email`):
+
+1. `GOOGLE_CREDENTIALS_PATH` (legacy / one_automation)
+2. `GOOGLE_SERVICE_ACCOUNT_FILE`
+3. `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`
+4. `GOOGLE_APPLICATION_CREDENTIALS`
+5. `~/.secrets/google/service_account.json` | `service_key.json` | `service_key`
+6. Mọi `~/.secrets/google/*.json` (ưu tiên file sửa gần nhất)
+7. `automation/config/service_account.json`
+
+**Không bắt buộc** copy JSON vào `config/` nếu bạn đã đặt key ở `~/.secrets/google/` hoặc trỏ biến môi trường trong `automation/.env`.
+
+Trong **`automation/.env`** nên có ít nhất: `GOOGLE_SHEET_ID`, và một trong các biến đường dẫn key ở trên (hoặc chỉ dùng `~/.secrets/`).
+
+**Lưu ý:** Email service account có dạng `...@PROJECT_ID.iam.gserviceaccount.com` — cần **Share** spreadsheet với email đó (Editor).
 
 ---
 
 ## ✅ Pre-deployment Checklist
 
-### 1. 🔐 Google Sheets API Setup
+### 1. 🔐 Google Cloud & Sheets
 
 - [ ] Google Cloud Project đã tạo
-- [ ] Google Sheets API đã được bật
-- [ ] Google Drive API đã được bật (optional, để access files)
-- [ ] Service Account đã tạo với đúng permissions
-- [ ] JSON credentials file đã download
-- [ ] JSON file đã được lưu vào `config/service_account.json`
-- [ ] Google Sheet đã được chia sẻ với service account email (Editor permission)
-- [ ] Sheet ID đã được copy chính xác từ URL
+- [ ] **Google Sheets API** đã bật
+- [ ] **Google Drive API** đã bật (khuyến nghị nếu dùng Drive / `one_automation_system` khởi tạo Drive v3)
+- [ ] Service Account đã tạo, JSON key đã tải về (tên GCP thường dạng `*-*.json`)
+- [ ] Key đặt tại một trong: `automation/config/service_account.json`, hoặc `~/.secrets/google/`, hoặc path khai báo trong `.env`
+- [ ] Sheet đã share **Editor** cho `client_email` trong JSON
+- [ ] `GOOGLE_SHEET_ID` (hoặc `GOOGLE_SHEETS_ID` / `SPREADSHEET_ID` ở một số script) khớp ID trên URL Sheets
 
-**Lưu ý:** Service account email có dạng: `your-service@project-id.iam.gserviceaccount.com`
+### 2. 📁 Cấu trúc & môi trường (`automation/`)
 
-### 2. 📁 Project Structure
-
-- [ ] Tất cả files code đã được copy vào project
-- [ ] Thư mục `config/` đã tồn tại
-- [ ] File `.env` đã được tạo từ `.env.example` (nếu có)
-- [ ] Tất cả environment variables đã được điền đầy đủ
-- [ ] Permissions của credentials file đã được set đúng (`chmod 600 config/service_account.json`)
-- [ ] Virtual environment đã được tạo (nếu dùng Python venv)
+- [ ] Thư mục `automation/config/` tồn tại (hoặc chỉ dùng key ngoài repo)
+- [ ] File **`automation/.env`** đã cấu hình (có thể copy cấu trúc từ `automation/.env.example` ở root repo — đừng commit secret)
+- [ ] Biến **đăng nhập web ONE** nếu chạy Selenium: `ONE_USERNAME`, `ONE_PASSWORD` trong `automation/.env`
+- [ ] **Telegram** (tuỳ chọn): `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — API `one_automation_system` log + `/health` có trường `telegram_configured`
+- [ ] `chmod 600` cho mọi file JSON key bạn giữ trong repo (nếu có)
+- [ ] `python3 -m venv venv` trong `automation/` và `pip install -r requirements.txt` (hoặc `requirements-basic.txt`)
 
 ### 3. 🐳 Docker Setup (Optional)
 
@@ -66,44 +83,49 @@ python3 -c "import gspread, google.auth; print('✅ OK')"
 
 ### 1. 🔧 Environment Test
 
+Chạy từ **`automation/`** (`cd automation`), đã `source venv/bin/activate` nếu dùng venv.
+
 ```bash
-# Test 1: Check files exist
-ls -la config/service_account.json
+# Test 1: File env + config (key có thể chỉ nằm ngoài repo)
 ls -la .env
+ls -la config/service_account.json 2>/dev/null || true
 
-# Test 2: Validate JSON credentials
-python3 -c "import json; json.load(open('config/service_account.json')); print('✅ Valid JSON')"
+# Test 2: Đường dẫn key mà code sẽ dùng (resolve + dotenv)
+python3 -c "
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(Path('.env'))
+from google_sheets_config import resolve_service_account_credentials_path
+p = resolve_service_account_credentials_path()
+print('Resolved key:', p or '(none)')
+"
 
-# Test 3: Check environment variables
-python3 -c "import os; from dotenv import load_dotenv; load_dotenv(); print('✅ SHEET_ID found' if os.getenv('GOOGLE_SHEET_ID') else '❌ SHEET_ID missing')"
+# Test 3: GOOGLE_SHEET_ID
+python3 -c 'import os; from dotenv import load_dotenv; load_dotenv(); print("OK sheet" if os.getenv("GOOGLE_SHEET_ID") else "MISSING GOOGLE_SHEET_ID")'
 ```
 
-### 2. 🐍 Python Service Test
+### 2. 🐍 Python — Sheets config & kết nối
 
 ```bash
-# Test 1: Dependencies
-pip install -r requirements.txt
-# Hoặc với virtual environment
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt   # hoặc requirements-basic.txt
 
-# Test 2: Connection test (sử dụng script đã tạo)
+# Kiểm tra kết nối (đọc .env + resolve key)
 python3 test_sheets_connection.py
 
-# Test 3: Manual service test
+# Kiểm tra nhanh GoogleSheetsConfigService (gspread)
 python3 -c "
-from services.google_sheets_service import GoogleSheetsService
-import os
+from pathlib import Path
 from dotenv import load_dotenv
-
-load_dotenv()
-gs = GoogleSheetsService(
-    service_account_file=os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE', 'config/service_account.json'),
-    sheet_id=os.getenv('GOOGLE_SHEET_ID')
-)
-info = gs.get_sheet_info()
-print('✅ Service OK' if info else '❌ Service Error')
+load_dotenv(Path('.env'))
+from google_sheets_config import GoogleSheetsConfigService
+s = GoogleSheetsConfigService()
+print('Client OK' if s.client else 'Client FAIL')
+print('Spreadsheet:', s.spreadsheet_id)
 "
+
+# Verify Sheets (wrapper gọi modules/verify_sheets.py)
+python3 verify_sheets.py
 ```
 
 ### 3. 🌐 Node.js API Test (Nếu có Backend API)
@@ -162,20 +184,34 @@ curl http://localhost:3001/health
 curl http://localhost:3000 # Should show React app
 ```
 
-### 6. 🔍 Automated Health Check
+### 6. 🔍 Health check (shell)
+
+Script: **`automation/scripts/health-check.sh`**
+
+- Tự `cd` vào `automation/` (có thể gọi từ bất kỳ đâu: `bash automation/scripts/health-check.sh`).
+- Dùng Python từ **`venv`** nếu có (`automation/venv`, `.venv`, hoặc `$VIRTUAL_ENV`).
+- Dòng **Service account JSON** lấy từ cùng logic **`resolve_service_account_credentials_path()`** như Python (không còn chỉ báo `config/service_account.json` khi key nằm ở `~/.secrets/`).
 
 ```bash
-# Sử dụng script health check đã tạo
-bash scripts/health-check.sh
-
-# Hoặc từ automation directory
-cd automation
-bash scripts/health-check.sh
+bash automation/scripts/health-check.sh
+# hoặc
+cd automation && bash scripts/health-check.sh
 ```
+
+### 7. 🤖 API `one_automation_system` (port 8001)
+
+Khi chạy **`./start.sh`** từ root, `scripts/start-stop/start-all.sh` sẽ **`source ../automation/.env`** trước khi khởi chạy uvicorn — biến Google/Telegram khớp `automation/.env`.
+
+- `GET http://localhost:8001/health` — có `google_sheets`, **`google_drive`**, **`telegram_configured`**, `email`, …
+- Log: `logs/automation.log` (xem dòng khởi tạo Sheets / Drive / Telegram).
 
 ---
 
 ## 🚨 Common Issues & Solutions
+
+### Issue 0: Tab `Automation_Logs` — `get_all_records` duplicate header `''`
+
+Nếu dòng 1 có nhiều cột trống (Sheets pad thêm cột), `gspread` báo duplicate `''`. Code đã dùng `expected_headers` + fallback đọc theo cột trong `automation/google_sheets_config.py` (`get_automation_history`). Trên sheet: cố gắng giữ tên cột duy nhất ở hàng 1.
 
 ### Issue 1: Authentication Failed
 
@@ -189,8 +225,18 @@ bash scripts/health-check.sh
 **Solutions:**
 
 ```bash
-# Check 1: Verify service account email
-python3 -c "import json; print(json.load(open('config/service_account.json'))['client_email'])"
+# Check 1: client_email từ file key đang được resolve (chạy trong thư mục automation/)
+cd automation
+python3 -c "
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(Path('.env'))
+from google_sheets_config import resolve_service_account_credentials_path
+import json
+p = resolve_service_account_credentials_path()
+assert p, 'No credentials path resolved'
+print(json.load(open(p))['client_email'])
+"
 
 # Check 2: Verify sheet sharing
 # Go to Google Sheet → Share → Check service account email is listed with Editor permission
@@ -202,9 +248,14 @@ python3 -c "import json; print(json.load(open('config/service_account.json'))['c
 echo $GOOGLE_SHEET_ID
 # Should be: Long alphanumeric string like "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As"
 
-# Check 5: Verify JSON file path
-ls -la config/service_account.json
-# File should exist and be readable
+# Check 5: File key sau resolve
+python3 -c "
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv(Path('.env'))
+from google_sheets_config import resolve_service_account_credentials_path
+print(resolve_service_account_credentials_path())
+"
 ```
 
 ### Issue 2: API Connection Failed
@@ -252,20 +303,19 @@ curl -v http://localhost:3001/health
 **Solutions:**
 
 ```bash
-# Check 1: Sheet has data
+# Check 1: Sheet có dữ liệu (gspread / GoogleSheetsConfigService)
 python3 -c "
-from services.google_sheets_service import GoogleSheetsService
-import os
+from pathlib import Path
 from dotenv import load_dotenv
-
-load_dotenv()
-gs = GoogleSheetsService(
-    service_account_file=os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE', 'config/service_account.json'),
-    sheet_id=os.getenv('GOOGLE_SHEET_ID')
-)
-data = gs.read_data('Sheet1!A1:Z10')
-print(f'Rows read: {len(data)}')
-print(data[:3] if data else 'No data')
+load_dotenv(Path('.env'))
+from google_sheets_config import GoogleSheetsConfigService
+import os
+sid = os.getenv('GOOGLE_SHEET_ID')
+s = GoogleSheetsConfigService(spreadsheet_id=sid)
+ws = s.spreadsheet.sheet1
+rows = ws.get('A1:Z10')
+print('Rows:', len(rows or []))
+print((rows or [])[:3])
 "
 
 # Check 2: Add sample data manually in Google Sheets
@@ -336,34 +386,34 @@ docker-compose up -d
 docker-compose exec sheets-api curl http://localhost:3001/health
 ```
 
-### Issue 6: Environment Variables Not Found
+### Issue 6: Biến môi trường / đường dẫn key
 
-**Symptoms:**
+**Triệu chứng:** thiếu `GOOGLE_SHEET_ID`, không tìm thấy key, hoặc health-check báo sai file.
 
-- ❌ `GOOGLE_SHEET_ID` not found
-- ❌ `GOOGLE_SERVICE_ACCOUNT_FILE` not found
-- ❌ Empty environment variables
-
-**Solutions:**
+**Gợi ý:**
 
 ```bash
-# Check 1: .env file exists
+cd automation
 ls -la .env
 
-# Check 2: Load and verify variables
-source .env
-echo "GOOGLE_SHEET_ID: $GOOGLE_SHEET_ID"
-echo "GOOGLE_SERVICE_ACCOUNT_FILE: $GOOGLE_SERVICE_ACCOUNT_FILE"
+# Bash (lưu ý: source .env có thể lỗi nếu giá trị có ký tự đặc biệt — ưu tiên dotenv trong Python)
+set -a; [ -f .env ] && . ./.env; set +a
+echo "GOOGLE_SHEET_ID=$GOOGLE_SHEET_ID"
+echo "GOOGLE_SERVICE_ACCOUNT_FILE=$GOOGLE_SERVICE_ACCOUNT_FILE"
+echo "GOOGLE_SERVICE_ACCOUNT_KEY_PATH=$GOOGLE_SERVICE_ACCOUNT_KEY_PATH"
 
-# Check 3: Use python-dotenv
 python3 -c "
+from pathlib import Path
 from dotenv import load_dotenv
 import os
-load_dotenv()
+load_dotenv(Path('.env'))
 print('GOOGLE_SHEET_ID:', os.getenv('GOOGLE_SHEET_ID'))
-print('GOOGLE_SERVICE_ACCOUNT_FILE:', os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE'))
+from google_sheets_config import resolve_service_account_credentials_path
+print('Resolved JSON:', resolve_service_account_credentials_path())
 "
 ```
+
+**one_automation_system:** cần env được load — `scripts/start-stop/start-all.sh` đã `source ../automation/.env` trước uvicorn; `one_automation_system/main.py` cũng gọi `load_dotenv` tới `automation/.env`.
 
 ### Issue 7: Performance Issues
 
@@ -451,57 +501,58 @@ top  # CPU and memory usage
 
 ### ✅ System is working correctly when
 
-1. **Health Check** returns 200 OK
+1. **Backend** (nếu chạy) `GET /health` — ví dụ:
 
    ```bash
-   curl http://localhost:3001/health
+   curl -s http://localhost:3001/health
    ```
 
-2. **Sheet Connection Test** passes
+2. **Automation API** (port 8001) có Sheets + Drive + Telegram trong JSON health:
 
    ```bash
+   curl -s http://localhost:8001/health
+   ```
+
+3. **Sheet connection** — trong `automation/`:
+
+   ```bash
+   cd automation && source venv/bin/activate
    python3 test_sheets_connection.py
    ```
 
-3. **Data Read** returns data from Google Sheets
+4. **Đọc thử một range** (đổi tên sheet/range cho đúng file của bạn):
 
    ```bash
+   cd automation && source venv/bin/activate
    python3 -c "
-   from services.google_sheets_service import GoogleSheetsService
-   import os
+   from pathlib import Path
    from dotenv import load_dotenv
-   load_dotenv()
-   gs = GoogleSheetsService(
-       service_account_file=os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE', 'config/service_account.json'),
-       sheet_id=os.getenv('GOOGLE_SHEET_ID')
-   )
-   data = gs.read_data('Sheet1!A1:Z100')
-   print(f'✅ Read {len(data)} rows')
+   import os
+   load_dotenv(Path('.env'))
+   from google_sheets_config import GoogleSheetsConfigService
+   s = GoogleSheetsConfigService(spreadsheet_id=os.getenv('GOOGLE_SHEET_ID'))
+   print(s.spreadsheet.sheet1.get('A1:E5'))
    "
    ```
 
-4. **Health Check Script** shows 100% success
+5. **Health check shell** — pass cao (resolve key hiển thị đúng path):
 
    ```bash
-   bash scripts/health-check.sh
+   bash automation/scripts/health-check.sh
    ```
 
-5. **All Docker containers** are running and healthy (if using Docker)
+6. **Docker** (nếu dùng): `docker-compose ps`
+
+7. **Log automation** (từ root repo):
 
    ```bash
-   docker-compose ps
+   tail -f logs/automation.log
    ```
 
-6. **Logs** show no critical errors
+8. **Performance** API tùy endpoint bạn có — ví dụ đo thời gian:
 
    ```bash
-   tail -f logs/automation.log  # Check for errors
-   ```
-
-7. **Performance** is acceptable (< 2s API response time)
-
-   ```bash
-   time curl http://localhost:3001/api/sheets/data
+   time curl -s http://localhost:3001/health >/dev/null
    ```
 
 ---
@@ -552,70 +603,54 @@ bash scripts/health-check.sh
 
 ## 📞 Support & Troubleshooting
 
-### 🔧 Quick Debug Commands
+### 🔧 Lệnh debug nhanh
 
 ```bash
-# Full system check
-bash scripts/health-check.sh
+# Health (từ bất kỳ đâu, cwd được script set về automation/)
+bash automation/scripts/health-check.sh
 
-# Connection test
+cd automation
+source venv/bin/activate
 python3 test_sheets_connection.py
+python3 inspect_sheets_data.py
 
-# Check environment
 env | grep GOOGLE
+python3 -c "import gspread, google.auth, googleapiclient; print('deps OK')"
+ls -la config/service_account.json 2>/dev/null || true
 
-# Check Python modules
-python3 -c "import gspread, google.auth; print('✅ OK')"
-
-# Check file permissions
-ls -la config/service_account.json
-
-# View logs
-tail -f logs/automation.log
+# Log API automation (khi start từ root)
+tail -f ../logs/automation.log
 ```
 
-### 📧 Get Help
+### 📧 Tài liệu trong repo
 
-- **Documentation:**
-  - Check `automation/docs/README.md` for detailed setup instructions
-  - Review `GOOGLE_SHEETS_SETUP_GUIDE.md` for setup guide
-  - Review API documentation in code comments
-
-- **Scripts:**
-  - `scripts/health-check.sh` - Comprehensive health check
-  - `scripts/quick-start.sh` - Automated setup
-  - `test_sheets_connection.py` - Connection test
-
-- **Support:**
-  - Check GitHub issues for similar problems
-  - Review logs in `logs/` directory
-  - Contact support with:
-    - Error messages
-    - System configuration
-    - Steps to reproduce issue
+- `automation/GOOGLE_SHEETS_SETUP_GUIDE.md` — hướng dẫn Sheets + env
+- `automation/scripts/README.md` — `health-check.sh`, `quick-start.sh`
+- `automation/INTEGRATIONS_SETUP.md` — Telegram / Email / SMTP
+- `automation/google_sheets_config.py` — `resolve_service_account_credentials_path`, `get_automation_history` (`expected_headers` cho tab logs)
 
 ---
 
 ## 📚 Related Documentation
 
-- `automation/docs/README.md` - Full documentation
-- `automation/GOOGLE_SHEETS_SETUP_GUIDE.md` - Setup guide
-- `automation/scripts/README.md` - Scripts documentation
-- `FRONTEND_BACKEND_CONNECTION_ANALYSIS.md` - API connection analysis
+- `automation/GOOGLE_SHEETS_SETUP_GUIDE.md` — setup Sheets + env
+- `automation/scripts/README.md` — `health-check.sh`, `quick-start.sh`
+- `automation/INTEGRATIONS_SETUP.md` — Telegram, email, SMTP
+- `HEALTH_CHECK_GUIDE.md` (root) — health tổng quan repo (nếu có)
 
 ---
 
 ## ✅ Checklist Summary
 
-**Pre-deployment:** 4 sections, ~15 items
-**Testing:** 6 sections, ~20 test commands
-**Troubleshooting:** 7 common issues with solutions
-**Production:** 5 sections, ~20 items
-**Success Criteria:** 7 verification steps
+| Nhóm            | Nội dung chính                                                                 |
+| --------------- | ------------------------------------------------------------------------------ |
+| Pre-deployment  | GCP APIs, key JSON (đa nguồn), share sheet, `.env`                             |
+| Testing         | `test_sheets_connection`, `verify_sheets`, `inspect_sheets_data`, health-check |
+| Troubleshooting | Auth, API, env, Docker (tuỳ dùng)                                              |
+| Production      | Bảo mật, log, backup                                                           |
+| Success         | `curl` health backend + automation, script shell, log                          |
 
 ---
 
-✅ **Remember:** Test each step thoroughly before moving to the next!
-
-**Last Updated:** 2025-01-03
-**Version:** 2.0
+**Last updated:** 2026-04-22  
+**Version:** 3.0 — đồng bộ resolve credentials, `health-check.sh`, `one_automation_system` + `automation/.env`.

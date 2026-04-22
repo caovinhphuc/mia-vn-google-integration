@@ -253,7 +253,7 @@ Full App:  https://[your-domain].com
 **Required Environment Variables:**
 
 ```bash
-# Backend (.env)
+# Backend (.env) — production/container: PORT OK; local monorepo + CRA: BACKEND_PORT=3001
 NODE_ENV=production
 PORT=3001
 CORS_ORIGIN=https://your-domain.com
@@ -276,7 +276,7 @@ LOG_LEVEL=INFO
 ./deploy.sh test
 
 # Individual tests
-node complete_system_test.js      # 6/6 tests
+node scripts/tests/complete_system_test.js      # 6/6 tests
 node integration_test.js          # 5/5 tests
 node advanced_integration.js      # 7/7 tests
 node frontend_connection_test.js  # 12/12 checks khi đủ service

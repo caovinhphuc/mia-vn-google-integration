@@ -1,0 +1,88 @@
+{
+  "title": "Telegram Integration Test Report",
+  "timestamp": "2026-04-22T18:04:32.243Z",
+  "summary": {
+    "total_tests": 6,
+    "passed": 5,
+    "failed": 0,
+    "warnings": 1
+  },
+  "configuration": {
+    "bot_token": "configured",
+    "chat_id": "configured",
+    "api_url": "https://api.telegram.org/bot7569672896:AAH9Av9sIXersUIJ4ll6XXTrl2fpgiIHTvA"
+  },
+  "results": [
+    {
+      "test": "environment-check",
+      "status": "success",
+      "message": "Đủ biến Telegram (CRA hoặc plain env)",
+      "details": {
+        "token_from": "TELEGRAM_BOT_TOKEN",
+        "chat_from": "TELEGRAM_CHAT_ID"
+      },
+      "timestamp": "2026-04-22T18:04:28.645Z"
+    },
+    {
+      "test": "bot-info",
+      "status": "success",
+      "message": "Bot kết nối thành công: MIA.vn - Warehouse - support",
+      "details": {
+        "id": 7569672896,
+        "username": "react_integration_kho_van_bot",
+        "first_name": "MIA.vn - Warehouse - support",
+        "can_join_groups": true,
+        "can_read_all_group_messages": false,
+        "supports_inline_queries": false
+      },
+      "timestamp": "2026-04-22T18:04:29.951Z"
+    },
+    {
+      "test": "webhook-info",
+      "status": "warning",
+      "message": "Chưa cấu hình webhook",
+      "details": {
+        "url": "",
+        "has_custom_certificate": false,
+        "pending_update_count": 0
+      },
+      "timestamp": "2026-04-22T18:04:30.251Z"
+    },
+    {
+      "test": "chat-info",
+      "status": "success",
+      "message": "Thông tin chat lấy thành công: MIA.vn - Kho Vận - Warehouse - support",
+      "details": {
+        "id": -5257092045,
+        "type": "group",
+        "title": "MIA.vn - Kho Vận - Warehouse - support"
+      },
+      "timestamp": "2026-04-22T18:04:30.490Z"
+    },
+    {
+      "test": "send-message",
+      "status": "success",
+      "message": "Tin nhắn test đã được gửi thành công",
+      "details": {
+        "message_id": 295,
+        "chat_id": -5257092045,
+        "chat_type": "group",
+        "chat_title": "MIA.vn - Kho Vận - Warehouse - support",
+        "date": "2026-04-22T18:04:30.000Z"
+      },
+      "timestamp": "2026-04-22T18:04:31.006Z"
+    },
+    {
+      "test": "file-upload",
+      "status": "success",
+      "message": "File test đã được upload thành công",
+      "details": {
+        "file_id": "BQACAgUAAxkDAAIBKGnpDbB0su6N_0_7Jn3lZsM5RfcjAAJBIwACPr9JV98ueCUKPdjSOwQ",
+        "file_name": "telegram-test-report.json",
+        "file_size": 2077,
+        "mime_type": "application/json"
+      },
+      "timestamp": "2026-04-22T18:04:32.237Z"
+    }
+  ]
+}

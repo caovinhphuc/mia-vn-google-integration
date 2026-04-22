@@ -69,14 +69,21 @@ pkill -f "react-scripts start"
 pkill -f "node.*server.js"
 ```
 
-## 📊 Ports Sử Dụng
+## ⚠️ Monorepo: biến `PORT` trong `.env` gốc
 
-| Port | Service | Description |
-|------|---------|-------------|
-| 3000 | Frontend (React) | React development server |
-| 3001 | Backend (Node.js) | Express + WebSocket server |
-| 8000 | AI Service (Python) | FastAPI service |
-| 8001 | Automation (Python) | Automation bridge API |
+- **Create React App** (`npm start`) đọc **`PORT`** làm cổng dev server.
+- **Backend** (`backend/src/server.js`) đọc cùng file `.env` ở root → nếu đặt `PORT=3001`, CRA và API đều tranh **3001**.
+- **Cách làm đúng:** dùng **`BACKEND_PORT=3001`** cho Node API; **bỏ** `PORT=` ở root khi dev (CRA mặc định **3000**). Trên PaaS platform vẫn inject `PORT` — server dùng `PORT || BACKEND_PORT || 3001`.
+
+## 📊 Ports sử dụng
+
+| Port | Service             | Mô tả                                                                |
+| ---- | ------------------- | -------------------------------------------------------------------- |
+| 3000 | Frontend (React)    | CRA mặc định (khi không set `PORT`)                                  |
+| 3001 | Backend (Node.js)   | Express + **Socket.IO** — cổng qua `BACKEND_PORT` hoặc `PORT` (PaaS) |
+| 3002 | WS thuần (tuỳ chọn) | `backend/ws-server.js`; dev proxy `/ws` từ CRA                       |
+| 8000 | AI Service (Python) | FastAPI                                                              |
+| 8001 | Automation (Python) | Bridge / automation API khi bật                                      |
 
 ## 🔄 Workflow Khuyến Nghị
 
@@ -168,11 +175,11 @@ echo "PORT=3002" >> .env
 
 ## 📝 Scripts Available
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `check-ports.sh` | `npm run check:ports` | Kiểm tra trạng thái ports |
-| `fix-port-conflict.sh` | `npm run fix:ports` | Tự động fix port conflicts |
-| `kill-port.sh` | `npm run kill:port` | Kill processes trên ports cụ thể |
+| Script                 | Command               | Description                      |
+| ---------------------- | --------------------- | -------------------------------- |
+| `check-ports.sh`       | `npm run check:ports` | Kiểm tra trạng thái ports        |
+| `fix-port-conflict.sh` | `npm run fix:ports`   | Tự động fix port conflicts       |
+| `kill-port.sh`         | `npm run kill:port`   | Kill processes trên ports cụ thể |
 
 ## ✅ Best Practices
 

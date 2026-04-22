@@ -17,7 +17,7 @@
 
 - ✅ `npm run health-check` - Full health check
 - ✅ `npm run health:full` - Comprehensive check
-- ✅ `npm run health:quick` - Quick check
+- ✅ `npm run health:quick` — `scripts/health-quick.sh` (bảng màu: từng URL + HTTP + ms)
 
 ---
 
@@ -26,13 +26,17 @@
 ### Quick Health Check
 
 ```bash
-# Quick check (curl)
 npm run health:quick
+```
 
-# Output:
-# ✅ All services healthy
-# hoặc
-# ❌ Some services down
+**Hiển thị:** tiêu đề, từng dòng ✔/✘ cho Frontend (3000), Backend (3001), rồi **AI :8000** và **Automation :8001** (tùy chọn — ○ nếu tắt). Cuối cùng một dòng tóm tắt (Core OK + AI / Automation / optional).
+
+**Tuỳ chỉnh URL** (khi không dùng localhost):
+
+```bash
+export HEALTH_QUICK_FRONTEND=http://127.0.0.1:3000
+export HEALTH_QUICK_BACKEND_HEALTH=http://127.0.0.1:3001/health
+npm run health:quick
 ```
 
 ### Full Health Check
@@ -42,7 +46,7 @@ npm run health:quick
 npm run health-check
 
 # Checks:
-# - Environment variables
+# - Environment variables (Google: file JSON **hoặc** email + PEM; tự tìm `config/google-credentials.json`, `automation/config/google-credentials.json`, `automation/config/service_account.json` nếu env path trống/sai)
 # - Google APIs
 # - Email service
 # - Telegram bot

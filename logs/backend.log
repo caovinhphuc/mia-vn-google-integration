@@ -5,5 +5,35 @@
 🚀 Backend server running on port 3001
 📊 Health check: http://localhost:3001/health
 🌐 WebSocket server ready for connections
-::1 - - [23/Mar/2026:17:22:51 +0000] "GET /health HTTP/1.1" 200 106 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
-::1 - - [23/Mar/2026:17:23:51 +0000] "GET /health HTTP/1.1" 200 106 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:40:22 +0000] "GET /health HTTP/1.1" 200 106 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:40:27 +0000] "GET /health HTTP/1.1" 200 106 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:40:27 +0000] "GET /health HTTP/1.1" 200 106 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:40:52 +0000] "GET /health HTTP/1.1" 200 106 "-" "axios/1.15.2"
+✅ Google Sheets API initialized with: /Users/phuccao/Projects/mia-vn-google-integration/automation/config/service_account.json
+::1 - - [22/Apr/2026:18:40:53 +0000] "GET /api/sheets/metadata?sheetId=1TFNZPLY89E0gFJAdmgLLKY-IIfV35TJPzNTPthCgchA HTTP/1.1" 200 2304 "-" "axios/1.15.2"
+::1 - - [22/Apr/2026:18:40:53 +0000] "GET /api/sheets/read?sheetId=1TFNZPLY89E0gFJAdmgLLKY-IIfV35TJPzNTPthCgchA&range=A1:A1 HTTP/1.1" 200 79 "-" "axios/1.15.2"
+✅ Google Drive API initialized
+::1 - - [22/Apr/2026:18:40:54 +0000] "GET /api/drive/files?pageSize=1 HTTP/1.1" 200 47 "-" "axios/1.15.2"
+::1 - - [22/Apr/2026:18:45:30 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:52:28 +0000] "GET /health HTTP/1.1" 200 106 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:52:28 +0000] "GET /health HTTP/1.1" 200 106 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+::1 - - [22/Apr/2026:18:52:39 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:54:54 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:56:15 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:56:53 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:57:06 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:18:57:53 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:19:01:40 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:19:01:48 +0000] "GET /health HTTP/1.1" 200 106 "-" "curl/8.7.1"
+::1 - - [22/Apr/2026:19:02:43 +0000] "GET /health HTTP/1.1" 200 106 "-" "-"
+::1 - - [22/Apr/2026:19:02:43 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [22/Apr/2026:19:02:43 +0000] "GET /api/drive/files?pageSize=1 HTTP/1.1" 200 47 "-" "-"
+::1 - - [22/Apr/2026:19:02:44 +0000] "GET /health HTTP/1.1" 200 106 "-" "-"
+Client connected: nEe89TUPZJZIClbiAAAB
+Client disconnected: nEe89TUPZJZIClbiAAAB
+::1 - - [22/Apr/2026:19:03:21 +0000] "GET /health HTTP/1.1" 200 106 "-" "-"
+::1 - - [22/Apr/2026:19:03:21 +0000] "GET /api/reports HTTP/1.1" 200 853 "-" "-"
+::1 - - [22/Apr/2026:19:03:22 +0000] "GET /api/drive/files?pageSize=1 HTTP/1.1" 200 47 "-" "-"
+::1 - - [22/Apr/2026:19:03:22 +0000] "GET /health HTTP/1.1" 200 106 "-" "-"
+Client connected: 2GOy0pIFIn4n657BAAAD
+Client disconnected: 2GOy0pIFIn4n657BAAAD

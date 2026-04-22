@@ -1,13 +1,70 @@
-require("dotenv").config({
-  path: require("path").join(__dirname, "../../.env"),
-});
+const path = require("path");
+const fs = require("fs");
+
+const PROJECT_ROOT = path.join(__dirname, "../..");
+function loadProjectEnv() {
+  const files = [
+    path.join(PROJECT_ROOT, ".env"),
+    path.join(PROJECT_ROOT, "backend/.env"),
+    path.join(PROJECT_ROOT, "automation/.env"),
+    path.join(PROJECT_ROOT, ".env.local"),
+  ];
+  for (let i = 0; i < files.length; i++) {
+    const p = files[i];
+    if (!fs.existsSync(p)) continue;
+    require("dotenv").config({ path: p, override: i > 0 });
+  }
+}
+loadProjectEnv();
+
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return "";
+  let s = String(val).trim();
+  if (s.length >= 2) {
+    const a = s[0];
+    const b = s[s.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+function isPlaceholderSpreadsheetId(id) {
+  const s = String(id || "").trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  if (["PLACEHOLDER", "REPLACE_ME", "CHANGEME", "EXAMPLE_ID"].some((x) => u.includes(x)))
+    return true;
+  return false;
+}
+
+const SPREADSHEET_ID_ENV_KEYS = [
+  "GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEET_ID",
+  "GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_ID",
+  "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+];
+
+const FALLBACK_DEMO_SPREADSHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+
+function resolveDefaultSpreadsheetId() {
+  for (const k of SPREADSHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSpreadsheetId(v)) return v;
+  }
+  return FALLBACK_DEMO_SPREADSHEET_ID;
+}
+
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const path = require("path");
 const { google } = require("googleapis");
 
 const app = express();
@@ -19,20 +76,19 @@ const io = socketIo(server, {
   },
 });
 
-const PORT = process.env.PORT || 3001;
+// PaaS thường inject PORT. Local monorepo: dùng BACKEND_PORT=3001 trong .env gốc, tránh đặt PORT= (CRA npm start cũng đọc PORT).
+const PORT = process.env.PORT || process.env.BACKEND_PORT || 3001;
 
-// Google Sheets API Setup
-const DEFAULT_SPREADSHEET_ID =
-  process.env.GOOGLE_SHEETS_SPREADSHEET_ID ||
-  process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
-  "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+// Google Sheets API Setup — đồng bộ biến env với CRA / automation (bỏ placeholder YOUR_*)
+const DEFAULT_SPREADSHEET_ID = resolveDefaultSpreadsheetId();
 
 // Google Drive API Setup (có thể dùng chung folder ID với Sheets hoặc riêng)
 const DEFAULT_DRIVE_FOLDER_ID =
   process.env.GOOGLE_DRIVE_FOLDER_ID ||
   process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID ||
-  process.env.GOOGLE_SHEETS_SPREADSHEET_ID ||
-  process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
+  stripEnvQuotes(process.env.GOOGLE_SHEETS_SPREADSHEET_ID) ||
+  stripEnvQuotes(process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID) ||
+  DEFAULT_SPREADSHEET_ID ||
   null; // Default: list from root
 
 let googleSheetsAuth = null;

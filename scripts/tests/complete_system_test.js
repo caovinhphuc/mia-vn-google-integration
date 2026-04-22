@@ -91,6 +91,9 @@ async function runCompleteSystemTests() {
   console.log("✅ Backend API (Node.js): Operational");
   console.log("✅ Frontend (React): Ready");
   console.log("✅ WebSocket Communication: Active");
+  console.log(
+    "📁 Google Drive: chạy riêng `npm run test:google-drive` (GET /api/drive/files, cần backend 3001)"
+  );
   console.log("✅ Integration: Complete");
 
   console.log("\n📋 NEXT STEPS:");

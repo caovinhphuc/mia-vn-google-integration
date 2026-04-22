@@ -1,173 +1,80 @@
-# 📋 DOCUMENTATION CHECKLIST - React OAS Integration v4.0
+# 📋 Documentation checklist — Mia / React OAS Google Integration
 
-> **Ngày cập nhật**: 2025-01-27  
-> **Mục đích**: Theo dõi và cập nhật tất cả tài liệu markdown
-
----
-
-## ✅ CHECKLIST TỔNG QUAN
-
-| File                         | Trạng thái       | Vấn đề                        | Hành động | Ngày cập nhật |
-| ---------------------------- | ---------------- | ----------------------------- | --------- | ------------- |
-| README.md                    | 🔄 Cần cập nhật  | v3.0 → v4.0, Port 8080 → 3000 | Cập nhật  | -             |
-| ARCHITECTURE.md              | 🔄 Cần cập nhật  | Thông tin cũ                  | Cập nhật  | -             |
-| ARCHITECTURE_GUIDE.md        | ⏳ Chưa kiểm tra | -                             | Kiểm tra  | -             |
-| DEPLOYMENT_GUIDE.md          | ⏳ Chưa kiểm tra | -                             | Kiểm tra  | -             |
-| GOOGLE_SHEETS_SETUP_GUIDE.md | ✅ OK            | -                             | -         | -             |
-| docs/CICD.md                 | ⚠️ Cần xác nhận  | Có thể là cho MIA Logistics   | Xác nhận  | -             |
-| docs/OPTIMIZATION_GUIDE.md   | ⏳ Chưa kiểm tra | -                             | Kiểm tra  | -             |
+> **Mục đích:** Quy trình ngắn để **không lệch** giữa markdown và code.  
+> **Cập nhật:** 2026-04-22
 
 ---
 
-## 📊 CHI TIẾT TỪNG FILE
+## 1. Nguồn sự thật (đọc trước khi sửa doc)
 
-### 1. README.md ⚠️ **ƯU TIÊN CAO**
-
-**Vấn đề phát hiện:**
-
-- ❌ Version: v3.0 (sai) → ✅ v4.0 (đúng)
-- ❌ Port Frontend: 8080 (sai) → ✅ 3000 (đúng)
-- ❌ React Router: v6 (sai) → ✅ v7.11.0 (đúng)
-- ❌ Thiếu các routes mới: `/retail`, `/security`, `/nlp`, `/smart-automation`
-- ❌ Thiếu thông tin về Security features (MFA, SSO, RBAC)
-
-**Cần cập nhật:**
-
-- [ ] Version badges và thông tin
-- [ ] Port configuration
-- [ ] Routes list đầy đủ
-- [ ] Features mới (Security, NLP, Smart Automation)
-- [ ] Tech stack versions chính xác
+| Nguồn                             | Dùng để                                                              |
+| --------------------------------- | -------------------------------------------------------------------- |
+| `package.json`                    | Phiên bản app, `dependencies`, script `npm run …`                    |
+| `.nvmrc` / `.python-version`      | Node **20**, Python **3.11** (venv)                                  |
+| `backend/src/server.js`           | Port backend, merge `.env`, Sheet ID resolve                         |
+| `src/App.jsx` (và thư mục `src/`) | Route thật — **không** đoán route trong checklist                    |
+| `PORT_CLARIFICATION.md`           | Bảng cổng canonical: **3000 / 3001 / 8000 (AI) / 8001 (automation)** |
 
 ---
 
-### 2. ARCHITECTURE.md ⚠️ **ƯU TIÊN CAO**
+## 2. Hub đã đồng bộ (ưu tiên đọc / giữ khớp)
 
-**Vấn đề phát hiện:**
+| File                                                           | Nội dung chính                                |
+| -------------------------------------------------------------- | --------------------------------------------- |
+| [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)             | Mục lục toàn repo                             |
+| [ENV_SETUP.md](./ENV_SETUP.md)                                 | `.env` đa file, Google, AI vs Automation URL  |
+| [PORT_CLARIFICATION.md](./PORT_CLARIFICATION.md)               | Cổng & gỡ nhầm tài liệu cũ                    |
+| [DOCUMENTATION_FIX_SUMMARY.md](./DOCUMENTATION_FIX_SUMMARY.md) | Lịch sử chỉnh port / AI                       |
+| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md)                     | Lệnh nhanh + bảng port                        |
+| [HEALTH_CHECK_GUIDE.md](./HEALTH_CHECK_GUIDE.md)               | `health-check`, `health:quick`, `health:full` |
+| [AUTOMATED_SETUP.md](./AUTOMATED_SETUP.md)                     | `node scripts/setup.js`                       |
 
-- ⚠️ Version: 2025-09-26 (có thể cũ)
-- ⚠️ Ports có thể không chính xác
-- ⚠️ Thiếu thông tin về Security features
-- ⚠️ Thiếu thông tin về NLP, Smart Automation
-
-**Cần cập nhật:**
-
-- [ ] Version date
-- [ ] Port configuration chính xác
-- [ ] Service inventory đầy đủ
-- [ ] Security layers chi tiết
-- [ ] Features mới
+Khi sửa một mục trên → kiểm tra **cùng ý** trong các file còn lại (đặc biệt port và tên script).
 
 ---
 
-### 3. ARCHITECTURE_GUIDE.md ⏳ **CHƯA KIỂM TRA**
+## 3. Bảng rà soát định kỳ
 
-**Cần kiểm tra:**
-
-- [ ] So sánh với ARCHITECTURE.md
-- [ ] Xác định file nào là chính
-- [ ] Cập nhật hoặc merge nếu cần
-
----
-
-### 4. DEPLOYMENT_GUIDE.md ⏳ **CHƯA KIỂM TRA**
-
-**Cần kiểm tra:**
-
-- [ ] Port configuration
-- [ ] Scripts paths
-- [ ] Environment variables
-- [ ] Deployment targets
+| Hạng mục       | Việc cần làm                                                                      | Tần suất gợi ý     |
+| -------------- | --------------------------------------------------------------------------------- | ------------------ |
+| Port / service | So khớp `PORT_CLARIFICATION.md` ↔ `package.json` (`dev`, `ai-service`, `backend`) | Mỗi lần đổi cổng   |
+| Env            | So khớp `ENV_SETUP.md` ↔ `.env.example` ↔ `scripts/check-env.sh`                  | Khi thêm biến      |
+| Health         | Chạy `npm run health:quick` + `npm run health-check`                              | Trước release      |
+| Script path    | Doc ghi `node scripts/...` — file phải tồn tại (`ls scripts/…`)                   | Khi đổi tên script |
+| Index          | Thêm/xóa doc lớn → cập nhật `DOCUMENTATION_INDEX.md`                              | Cùng PR doc        |
+| README         | Link hub, Node version, lệnh start — khớp `README.md` đầu file                    | Theo sprint        |
 
 ---
 
-### 5. GOOGLE_SHEETS_SETUP_GUIDE.md ✅ **OK**
+## 4. File dài / legacy (rà khi có thời gian)
 
-**Trạng thái:** Có vẻ ổn, cần verify lại
+Các file sau **không** được coi là đã rà trong checklist 2026-04; khi chỉnh code liên quan thì mở và cập nhật tương ứng:
 
----
-
-### 6. docs/CICD.md ⚠️ **CẦN XÁC NHẬN**
-
-**Vấn đề:**
-
-- Có vẻ là cho MIA Logistics Manager, không phải main project
-- Cần xác nhận có phải là tài liệu chính không
-
-**Hành động:**
-
-- [ ] Xác nhận scope
-- [ ] Cập nhật hoặc di chuyển nếu cần
+- `ARCHITECTURE.md`, `ARCHITECTURE_GUIDE.md`, `ARCHITECTURE_GUIDE_COMPARISON.md`
+- `DEPLOYMENT_GUIDE.md`, `DEPLOYMENT_LINKS.md`, `DEPLOYMENT_READY.md`
+- `docs/CICD.md`, `docs/OPTIMIZATION_GUIDE.md` (nếu còn dùng)
+- `GOOGLE_SHEETS_SETUP_GUIDE.md` — giữ khớp Sheet ID / SA với `docs/GOOGLE_CREDENTIALS_SETUP.md`
 
 ---
 
-### 7. docs/OPTIMIZATION_GUIDE.md ⏳ **CHƯA KIỂM TRA**
+## 5. Sai lệch đã từng gặp (tránh lặp)
 
-**Cần kiểm tra:**
-
-- [ ] Nội dung có còn phù hợp không
-- [ ] Có cần cập nhật không
-
----
-
-## 🔍 THÔNG TIN THỰC TẾ (Đã xác nhận)
-
-### Version
-
-- **Package.json**: 3.0.0 (cần cập nhật)
-- **Layout.jsx**: v4.0 (hiển thị)
-- **README**: Nên là v4.0
-
-### Ports
-
-- **Frontend**: 3000 (không phải 8080)
-- **Backend**: 3001
-- **AI Service**: 8000 (có trong code)
-- **Automation**: 8001 (optional)
-
-### Tech Stack
-
-- **React**: 18.2.0
-- **React Router**: 7.11.0 (không phải v6)
-- **Redux Toolkit**: 2.11.2
-- **Ant Design**: 5.29.3
-- **Node.js**: 18+
-
-### Routes (Đầy đủ)
-
-- `/` - Home
-- `/login` - Login
-- `/dashboard` - Live Dashboard
-- `/ai-analytics` - AI Analytics
-- `/retail` - Retail Dashboard
-- `/google-sheets` - Google Sheets
-- `/google-drive` - Google Drive
-- `/google-apps-script` - Google Apps Script
-- `/telegram` - Telegram Integration
-- `/automation` - Automation Dashboard
-- `/alerts` - Alerts Management
-- `/advanced-analytics` - Advanced Analytics
-- `/smart-automation` - Smart Automation
-- `/nlp` - NLP Dashboard
-- `/security` - Security Dashboard
-
-### Features mới (v4.0)
-
-- ✅ Security Dashboard (MFA, SSO, RBAC, Audit Logs)
-- ✅ NLP Dashboard (Chat, Voice, Search)
-- ✅ Smart Automation (AI-powered)
-- ✅ Advanced Analytics
-- ✅ Alerts Management
+1. **Gộp AI (8000) với Automation (8001)** — hai service khác nhau (`ai-service/` vs `automation/`).
+2. **Ghi React Router / version** không đọc `package.json` — luôn tra `dependencies` thật.
+3. **Port frontend 8080** — CRA mặc định **3000** (trừ khi đặt `PORT=`).
+4. **Chỉ nói “backend đọc root `.env`”** — backend còn merge `backend/.env`, `automation/.env`, `.env.local` (xem `ENV_SETUP.md`).
 
 ---
 
-## 📝 GHI CHÚ
+## 6. Lệnh kiểm tra nhanh
 
-- Tất cả các file sẽ được cập nhật theo thứ tự ưu tiên
-- Sau khi cập nhật, sẽ đánh dấu ✅ trong checklist
-- File này sẽ được cập nhật liên tục
+```bash
+npm run health:quick
+npm run tools:check
+./scripts/check-env.sh
+```
 
 ---
 
-**Last Updated**: 2025-01-27  
-**Status**: 🔄 In Progress
+**Trạng thái:** Checklist vận hành — không thay thế `DOCUMENTATION_INDEX.md`.  
+**Phiên bản tài liệu app:** lấy từ `package.json` → `"version"` (hiện **3.0.0**); mô tả marketing “v4.0” chỉ dùng khi đồng bộ toàn repo.

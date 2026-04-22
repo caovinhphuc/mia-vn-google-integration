@@ -121,6 +121,7 @@ gspread==6.2.1  # Google Sheets API
 google-auth==2.40.3  # Google authentication
 google-auth-oauthlib==1.2.2  # OAuth2 flow
 google-auth-httplib2==0.2.0  # HTTP library adapter
+google-api-python-client>=2.108.0  # Google Drive API v3 (discovery.build)
 
 # Development Tools
 ipython==8.31.0  # Enhanced Python shell

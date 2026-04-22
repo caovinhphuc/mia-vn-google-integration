@@ -42,11 +42,18 @@ fi
 echo "Kích hoạt virtual environment..."
 source venv/bin/activate
 
-# Cài đặt Python dependencies
+# Cài đặt Python dependencies (root repo: không có requirements.txt — dùng requirements-dev.txt)
 echo "Cài đặt Python dependencies..."
 pip install --upgrade pip
-pip install -r requirements.txt
-echo "✅ Python dependencies đã được cài đặt"
+if [ -f "requirements.txt" ]; then
+  pip install -r requirements.txt
+elif [ -f "requirements-dev.txt" ]; then
+  pip install -r requirements-dev.txt
+else
+  echo "⚠️  Không có requirements.txt / requirements-dev.txt tại root — bỏ qua pip install hàng loạt."
+  echo "    Gợi ý: npm run ide:setup (tạo .venv + requirements-dev) hoặc venv trong ai-service / one_automation_system."
+fi
+echo "✅ Bước Python dependencies đã xử lý (hoặc đã bỏ qua có chủ đích)"
 
 # Kiểm tra và cài đặt Node dependencies nếu cần
 echo "Kiểm tra Node.js dependencies..."
@@ -87,18 +94,17 @@ else
     echo "❌ File config/config.json không tồn tại"
 fi
 
-# Kiểm tra automation files
-echo "Kiểm tra automation files..."
-if [ -f "automation.py" ]; then
-    echo "✅ automation.py đã tồn tại"
+# Kiểm tra automation (layout mới: không còn automation.py tại root)
+echo "Kiểm tra automation..."
+if [ -f "automation/automation.py" ] || [ -f "one_automation_system/automation.py" ]; then
+    echo "✅ automation.py trong automation/ hoặc one_automation_system/"
 else
-    echo "❌ automation.py không tồn tại"
+    echo "⚠️  Không thấy automation.py ở automation/ hoặc one_automation_system/ (bỏ qua nếu không dùng)"
 fi
-
 if [ -f "automation_bridge.py" ]; then
-    echo "✅ automation_bridge.py đã tồn tại"
+    echo "✅ automation_bridge.py (legacy root)"
 else
-    echo "❌ automation_bridge.py không tồn tại"
+    echo "ℹ️  automation_bridge.py không có tại root (bình thường với layout hiện tại)"
 fi
 
 echo ""

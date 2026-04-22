@@ -2,35 +2,65 @@
   "system": {
     "one_url": "https://one.tga.com.vn",
     "orders_url": "https://one.tga.com.vn/so/",
-    "inventory_url": "https://one.tga.com.vn/bi_inventory/sale/?name=&limit=-1&category=all&location=all&type=old",
-    "implicit_wait": 5,
-    "page_load_timeout": 60,
-    "inventory_table_timeout": 90,
+    "inventory_url": "https://one.tga.com.vn/bi_inventory",
+    "inventory_sale_url": "https://one.tga.com.vn/bi_inventory/sale/",
+    "implicit_wait": 3,
+    "page_load_timeout": 15,
     "login_timeout": 8,
     "use_javascript_optimization": true,
-    "session_timeout": 3600
+    "session_timeout": 3600,
+    "download_timeout": 60,
+    "headless": false
   },
   "credentials": {
     "username": "${ONE_USERNAME}",
     "password": "${ONE_PASSWORD}"
   },
   "logging": {
-    "level": "INFO"
+    "level": "INFO",
+    "file_logging": true,
+    "console_logging": true,
+    "log_rotation": true,
+    "max_log_files": 30
   },
   "data_processing": {
-    "data_dir": "data",
     "max_rows_for_testing": 2000,
     "enable_fast_mode": false,
-    "export_formats": ["json", "excel"]
+    "product_details_batch_size": 2000,
+    "export_formats": ["json", "excel", "csv", "txt", "html"],
+    "data_validation": true,
+    "deduplication": true
+  },
+  "inventory": {
+    "enabled": true,
+    "download_excel": true,
+    "upload_to_drive": true,
+    "create_date_folders": true,
+    "folder_name_format": "Inventory_{date}",
+    "auto_refresh": true,
+    "wait_after_refresh": 10,
+    "export_button_selectors": [
+      "button:contains('Xuất file Excel')",
+      "a:contains('Xuất file Excel')",
+      "button:contains('Export Excel')",
+      "a:contains('Export Excel')"
+    ]
   },
   "notifications": {
     "email": {
-      "enabled": false,
-      "smtp_server": "smtp.gmail.com",
+      "enabled": true,
+      "smtp_server": "${SMTP_HOST}",
       "smtp_port": 587,
       "sender_email": "${EMAIL_ADDRESS}",
-      "sender_password": "${EMAIL_PASSWORD}",
-      "recipients": ["admin@example.com"]
+      "sender_password": "${EMAIL_APP_PASSWORD}",
+      "recipients": ["${EMAIL_RECIPIENT_WORK}", "${EMAIL_RECIPIENT_PERSONAL}"],
+      "send_on_success": true,
+      "send_on_failure": true
+    },
+    "telegram": {
+      "enabled": false,
+      "bot_token": "${TELEGRAM_BOT_TOKEN}",
+      "chat_id": "${TELEGRAM_CHAT_ID}"
     },
     "slack": {
       "enabled": false,
@@ -39,6 +69,54 @@
   },
   "scheduling": {
     "enabled": false,
-    "interval_hours": 2
+    "interval_hours": 2,
+    "inventory_schedule": {
+      "enabled": false,
+      "time": "08:00",
+      "timezone": "Asia/Ho_Chi_Minh"
+    }
+  },
+  "google_sheets": {
+    "enabled": true,
+    "spreadsheet_id": "${GOOGLE_SHEET_ID}",
+    "credentials_file": "${GOOGLE_SERVICE_ACCOUNT_KEY_PATH}",
+    "auto_sync": true,
+    "worksheets": {
+      "config": "Config",
+      "sla_rules": "SLA_Rules",
+      "automation_logs": "Automation_Logs",
+      "inventory_logs": "Inventory_Logs"
+    },
+    "rate_limit": {
+      "enabled": true,
+      "requests_per_minute": 60
+    }
+  },
+  "google_drive": {
+    "enabled": true,
+    "credentials_file": "${GOOGLE_SERVICE_ACCOUNT_KEY_PATH}",
+    "upload_folder": "Automation_Exports",
+    "create_date_folders": true,
+    "share_with_emails": ["${EMAIL_RECIPIENT_WORK}"],
+    "permissions": "reader"
+  },
+  "automation": {
+    "batch_size": 20,
+    "retry_count": 3,
+    "page_wait_time": 15,
+    "session_strategy": "fresh_per_page",
+    "product_extraction": true
+  },
+  "api_server": {
+    "port": 8000,
+    "host": "0.0.0.0",
+    "debug": false,
+    "cors_enabled": true
+  },
+  "health_check": {
+    "enabled": true,
+    "interval_seconds": 300,
+    "check_dependencies": true,
+    "check_google_services": true
   }
 }

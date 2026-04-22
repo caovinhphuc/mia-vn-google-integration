@@ -1,15 +1,24 @@
 {
   "date_range": {
-    "mode": "custom",
+    "mode": "current_month",
     "start_date": "2025-05-01",
     "end_date": "2025-05-31",
     "auto_calculate": false,
-    "default_range_days": 31
+    "default_range_days": 31,
+    "comment": "mode current_month: bỏ qua start_date/end_date, dùng đầu tháng → hôm nay"
   },
   "system": {
     "max_rows_for_testing": 200,
     "fast_mode": true,
     "enable_daterange": true
+  },
+  "pagination": {
+    "rows_per_page_ui": 2000,
+    "comment_rows": "one.tga.com.vn — tối đa 2000 dòng/trang trên UI DataTables",
+    "fallback_max_pages": 16,
+    "comment_fallback": "khi không đọc được #orderTB_info; tăng nếu cần — trước đây 48 dễ thành lặp login vô ích",
+    "stop_after_empty_pages": 2,
+    "max_pages_cap": 500
   },
   "browser": {
     "headless": true,

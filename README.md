@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![Python](https://img.shields.io/badge/Python-3.9+-yellow.svg)](https://python.org/)
+[![Python](<https://img.shields.io/badge/Python-3.11%20(recommended)-3776AB.svg>)](https://python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-teal.svg)](https://fastapi.tiangolo.com/)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
@@ -124,12 +124,12 @@
 
 ### 📋 Yêu cầu hệ thống
 
-| Component    | Version           | Ghi chú                                           |
-| ------------ | ----------------- | ------------------------------------------------- |
-| **Node.js**  | **20** (`.nvmrc`) | Runtime cho Frontend & Backend; có thể thử 18 LTS |
-| **Python**   | 3.9+              | Runtime cho Automation & AI Service               |
-| **npm/yarn** | Latest            | Package manager                                   |
-| **Git**      | Latest            | Version control                                   |
+| Component    | Version                                                                                               | Ghi chú                                                                                |
+| ------------ | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Node.js**  | **20** (`.nvmrc`)                                                                                     | Runtime cho Frontend & Backend; có thể thử 18 LTS                                      |
+| **Python**   | **3.11** (`.python-version`, CI); 3.10–3.13 cho venv cục bộ; **không khuyến nghị 3.14+** khi tạo venv | Runtime cho Automation & AI Service — xem [PYTHON_VENV_GUIDE.md](PYTHON_VENV_GUIDE.md) |
+| **npm/yarn** | Latest                                                                                                | Package manager                                                                        |
+| **Git**      | Latest                                                                                                | Version control                                                                        |
 
 ### ⚡ Khởi chạy nhanh
 
@@ -318,7 +318,7 @@ Sau khi khởi chạy thành công, truy cập các endpoints:
 
 ```json
 {
-  "language": "Python 3.9+",
+  "language": "Python 3.11 (recommended; see PYTHON_VENV_GUIDE.md)",
   "framework": "FastAPI",
   "server": "Uvicorn",
   "ml": "scikit-learn, NumPy, Pandas",
@@ -400,8 +400,8 @@ React-OAS-Integration-v3.0/
 Tạo file `.env` trong thư mục gốc:
 
 ```env
-# Backend Configuration
-PORT=3001
+# Backend (đừng dùng PORT= ở root khi chạy CRA — xem ENV_SETUP.md)
+BACKEND_PORT=3001
 NODE_ENV=development
 
 # AI Service Configuration
@@ -457,7 +457,7 @@ Xem hướng dẫn chi tiết tại: [`docs/GOOGLE_CREDENTIALS_SETUP.md`](docs/G
 | `POST` | `/ai/optimization/solve`  | Solve optimization problem |
 | `GET`  | `/ai/optimization/status` | Check optimization engine  |
 
-### 🤖 Automation API (Port 8000)
+### 🤖 Automation API (Port 8001)
 
 | Method | Endpoint                  | Mô tả                 |
 | ------ | ------------------------- | --------------------- |

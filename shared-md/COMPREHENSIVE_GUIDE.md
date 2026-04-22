@@ -100,8 +100,8 @@ REACT_APP_DEMO_MODE=false
 > Thực tế repo load **một file `.env` ở root** cho `backend/` — xem `ENV_SETUP.md`.
 
 ```env
-# Server Configuration
-PORT=3001
+# Server — dùng BACKEND_PORT trong .env gốc (CRA không đọc); PaaS vẫn dùng PORT inject
+BACKEND_PORT=3001
 NODE_ENV=development
 JWT_SECRET=your-super-secret-jwt-key
 GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
@@ -280,6 +280,7 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=production
+      # Trong container chỉ chạy Node — PORT=3001 hợp lệ (không có CRA đọc chung file)
       - PORT=3001
 
   automation:

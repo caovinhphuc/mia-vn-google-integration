@@ -1,8 +1,23 @@
-INFO:     Will watch for changes in these directories: ['/Users/phuccao/Projects/mia/oas-integration/ai-service']
+INFO:     Will watch for changes in these directories: ['/Users/phuccao/Projects/mia-vn-google-integration/ai-service']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [22565] using WatchFiles
-INFO:     Started server process [22575]
+INFO:     Started reloader process [3741] using WatchFiles
+INFO:mia_models.nlp_processor:NLP hybrid: ANTHROPIC_API_KEY not set — regex-only mode
+INFO:     Started server process [3750]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:61556 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61571 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64697 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64718 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64718 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50651 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51076 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51332 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51413 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51477 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51964 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51995 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52210 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52210 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52210 - "GET /api/ml/insights HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52342 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52342 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52342 - "GET /api/ml/insights HTTP/1.1" 200 OK

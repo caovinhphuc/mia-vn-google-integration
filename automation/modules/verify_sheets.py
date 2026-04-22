@@ -7,8 +7,10 @@ import os
 import sys
 from datetime import datetime
 
-# Add current path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Ưu tiên thư mục modules (tránh cwd automation/ import nhầm google_sheets_config gốc)
+_mod_dir = os.path.dirname(os.path.abspath(__file__))
+if _mod_dir not in sys.path:
+    sys.path.insert(0, _mod_dir)
 
 try:
     from google_sheets_config import GoogleSheetsConfigService

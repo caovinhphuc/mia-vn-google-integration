@@ -2,7 +2,69 @@ const { google } = require("googleapis");
 const { GoogleAuth } = require("google-auth-library");
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
+
+const PROJECT_ROOT = path.join(__dirname, "..");
+
+function loadProjectEnv() {
+  const files = [
+    path.join(PROJECT_ROOT, ".env"),
+    path.join(PROJECT_ROOT, ".env.local"),
+    path.join(PROJECT_ROOT, "backend/.env"),
+    path.join(PROJECT_ROOT, "automation/.env"),
+  ];
+  for (const p of files) {
+    if (fs.existsSync(p)) require("dotenv").config({ path: p });
+  }
+}
+
+loadProjectEnv();
+
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return "";
+  let s = String(val).trim();
+  if (s.length >= 2) {
+    const a = s[0];
+    const b = s[s.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+function isPlaceholderSheetId(id) {
+  const s = String(id).trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  const substrings = ["YOUR_SPREADSHEET", "PLACEHOLDER", "REPLACE_ME", "CHANGEME", "EXAMPLE_ID", "TODO"];
+  if (substrings.some((x) => u.includes(x))) return true;
+  return false;
+}
+
+const SHEET_ID_ENV_KEYS = [
+  "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEET_ID",
+  "GOOGLE_SHEETS_SPREADSHEET_ID",
+  "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+];
+
+function resolveSpreadsheetId() {
+  for (const k of SHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSheetId(v)) return { id: v, fromKey: k };
+  }
+  return { id: null, fromKey: null };
+}
+
+function maskSpreadsheetId(id) {
+  if (!id) return "(trống)";
+  const s = String(id).trim();
+  if (s.length < 12) return `${s} (${s.length} ký tự — ID Sheet thường ~40+ ký tự)`;
+  return `${s.slice(0, 6)}…${s.slice(-4)} (${s.length} ký tự)`;
+}
 
 /**
  * Chuẩn hóa private key từ .env — tránh OpenSSL DECODER unsupported (Node/OpenSSL 3).
@@ -41,11 +103,7 @@ async function testGoogleConnection() {
       });
     } else {
       // Fallback: build từ env (cần đủ biến)
-      const requiredVars = [
-        "GOOGLE_SERVICE_ACCOUNT_EMAIL",
-        "GOOGLE_PRIVATE_KEY",
-        "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
-      ];
+      const requiredVars = ["GOOGLE_SERVICE_ACCOUNT_EMAIL", "GOOGLE_PRIVATE_KEY"];
       const missingVars = requiredVars.filter((varName) => !process.env[varName]);
       if (missingVars.length > 0) {
         throw new Error(`Missing environment variables: ${missingVars.join(", ")}`);
@@ -82,18 +140,29 @@ async function testGoogleConnection() {
 
     console.log("✅ Google Service Account connection successful!");
     console.log("Access token obtained:", accessToken.token ? "Yes" : "No");
-    const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || authClient?.email;
-    if (email) console.log("Service Account email:", email);
+
+    let saEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || authClient?.email;
+    if (!saEmail && credFile && fs.existsSync(credFile)) {
+      try {
+        const j = JSON.parse(fs.readFileSync(credFile, "utf8"));
+        if (j.client_email) saEmail = j.client_email;
+      } catch (_) {
+        /* ignore */
+      }
+    }
+    if (saEmail) console.log("Service Account email:", saEmail);
+
+    const { id: sheetId, fromKey: sheetIdFromKey } = resolveSpreadsheetId();
     console.log(
       "Sheet ID configured:",
-      process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ? "Yes" : "No"
+      sheetId ? `Yes (${sheetIdFromKey})` : "No (hoặc chỉ có placeholder)"
     );
+    if (sheetId) console.log("   ID (rút gọn):", maskSpreadsheetId(sheetId));
 
     // Test Google Sheets API connection
     console.log("\n📊 Testing Google Sheets API...");
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    const sheetId = process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID;
     if (sheetId) {
       try {
         const response = await sheets.spreadsheets.get({
@@ -122,12 +191,34 @@ async function testGoogleConnection() {
           console.log("   First row sample:", rows[0].slice(0, 5).join(", "));
         }
       } catch (error) {
+        const status = error.response?.status ?? error.code;
         console.error("❌ Google Sheets API test failed:", error.message);
-        if (error.code === 403) {
-          console.error("   → Service Account chưa có quyền truy cập sheet");
-          console.error("   → Share sheet với email:", authClient?.email || process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL);
+        if (status === 403) {
+          console.error("   → 403: Service Account chưa được share quyền trên Sheet.");
+          console.error("   → Mở Google Sheet → Share → thêm email:", saEmail || "(lấy từ JSON client_email)");
+          console.error("   → Quyền tối thiểu: Viewer (đọc); Editor nếu app cần ghi.");
+        }
+        if (
+          status === 404 ||
+          /not found|NOT_FOUND/i.test(String(error.message)) ||
+          /Requested entity was not found/i.test(String(error.message))
+        ) {
+          console.error("   → 404 / Requested entity was not found — thường do một trong các nguyên nhân:");
+          console.error("      1) Sai Spreadsheet ID (copy đoạn giữa /d/ và /edit trong URL Sheet).");
+          console.error("      2) File đã xóa hoặc URL không phải Google Sheet.");
+          console.error("      3) Sheet chưa share cho Service Account — Google đôi khi trả 404 thay vì 403.");
+          console.error("      4) Đang trỏ biến env khác file thật (đã dùng:", sheetIdFromKey + ").");
+          console.error("   → Kiểm tra ID:", maskSpreadsheetId(sheetId));
+          console.error("   → Share với:", saEmail || "(email trong service_account.json → client_email)");
         }
       }
+    } else {
+      console.log("⏭️  Bỏ qua test Sheet: không có ID hợp lệ.");
+      console.log(
+        "   Đặt một trong:",
+        SHEET_ID_ENV_KEYS.slice(0, 4).join(", "),
+        "… (xem scripts/tests/test_google_sheets.js)"
+      );
     }
 
     console.log(

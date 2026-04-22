@@ -8,6 +8,8 @@ import os
 import logging
 from typing import List, Dict, Any, Optional
 
+from google_sheets_config import resolve_service_account_credentials_path
+
 logger = logging.getLogger(__name__)
 
 SCOPES = [
@@ -26,7 +28,7 @@ class GoogleDriveService:
     ):
         self.credentials_path = (
             credentials_path
-            or os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE")
+            or resolve_service_account_credentials_path()
             or "config/service_account.json"
         )
         self.folder_id = folder_id or os.getenv("GOOGLE_DRIVE_FOLDER_ID", "")

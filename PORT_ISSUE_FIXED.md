@@ -2,40 +2,40 @@
 
 ## 📋 Vấn đề
 
-File `.env` đã cấu hình sai:
+File `.env` ở **root** dùng chung cho CRA và backend. Đặt:
 
 ```bash
-PORT=3001  # ❌ Sai - Trùng với Backend port
+PORT=3001  # ❌ Sai — Create React App (`npm start`) CŨNG đọc PORT → dev server đòi 3001, trùng Express
 ```
 
-Điều này khiến Frontend cố chạy trên cùng port với Backend (3001), gây xung đột.
+## ✅ Giải pháp (khuyến nghị hiện tại)
 
-## ✅ Giải pháp
-
-### 1. Sửa file `.env`
+### 1. Backend dùng `BACKEND_PORT`, không dùng `PORT` ở root khi dev full-stack
 
 ```bash
-PORT=3000  # ✅ Đúng - Frontend port
+BACKEND_PORT=3001   # ✅ API Node — xem backend/src/server.js (PORT || BACKEND_PORT || 3001)
+# Bỏ hẳn dòng PORT=… khỏi .env gốc — CRA mặc định chạy :3000
 ```
 
-### 2. Cấu hình đúng
+### 2. Cấu hình mẫu (root `.env`)
 
 ```bash
-# Frontend
-PORT=3000
+# Không cần PORT= cho frontend — mặc định CRA = 3000
+BACKEND_PORT=3001
 
-# Backend URLs
 REACT_APP_API_URL=http://localhost:3001
 REACT_APP_API_BASE_URL=http://localhost:3001/api
 
-# AI Service (Optional)
+# AI Service (tuỳ chọn)
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
 ```
 
+**Deploy:** Nền tảng thường set `PORT` — backend vẫn ưu tiên `process.env.PORT` trước `BACKEND_PORT`.
+
 ## 🚀 Services hiện tại
 
-| Service  | Port | Status | URL |
-|----------|------|--------|-----|
+| Service  | Port | Status     | URL                     |
+| -------- | ---- | ---------- | ----------------------- |
 | Frontend | 3000 | ✅ Running | <http://localhost:3000> |
 | Backend  | 3001 | ✅ Running | <http://localhost:3001> |
 
@@ -72,13 +72,13 @@ Please use 'App' component instead.
 
 ```jsx
 // Thay vì
-import { message } from 'antd';
-message.warning('...');
+import { message } from "antd";
+message.warning("...");
 
 // Nên dùng
-import { App } from 'antd';
+import { App } from "antd";
 const { message } = App.useApp();
-message.warning('...');
+message.warning("...");
 ```
 
 ## 📝 Login Credentials

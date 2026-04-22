@@ -90,7 +90,6 @@
 - `one_automation_system/start_all.sh` - Start all
 - `one_automation_system/start_backend.sh` - Start backend
 - `one_automation_system/stop_all.sh` - Stop all
-- `mia-logistics-manager/start-mia.sh` - Start MIA
 - `google-sheets-project/start.sh` - Start Google Sheets project
 
 **Vấn đề**:
@@ -260,10 +259,6 @@
 - `google-sheets-project/check_auth.sh`
 - `google-sheets-project/monitor_auth.sh`
 
-#### mia-logistics-manager/:
-
-- `mia-logistics-manager/start-mia.sh`
-
 ---
 
 ## ⚠️ VẤN ĐỀ PHÁT HIỆN
@@ -350,4 +345,4 @@ scripts/
 
 ---
 
-**Last Updated**: 2026-03-18
+**Last Updated**: 2026-04-22 (đã gỡ tham chiếu `mia-logistics-manager` — không có trong repo này)

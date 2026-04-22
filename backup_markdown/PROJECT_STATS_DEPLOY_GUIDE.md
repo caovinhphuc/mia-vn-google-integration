@@ -272,7 +272,7 @@ LOG_LEVEL=INFO
 ./deploy.sh test
 
 # Individual tests
-node complete_system_test.js      # 6/6 tests
+node scripts/tests/complete_system_test.js      # 6/6 tests
 node integration_test.js          # 5/5 tests
 node advanced_integration.js      # 7/7 tests
 node frontend_connection_test.js  # 11/11 tests

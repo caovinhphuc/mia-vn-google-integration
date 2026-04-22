@@ -9,6 +9,93 @@ const fs = require("fs");
 const path = require("path");
 const { google } = require("googleapis");
 
+const PROJECT_ROOT = path.join(__dirname, "..");
+
+function loadProjectEnv() {
+  const files = [
+    path.join(PROJECT_ROOT, ".env"),
+    path.join(PROJECT_ROOT, ".env.local"),
+    path.join(PROJECT_ROOT, "backend/.env"),
+    path.join(PROJECT_ROOT, "automation/.env"),
+  ];
+  for (const p of files) {
+    if (fs.existsSync(p)) require("dotenv").config({ path: p });
+  }
+}
+
+loadProjectEnv();
+
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return "";
+  let s = String(val).trim();
+  if (s.length >= 2) {
+    const a = s[0];
+    const b = s[s.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+function isPlaceholderSheetId(id) {
+  const s = String(id || "").trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  if (["PLACEHOLDER", "REPLACE_ME", "CHANGEME", "EXAMPLE_ID"].some((x) => u.includes(x)))
+    return true;
+  if (s === "your_actual_sheet_id_here" || s === "your-spreadsheet-id") return true;
+  return false;
+}
+
+const SHEET_ID_ENV_KEYS = [
+  "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEET_ID",
+  "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+];
+
+function resolveSheetIdForTest() {
+  for (const k of SHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSheetId(v)) return { id: v, fromKey: k };
+  }
+  return { id: null, fromKey: null };
+}
+
+const DEMO_SHEET_FALLBACK = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+
+function maskSheetId(id) {
+  if (!id) return "(trống)";
+  const s = String(id);
+  if (s.length < 12) return `${s} (${s.length} ký tự)`;
+  return `${s.slice(0, 6)}…${s.slice(-4)} (${s.length} ký tự)`;
+}
+
+/** Đường dẫn tuyệt đối; env relative → ghép PROJECT_ROOT */
+function resolveCredentialPath(p) {
+  if (!p || typeof p !== "string") return null;
+  const t = stripEnvQuotes(p);
+  if (!t) return null;
+  return path.isAbsolute(t) ? path.normalize(t) : path.normalize(path.join(PROJECT_ROOT, t));
+}
+
+/** Thứ tự khớp check-env.sh / backend / scripts/testGoogleSheets3.js */
+const CREDENTIAL_REL_PATHS = [
+  "config/service_account.json",
+  "config/google-credentials.json",
+  "automation/config/service_account.json",
+  "automation/config/google-credentials.json",
+  "one_automation_system/config/google-credentials.json",
+  "one_automation_system/config/service_account.json",
+  "automation/one_automation_system/config/google-credentials.json",
+  "automation/one_automation_system/config/service_account.json",
+  "automation/automation_new/config/service_account.json",
+  "google-credentials.json",
+];
+
 const colors = {
   reset: "\x1b[0m",
   green: "\x1b[32m",
@@ -22,46 +109,44 @@ function log(message, color = "reset") {
   console.log(`${colors[color]}${message}${colors.reset}`);
 }
 
-// Tìm credentials file
 function findCredentialsFile() {
-  const possiblePaths = [
-    // 1. Environment variable
-    process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
-    process.env.GOOGLE_APPLICATION_CREDENTIALS,
-
-    // 2. automation/config/google-credentials.json
-    path.join(
-      __dirname,
-      "..",
-      "automation",
-      "config",
-      "google-credentials.json"
-    ),
-
-    // 3. automation/one_automation_system/config/google-credentials.json
-    path.join(
-      __dirname,
-      "..",
-      "automation",
-      "one_automation_system",
-      "config",
-      "google-credentials.json"
-    ),
-
-    // 4. config/google-credentials.json
-    path.join(__dirname, "..", "config", "google-credentials.json"),
-
-    // 5. Root directory
-    path.join(__dirname, "..", "google-credentials.json"),
+  const envKeys = [
+    "GOOGLE_APPLICATION_CREDENTIALS",
+    "GOOGLE_SERVICE_ACCOUNT_KEY_PATH",
+    "GOOGLE_CREDENTIALS_PATH",
+    "GOOGLE_SERVICE_ACCOUNT_FILE",
   ];
 
+  const possiblePaths = [];
+  for (const k of envKeys) {
+    const abs = resolveCredentialPath(process.env[k]);
+    if (abs) possiblePaths.push(abs);
+  }
+  for (const rel of CREDENTIAL_REL_PATHS) {
+    possiblePaths.push(path.join(PROJECT_ROOT, rel));
+  }
+
+  const seen = new Set();
   for (const credPath of possiblePaths) {
-    if (credPath && fs.existsSync(credPath)) {
-      return credPath;
-    }
+    if (!credPath || seen.has(credPath)) continue;
+    seen.add(credPath);
+    if (fs.existsSync(credPath)) return credPath;
   }
 
   return null;
+}
+
+function credentialSearchHintsForUser() {
+  return [
+    "Biến môi trường (sau khi load .env / backend/.env / automation/.env):",
+    "  • GOOGLE_APPLICATION_CREDENTIALS",
+    "  • GOOGLE_SERVICE_ACCOUNT_KEY_PATH",
+    "  • GOOGLE_CREDENTIALS_PATH",
+    "  • GOOGLE_SERVICE_ACCOUNT_FILE (đường dẫn tương đối tính từ root repo)",
+    "",
+    "File mặc định (một trong các path sau):",
+    ...CREDENTIAL_REL_PATHS.map((rel, i) => `  ${i + 1}. ${rel}`),
+  ].join("\n");
 }
 
 async function testGoogleSheetsAPI(credentialsPath) {
@@ -76,13 +161,21 @@ async function testGoogleSheetsAPI(credentialsPath) {
     const authClient = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: authClient });
 
-    // Test với sheet ID từ env hoặc default
-    const sheetId =
-      process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
-      process.env.GOOGLE_SHEET_ID ||
-      "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
-
-    log(`   Đang test với Sheet ID: ${sheetId}`, "yellow");
+    const resolved = resolveSheetIdForTest();
+    const sheetId = resolved.id || DEMO_SHEET_FALLBACK;
+    if (!resolved.id) {
+      log(
+        `   ℹ️  Env không có Spreadsheet ID hợp lệ (bỏ qua YOUR_* / placeholder) — dùng ID demo repo.`,
+        "yellow"
+      );
+      log(
+        `   ℹ️  Đặt GOOGLE_SHEETS_ID hoặc REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID = ID trong URL Sheet.`,
+        "yellow"
+      );
+    } else {
+      log(`   Đang test từ biến: ${resolved.fromKey}`, "yellow");
+    }
+    log(`   Sheet ID (rút gọn): ${maskSheetId(sheetId)}`, "yellow");
 
     const response = await sheets.spreadsheets.get({
       spreadsheetId: sheetId,
@@ -107,15 +200,22 @@ async function testGoogleSheetsAPI(credentialsPath) {
         `   💡 Enable tại: https://console.cloud.google.com/apis/library/sheets.googleapis.com`,
         "yellow"
       );
-    } else if (
-      errorMsg.includes("PERMISSION_DENIED") ||
-      errorMsg.includes("permission")
-    ) {
+    } else if (errorMsg.includes("PERMISSION_DENIED") || errorMsg.includes("permission")) {
       log(`   ⚠️  Google Sheets API: ĐÃ ENABLE nhưng thiếu quyền`, "yellow");
-      log(`   💡 Share Sheet với service account email`, "yellow");
+      log(`   💡 Share Sheet với service account email (JSON → client_email)`, "yellow");
+    } else if (
+      error.code === 404 ||
+      /not found|NOT_FOUND|Requested entity was not found/i.test(errorMsg)
+    ) {
+      log(`   ❌ Google Sheets: không tìm thấy Spreadsheet (404)`, "red");
+      log(
+        `   💡 Sai ID / Sheet đã xóa / chưa share cho service account (đôi khi Google trả 404).`,
+        "yellow"
+      );
+      log(`   💡 Kiểm tra ID trong .env khớp URL /d/<id>/edit`, "yellow");
     } else {
       log(`   ❌ Google Sheets API: LỖI`, "red");
-      log(`   📝 ${errorMsg.substring(0, 100)}`, "red");
+      log(`   📝 ${errorMsg.substring(0, 120)}`, "red");
     }
 
     return { success: false, error: errorMsg };
@@ -192,10 +292,7 @@ async function testGoogleAppsScriptAPI(credentialsPath) {
       ) {
         throw listError;
       }
-      log(
-        `   ✅ Google Apps Script API: HOẠT ĐỘNG (không có projects)`,
-        "green"
-      );
+      log(`   ✅ Google Apps Script API: HOẠT ĐỘNG (không có projects)`, "green");
       return { success: true };
     }
   } catch (error) {
@@ -232,19 +329,14 @@ ${colors.reset}`);
   const credentialsPath = findCredentialsFile();
 
   if (!credentialsPath) {
-    log("\n❌ Không tìm thấy credentials file!", "red");
-    log("\n💡 Các vị trí đã kiểm tra:", "yellow");
-    log("   1. GOOGLE_SERVICE_ACCOUNT_KEY_PATH env variable", "yellow");
-    log("   2. automation/config/google-credentials.json", "yellow");
+    log("\n❌ Không tìm thấy credentials file (JSON service account)!", "red");
+    log("\n💡 Đã kiểm tra (theo thứ tự):", "yellow");
+    log(credentialSearchHintsForUser(), "yellow");
     log(
-      "   3. automation/one_automation_system/config/google-credentials.json",
+      "\n📝 Gợi ý: copy key GCP → config/service_account.json hoặc config/google-credentials.json, rồi trong .env đặt:",
       "yellow"
     );
-    log("   4. config/google-credentials.json", "yellow");
-    log(
-      "\n📝 Vui lòng đặt credentials file vào một trong các vị trí trên",
-      "yellow"
-    );
+    log("   GOOGLE_APPLICATION_CREDENTIALS=config/service_account.json", "yellow");
     process.exit(1);
   }
 
@@ -273,10 +365,7 @@ ${colors.reset}`);
   const enabled = Object.values(results).filter((r) => r.success).length;
   const total = Object.keys(results).length;
 
-  log(
-    `\n✅ APIs hoạt động: ${enabled}/${total}`,
-    enabled === total ? "green" : "yellow"
-  );
+  log(`\n✅ APIs hoạt động: ${enabled}/${total}`, enabled === total ? "green" : "yellow");
 
   if (results.sheets.success) log("   ✅ Google Sheets API", "green");
   else log("   ❌ Google Sheets API", "red");

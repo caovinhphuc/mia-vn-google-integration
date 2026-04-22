@@ -3,7 +3,28 @@
 # OneAutomationSystem - Health Check Script
 # Kiểm tra tất cả components của Google Sheets Integration
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+AUTOMATION_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "$AUTOMATION_ROOT/.." && pwd)"
+cd "$AUTOMATION_ROOT" || exit 1
+
+# Python: ưu tiên venv để khớp pip install (tránh báo thiếu module trên python3 hệ thống)
+if [ -n "${VIRTUAL_ENV:-}" ] && [ -x "${VIRTUAL_ENV}/bin/python3" ]; then
+    PYTHON="${VIRTUAL_ENV}/bin/python3"
+elif [ -x "${AUTOMATION_ROOT}/venv/bin/python3" ]; then
+    PYTHON="${AUTOMATION_ROOT}/venv/bin/python3"
+elif [ -x "${AUTOMATION_ROOT}/.venv/bin/python3" ]; then
+    PYTHON="${AUTOMATION_ROOT}/.venv/bin/python3"
+elif [ -x "${REPO_ROOT}/.venv/bin/python3" ]; then
+    PYTHON="${REPO_ROOT}/.venv/bin/python3"
+else
+    PYTHON="python3"
+fi
+
 echo "🔍 OneAutomationSystem Health Check"
+echo "=================================="
+echo "📌 Working directory: $AUTOMATION_ROOT"
+echo "🐍 Python for checks: $PYTHON"
 echo "=================================="
 
 # Colors
@@ -46,6 +67,36 @@ check_env_var() {
     fi
 }
 
+# Trùng logic Python: google_sheets_config.resolve_service_account_credentials_path()
+check_google_credentials() {
+    total=$((total + 1))
+    resolved=$("$PYTHON" -c "
+from pathlib import Path
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path('.env'))
+except Exception:
+    pass
+try:
+    from google_sheets_config import resolve_service_account_credentials_path
+    p = resolve_service_account_credentials_path()
+    print(p or '', end='')
+except Exception:
+    print('', end='')
+" 2>/dev/null || true)
+    if [ -n "$resolved" ]; then
+        echo -e "${GREEN}✅${NC} Service account JSON: ${resolved}"
+        success=$((success + 1))
+        return
+    fi
+    if [ -f "config/service_account.json" ]; then
+        echo -e "${GREEN}✅${NC} Service account: config/service_account.json (resolve không chọn được key khác; runtime vẫn fallback file này)"
+        success=$((success + 1))
+        return
+    fi
+    echo -e "${RED}❌${NC} Không tìm thấy JSON service account (GOOGLE_SERVICE_ACCOUNT_FILE / KEY_PATH / ~/.secrets / config/)"
+}
+
 check_port() {
     total=$((total + 1))
     if command -v nc >/dev/null 2>&1; then
@@ -62,18 +113,18 @@ check_port() {
 
 check_python_module() {
     total=$((total + 1))
-    if python3 -c "import $1" 2>/dev/null; then
+    if "$PYTHON" -c "import $1" 2>/dev/null; then
         echo -e "${GREEN}✅${NC} Python module installed: $1"
         success=$((success + 1))
     else
-        echo -e "${RED}❌${NC} Python module missing: $1"
+        echo -e "${RED}❌${NC} Python module missing: $1 (interpreter: $PYTHON)"
     fi
 }
 
 check_json_valid() {
     total=$((total + 1))
     if [ -f "$1" ]; then
-        if python3 -c "import json; json.load(open('$1'))" 2>/dev/null; then
+        if "$PYTHON" -c "import json; json.load(open('$1'))" 2>/dev/null; then
             echo -e "${GREEN}✅${NC} Valid JSON file: $1"
             success=$((success + 1))
         else
@@ -106,7 +157,7 @@ echo -e "${CYAN}🔧 Checking environment variables...${NC}"
 if [ -f ".env" ]; then
     source .env 2>/dev/null || echo "Warning: Could not load .env file"
     check_env_var "GOOGLE_SHEET_ID"
-    check_env_var "GOOGLE_SERVICE_ACCOUNT_FILE"
+    check_google_credentials
 else
     echo -e "${YELLOW}⚠️${NC} .env file not found - skipping env var checks"
 fi
@@ -138,27 +189,27 @@ total=$((total + 1))
 
 # Try test_sheets_connection.py first (new comprehensive test)
 if [ -f "test_sheets_connection.py" ]; then
-    if python3 test_sheets_connection.py 2>/dev/null | grep -q "✅ All tests passed\|All tests passed"; then
+    if "$PYTHON" test_sheets_connection.py 2>/dev/null | grep -q "✅ All tests passed\|All tests passed"; then
         echo -e "${GREEN}✅${NC} Google Sheets connection test passed (test_sheets_connection.py)"
         success=$((success + 1))
     else
-        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: python3 test_sheets_connection.py"
+        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: $PYTHON test_sheets_connection.py"
     fi
 # Fallback to verify_sheets.py if exists
 elif [ -f "verify_sheets.py" ]; then
-    if python3 verify_sheets.py 2>/dev/null | grep -q "✅\|Success"; then
+    if "$PYTHON" verify_sheets.py 2>/dev/null | grep -q "✅\|Success"; then
         echo -e "${GREEN}✅${NC} Google Sheets connection test passed (verify_sheets.py)"
         success=$((success + 1))
     else
-        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: python3 verify_sheets.py"
+        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: $PYTHON verify_sheets.py"
     fi
 # Check in modules directory
 elif [ -f "modules/verify_sheets.py" ]; then
-    if python3 modules/verify_sheets.py 2>/dev/null | grep -q "✅\|Success"; then
+    if "$PYTHON" modules/verify_sheets.py 2>/dev/null | grep -q "✅\|Success"; then
         echo -e "${GREEN}✅${NC} Google Sheets connection test passed (modules/verify_sheets.py)"
         success=$((success + 1))
     else
-        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: python3 modules/verify_sheets.py"
+        echo -e "${YELLOW}⚠️${NC} Google Sheets connection test - run manually: $PYTHON modules/verify_sheets.py"
     fi
 else
     echo -e "${YELLOW}⚠️${NC} No connection test script found (test_sheets_connection.py or verify_sheets.py)"

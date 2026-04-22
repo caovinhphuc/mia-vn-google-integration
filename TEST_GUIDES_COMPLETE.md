@@ -3,6 +3,8 @@
 > **Hoàn thiện tất cả test guides**
 > **Ngày hoàn thành**: 2025-01-27
 
+> **Lưu ý (path):** mọi file test Node nằm trong **`scripts/tests/`**. Từ **root repo** chạy `node scripts/tests/complete_system_test.js` hoặc `npm run test:complete-system` — **không** chạy `node complete_system_test.js` (sẽ lỗi `MODULE_NOT_FOUND`). Mục _Before_ bên dưới chỉ mô tả lịch sử đổi path, đừng copy lệnh cũ.
+
 ---
 
 ## ✅ ĐÃ HOÀN THÀNH
@@ -18,6 +20,7 @@
 ### 2. Test Files Documentation ✅
 
 - ✅ `scripts/tests/README.md` - Test files guide (enhanced)
+- ✅ `scripts/tests/test_google_drive.js` — Drive qua `GET /api/drive/files` + `npm run test:google-drive` (trong `npm run test:scripts`)
 
 ### 3. Updates Applied ✅
 
@@ -76,9 +79,10 @@
 
 ### File Paths
 
-**Before:**
+**Before** (đã lỗi thời — chỉ để so sánh, **không dùng**):
 
 ```bash
+# SAI — file không nằm ở root
 node complete_system_test.js
 node end_to_end_test.js
 ```
@@ -123,7 +127,7 @@ npm run test:ci            # CI mode
 
 ```bash
 # Complete system
-node scripts/tests/complete_system_test.js
+  node scripts/tests/complete_system_test.js
 
 # Individual tests
 node scripts/tests/end_to_end_test.js

@@ -375,7 +375,7 @@ git push origin main
 ### Frontend (.env)
 
 ```bash
-PORT=3000
+# Không đặt PORT= trừ khi muốn ép cổng CRA; mặc định 3000
 REACT_APP_API_URL=http://localhost:3001
 REACT_APP_API_BASE_URL=http://localhost:3001/api
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
@@ -386,11 +386,12 @@ GOOGLE_DRIVE_FOLDER_ID=your_folder_id
 
 Backend đọc `.env` **ở root repo** (không bắt buộc `backend/.env`). Xem [ENV_SETUP.md](./ENV_SETUP.md).
 
-### Backend (tuỳ chọn)
+### Backend (cổng API)
 
 ```bash
-PORT=3001
+BACKEND_PORT=3001
 NODE_ENV=development
+# Trên PaaS thường chỉ có PORT do platform inject — server: PORT || BACKEND_PORT || 3001
 ```
 
 ---

@@ -624,7 +624,7 @@ cd automation && ./start.sh
 
 #### `automation/setup.sh`
 
-**Mục đích**: Setup automation
+**Mục đích**: Setup automation (lần sau: giữ `venv/`, chỉ pip; backup chỉ khi đổi major.minor Python hoặc `--force`)
 **Chạy từ**: Root directory hoặc `automation/`
 **Cách dùng**:
 
@@ -632,6 +632,10 @@ cd automation && ./start.sh
 ./automation/setup.sh
 # hoặc
 cd automation && ./setup.sh
+npm run setup:automation
+# Backup venv cũ + tạo lại
+./automation/setup.sh --force
+npm run setup:automation:force
 ```
 
 ---
@@ -640,7 +644,7 @@ cd automation && ./setup.sh
 
 #### `ai-service/setup_venv.sh`
 
-**Mục đích**: Setup Python virtual environment
+**Mục đích**: Setup Python virtual environment (lần sau: chỉ cập nhật pip deps, không backup trừ khi `--force`)
 **Chạy từ**: Root directory hoặc `ai-service/`
 **Cách dùng**:
 
@@ -648,22 +652,24 @@ cd automation && ./setup.sh
 ./ai-service/setup_venv.sh
 # hoặc
 cd ai-service && ./setup_venv.sh
+# hoặc từ root (npm)
+npm run setup:ai-service
+# Tạo lại venv + backup bản cũ (đổi Python / sửa venv hỏng)
+./ai-service/setup_venv.sh --force
+npm run setup:ai-service:force
 ```
 
 ---
 
-### 🛒 MIA Logistics Manager
+### 🔧 one_automation_system (FastAPI, port 8001)
 
-#### `mia-logistics-manager/start-mia.sh`
+**Mục đích**: API automation / Google Sheets bridge (không còn subfolder `mia-logistics-manager` trong repo này).
 
-**Mục đích**: Start MIA Logistics Manager
-**Chạy từ**: Root directory hoặc `mia-logistics-manager/`
-**Cách dùng**:
+**Chạy từ**: Root hoặc `one_automation_system/` — xem [START_HERE.md](./START_HERE.md), `./start.sh`, `scripts/start-stop/start-all.sh`.
 
 ```bash
-./mia-logistics-manager/start-mia.sh
-# hoặc
-cd mia-logistics-manager && ./start-mia.sh
+# Ví dụ chỉ backend API (sau khi cài venv + requirements trong one_automation_system):
+cd one_automation_system && ./start_backend.sh
 ```
 
 ---

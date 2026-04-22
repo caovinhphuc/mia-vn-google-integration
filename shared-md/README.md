@@ -199,9 +199,9 @@ react-oas-integration/
 ### Production Environment Variables
 
 ```bash
-# Backend
+# Backend (PaaS thường inject PORT; local monorepo: BACKEND_PORT trong .env gốc)
 NODE_ENV=production
-PORT=3001
+BACKEND_PORT=3001
 CORS_ORIGIN=https://your-domain.com
 
 # Frontend

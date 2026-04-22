@@ -23,6 +23,7 @@
     "chart.js": "^4.5.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
+    "express": "^4.21.2",
     "googleapis": "^126.0.0",
     "ml-matrix": "^6.12.1",
     "ml-regression": "^6.3.0",

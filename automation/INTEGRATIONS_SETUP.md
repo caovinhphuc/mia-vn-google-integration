@@ -81,18 +81,18 @@ Script kiểm tra: **Sheets**, **Drive**, **Telegram**, **Email**.
 
 ## 5. Email (SMTP)
 
-| Biến                               | Mô tả                                         |
-| ---------------------------------- | --------------------------------------------- |
-| `SMTP_HOST`                        | smtp.gmail.com (mặc định)                     |
-| `SMTP_PORT`                        | 587                                           |
-| `SMTP_USER` / `EMAIL_ADDRESS`      | Email gửi                                     |
-| `SMTP_PASSWORD` / `EMAIL_PASSWORD` | App password (Gmail: bật 2FA → App passwords) |
+| Biến                                                                        | Mô tả                                                                                 |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `SMTP_HOST`                                                                 | smtp.gmail.com (mặc định)                                                             |
+| `SMTP_PORT`                                                                 | 587                                                                                   |
+| `SMTP_USER` / `EMAIL_ADDRESS` / `GMAIL_USER`                                | Email gửi (địa chỉ Gmail đầy đủ)                                                      |
+| `SMTP_PASS` / `SMTP_PASSWORD` / `EMAIL_APP_PASSWORD` / `GMAIL_APP_PASSWORD` | App Password (Gmail: Google Account → Security → 2-Step Verification → App passwords) |
 
 **Cấu hình Gmail:**
 
 1. Bật 2-Step Verification
 2. Tạo App password
-3. Đặt `SMTP_USER` = email, `SMTP_PASSWORD` = app password
+3. Đặt `SMTP_USER` = email, **`SMTP_PASS`** = app password (root `.env.example` dùng `SMTP_PASS`; script `verify_integrations.py` đọc cả `SMTP_PASS` và `SMTP_PASSWORD`)
 
 **Gửi test:**
 

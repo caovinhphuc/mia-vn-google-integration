@@ -6,9 +6,11 @@
 
 | Nhu cầu                                   | File                                                           |
 | ----------------------------------------- | -------------------------------------------------------------- |
+| Cổng + FAQ siêu ngắn (đọc trước)          | [READ_THIS_FIRST.md](./READ_THIS_FIRST.md)                     |
 | ESLint, Prettier, Husky, `validate`, hook | [DEVELOPMENT_TOOLS_SUMMARY.md](./DEVELOPMENT_TOOLS_SUMMARY.md) |
 | npm scripts, WebSocket, test, `dev`       | [QUICK_SCRIPTS_REFERENCE.md](./QUICK_SCRIPTS_REFERENCE.md)     |
 | Cài đặt môi trường, `.env`                | [ENV_SETUP.md](./ENV_SETUP.md)                                 |
+| Python 3.11 / venv / tránh 3.14           | [PYTHON_VENV_GUIDE.md](./PYTHON_VENV_GUIDE.md)                 |
 
 ## Canonical commands (team)
 
@@ -33,7 +35,7 @@ Chi tiết: [PORT_CLARIFICATION.md](./PORT_CLARIFICATION.md) — tra `grep -r "p
 | Frontend (CRA)                     | **3000**        |
 | Backend API                        | **3001**        |
 | AI service (`ai-service`, uvicorn) | **8000**        |
-| Automation API (khi chạy riêng)    | **8001**        |
+| `one_automation_system` (uvicorn)  | **8001**        |
 
 ## Docs HTML
 
@@ -41,4 +43,4 @@ Chi tiết: [PORT_CLARIFICATION.md](./PORT_CLARIFICATION.md) — tra `grep -r "p
 
 ---
 
-_2026-03-20 — khôi phục file hub; `grep` / tài liệu cũ trỏ `QUICK_REFERENCE.md` sẽ hoạt động._
+_2026-04-22 — hub; liên kết READ_THIS_FIRST + đồng bộ port 8001._

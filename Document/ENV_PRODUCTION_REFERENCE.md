@@ -41,14 +41,14 @@ Sau khi đổi env: **Deployments → Redeploy**.
 
 **Variables** (tối thiểu; bổ sung secret thật trên Dashboard, không commit):
 
-| Biến                                                                         | Mô tả                                                                      |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `PORT`                                                                       | Railway gán (vd. `8080`); app đã dùng `process.env.PORT`                   |
-| `NODE_ENV`                                                                   | `production`                                                               |
-| `GOOGLE_SHEETS_SPREADSHEET_ID` hoặc `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID` | ID sheet mặc định                                                          |
-| `GOOGLE_APPLICATION_CREDENTIALS` / `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`         | JSON service account (hoặc paste JSON qua biến tuỳ cấu hình bạn đang dùng) |
-| `JWT_SECRET`                                                                 | Chuỗi dài, ngẫu nhiên                                                      |
-| `CORS_ORIGIN`                                                                | `https://react-oas-integration-v4-0.vercel.app`                            | Nếu backend có kiểm tra origin (hiện `server.js` dùng `cors()` mở — có thể siết sau) |
+| Biến                                                                         | Mô tả                                                                                                                                                        |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `PORT`                                                                       | Railway inject (vd. `8080`). Trong code: `PORT \|\| BACKEND_PORT \|\| 3001`. **Local monorepo + CRA:** dùng `BACKEND_PORT=3001`, tránh `PORT=` ở `.env` gốc. |
+| `NODE_ENV`                                                                   | `production`                                                                                                                                                 |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` hoặc `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID` | ID sheet mặc định                                                                                                                                            |
+| `GOOGLE_APPLICATION_CREDENTIALS` / `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`         | JSON service account (hoặc paste JSON tuỳ cách deploy)                                                                                                       |
+| `JWT_SECRET`                                                                 | Chuỗi dài, ngẫu nhiên                                                                                                                                        |
+| `CORS_ORIGIN`                                                                | `https://react-oas-integration-v4-0.vercel.app` — nếu sau này siết origin (hiện `cors()` mở)                                                                 |
 
 File mẫu chi tiết: [`backend/railway.env.example`](../backend/railway.env.example).
 
@@ -56,11 +56,11 @@ File mẫu chi tiết: [`backend/railway.env.example`](../backend/railway.env.ex
 
 ## 3. Local / build máy
 
-| File                                                                    | Mục đích                                                      |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------- |
-| [`.env.development`](../.env.development)                               | `localhost:3001` cho `npm start`                              |
-| [`.env.production`](../.env.production)                                 | Giá trị production khi `npm run build` local (đã trỏ Railway) |
-| `npx vercel env pull .env.production.local --environment production -y` | Lấy env từ Vercel trước khi `vercel build --prod`             |
+| File                                                                    | Mục đích                                                              |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`.env.development`](../.env.development)                               | `REACT_APP_*` + `BACKEND_PORT`; CRA mặc định **:3000**, API **:3001** |
+| [`.env.production`](../.env.production)                                 | Giá trị production khi `npm run build` local (đã trỏ Railway)         |
+| `npx vercel env pull .env.production.local --environment production -y` | Lấy env từ Vercel trước khi `vercel build --prod`                     |
 
 ---
 

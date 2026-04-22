@@ -1,0 +1,56 @@
+{
+  "date_range": {
+    "start_date": "2026-02-01",
+    "end_date": "2026-02-28"
+  },
+  "department": {
+    "selected": "Kho vận"
+  },
+  "month_year": {
+    "current_month": "02/2026"
+  },
+  "output": {
+    "data_dir": "data",
+    "source_name": "one_department_schedule",
+    "formats": ["json", "csv"]
+  },
+  "orders": {
+    "start_date": "2026-02-01",
+    "end_date": "2026-02-28",
+    "time_type": "ecom",
+    "display_limit": 2000
+  },
+  "extraction": {
+    "wait_time": 5,
+    "clean_data": true
+  },
+  "ui": {
+    "department_selectors": [
+      "#department_id",
+      "select#department_id",
+      "select[id*='department']",
+      "select[name*='department']",
+      "select[name*='dept']",
+      ".department-select",
+      "[class*='department'] select",
+      "select"
+    ],
+    "month_selectors": [
+      "#date",
+      "input#date",
+      "input[id='date']",
+      "input[placeholder*='tháng']",
+      "input[placeholder*='month']",
+      "input[name*='month']",
+      "input[name*='date']",
+      "input[id*='month']",
+      "input[id*='date']",
+      "select[name*='month']",
+      "select[id*='month']",
+      "[class*='month'] input",
+      "[class*='date'] input",
+      "input[type='text']"
+    ],
+    "month_keywords": ["tháng", "month", "date", "ngày", "picker", "calendar", "filter"]
+  }
+}

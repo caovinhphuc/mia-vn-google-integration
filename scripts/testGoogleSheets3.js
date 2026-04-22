@@ -1,274 +1,239 @@
 #!/usr/bin/env node
 /**
- * Test Google Sheets Service
- * Kiểm tra các chức năng Google Sheets có hoạt động không
+ * Test Google Sheets Service (CommonJS — tránh cảnh báo ESM của Node)
+ * Ưu tiên file JSON (GOOGLE_APPLICATION_CREDENTIALS / config/…) giống backend.
  */
 
-import { google } from 'googleapis';
-import dotenv from 'dotenv';
+const fs = require("fs");
+const path = require("path");
+const { google } = require("googleapis");
+require("dotenv").config();
 
-// Load environment variables
-dotenv.config();
+const PROJECT_ROOT = path.join(__dirname, "..");
 
-// Service Account credentials (support both REACT_APP_ and non-prefix)
-const getEnvVar = (reactAppName, fallbackName) => {
-  return process.env[reactAppName] || process.env[fallbackName];
-};
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return "";
+  let s = String(val).trim();
+  if (s.length >= 2) {
+    const a = s[0];
+    const b = s[s.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) s = s.slice(1, -1).trim();
+  }
+  return s;
+}
 
-const SERVICE_ACCOUNT_CREDENTIALS = {
-  type: 'service_account',
-  project_id: getEnvVar('REACT_APP_GOOGLE_PROJECT_ID', 'GOOGLE_PROJECT_ID'),
-  private_key_id: getEnvVar(
-    'REACT_APP_GOOGLE_PRIVATE_KEY_ID',
-    'GOOGLE_PRIVATE_KEY_ID'
-  ),
-  private_key: (
-    getEnvVar('REACT_APP_GOOGLE_PRIVATE_KEY', 'GOOGLE_PRIVATE_KEY') || ''
-  ).replace(/\\n/g, '\n'),
-  client_email: getEnvVar(
-    'REACT_APP_GOOGLE_CLIENT_EMAIL',
-    'GOOGLE_SERVICE_ACCOUNT_EMAIL'
-  ),
-  client_id: getEnvVar('REACT_APP_GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_ID'),
-  auth_uri:
-    process.env.GOOGLE_AUTH_URI || 'https://accounts.google.com/o/oauth2/auth',
-  token_uri:
-    process.env.GOOGLE_TOKEN_URI || 'https://oauth2.googleapis.com/token',
-  auth_provider_x509_cert_url:
-    process.env.GOOGLE_AUTH_PROVIDER_X509_CERT_URL ||
-    'https://www.googleapis.com/oauth2/v1/certs',
-  client_x509_cert_url:
-    process.env.GOOGLE_CLIENT_X509_CERT_URL ||
-    `https://www.googleapis.com/robot/v1/metadata/x509/${getEnvVar('REACT_APP_GOOGLE_CLIENT_EMAIL', 'GOOGLE_SERVICE_ACCOUNT_EMAIL')}`,
-};
+function isPlaceholderSheetId(id) {
+  const s = String(id).trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  if (["PLACEHOLDER", "REPLACE_ME", "CHANGEME", "EXAMPLE"].some((x) => u.includes(x))) return true;
+  if (s === "your-spreadsheet-id" || s === "your_spreadsheet_id") return true;
+  return false;
+}
 
-const SHEET_ID =
-  process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
-  process.env.REACT_APP_GOOGLE_SHEET_ID;
+function resolveSpreadsheetId() {
+  const keys = [
+    "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+    "REACT_APP_GOOGLE_SHEET_ID",
+    "REACT_APP_GOOGLE_SHEETS_ID",
+    "GOOGLE_SHEETS_ID",
+    "GOOGLE_SHEET_ID",
+    "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+  ];
+  for (const k of keys) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSheetId(v)) return { id: v, fromKey: k };
+  }
+  return { id: null, fromKey: null };
+}
 
-// Colors
+function findCredentialsJsonPath() {
+  const candidates = [
+    process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH,
+    process.env.GOOGLE_CREDENTIALS_PATH,
+    path.join(PROJECT_ROOT, "config/google-credentials.json"),
+    path.join(PROJECT_ROOT, "automation/config/google-credentials.json"),
+    path.join(PROJECT_ROOT, "automation/config/service_account.json"),
+  ].filter(Boolean);
+  const seen = new Set();
+  for (const p of candidates) {
+    const abs = path.isAbsolute(p) ? path.normalize(p) : path.join(PROJECT_ROOT, p);
+    if (seen.has(abs)) continue;
+    seen.add(abs);
+    if (fs.existsSync(abs)) return abs;
+  }
+  return null;
+}
+
 const colors = {
-  reset: '\x1b[0m',
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  yellow: '\x1b[33m',
-  blue: '\x1b[34m',
-  cyan: '\x1b[36m',
+  reset: "\x1b[0m",
+  green: "\x1b[32m",
+  red: "\x1b[31m",
+  yellow: "\x1b[33m",
+  blue: "\x1b[34m",
+  cyan: "\x1b[36m",
 };
 
 const log = {
-  success: msg => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  error: msg => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
-  info: msg => console.log(`${colors.blue}ℹ️  ${msg}${colors.reset}`),
-  test: msg => console.log(`${colors.cyan}🧪 ${msg}${colors.reset}`),
+  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
+  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
+  info: (msg) => console.log(`${colors.blue}ℹ️  ${msg}${colors.reset}`),
+  test: (msg) => console.log(`${colors.cyan}🧪 ${msg}${colors.reset}`),
 };
 
 async function testGoogleSheets() {
-  console.log('\n🧪 KIỂM TRA GOOGLE SHEETS SERVICE\n');
-  console.log('='.repeat(50));
+  console.log("\n🧪 KIỂM TRA GOOGLE SHEETS SERVICE\n");
+  console.log("=".repeat(50));
 
-  // Check environment variables (support both REACT_APP_ and non-prefix)
-  log.test('Bước 1: Kiểm tra Environment Variables...');
+  log.test("Bước 1: Kiểm tra Environment Variables...");
 
-  // Map environment variables (support both formats)
-  const projectId =
-    process.env.REACT_APP_GOOGLE_PROJECT_ID || process.env.GOOGLE_PROJECT_ID;
-  const privateKey =
-    process.env.REACT_APP_GOOGLE_PRIVATE_KEY || process.env.GOOGLE_PRIVATE_KEY;
-  const clientEmail =
-    process.env.REACT_APP_GOOGLE_CLIENT_EMAIL ||
-    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const clientId =
-    process.env.REACT_APP_GOOGLE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
-  const privateKeyId =
-    process.env.REACT_APP_GOOGLE_PRIVATE_KEY_ID ||
-    process.env.GOOGLE_PRIVATE_KEY_ID;
-
-  if (!projectId || !privateKey || !clientEmail || !clientId || !privateKeyId) {
-    log.error('Thiếu biến môi trường cần thiết:');
-    if (!projectId)
-      log.error('  - REACT_APP_GOOGLE_PROJECT_ID hoặc GOOGLE_PROJECT_ID');
-    if (!privateKey)
-      log.error('  - REACT_APP_GOOGLE_PRIVATE_KEY hoặc GOOGLE_PRIVATE_KEY');
-    if (!clientEmail)
-      log.error(
-        '  - REACT_APP_GOOGLE_CLIENT_EMAIL hoặc GOOGLE_SERVICE_ACCOUNT_EMAIL'
-      );
-    if (!clientId)
-      log.error('  - REACT_APP_GOOGLE_CLIENT_ID hoặc GOOGLE_CLIENT_ID');
-    if (!privateKeyId)
-      log.error(
-        '  - REACT_APP_GOOGLE_PRIVATE_KEY_ID hoặc GOOGLE_PRIVATE_KEY_ID'
-      );
-    return false;
-  }
-  log.success('Tất cả biến môi trường đã có');
-
+  const { id: SHEET_ID, fromKey } = resolveSpreadsheetId();
   if (!SHEET_ID) {
-    log.error(
-      'Thiếu REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID hoặc REACT_APP_GOOGLE_SHEET_ID'
-    );
-    return false;
-  }
-  log.success(`Sheet ID: ${SHEET_ID}`);
-
-  // Initialize auth
-  log.test('\nBước 2: Khởi tạo Google Auth...');
-  log.info(`   Project ID: ${SERVICE_ACCOUNT_CREDENTIALS.project_id}`);
-  log.info(`   Client Email: ${SERVICE_ACCOUNT_CREDENTIALS.client_email}`);
-
-  let auth;
-  try {
-    auth = new google.auth.JWT(
-      SERVICE_ACCOUNT_CREDENTIALS.client_email,
-      null,
-      SERVICE_ACCOUNT_CREDENTIALS.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets']
-    );
-    log.success('Google Auth đã khởi tạo');
-  } catch (error) {
-    log.error(`Lỗi khởi tạo auth: ${error.message}`);
-    if (error.message.includes('private_key')) {
+    const raw = stripEnvQuotes(process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID || "");
+    if (raw && isPlaceholderSheetId(raw)) {
       log.error(
-        '   → Kiểm tra GOOGLE_PRIVATE_KEY có đầy đủ không (bao gồm BEGIN/END)'
+        `REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID="${raw}" là placeholder — thay bằng ID từ URL Sheet.`
+      );
+    } else {
+      log.error(
+        "Thiếu Spreadsheet ID (đặt REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID hoặc REACT_APP_GOOGLE_SHEET_ID, v.v.)"
       );
     }
     return false;
   }
+  log.success(`Sheet ID (${fromKey}): ${SHEET_ID}`);
 
-  // Initialize Sheets API
-  log.test('\nBước 3: Khởi tạo Google Sheets API...');
-  let sheets;
-  try {
-    sheets = google.sheets({ version: 'v4', auth });
-    log.success('Google Sheets API đã khởi tạo');
-  } catch (error) {
-    log.error(`Lỗi khởi tạo Sheets API: ${error.message}`);
-    return false;
+  const keyFile = findCredentialsJsonPath();
+  let auth;
+
+  log.test("\nBước 2: Khởi tạo Google Auth...");
+  if (keyFile) {
+    log.info(`   Dùng file JSON: ${keyFile}`);
+    const raw = JSON.parse(fs.readFileSync(keyFile, "utf8"));
+    log.info(`   Project ID: ${raw.project_id}`);
+    log.info(`   Client Email: ${raw.client_email}`);
+    auth = new google.auth.GoogleAuth({
+      keyFile,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+    log.success("Google Auth (keyFile) đã khởi tạo");
+  } else {
+    const getEnvVar = (a, b) => stripEnvQuotes(process.env[a]) || stripEnvQuotes(process.env[b]);
+    const projectId = getEnvVar("REACT_APP_GOOGLE_PROJECT_ID", "GOOGLE_PROJECT_ID");
+    const privateKey = (
+      getEnvVar("REACT_APP_GOOGLE_PRIVATE_KEY", "GOOGLE_PRIVATE_KEY") || ""
+    ).replace(/\\n/g, "\n");
+    const clientEmail = getEnvVar("REACT_APP_GOOGLE_CLIENT_EMAIL", "GOOGLE_SERVICE_ACCOUNT_EMAIL");
+    const clientId = getEnvVar("REACT_APP_GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_ID");
+    const privateKeyId = getEnvVar("REACT_APP_GOOGLE_PRIVATE_KEY_ID", "GOOGLE_PRIVATE_KEY_ID");
+
+    if (!projectId || !privateKey || !clientEmail || !clientId || !privateKeyId) {
+      log.error("Thiếu biến để ghép JWT HOẶC không có file JSON credentials.");
+      log.error("  → Đặt GOOGLE_APPLICATION_CREDENTIALS=config/google-credentials.json");
+      log.error(
+        "  → Hoặc đủ: GOOGLE_PROJECT_ID, GOOGLE_PRIVATE_KEY, GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_CLIENT_ID, GOOGLE_PRIVATE_KEY_ID"
+      );
+      return false;
+    }
+    log.info(`   Project ID: ${projectId}`);
+    log.info(`   Client Email: ${clientEmail}`);
+    auth = new google.auth.JWT(clientEmail, null, privateKey, [
+      "https://www.googleapis.com/auth/spreadsheets",
+    ]);
+    log.success("Google Auth (JWT từ .env) đã khởi tạo");
   }
 
-  // Test 1: Get Spreadsheet Metadata
-  log.test('\nBước 4: Test 1 - Lấy thông tin Spreadsheet...');
+  const authClient = await auth.getClient();
+
+  log.test("\nBước 3: Khởi tạo Google Sheets API...");
+  const sheets = google.sheets({ version: "v4", auth: authClient });
+  log.success("Google Sheets API đã khởi tạo");
+
+  log.test("\nBước 4: Test 1 - Lấy thông tin Spreadsheet...");
   try {
     const response = await sheets.spreadsheets.get({
       spreadsheetId: SHEET_ID,
     });
     const title = response.data.properties.title;
     const sheetCount = response.data.sheets.length;
-    log.success(`✅ Kết nối thành công!`);
+    log.success("Kết nối thành công!");
     log.info(`   Tên: ${title}`);
     log.info(`   Số sheets: ${sheetCount}`);
-    log.info(
-      `   Sheets: ${response.data.sheets.map(s => s.properties.title).join(', ')}`
-    );
+    log.info(`   Sheets: ${response.data.sheets.map((s) => s.properties.title).join(", ")}`);
   } catch (error) {
-    log.error(`❌ Lỗi: ${error.message}`);
-    if (error.code === 403) {
-      log.error('   → Service Account chưa có quyền truy cập sheet này');
+    const msg = error.message || String(error);
+    log.error(`Lỗi: ${msg}`);
+    const email =
+      keyFile && fs.existsSync(keyFile)
+        ? JSON.parse(fs.readFileSync(keyFile, "utf8")).client_email
+        : stripEnvQuotes(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || "");
+    if (
+      msg.includes("unregistered") ||
+      msg.includes("API Key") ||
+      msg.includes("consumer identity")
+    ) {
       log.error(
-        '   → Cần share sheet với email: ' +
-          SERVICE_ACCOUNT_CREDENTIALS.client_email
+        "   → Thường gặp khi: Google Sheets API chưa bật trên project của key; private_key sai; hoặc request không gắn đúng credentials."
       );
+      log.error('   → GCP Console → APIs & Services → Enable "Google Sheets API"');
+    }
+    if (error.code === 403 || msg.includes("PERMISSION_DENIED")) {
+      log.error("   → Chia sẻ Sheet với service account (Viewer tối thiểu):");
+      if (email) log.error(`      ${email}`);
+    }
+    if (msg.includes("not found") || msg.includes("Not Found")) {
+      log.error("   → Kiểm tra Spreadsheet ID khớp URL / Sheet đã share cho email trên.");
     }
     return false;
   }
 
-  // Test 2: Read Data
-  log.test('\nBước 5: Test 2 - Đọc dữ liệu từ Sheet...');
+  log.test("\nBước 5: Test 2 - Đọc dữ liệu từ Sheet...");
   try {
-    const firstSheet = await sheets.spreadsheets.get({
-      spreadsheetId: SHEET_ID,
-    });
-    const firstSheetName = firstSheet.data.sheets[0].properties.title;
-
+    const meta = await sheets.spreadsheets.get({ spreadsheetId: SHEET_ID });
+    const firstSheetName = meta.data.sheets[0].properties.title;
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
       range: `${firstSheetName}!A1:Z10`,
     });
-
     const rows = response.data.values || [];
-    log.success(`✅ Đọc thành công!`);
-    log.info(`   Sheet: ${firstSheetName}`);
-    log.info(`   Số dòng: ${rows.length}`);
-    if (rows.length > 0) {
-      log.info(`   Số cột: ${rows[0].length}`);
-      log.info(`   Dòng đầu tiên: ${rows[0].slice(0, 5).join(', ')}...`);
-    }
+    log.success("Đọc thành công!");
+    log.info(`   Sheet: ${firstSheetName}, số dòng: ${rows.length}`);
   } catch (error) {
-    log.error(`❌ Lỗi đọc dữ liệu: ${error.message}`);
+    log.error(`Lỗi đọc dữ liệu: ${error.message}`);
     return false;
   }
 
-  // Test 3: Write Data (Test write to a test cell)
-  log.test('\nBước 6: Test 3 - Ghi dữ liệu vào Sheet (Test cell)...');
+  log.test("\nBước 6: Test 3 - Ghi ô test Z999...");
   try {
-    const firstSheet = await sheets.spreadsheets.get({
-      spreadsheetId: SHEET_ID,
-    });
-    const firstSheetName = firstSheet.data.sheets[0].properties.title;
-    const testRange = `${firstSheetName}!Z999`; // Test cell ở cuối sheet
-
-    const response = await sheets.spreadsheets.values.update({
+    const meta = await sheets.spreadsheets.get({ spreadsheetId: SHEET_ID });
+    const firstSheetName = meta.data.sheets[0].properties.title;
+    const testRange = `${firstSheetName}!Z999`;
+    await sheets.spreadsheets.values.update({
       spreadsheetId: SHEET_ID,
       range: testRange,
-      valueInputOption: 'RAW',
-      requestBody: {
-        values: [['TEST_' + Date.now()]],
-      },
+      valueInputOption: "RAW",
+      requestBody: { values: [[`TEST_${Date.now()}`]] },
     });
-
-    log.success(`✅ Ghi thành công!`);
+    log.success("Ghi thành công!");
     log.info(`   Range: ${testRange}`);
-    log.info(`   Updated cells: ${response.data.updatedCells}`);
   } catch (error) {
-    log.error(`❌ Lỗi ghi dữ liệu: ${error.message}`);
-    if (error.code === 403) {
-      log.error('   → Service Account chưa có quyền ghi');
-    }
+    log.error(`Lỗi ghi: ${error.message}`);
     return false;
   }
 
-  // Test 4: Append Data
-  log.test('\nBước 7: Test 4 - Thêm dữ liệu vào cuối Sheet...');
-  try {
-    const firstSheet = await sheets.spreadsheets.get({
-      spreadsheetId: SHEET_ID,
-    });
-    const firstSheetName = firstSheet.data.sheets[0].properties.title;
-
-    const response = await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: `${firstSheetName}!A:Z`,
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      requestBody: {
-        values: [['APPEND_TEST', Date.now(), 'Test data']],
-      },
-    });
-
-    log.success(`✅ Thêm dữ liệu thành công!`);
-    log.info(`   Updated rows: ${response.data.updates.updatedRows}`);
-  } catch (error) {
-    log.error(`❌ Lỗi thêm dữ liệu: ${error.message}`);
-    return false;
-  }
-
-  // Summary
-  console.log('\n' + '='.repeat(50));
-  log.success('🎉 TẤT CẢ CÁC TEST ĐÃ THÀNH CÔNG!');
-  log.info('Google Sheets Service hoạt động bình thường ✅');
-  console.log('');
-
+  console.log("\n" + "=".repeat(50));
+  log.success("🎉 TẤT CẢ CÁC TEST ĐÃ THÀNH CÔNG!");
+  console.log("");
   return true;
 }
 
-// Run test
 testGoogleSheets()
-  .then(success => {
-    process.exit(success ? 0 : 1);
-  })
-  .catch(error => {
-    log.error(`Lỗi không mong đợi: ${error.message}`);
-    console.error(error);
+  .then((ok) => process.exit(ok ? 0 : 1))
+  .catch((e) => {
+    log.error(`Lỗi không mong đợi: ${e.message}`);
+    console.error(e);
     process.exit(1);
   });

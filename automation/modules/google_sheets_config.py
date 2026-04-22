@@ -15,6 +15,78 @@ from google.auth.exceptions import RefreshError
 from google.oauth2.service_account import Credentials
 import pandas as pd
 
+# Sheet Automation_Logs (A–O): dùng cho log + get_all_records khi dòng 1 có cột trống/trùng
+AUTOMATION_LOG_HEADERS: List[str] = [
+    'Timestamp', 'Success', 'Duration_Seconds', 'Order_Count',
+    'Enhanced_Order_Count', 'Config_Source', 'Sheets_Integration',
+    'System_URL', 'Automation_Version', 'Error', 'Start_Time',
+    'End_Time', 'Export_Files', 'Platform', 'Notes',
+]
+
+
+def _sheet_bool(value: Any, default: bool = True) -> bool:
+    """Giá trị từ Sheets / merge config có thể là bool hoặc chuỗi true/false."""
+    if isinstance(value, bool):
+        return value
+    if value is None or value == '':
+        return default
+    return str(value).strip().lower() in ('true', '1', 'yes', 'on')
+
+
+def _is_google_service_account_file(path: str) -> bool:
+    """JSON key tải từ GCP IAM có type service_account."""
+    try:
+        with open(path, encoding='utf-8') as f:
+            data = json.load(f)
+        return data.get('type') == 'service_account' and bool(data.get('client_email'))
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return False
+
+
+def resolve_service_account_credentials_path() -> Optional[str]:
+    """
+    Tìm file service account JSON theo thứ tự:
+    GOOGLE_SERVICE_ACCOUNT_FILE → GOOGLE_SERVICE_ACCOUNT_KEY_PATH → GOOGLE_APPLICATION_CREDENTIALS →
+    ~/.secrets/google/service_account.json | service_key.json | service_key →
+    bất kỳ *.json hợp lệ trong ~/.secrets/google (ưu tiên file mới sửa gần nhất) →
+    config/service_account.json
+    """
+    candidates: List[str] = []
+
+    def push(p: Optional[str]) -> None:
+        if not p:
+            return
+        x = os.path.expanduser(os.path.expandvars(str(p).strip()))
+        if x and x not in candidates:
+            candidates.append(x)
+
+    push(os.environ.get('GOOGLE_CREDENTIALS_PATH'))
+    push(os.environ.get('GOOGLE_SERVICE_ACCOUNT_FILE'))
+    push(os.environ.get('GOOGLE_SERVICE_ACCOUNT_KEY_PATH'))
+    push(os.environ.get('GOOGLE_APPLICATION_CREDENTIALS'))
+
+    secrets_dir = os.path.expanduser('~/.secrets/google')
+    push(os.path.join(secrets_dir, 'service_account.json'))
+    push(os.path.join(secrets_dir, 'service_key.json'))
+    push(os.path.join(secrets_dir, 'service_key'))
+
+    if os.path.isdir(secrets_dir):
+        json_paths = [
+            os.path.join(secrets_dir, f)
+            for f in os.listdir(secrets_dir)
+            if f.endswith('.json')
+        ]
+        json_paths.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+        for p in json_paths:
+            push(p)
+
+    push('config/service_account.json')
+
+    for p in candidates:
+        if os.path.isfile(p) and _is_google_service_account_file(p):
+            return p
+    return None
+
 
 class GoogleSheetsConfigService:
     """Service quản lý cấu hình qua Google Sheets"""
@@ -29,7 +101,11 @@ class GoogleSheetsConfigService:
         """
         self.logger = logging.getLogger('GoogleSheetsConfig')
         self.spreadsheet_id = spreadsheet_id or '17xjOqmZFMYT_Tt78_BARbwMYhDEyGcODNwxYbxNSWG8'
-        self.credentials_path = credentials_path or 'config/service_account.json'
+        self.credentials_path = (
+            credentials_path
+            or resolve_service_account_credentials_path()
+            or 'config/service_account.json'
+        )
         self.client = None
         self.spreadsheet = None
 
@@ -277,13 +353,7 @@ class GoogleSheetsConfigService:
                     title=self.logs_sheet, rows=1000, cols=15
                 )
                 # Add headers
-                headers = [
-                    'Timestamp', 'Success', 'Duration_Seconds', 'Order_Count',
-                    'Enhanced_Order_Count', 'Config_Source', 'Sheets_Integration',
-                    'System_URL', 'Automation_Version', 'Error', 'Start_Time',
-                    'End_Time', 'Export_Files', 'Platform', 'Notes'
-                ]
-                worksheet.update('A1:O1', [headers])
+                worksheet.update('A1:O1', [AUTOMATION_LOG_HEADERS])
 
             # Prepare log data
             log_data = [
@@ -325,8 +395,12 @@ class GoogleSheetsConfigService:
             except gspread.WorksheetNotFound:
                 return []
 
-            # Get all records
-            records = worksheet.get_all_records()
+            try:
+                records = worksheet.get_all_records(
+                    expected_headers=AUTOMATION_LOG_HEADERS
+                )
+            except Exception:
+                records = self._automation_logs_from_values(worksheet)
 
             # Sort by timestamp (newest first)
             sorted_records = sorted(
@@ -340,6 +414,22 @@ class GoogleSheetsConfigService:
         except Exception as e:
             self.logger.error(f"❌ Error getting automation history: {e}")
             return []
+
+    def _automation_logs_from_values(self, worksheet) -> List[Dict[str, Any]]:
+        """Đọc Automation_Logs khi header trên sheet lệch (unknown/duplicate) so với gspread."""
+        rows = worksheet.get_all_values()
+        if not rows:
+            return []
+        n = len(AUTOMATION_LOG_HEADERS)
+        first = rows[0]
+        body = rows[1:] if first and str(first[0]).strip() == 'Timestamp' else rows
+        out: List[Dict[str, Any]] = []
+        for row in body:
+            padded = (list(row) + [''] * n)[:n]
+            if not any(str(c).strip() for c in padded):
+                continue
+            out.append(dict(zip(AUTOMATION_LOG_HEADERS, padded)))
+        return out
 
     def _parse_config_value(self, value: str) -> Any:
         """Parse config value từ string"""
@@ -641,7 +731,9 @@ class GoogleSheetsConfigService:
                 'retry_count': int(config.get('automation', {}).get('retry_count', '3')),
                 'page_wait_time': int(config.get('automation', {}).get('page_wait_time', '5')),
                 'session_strategy': config.get('automation', {}).get('session_strategy', 'fresh_per_page'),
-                'product_extraction': config.get('automation', {}).get('product_extraction', 'true').lower() == 'true',
+                'product_extraction': _sheet_bool(
+                    config.get('automation', {}).get('product_extraction'), True
+                ),
                 'export_format': config.get('export', {}).get('format', 'csv'),
                 'logging_level': config.get('logging', {}).get('level', 'INFO')
             }

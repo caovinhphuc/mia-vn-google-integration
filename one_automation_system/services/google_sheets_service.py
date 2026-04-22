@@ -6,44 +6,58 @@ Google Sheets Service
 import os
 import logging
 from typing import List, Dict, Any, Optional
+
 import gspread
 from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+
+from utils.google_credentials import resolve_service_account_credentials_path
+
 
 class GoogleSheetsService:
-    """Service for Google Sheets integration"""
+    """Service for Google Sheets + optional Google Drive API (cùng service account)."""
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.client = None
+        self.drive = None
+        self._credentials_path: Optional[str] = None
         self._initialized = False
 
     async def initialize(self):
-        """Initialize Google Sheets service"""
+        """Initialize Google Sheets (gspread) và Drive v3 (googleapiclient) nếu có key hợp lệ."""
         try:
-            credentials_path = os.getenv(
-                "GOOGLE_CREDENTIALS_PATH",
-                "config/service_account.json"
-            )
-
-            if not os.path.exists(credentials_path):
-                self.logger.warning(
-                    f"Credentials file not found: {credentials_path}"
+            credentials_path = resolve_service_account_credentials_path()
+            if not credentials_path:
+                credentials_path = os.path.expanduser(
+                    os.path.expandvars(
+                        os.getenv('GOOGLE_CREDENTIALS_PATH', 'config/service_account.json')
+                    )
                 )
+
+            self._credentials_path = credentials_path
+
+            if not os.path.isfile(credentials_path):
+                self.logger.warning('Credentials file not found: %s', credentials_path)
                 self._initialized = False
                 return False
 
             scopes = [
                 'https://www.googleapis.com/auth/spreadsheets',
-                'https://www.googleapis.com/auth/drive'
+                'https://www.googleapis.com/auth/drive',
             ]
 
-            creds = Credentials.from_service_account_file(
-                credentials_path,
-                scopes=scopes
-            )
+            creds = Credentials.from_service_account_file(credentials_path, scopes=scopes)
             self.client = gspread.authorize(creds)
+            try:
+                self.drive = build('drive', 'v3', credentials=creds, cache_discovery=False)
+                self.logger.info('Google Drive API v3 client ready')
+            except Exception as drive_err:
+                self.drive = None
+                self.logger.warning('Google Drive API init skipped: %s', drive_err)
+
             self._initialized = True
-            self.logger.info("Google Sheets service initialized")
+            self.logger.info('Google Sheets service initialized (key: %s)', credentials_path)
             return True
 
         except Exception as e:
@@ -97,4 +111,10 @@ class GoogleSheetsService:
     def is_connected(self) -> bool:
         """Check if service is connected"""
         return self._initialized and self.client is not None
+
+    def is_drive_ready(self) -> bool:
+        return self.drive is not None
+
+    def credentials_path_used(self) -> Optional[str]:
+        return self._credentials_path
 

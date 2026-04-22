@@ -31,8 +31,7 @@ const log = {
   warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
   error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
   step: (msg) => console.log(`${colors.cyan}🚀 ${msg}${colors.reset}`),
-  header: (msg) =>
-    console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
+  header: (msg) => console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
 };
 
 // Create readline interface for user input
@@ -71,9 +70,7 @@ const createEnvFile = async () => {
   log.step("Tạo file .env từ template...");
 
   if (fileExists(".env")) {
-    const overwrite = await askQuestion(
-      "File .env đã tồn tại. Bạn có muốn ghi đè? (y/N): "
-    );
+    const overwrite = await askQuestion("File .env đã tồn tại. Bạn có muốn ghi đè? (y/N): ");
     if (overwrite.toLowerCase() !== "y") {
       log.info("Bỏ qua tạo file .env");
       return;
@@ -84,8 +81,8 @@ const createEnvFile = async () => {
 REACT_APP_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
 REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
 
-# Service account (cho development)
-GOOGLE_SERVICE_ACCOUNT_EMAIL=mia-logistics-service@mia-logistics-469406.iam.gserviceaccount.com
+# Service account (cho development) — điền client_email từ JSON key GCP
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@YOUR_GCP_PROJECT_ID.iam.gserviceaccount.com
 GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\\nYour private key here\\n-----END PRIVATE KEY-----"
 GOOGLE_SERVICE_ACCOUNT_KEY_PATH=/path/to/service-account-key.json
 VITE_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
@@ -131,9 +128,7 @@ const installDependencies = async () => {
 
   // Check if package.json exists
   if (!fileExists("package.json")) {
-    log.error(
-      "Không tìm thấy package.json. Vui lòng chạy script trong thư mục gốc của dự án."
-    );
+    log.error("Không tìm thấy package.json. Vui lòng chạy script trong thư mục gốc của dự án.");
     return false;
   }
 
@@ -148,9 +143,7 @@ const installDependencies = async () => {
 
   // Install backend dependencies
   log.info("Cài đặt backend dependencies...");
-  const backendResult = execCommand(
-    "npm install express nodemailer node-cron cors dotenv"
-  );
+  const backendResult = execCommand("npm install express nodemailer node-cron cors dotenv");
   if (!backendResult.success) {
     log.error(`Lỗi cài đặt backend dependencies: ${backendResult.error}`);
     return false;
@@ -180,15 +173,11 @@ const validateEnvironment = () => {
 
   const missingVars = requiredVars.filter((varName) => {
     const regex = new RegExp(`^${varName}=`, "m");
-    return (
-      !regex.test(envContent) || envContent.match(regex)[0].includes("your-")
-    );
+    return !regex.test(envContent) || envContent.match(regex)[0].includes("your-");
   });
 
   if (missingVars.length > 0) {
-    log.warning(
-      `Các biến môi trường sau chưa được cấu hình: ${missingVars.join(", ")}`
-    );
+    log.warning(`Các biến môi trường sau chưa được cấu hình: ${missingVars.join(", ")}`);
     log.info("Vui lòng cập nhật file .env với thông tin thực tế của bạn.");
     return false;
   }
@@ -301,9 +290,7 @@ const main = async () => {
     // Step 4: Validate environment (optional)
     const envValid = validateEnvironment();
     if (!envValid) {
-      log.warning(
-        "Environment chưa được cấu hình đầy đủ. Vui lòng cập nhật file .env"
-      );
+      log.warning("Environment chưa được cấu hình đầy đủ. Vui lòng cập nhật file .env");
     }
 
     // Step 5: Test Google connection (if env is valid)

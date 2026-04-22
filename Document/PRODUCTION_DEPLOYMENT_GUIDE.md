@@ -125,6 +125,7 @@ cd /var/www/react-oas-integration
 ```bash
 # Backend Configuration
 NODE_ENV=production
+# PaaS/container: thường inject PORT. Local monorepo + CRA: dùng BACKEND_PORT=3001 trong .env gốc
 PORT=3001
 CORS_ORIGIN=https://yourdomain.com
 API_RATE_LIMIT=100
@@ -229,7 +230,7 @@ npm run cargo:optimize
 ./deploy.sh test
 
 # Manual test commands
-node complete_system_test.js     # Complete integration test
+node scripts/tests/complete_system_test.js     # Complete integration test
 node integration_test.js         # API integration test
 node advanced_integration.js     # Advanced scenarios
 node frontend_connection_test.js # Frontend connectivity

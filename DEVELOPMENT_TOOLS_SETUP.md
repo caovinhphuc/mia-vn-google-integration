@@ -1,5 +1,21 @@
 # 🛠️ Development Tools Setup - Complete
 
+Tóm tắt ngắn: [DEVELOPMENT_TOOLS_SUMMARY.md](./DEVELOPMENT_TOOLS_SUMMARY.md) · Môi trường repo: [ENV_SETUP.md](./ENV_SETUP.md)
+
+## ✅ Đã chạy thử (xác minh nội dung MD — 2026-04-22)
+
+| Lệnh                   | Kết quả                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `npm run tools:check`  | ✅ (Node/npm/git/python bắt buộc)                                              |
+| `npm run lint:check`   | ✅                                                                             |
+| `npm run format:check` | ✅ (có thể cảnh báo Prettier `jsxBracketSameLine is deprecated` — chỉ warning) |
+| `npm run type:check`   | ✅                                                                             |
+| `npm run test:ci`      | ✅ (26 tests; Login suite dùng `jest.setTimeout(30000)`)                       |
+| `npm run validate`     | ✅ (= lint + format + type + test:ci)                                          |
+| `npm run build:prod`   | ✅                                                                             |
+
+**Ghi chú:** Jest (CRA) có thể dùng Watchman. Trong môi trường sandbox hoặc khi Watchman lỗi quyền (`fchmod`), chạy test trên máy dev đầy đủ. Cảnh báo _recrawl_ của Watchman: xem [troubleshooting Watchman](https://facebook.github.io/watchman/docs/troubleshooting.html#recrawl).
+
 ## ✅ Đã cài đặt (đồng bộ `package.json`)
 
 **Phiên bản cụ thể:** xem trực tiếp trong `package.json` / chạy `npm ls eslint prettier husky lint-staged typescript`.
@@ -201,27 +217,34 @@ npm run validate:full
 
 ## 📚 Useful Commands Reference
 
-| Command                                           | Description                                      |
-| ------------------------------------------------- | ------------------------------------------------ |
-| `npm run lint`                                    | Lint all code                                    |
-| `npm run lint:fix`                                | Auto-fix linting issues                          |
-| `npm run format` / `npm run prettier`             | Format `src/**/*.{js,jsx,json,css,md}`           |
-| `npm run format:check` / `npm run prettier:check` | Kiểm tra Prettier (không sửa file)               |
-| `npm run type:check`                              | TypeScript type check                            |
-| `npm run validate`                                | lint:check + format:check + type:check + test:ci |
-| `npm run validate:full`                           | Full validation + build                          |
-| `npm run pre-commit`                              | Run lint-staged manually                         |
-| `npm run check:tools` / `tools:check`             | Kiểm tra Node, npm, Python, git, …               |
-| `npm run scripts:guard-wrappers`                  | Check root `*.sh` giữ chuẩn wrapper ngắn         |
+| Command                                           | Description                                                  |
+| ------------------------------------------------- | ------------------------------------------------------------ |
+| `npm run lint`                                    | Lint all code                                                |
+| `npm run lint:fix`                                | Auto-fix linting issues                                      |
+| `npm run format` / `npm run prettier`             | Format `src/**/*.{js,jsx,json,css,md}`                       |
+| `npm run format:check` / `npm run prettier:check` | Kiểm tra Prettier (không sửa file)                           |
+| `npm run type:check`                              | TypeScript type check                                        |
+| `npm run validate`                                | lint:check + format:check + type:check + test:ci             |
+| `npm run validate:full`                           | Full validation + build                                      |
+| `npm run pre-commit`                              | Run lint-staged manually                                     |
+| `npm run check:tools` / `tools:check`             | Kiểm tra Node, npm, Python, git, …                           |
+| `npm run ide:setup`                               | `bash scripts/setup/ide-setup.sh` — VS Code/Cursor + `.venv` |
+| `npm run scripts:guard-wrappers`                  | Check root `*.sh` giữ chuẩn wrapper ngắn                     |
 
 ## 🧩 VS Code / Cursor Extensions
 
-`scripts/setup/ide-setup.sh` **cài extension qua CLI `code`** khi máy có **VS Code**. **Cursor** không được script gọi `cursor --install-extension` — mở Extensions trong Cursor và cài theo danh sách dưới (hoặc dùng recommendations trong workspace).
+`scripts/setup/ide-setup.sh` (hoặc **`npm run ide:setup`**):
+
+- Nếu có CLI **`code`**: cài extension qua `code --install-extension`.
+- Nếu có CLI **`cursor`**: cài **cùng danh sách** qua `cursor --install-extension`.
+
+Nếu không có CLI, cài thủ công trong Extensions (hoặc dùng `.vscode/extensions.json` / recommendations workspace).
 
 | Extension ID                                 | Mô tả                                  |
 | -------------------------------------------- | -------------------------------------- |
 | `esbenp.prettier-vscode`                     | Prettier – Code formatter              |
 | `dbaeumer.vscode-eslint`                     | ESLint – Linting JavaScript/TypeScript |
+| `DavidAnson.vscode-markdownlint`             | Markdown lint                          |
 | `eamodio.gitlens`                            | GitLens – Git supercharged             |
 | `ms-vscode.vscode-typescript-next`           | TypeScript Nightly                     |
 | `bradlc.vscode-tailwindcss`                  | Tailwind CSS IntelliSense              |
@@ -240,7 +263,9 @@ npm run validate:full
 ### Cài đặt extensions (tự động)
 
 ```bash
-bash scripts/setup/ide-setup.sh
+npm run ide:setup
+# tương đương:
+# bash scripts/setup/ide-setup.sh
 ```
 
 ### Cài đặt thủ công (ví dụ với VS Code)
@@ -254,40 +279,35 @@ code --install-extension eamodio.gitlens
 
 ---
 
-## 🐍 Python Libraries (Automation)
+## 🐍 Python (IDE + AI + automation)
 
-Được cài đặt vào virtual environment `one_automation_system/venv/` qua `scripts/setup/ide-setup.sh`:
+### Chuẩn dự án: `.venv` ở **root** (`npm run ide:setup`)
 
-### Core packages
+`scripts/setup/ide-setup.sh` tạo/kích hoạt **`.venv` tại thư mục gốc repo** (song song có thể có `one_automation_system/venv/` nếu bạn tạo tay):
 
-| Package                | Mô tả                          |
-| ---------------------- | ------------------------------ |
-| `uvicorn`              | ASGI server cho FastAPI        |
-| `fastapi`              | Web framework hiệu năng cao    |
-| `python-dotenv`        | Đọc biến môi trường từ `.env`  |
-| `gspread`              | Google Sheets API client       |
-| `google-auth`          | Google authentication          |
-| `google-auth-oauthlib` | OAuth2 flow cho Google APIs    |
-| `google-auth-httplib2` | HTTP transport cho Google auth |
-| `pandas`               | Xử lý và phân tích dữ liệu     |
-| `numpy`                | Tính toán số học               |
-| `openpyxl`             | Đọc/ghi file Excel (.xlsx)     |
+1. `python3.11` nếu có, không thì `python3`.
+2. Cài từ **`requirements-dev.txt`** (FastAPI, uvicorn, pandas, Selenium, …) — xem file trong repo.
+3. Nếu thiếu `requirements-dev.txt`: fallback cài một số gói cốt lõi (log trong script).
 
-### Khởi tạo môi trường Python thủ công
+```bash
+source .venv/bin/activate
+python --version
+pip install -r requirements-dev.txt   # khi cần cập nhật tay
+```
+
+### Môi trường riêng `one_automation_system/` (tuỳ chọn)
+
+Một số workflow vẫn dùng venv trong thư mục con:
 
 ```bash
 cd one_automation_system
 python3 -m venv venv
 source venv/bin/activate
-
-# Nếu có file requirements-minimal.txt
 pip install -r requirements-minimal.txt
-
-# Hoặc cài thủ công
-pip install uvicorn fastapi python-dotenv gspread \
-    google-auth google-auth-oauthlib google-auth-httplib2 \
-    pandas numpy openpyxl
+# hoặc: pip install -r requirements.txt
 ```
+
+Gói tiêu biểu (xem đúng file requirements): `fastapi`, `uvicorn`, `pandas`, `selenium`, `gspread` / Google auth (tùy mô-đun), v.v.
 
 ### Python formatter / linter (VS Code extensions)
 
@@ -314,8 +334,12 @@ pip install uvicorn fastapi python-dotenv gspread \
 
 ---
 
-**Date**: December 25, 2025
-**Updated**: March 20, 2026 — Husky 9 `prepare`, pre-commit bật, alias `npm run prettier`, artefact perf/Lighthouse trong `.gitignore` (xem `Document/DEV_SCRIPTS_NOTES.md`)
-**Status**: ✅ **Complete**
-**Tools**: ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code Extensions, Python (`one_automation_system/venv`)
+**Cập nhật:** 2026-04-22 — Đồng bộ `ide-setup.sh` (Cursor + `.venv` + `requirements-dev.txt`), bảng lệnh đã chạy thử, script `npm run ide:setup`.
+
+**Trước đó:** 2026-03 — Husky 9 `prepare`, pre-commit, alias `npm run prettier` (xem `Document/DEV_SCRIPTS_NOTES.md` nếu còn dùng).
+
+**Status:** ✅ Hoàn chỉnh (theo `package.json` hiện tại)
+
+**Stack:** ESLint (CRA + Prettier), Prettier, Husky, lint-staged, TypeScript, VS Code/Cursor extensions, Python root `.venv`
+
 **Môi trường tổng quát:** [ENV_SETUP.md](./ENV_SETUP.md)

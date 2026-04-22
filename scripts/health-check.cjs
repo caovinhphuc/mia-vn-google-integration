@@ -9,7 +9,22 @@
 
 const fs = require("fs");
 const path = require("path");
-require("dotenv").config();
+
+const PROJECT_ROOT = path.join(__dirname, "..");
+function loadProjectEnv() {
+  const files = [
+    path.join(PROJECT_ROOT, ".env"),
+    path.join(PROJECT_ROOT, ".env.local"),
+    path.join(PROJECT_ROOT, "backend/.env"),
+    path.join(PROJECT_ROOT, "automation/.env"),
+  ];
+  for (let i = 0; i < files.length; i++) {
+    const p = files[i];
+    if (!fs.existsSync(p)) continue;
+    require("dotenv").config({ path: p, override: i > 0 });
+  }
+}
+loadProjectEnv();
 
 // Colors for console output
 const colors = {
@@ -62,41 +77,94 @@ const addResult = (service, status, message, details = null) => {
   }
 };
 
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return val;
+  const t = String(val).trim();
+  if (t.length >= 2) {
+    const a = t[0];
+    const b = t[t.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) return t.slice(1, -1).trim();
+  }
+  return t;
+}
+
+function normalizeTelegramBotToken(raw) {
+  let t = stripEnvQuotes(raw);
+  if (!t) return "";
+  t = String(t).replace(/\s/g, "").trim();
+  const urlMatch = t.match(/(?:https?:)?\/\/api\.telegram\.org\/bot([^/?\s#]+)/i);
+  if (urlMatch) return urlMatch[1].trim();
+  if (/^bot\d+:/i.test(t)) t = t.replace(/^bot/i, "");
+  return t.trim();
+}
+
+function isPlaceholderTelegramToken(t) {
+  const s = normalizeTelegramBotToken(t).toLowerCase();
+  if (!s) return true;
+  if (s.includes("your_") || s.includes("your-") || s.includes("changeme") || s === "xxx") return true;
+  return false;
+}
+
+function resolveGoogleCredentialJsonFile() {
+  const raw = stripEnvQuotes(
+    process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
+      process.env.GOOGLE_CREDENTIALS_PATH ||
+      ""
+  );
+  if (raw) {
+    const p = path.isAbsolute(raw) ? raw : path.resolve(process.cwd(), raw);
+    if (fs.existsSync(p)) return { path: p, fromEnv: raw };
+  }
+  const defaults = [
+    "config/google-credentials.json",
+    "automation/config/google-credentials.json",
+    "automation/config/service_account.json",
+  ];
+  for (const rel of defaults) {
+    const p = path.resolve(process.cwd(), rel);
+    if (fs.existsSync(p)) return { path: p, fromEnv: null };
+  }
+  return { path: null, fromEnv: raw || null };
+}
+
 const checkEnvironmentVariables = () => {
   log.step("Kiểm tra Environment Variables...");
 
-  // Sheet ID — chấp nhận nhiều tên
   const sheetId =
     process.env.REACT_APP_GOOGLE_SHEET_ID ||
     process.env.REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID ||
     process.env.GOOGLE_SHEETS_ID;
 
-  // Google config: (A) file credentials HOẶC (B) biến cũ từng cái
-  const credFile =
-    process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-    process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
-    process.env.GOOGLE_CREDENTIALS_PATH;
-  const hasCredFile = credFile && fs.existsSync(path.resolve(process.cwd(), credFile));
+  const { path: credResolved, fromEnv: credFromEnv } = resolveGoogleCredentialJsonFile();
+  const hasCredFile = Boolean(credResolved);
 
-  const hasLegacyGoogle =
-    process.env.REACT_APP_GOOGLE_CLIENT_EMAIL &&
-    process.env.REACT_APP_GOOGLE_PRIVATE_KEY &&
-    process.env.REACT_APP_GOOGLE_PROJECT_ID;
+  const clientEmail = stripEnvQuotes(
+    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || process.env.REACT_APP_GOOGLE_CLIENT_EMAIL || ""
+  );
+  const privateKeyRaw = stripEnvQuotes(
+    process.env.GOOGLE_PRIVATE_KEY || process.env.REACT_APP_GOOGLE_PRIVATE_KEY || ""
+  );
+  const hasInlinePem = Boolean(privateKeyRaw && String(privateKeyRaw).includes("BEGIN"));
 
-  const googleOk =
-    (hasCredFile && sheetId) ||
-    (hasLegacyGoogle && sheetId) ||
-    (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL &&
-      (hasCredFile || process.env.GOOGLE_PRIVATE_KEY?.includes("BEGIN")) &&
-      sheetId);
+  const googleCredsOk = hasCredFile || (clientEmail && hasInlinePem);
+  const googleOk = Boolean(sheetId && googleCredsOk);
 
   if (!googleOk) {
     const missing = [];
-    if (!sheetId) missing.push("REACT_APP_GOOGLE_SHEET_ID / GOOGLE_SHEETS_ID");
-    if (!hasCredFile && !hasLegacyGoogle)
+    if (!sheetId) {
       missing.push(
-        "GOOGLE_APPLICATION_CREDENTIALS (file) hoặc REACT_APP_GOOGLE_CLIENT_EMAIL + GOOGLE_PRIVATE_KEY + GOOGLE_PROJECT_ID"
+        "Spreadsheet ID: REACT_APP_GOOGLE_SHEET_ID hoặc REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID hoặc GOOGLE_SHEETS_ID"
       );
+    }
+    if (!googleCredsOk) {
+      const hint = credFromEnv
+        ? `biến path "${credFromEnv}" không trỏ tới file tồn tại`
+        : "chưa có GOOGLE_* path hoặc file không tồn tại";
+      missing.push(
+        `Credentials (${hint}). Cần JSON đúng HOẶC email + GOOGLE_PRIVATE_KEY (PEM). Script cũng tự tìm: config/google-credentials.json, automation/config/google-credentials.json, automation/config/service_account.json`
+      );
+    }
     addResult("environment", "error", `Thiếu cấu hình Google: ${missing.join("; ")}`);
     return false;
   }
@@ -112,8 +180,22 @@ const checkEnvironmentVariables = () => {
     "REDIS_URL",
   ];
   const missingOptional = optionalVars.filter((varName) => !process.env[varName]);
+
+  // Không dùng warning ở đây: hầu hết dev local không cần Maps/Telegram/Email/Redis → tránh overall "degraded".
   if (missingOptional.length > 0) {
-    addResult("environment", "warning", `Optional chưa đặt: ${missingOptional.join(", ")}`);
+    log.info(
+      `Tích hợp tùy chọn chưa đặt (${missingOptional.length} biến): ${missingOptional.join(", ")} — bình thường nếu không dùng. Muốn coi là cảnh báo CI: HEALTH_CHECK_WARN_OPTIONAL=1`
+    );
+    if (process.env.HEALTH_CHECK_WARN_OPTIONAL === "1") {
+      addResult("environment", "warning", `Optional chưa đặt: ${missingOptional.join(", ")}`);
+    } else {
+      addResult(
+        "environment",
+        "healthy",
+        `Google (bắt buộc) OK; ${missingOptional.length} biến tích hợp tùy chọn chưa đặt`,
+        { optionalMissing: missingOptional }
+      );
+    }
   } else {
     addResult("environment", "healthy", "Environment variables OK");
   }
@@ -127,11 +209,7 @@ const checkGoogleSheetsAPI = async () => {
     const { GoogleAuth } = require("google-auth-library");
     const { google } = require("googleapis");
 
-    const credPath =
-      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
-      process.env.GOOGLE_CREDENTIALS_PATH;
-    const credFile = credPath ? path.resolve(process.cwd(), credPath) : null;
+    const { path: credFile } = resolveGoogleCredentialJsonFile();
 
     let auth;
     if (credFile && fs.existsSync(credFile)) {
@@ -140,12 +218,17 @@ const checkGoogleSheetsAPI = async () => {
         scopes: ["https://www.googleapis.com/auth/spreadsheets"],
       });
     } else {
+      const pk = stripEnvQuotes(
+        process.env.GOOGLE_PRIVATE_KEY || process.env.REACT_APP_GOOGLE_PRIVATE_KEY || ""
+      );
       const credentials = {
         type: "service_account",
         project_id: process.env.GOOGLE_PROJECT_ID || process.env.REACT_APP_GOOGLE_PROJECT_ID,
         private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || process.env.REACT_APP_GOOGLE_CLIENT_EMAIL,
+        private_key: pk ? pk.replace(/\\n/g, "\n") : undefined,
+        client_email: stripEnvQuotes(
+          process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || process.env.REACT_APP_GOOGLE_CLIENT_EMAIL || ""
+        ),
         client_id: process.env.GOOGLE_CLIENT_ID,
         auth_uri: process.env.GOOGLE_AUTH_URI,
         token_uri: process.env.GOOGLE_TOKEN_URI,
@@ -197,11 +280,7 @@ const checkGoogleDriveAPI = async () => {
     const { GoogleAuth } = require("google-auth-library");
     const { google } = require("googleapis");
 
-    const credPath =
-      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
-      process.env.GOOGLE_CREDENTIALS_PATH;
-    const credFile = credPath ? path.resolve(process.cwd(), credPath) : null;
+    const { path: credFile } = resolveGoogleCredentialJsonFile();
 
     let auth;
     if (credFile && fs.existsSync(credFile)) {
@@ -264,8 +343,10 @@ const checkEmailService = async () => {
   const emailPass = process.env.REACT_APP_EMAIL_PASS || process.env.SMTP_PASS;
 
   if (!process.env.SENDGRID_API_KEY && (!emailUser || !emailPass)) {
-    addResult("email-service", "warning", "Email service not configured");
-    return false;
+    const msg = "Email chưa cấu hình (SendGrid hoặc SMTP user/pass) — tuỳ chọn; phần environment đã liệt kê biến thiếu nếu bật HEALTH_CHECK_WARN_OPTIONAL=1";
+    log.info(msg);
+    addResult("email-service", "healthy", "Optional — email not configured", { skipped: true });
+    return true;
   }
 
   try {
@@ -301,20 +382,30 @@ const checkEmailService = async () => {
 const checkTelegramService = async () => {
   log.step("Kiểm tra Telegram Service...");
 
-  const botToken = process.env.REACT_APP_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const rawToken = process.env.REACT_APP_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const botToken = normalizeTelegramBotToken(rawToken);
   const chatId = process.env.REACT_APP_TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
 
-  if (!botToken) {
-    addResult("telegram-service", "warning", "Telegram service not configured");
-    return false;
+  if (!botToken || isPlaceholderTelegramToken(botToken)) {
+    const msg =
+      "Telegram chưa cấu hình (TELEGRAM_BOT_TOKEN / REACT_APP_TELEGRAM_BOT_TOKEN) — tuỳ chọn; biến token nằm trong danh sách optional của environment nếu bật HEALTH_CHECK_WARN_OPTIONAL=1";
+    log.info(msg);
+    addResult("telegram-service", "healthy", "Optional — Telegram not configured", {
+      skipped: true,
+      chatIdConfigured: Boolean(chatId),
+    });
+    return true;
   }
 
   try {
     const axios = require("axios");
 
-    const response = await axios.get(`https://api.telegram.org/bot${botToken}/getMe`);
+    const response = await axios.get(`https://api.telegram.org/bot${botToken}/getMe`, {
+      timeout: 10000,
+      validateStatus: () => true,
+    });
 
-    if (response.data.ok) {
+    if (response.status === 200 && response.data?.ok) {
       addResult(
         "telegram-service",
         "healthy",
@@ -325,12 +416,22 @@ const checkTelegramService = async () => {
         }
       );
       return true;
-    } else {
-      throw new Error("Invalid bot token");
     }
+
+    const http = response.status;
+    const desc = response.data?.description || response.data?.error || "Unknown";
+    throw new Error(`HTTP ${http}: ${desc}`);
   } catch (error) {
+    const status = error.response?.status;
+    const hint =
+      status === 404 || status === 401 || String(error.message).includes("404")
+        ? "Token sai / thừa tiền tố bot / có khoảng trắng / URL dán nhầm — lấy token từ @BotFather (dạng 123456789:AAH...)."
+        : "Kiểm tra mạng và biến TELEGRAM_BOT_TOKEN.";
+    log.warning(`   💡 ${hint}`);
     addResult("telegram-service", "error", `Telegram service connection failed: ${error.message}`, {
       error: error.message,
+      httpStatus: status,
+      hint,
     });
     return false;
   }

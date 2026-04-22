@@ -1,16 +1,23 @@
-/Users/phuccao/Projects/mia/oas-integration/one_automation_system/venv/lib/python3.9/site-packages/google/auth/__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
-  warnings.warn(eol_message.format("3.9"), FutureWarning)
-/Users/phuccao/Projects/mia/oas-integration/one_automation_system/venv/lib/python3.9/site-packages/google/oauth2/__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
-  warnings.warn(eol_message.format("3.9"), FutureWarning)
-/Users/phuccao/Projects/mia/oas-integration/one_automation_system/venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
-INFO:     Started server process [22588]
+INFO:     Started server process [3796]
 INFO:     Waiting for application startup.
-2026-03-24 00:22:38,972 - main - INFO - 🚀 Starting OneAutomation System...
-Credentials file not found: config/service_account.json
-2026-03-24 00:22:38,972 - main - INFO - ✅ Google Sheets service initialized
-2026-03-24 00:22:38,972 - main - INFO - ✅ Email service initialized
-2026-03-24 00:22:38,972 - main - INFO - ✅ Data processor initialized
-2026-03-24 00:22:38,972 - main - INFO - 🎉 OneAutomation System started successfully!
+2026-04-23 01:40:23,372 - main - INFO - 🚀 Starting OneAutomation System...
+2026-04-23 01:40:23,686 - main - INFO - ✅ Google Sheets: connected — key /Users/phuccao/.secrets/google/sinuous-aviary-474820-e3-6632eb0de998.json
+2026-04-23 01:40:23,686 - main - INFO - ✅ Google Drive API v3: client ready (same service account)
+2026-04-23 01:40:23,686 - main - INFO - ✅ Telegram: TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID đã set (gọi notifier khi cần)
+2026-04-23 01:40:23,686 - main - INFO - ✅ Email service initialized
+2026-04-23 01:40:23,686 - main - INFO - ✅ Data processor initialized
+2026-04-23 01:40:23,686 - main - INFO - 🎉 OneAutomation System started successfully!
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50383 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50383 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51078 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51336 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51415 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51479 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51998 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52212 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52212 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52344 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52344 - "GET /health HTTP/1.1" 200 OK

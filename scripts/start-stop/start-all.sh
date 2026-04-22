@@ -2,6 +2,9 @@
 
 # 🚀 React OAS Integration v4.0 - Start All Services
 # Start Frontend, Backend, AI Service, and Automation
+#
+# Python: ưu tiên ai-service/venv/bin/python (và tương tự) — không in mù `python3` trên PATH.
+# Khi chưa có venv hoặc venv cũ dùng 3.14: PYTHON_BIN=python3.12 bash ai-service/setup_venv.sh --force
 
 # Get script directory and change to project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,6 +33,22 @@ print_warning() {
 
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Python dùng cho log / health: ưu tiên venv của service (không dùng mù `python3` trên PATH — hay là 3.14 beta).
+# Ép phiên bản khi tạo venv: PYTHON_BIN=python3.12 bash ai-service/setup_venv.sh --force
+probe_service_python() {
+    if [ -x "ai-service/venv/bin/python" ]; then
+        printf '%s' "ai-service/venv/bin/python"
+    elif [ -x "one_automation_system/venv/bin/python" ]; then
+        printf '%s' "one_automation_system/venv/bin/python"
+    elif [ -x "automation/venv/bin/python" ]; then
+        printf '%s' "automation/venv/bin/python"
+    elif [ -n "${PYTHON_BIN:-}" ] && command -v "${PYTHON_BIN}" &>/dev/null; then
+        command -v "${PYTHON_BIN}"
+    else
+        command -v python3 2>/dev/null || command -v python 2>/dev/null || true
+    fi
 }
 
 # Check if required directories exist
@@ -100,11 +119,23 @@ check_dependencies() {
     fi
     print_success "npm found: $(npm --version) ✅"
 
-    # Check Python (for automation) - Optional
-    if ! command -v python3 &> /dev/null; then
-        print_warning "Python3 not found. Automation service may not work."
+    # Python: hiển thị interpreter thực tế (venv nếu có), không chỉ `python3` trên PATH
+    PY_PROBE="$(probe_service_python)"
+    if [ -z "$PY_PROBE" ] || [ ! -x "$PY_PROBE" ]; then
+        print_warning "Không tìm thấy Python (venv hoặc python3 trên PATH). AI / Automation có thể lỗi."
     else
-        print_success "Python3 found: $(python3 --version) ✅"
+        print_success "Python (probe): $($PY_PROBE --version) — $PY_PROBE ✅"
+        if "$PY_PROBE" -c 'import sys; sys.exit(0 if sys.version_info < (3, 14) else 1)' 2>/dev/null; then
+            :
+        else
+            print_warning "Python ≥3.14: nhiều thư viện chưa hỗ trợ ổn định. Khuyến nghị: PYTHON_BIN=python3.12 bash ai-service/setup_venv.sh --force (và venv one_automation_system/automation tương tự)."
+        fi
+    fi
+    if command -v python3 &>/dev/null; then
+        PATH_PY="$(command -v python3)"
+        if [ -n "$PY_PROBE" ] && [ "$PATH_PY" != "$PY_PROBE" ]; then
+            print_status "python3 trên PATH = $($PATH_PY --version) ($PATH_PY) — chỉ shell mặc định; AI/Automation dùng $PY_PROBE (dòng [SUCCESS] trên). Đổi mặc định terminal: pyenv local 3.11.x hoặc brew link python@3.11."
+        fi
     fi
 
     # Check if node_modules exists
@@ -201,23 +232,31 @@ start_ai_service() {
 
     cd ai-service
 
-    # Check if virtual environment exists
-    if [ -d "venv" ]; then
-        source venv/bin/activate
-        print_status "Activated Python virtual environment"
+    if [ -x "venv/bin/python" ]; then
+        AI_PY="$(pwd)/venv/bin/python"
+        print_status "AI Service dùng: $AI_PY ($("$AI_PY" --version))"
+    elif [ -n "${PYTHON_BIN:-}" ] && command -v "${PYTHON_BIN}" &>/dev/null; then
+        AI_PY="$(command -v "${PYTHON_BIN}")"
+        print_warning "Không có ai-service/venv — dùng PYTHON_BIN=$AI_PY"
     else
-        print_warning "Python virtual environment not found. Using system Python."
+        AI_PY="$(command -v python3 2>/dev/null || command -v python 2>/dev/null || true)"
+        print_warning "Không có ai-service/venv — dùng PATH: $AI_PY"
     fi
 
-    # Check if uvicorn is available
-    if ! python -c "import uvicorn" 2>/dev/null; then
+    if [ -z "$AI_PY" ] || [ ! -x "$AI_PY" ]; then
+        print_warning "Không tìm thấy Python. Bỏ qua AI Service."
+        cd ..
+        return 0
+    fi
+
+    if ! "$AI_PY" -c "import uvicorn" 2>/dev/null; then
         print_warning "uvicorn not found. AI Service may not work."
         cd ..
         return 0
     fi
 
     # Start using uvicorn (FastAPI)
-    python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload > ../logs/ai-service.log 2>&1 &
+    "$AI_PY" -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload > ../logs/ai-service.log 2>&1 &
     AI_SERVICE_PID=$!
     cd ..
 
@@ -238,15 +277,18 @@ start_automation() {
     if [ -d "one_automation_system" ]; then
         cd one_automation_system
 
-        # Check if virtual environment exists
-        if [ -d "venv" ]; then
-            source venv/bin/activate
-            print_status "Activated Python virtual environment"
-        elif [ -d "../automation/venv" ]; then
-            source ../automation/venv/bin/activate
-            print_status "Activated Python virtual environment from automation folder"
+        if [ -x "venv/bin/python" ]; then
+            AUTO_PY="$(pwd)/venv/bin/python"
+            print_status "Automation dùng: $AUTO_PY ($("$AUTO_PY" --version))"
+        elif [ -x "../automation/venv/bin/python" ]; then
+            AUTO_PY="$(cd .. && pwd)/automation/venv/bin/python"
+            print_status "Automation dùng (từ automation/venv): $AUTO_PY ($("$AUTO_PY" --version))"
+        elif [ -n "${PYTHON_BIN:-}" ] && command -v "${PYTHON_BIN}" &>/dev/null; then
+            AUTO_PY="$(command -v "${PYTHON_BIN}")"
+            print_warning "Không có venv one_automation/automation — dùng PYTHON_BIN=$AUTO_PY"
         else
-            print_warning "Python virtual environment not found. Using system Python."
+            AUTO_PY="$(command -v python3 2>/dev/null || command -v python 2>/dev/null || true)"
+            print_warning "Không có venv — dùng PATH: $AUTO_PY"
         fi
 
         # Check if main.py exists
@@ -256,15 +298,29 @@ start_automation() {
             return 0
         fi
 
-        # Check if uvicorn is available
-        if ! python -c "import uvicorn" 2>/dev/null; then
+        if [ -z "$AUTO_PY" ] || [ ! -x "$AUTO_PY" ]; then
+            print_warning "Không tìm thấy Python. Bỏ qua Automation."
+            cd ..
+            return 0
+        fi
+
+        if ! "$AUTO_PY" -c "import uvicorn" 2>/dev/null; then
             print_warning "uvicorn not found. Automation service may not work."
             cd ..
             return 0
         fi
 
+        # Biến Google / Telegram từ automation/.env (process uvicorn kế thừa env)
+        if [ -f "../automation/.env" ]; then
+            set -a
+            # shellcheck disable=SC1091
+            . "../automation/.env"
+            set +a
+            print_status "Loaded ../automation/.env into environment for Automation service"
+        fi
+
         # Start using uvicorn (FastAPI)
-        python -m uvicorn main:app --host 0.0.0.0 --port 8001 > ../logs/automation.log 2>&1 &
+        "$AUTO_PY" -m uvicorn main:app --host 0.0.0.0 --port 8001 > ../logs/automation.log 2>&1 &
         AUTOMATION_PID=$!
         cd ..
 

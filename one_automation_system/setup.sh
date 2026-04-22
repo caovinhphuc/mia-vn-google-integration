@@ -1,16 +1,42 @@
 #!/bin/bash
+# Dừng ngay nếu pip/npm lỗi (tránh in "✅ dependencies" khi numpy build fail trên Python 3.14).
+set -euo pipefail
 
 echo "=== ONE Automation System - Production Setup ==="
 echo "Thiết lập hệ thống tự động hóa ONE cho môi trường production"
 
-# Kiểm tra Python
+# Kiểm tra Python (tránh mặc định python3 = 3.14 trên PATH khi tạo venv)
 echo "Kiểm tra Python..."
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python3 không được tìm thấy. Vui lòng cài đặt Python3."
+PY="${PYTHON_BIN:-}"
+if [ -z "$PY" ]; then
+    # Cùng chuẩn repo (.python-version = 3.11): ưu tiên 3.11 trước 3.12
+    for c in python3.11 python3.12 python3.13 python3; do
+        if command -v "$c" &>/dev/null; then
+            _c="$(command -v "$c")"
+            if "$_c" -c 'import sys; sys.exit(0 if sys.version_info < (3, 14) else 1)' 2>/dev/null; then
+                PY="$_c"
+                break
+            fi
+        fi
+    done
+fi
+if [ -z "$PY" ] || ! command -v "$PY" &>/dev/null; then
+    echo "❌ Cần Python < 3.14 (khuyến nghị 3.11, giống ai-service / CI). Cài: brew install python@3.11"
+    echo "   Hoặc: PYTHON_BIN=/opt/homebrew/opt/python@3.11/bin/python3.11 bash setup.sh"
     exit 1
 fi
 
-echo "✅ Python3 đã được cài đặt: $(python3 --version)"
+echo "✅ Dùng Python: $($PY --version) ($PY)"
+
+# Nếu venv cũ tạo bằng 3.14 — pip sẽ fail build numpy; bắt buộc xoá và tạo lại bằng PY ở trên
+if [ -d "venv" ]; then
+    if ! venv/bin/python -c 'import sys; sys.exit(0 if sys.version_info < (3, 14) else 1)' 2>/dev/null; then
+        echo "❌ Thư mục venv/ đang dùng Python ≥3.14 (numpy/scipy thường không build được)."
+        echo "   Chạy lại sau khi xoá venv và dùng Python 3.11:"
+        echo "   rm -rf venv && PYTHON_BIN=\"$PY\" bash setup.sh"
+        exit 1
+    fi
+fi
 
 # Kiểm tra Node.js
 echo "Kiểm tra Node.js..."
@@ -24,7 +50,7 @@ echo "✅ Node.js đã được cài đặt: $(node --version)"
 # Tạo virtual environment cho Python
 echo "Tạo Python virtual environment..."
 if [ ! -d "venv" ]; then
-    python3 -m venv venv
+    "$PY" -m venv venv
     echo "✅ Virtual environment đã được tạo"
 else
     echo "✅ Virtual environment đã tồn tại"
@@ -32,19 +58,27 @@ fi
 
 # Kích hoạt virtual environment
 echo "Kích hoạt virtual environment..."
+# shellcheck source=/dev/null
 source venv/bin/activate
 
 # Cài đặt Python dependencies
 echo "Cài đặt Python dependencies..."
-pip install --upgrade pip
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+if ! python -m pip install -r requirements.txt; then
+    echo "❌ pip install -r requirements.txt thất bại."
+    echo "   Thường gặp khi dùng Python 3.14: rm -rf venv && PYTHON_BIN=\"$PY\" bash setup.sh"
+    exit 1
+fi
 echo "✅ Python dependencies đã được cài đặt"
 
 # Kiểm tra và cài đặt Node dependencies nếu cần
 echo "Kiểm tra Node.js dependencies..."
 if [ ! -d "node_modules" ]; then
     echo "Cài đặt Node.js dependencies..."
-    npm install
+    npm install || {
+        echo "❌ npm install thất bại trong one_automation_system/"
+        exit 1
+    }
     echo "✅ Node.js dependencies đã được cài đặt"
 else
     echo "✅ Node.js dependencies đã tồn tại"

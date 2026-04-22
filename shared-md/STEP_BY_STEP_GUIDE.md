@@ -85,10 +85,10 @@ tail -f logs/ai-service.log
 #### **Bước 3.1: Environment Variables**
 
 ```bash
-# Tạo file .env
+# Tạo file .env (BACKEND_PORT thay cho PORT= để tránh xung đột CRA)
 cat > .env << EOF
 NODE_ENV=development
-PORT=3001
+BACKEND_PORT=3001
 AI_SERVICE_URL=http://localhost:8000
 JWT_SECRET=your-secret-key-here-$(date +%s)
 GOOGLE_SHEETS_SPREADSHEET_ID=your-spreadsheet-id
@@ -213,7 +213,7 @@ npm run deploy:vercel
 # Run specific tests
 node integration_test.js
 node end_to_end_test.js
-node complete_system_test.js
+node scripts/tests/complete_system_test.js
 ```
 
 ---

@@ -63,6 +63,9 @@ const getLoginSubmitButton = () => {
 };
 
 describe("Login Component", () => {
+  // Ant Design Form + userEvent.type mặc định (có delay) dễ vượt 5000ms trên CI/máy chậm
+  jest.setTimeout(30000);
+
   let localStorageMock;
 
   beforeEach(() => {
@@ -151,7 +154,8 @@ describe("Login Component", () => {
     });
 
     it("should show error for invalid email format", async () => {
-      const user = userEvent.setup();
+      // delay: null — tránh timeout do gõ từng ký tự chậm với Ant Design Form debounce
+      const user = userEvent.setup({ delay: null });
       renderWithProviders(<Login />);
 
       const emailInput = screen.getByPlaceholderText("your@email.com");

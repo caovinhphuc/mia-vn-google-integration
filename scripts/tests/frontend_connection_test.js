@@ -86,6 +86,12 @@ async function testAPIConnectivity() {
       url: "http://localhost:3001/api/reports",
       required: true,
     },
+    {
+      name: "Google Drive API (list files)",
+      url: "http://localhost:3001/api/drive/files?pageSize=1",
+      required: false,
+      note: "Backend trả 200 + JSON; mock nếu chưa cấu hình credentials — xem npm run test:google-drive",
+    },
 
     // Optional endpoints - AI/Automation features
     {
@@ -119,6 +125,25 @@ async function testAPIConnectivity() {
   for (const endpoint of endpoints) {
     try {
       const response = await makeRequest(endpoint.url);
+      if (endpoint.name.includes("Google Drive")) {
+        try {
+          const j = JSON.parse(response);
+          const rows = Array.isArray(j.data) ? j.data : [];
+          const mock =
+            rows.length &&
+            rows.some((f) => f && f.id === "file_1") &&
+            rows.some((f) => f && f.id === "folder_1");
+          if (mock) {
+            console.log(
+              `   ↳ Phản hồi MOCK (chưa init Drive credentials — docs/GOOGLE_CREDENTIALS_SETUP.md)`
+            );
+          } else if (rows.length) {
+            console.log(`   ↳ ${rows.length} mục (tên đầu: ${rows[0]?.name || "—"})`);
+          }
+        } catch {
+          /* ignore parse */
+        }
+      }
       console.log(`✅ ${endpoint.name}: Connected`);
       results[endpoint.name] = true;
     } catch (error) {

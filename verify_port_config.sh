@@ -47,6 +47,7 @@ echo "📊 Checking Expected Ports:"
 echo "-----------------------------------"
 check_port 3000 "Frontend" "yes"
 check_port 3001 "Backend" "yes"
+check_port 8000 "AI Service" "no"
 check_port 8001 "Automation" "no"
 echo ""
 
@@ -61,10 +62,9 @@ else
 fi
 
 if lsof -i :8000 > /dev/null 2>&1; then
-    echo -e "${YELLOW}⚠️  Port 8000: Something is running${NC}"
-    echo "   Note: This port is not part of standard configuration"
+    echo -e "${GREEN}✅ Port 8000: AI Service (FastAPI) is running (optional)${NC}"
 else
-    echo -e "${GREEN}✅ Port 8000: Empty (correct)${NC}"
+    echo -e "${YELLOW}⚠️  Port 8000: AI Service not running (optional - OK)${NC}"
 fi
 echo ""
 
@@ -72,13 +72,12 @@ echo ""
 echo "📚 Checking Documentation Consistency:"
 echo "-----------------------------------"
 
-# Check for incorrect "AI Service" references in active docs
-ai_service_refs=$(grep -r "AI Service" README.md QUICK_REFERENCE.md PORT_CLARIFICATION.md 2>/dev/null | grep -v "legacy" | wc -l)
-if [ "$ai_service_refs" -gt 0 ]; then
-    echo -e "${RED}❌ Found $ai_service_refs references to 'AI Service' in main docs${NC}"
-    echo "   Docs should refer to 'Automation Service' instead"
+# Gợi ý: đồng bộ tên "AI Service" (8000) vs "Automation" (8001) trong README / QUICK_REFERENCE (không fail script)
+ai_service_refs=$(grep -r "AI Service" README.md QUICK_REFERENCE.md PORT_CLARIFICATION.md 2>/dev/null | wc -l | tr -d ' ')
+if [ "${ai_service_refs:-0}" -gt 0 ]; then
+    echo -e "${BLUE}ℹ️  Found $ai_service_refs line(s) mentioning 'AI Service' in scanned docs (OK if = FastAPI :8000)${NC}"
 else
-    echo -e "${GREEN}✅ No incorrect 'AI Service' references in main docs${NC}"
+    echo -e "${GREEN}✅ Scanned docs: no 'AI Service' string (optional check)${NC}"
 fi
 
 # Check for port 8002 references in active docs

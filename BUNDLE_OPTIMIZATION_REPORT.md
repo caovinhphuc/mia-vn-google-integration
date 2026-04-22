@@ -1,28 +1,34 @@
 # 📊 Bundle Optimization Report
 
-**Generated:** 03:02:26 24/3/2026
+**Generated:** 02:23:56 23/4/2026
 
 ## 📦 Bundle Sizes
 
-| Type       | Current | Budget | Status |
-| ---------- | ------- | ------ | ------ |
-| JavaScript | 0 Bytes | 2.8 MB | ✅ OK  |
-| CSS        | 0 Bytes | 130 KB | ✅ OK  |
-| Images     | 0 Bytes | 500 KB | ✅ OK  |
-| Total      | 0 Bytes | 5 MB   | ✅ OK  |
+| Type       | Current   | Budget | Status |
+| ---------- | --------- | ------ | ------ |
+| JavaScript | 2.41 MB   | 2.8 MB | ✅ OK  |
+| CSS        | 114.78 KB | 130 KB | ✅ OK  |
+| Images     | 0 Bytes   | 500 KB | ✅ OK  |
+| Total      | 2.52 MB   | 5 MB   | ✅ OK  |
 
 ## 📁 Top Largest Files
 
 ```
-1. logo512.png - 9.44 KB
-2. logo192.png - 5.22 KB
-3. test-login.html - 5.2 KB
-4. favicon.ico - 1.46 KB
-5. login.html - 1.29 KB
-6. manifest.json - 811 Bytes
-7. browserconfig.xml - 391 Bytes
-8. lighthouse.yml - 154 Bytes
-9. _redirects - 24 Bytes
+1. static/js/714.9fb13af5.chunk.js - 373.29 KB
+2. static/js/648.b7520029.chunk.js - 365.7 KB
+3. static/js/849.2d41bf25.chunk.js - 163.5 KB
+4. static/js/main.bbebb3e2.js - 144.52 KB
+5. static/js/937.12d7943f.chunk.js - 116.42 KB
+6. static/js/255.9e1009cb.chunk.js - 114.67 KB
+7. static/js/202.46ed09ba.chunk.js - 97.19 KB
+8. static/js/812.bf74dd5a.chunk.js - 87.88 KB
+9. static/js/253.219b6874.chunk.js - 87.38 KB
+10. static/js/611.6b2becb1.chunk.js - 52 KB
+11. static/js/672.7541f195.chunk.js - 51.31 KB
+12. static/js/security.3fb4d94f.chunk.js - 40.13 KB
+13. static/js/786.65b15c26.chunk.js - 39.9 KB
+14. static/js/863.e24b898f.chunk.js - 38.96 KB
+15. static/js/698.f387024e.chunk.js - 38.37 KB
 ```
 
 ## 💡 Recommendations

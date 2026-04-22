@@ -50,13 +50,58 @@ is_placeholder_value() {
         return 0
     fi
 
+    local u
+    u=$(printf '%s' "$value" | tr '[:lower:]' '[:upper:]')
+    case "$u" in
+        YOUR_SHEET_ID|YOUR_SPREADSHEET_ID) return 0 ;;
+    esac
     case "$value" in
-        *"YOUR_"*|*"REPLACE_"*|*"EXAMPLE"*|*"example"*|*"TODO"*|*"todo"*)
+        *"YOUR_"*|*"REPLACE_"*|*"CHANGEME"*|*"PLACEHOLDER"*|*"TODO"*|*"todo"*)
             return 0
             ;;
     esac
 
     return 1
+}
+
+# Last-wins trên các file .env cho một key
+_env_value_last_wins() {
+    local key="$1"
+    local v="" f t
+    for f in .env backend/.env automation/.env .env.local; do
+        [ -f "$f" ] || continue
+        t=$(extract_env_value "$f" "$key")
+        [ -n "$t" ] && v="$t"
+    done
+    printf '%s' "$v"
+}
+
+# Ưu tiên giống check-env / test-google-apis-simple; bỏ qua placeholder (vd. YOUR_SHEET_ID)
+resolve_google_sheet_id() {
+    local keys=(
+        REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID
+        REACT_APP_GOOGLE_SHEET_ID
+        REACT_APP_GOOGLE_SHEETS_ID
+        GOOGLE_SHEETS_ID
+        GOOGLE_SHEET_ID
+        VITE_GOOGLE_SHEETS_SPREADSHEET_ID
+    )
+    local k v
+    for k in "${keys[@]}"; do
+        eval "v=\${$k:-}"
+        if [ -n "$v" ] && ! is_placeholder_value "$v"; then
+            printf '%s' "$v"
+            return 0
+        fi
+    done
+    for k in "${keys[@]}"; do
+        v=$(_env_value_last_wins "$k")
+        if [ -n "$v" ] && ! is_placeholder_value "$v"; then
+            printf '%s' "$v"
+            return 0
+        fi
+    done
+    printf ''
 }
 
 extract_env_value() {
@@ -245,74 +290,13 @@ if [ -f ".env" ] || [ -f ".env.local" ] || [ -f "backend/.env" ] || [ -f "automa
 
     PASSED_CHECKS=$((PASSED_CHECKS + 1))
 
-    GOOGLE_SHEETS_ID=""
+    GOOGLE_SHEETS_ID=$(resolve_google_sheet_id)
 
-    if [ -n "$REACT_APP_GOOGLE_SHEET_ID" ]; then
-        GOOGLE_SHEETS_ID="$REACT_APP_GOOGLE_SHEET_ID"
-    elif [ -n "$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID" ]; then
-        GOOGLE_SHEETS_ID="$REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID"
-    elif [ -n "$VITE_GOOGLE_SHEETS_SPREADSHEET_ID" ]; then
-        GOOGLE_SHEETS_ID="$VITE_GOOGLE_SHEETS_SPREADSHEET_ID"
-    elif [ -n "$GOOGLE_SHEET_ID" ]; then
-        GOOGLE_SHEETS_ID="$GOOGLE_SHEET_ID"
-    elif [ -n "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID="$GOOGLE_SHEETS_ID"
-    fi
-
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "REACT_APP_GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "GOOGLE_SHEETS_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "GOOGLE_SHEETS_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "REACT_APP_GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "backend/.env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value ".env.local" "GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "GOOGLE_SHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "GOOGLE_SHEETS_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-    if [ -z "$GOOGLE_SHEETS_ID" ]; then
-        GOOGLE_SHEETS_ID=$(extract_env_value "automation/.env" "VITE_GOOGLE_SHEETS_SPREADSHEET_ID")
-    fi
-
-    if is_placeholder_value "$GOOGLE_SHEETS_ID"; then
-        print_warning "Google Sheets ID: Not configured"
+    if [ -z "$GOOGLE_SHEETS_ID" ] || is_placeholder_value "$GOOGLE_SHEETS_ID"; then
+        print_warning "Google Sheets ID: Not configured (đặt GOOGLE_SHEETS_ID hoặc REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID trong .env / backend / automation)"
         WARNING_CHECKS=$((WARNING_CHECKS + 1))
     else
-        print_success "Google Sheets ID: Configured"
+        print_success "Google Sheets ID: Configured (${GOOGLE_SHEETS_ID:0:8}…)"
     fi
 else
     print_warning ".env file: Not found"

@@ -48,9 +48,9 @@ Load Testing:            ❌ FAIL
 
 **Reason:**
 
-- Test expects AI Service on port 8001
-- AI Service is **optional** (not required for core functionality)
-- System works 100% without AI Service
+- Test gọi **AI Service (`ai-service`) trên port 8000** (ví dụ `/api/ml/insights`, `/health`)
+- **Port 8001** là **`one_automation_system`** (FastAPI automation) — **không** thay cho AI analytics
+- AI Service là **optional** (không bắt buộc cho core frontend + backend)
 
 #### 2. Real-time Data Flow ❌
 
@@ -173,79 +173,46 @@ AI Service:        ❌ Not running (Port 8000)
 
 **Action:** None needed - system is working as designed
 
-### Option 2: Add AI Service (If Needed)
+### Option 2: Bật AI Service (nếu cần test AI pass)
 
-**If you DO need AI features:**
+**Nếu cần** các bước test gọi `http://localhost:8000/...`:
 
-#### Step 1: Create AI Service
-
-```python
-# ai-service/main.py
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/health")
-async def health():
-    return {"status": "OK", "service": "AI Service"}
-
-@app.get("/")
-async def root():
-    return {"message": "AI Service API", "version": "1.0"}
-
-@app.get("/api/ml/insights")
-async def get_insights():
-    return {
-        "insights": [
-            {"type": "trend", "value": "Sales up 15%"},
-            {"type": "alert", "value": "Low inventory on Product X"},
-        ]
-    }
-
-@app.post("/api/ml/analyze")
-async def analyze(data: dict):
-    return {
-        "analysis": "AI analysis completed",
-        "confidence": 0.95,
-        "predictions": [...]
-    }
-```
-
-#### Step 2: Install Dependencies
+#### Bước 1: Venv + dependency (từ root repo)
 
 ```bash
-pip3 install fastapi uvicorn
+npm run setup:ai-service
+# hoặc: cd ai-service && bash setup_venv.sh
 ```
 
-#### Step 3: Start AI Service
+#### Bước 2: Chạy AI Service — **port 8000** (entry `main_simple:app`)
 
 ```bash
-cd ai-service
-python3 -m uvicorn main:app --host 0.0.0.0 --port 8001
+npm run ai-service
+# tương đương: cd ai-service && source venv/bin/activate && python -m uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### Step 4: Verify
+#### Bước 3: Kiểm tra
 
 ```bash
-curl http://localhost:8001/health
-# Should return: {"status":"OK","service":"AI Service"}
+curl -s http://localhost:8000/health
+curl -s http://localhost:8000/api/ml/insights
 ```
 
-#### Step 5: Re-run Tests
+#### Bước 4: Chạy lại test (từ root)
 
 ```bash
-node end_to_end_test.js
-# All tests should now pass
+node scripts/tests/end_to_end_test.js
+# hoặc: npm run test:complete-system
 ```
+
+**Ghi nhớ cổng:**
+
+| Dịch vụ                                      | Port mặc định |
+| -------------------------------------------- | ------------- |
+| Frontend (CRA)                               | **3000**      |
+| Backend Node                                 | **3001**      |
+| **AI Service** (`ai-service`, FastAPI)       | **8000**      |
+| **One Automation** (`one_automation_system`) | **8001**      |
 
 ---
 
@@ -305,12 +272,12 @@ Status:                ✅ Full System Working
 ### Which Tests Are Failing?
 
 ```javascript
-// In end_to_end_test.js or similar
+// Trong scripts/tests/end_to_end_test.js (và tương tự)
 
-// ❌ FAILING - Requires AI Service
+// ❌ FAILING - Requires AI Service trên 8000
 async function testAIAnalyticsWorkflow() {
-  // Calls http://localhost:8001/api/ml/insights
-  // Fails because AI Service not running
+  // Gọi http://localhost:8000/api/ml/insights
+  // Fail khi ai-service không chạy
 }
 
 // ❌ FAILING - Requires AI Service
@@ -374,9 +341,9 @@ console.log(`Required Tests: ${passedRequired}/${requiredTests.length} PASS`);
 
 ---
 
-**Version:** 4.0
-**Date:** January 21, 2026
-**Status:** ✅ Core System Working, ⚠️ Optional Features Documented
+**Version:** 4.0  
+**Last updated:** 2026-04-22 (sửa nhầm lẫn port AI 8000 vs automation 8001)  
+**Status:** ✅ Core documented, ⚠️ AI tests optional khi chưa bật `ai-service` trên **8000**
 
 **Your system is working correctly! The failing tests are for optional AI features. 🚀**
 

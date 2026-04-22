@@ -45,10 +45,10 @@ ps aux | grep -E 'node|python|serve' | grep -v grep
 ### [ ] 1. Tạo Environment Variables
 
 ```bash
-# Create .env file
+# Create .env file (không dùng PORT= — CRA npm start cũng đọc PORT)
 cat > .env << EOF
 NODE_ENV=development
-PORT=3001
+BACKEND_PORT=3001
 AI_SERVICE_URL=http://localhost:8000
 JWT_SECRET=your-secret-key-here
 ONE_USERNAME=your-username
@@ -73,8 +73,8 @@ npm run lint
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
-    error: 'Something went wrong!',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    error: "Something went wrong!",
+    message: process.env.NODE_ENV === "development" ? err.message : undefined,
   });
 });
 ```
@@ -83,12 +83,14 @@ app.use((err, req, res, next) => {
 
 ```javascript
 // Update backend/server.js
-app.use(cors({
-  origin: ['http://localhost:8080', 'http://localhost:3000'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:8080", "http://localhost:3000"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 ```
 
 ---
@@ -229,4 +231,4 @@ ps aux | grep node | awk '{print $2, $4, $11}'
 
 ---
 
-*Quick Start Guide - Updated 03/07/2025*
+_Quick Start Guide - Updated 03/07/2025_

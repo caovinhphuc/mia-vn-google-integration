@@ -30,9 +30,7 @@ function findLogFiles(logDir = "logs") {
   }
 
   const files = fs.readdirSync(logDir);
-  return files
-    .filter((file) => file.endsWith(".log"))
-    .map((file) => path.join(logDir, file));
+  return files.filter((file) => file.endsWith(".log")).map((file) => path.join(logDir, file));
 }
 
 function analyzeLogFile(filePath) {
@@ -68,9 +66,7 @@ function analyzeLogFile(filePath) {
     }
 
     // Extract timestamps
-    const timestampMatch = line.match(
-      /\d{4}-\d{2}-\d{2}[\sT]\d{2}:\d{2}:\d{2}/
-    );
+    const timestampMatch = line.match(/\d{4}-\d{2}-\d{2}[\sT]\d{2}:\d{2}:\d{2}/);
     if (timestampMatch) {
       analysis.timestamps.push(timestampMatch[0]);
     }
@@ -108,14 +104,8 @@ function generateReport(analyses) {
 
     log(`\n📄 ${analysis.file}`, "blue");
     log(`   Total Lines: ${analysis.totalLines}`, "cyan");
-    log(
-      `   Errors: ${analysis.errorCount}`,
-      analysis.errorCount > 0 ? "red" : "green"
-    );
-    log(
-      `   Warnings: ${analysis.warningCount}`,
-      analysis.warningCount > 0 ? "yellow" : "green"
-    );
+    log(`   Errors: ${analysis.errorCount}`, analysis.errorCount > 0 ? "red" : "green");
+    log(`   Warnings: ${analysis.warningCount}`, analysis.warningCount > 0 ? "yellow" : "green");
     log(`   Info: ${analysis.infoCount}`, "cyan");
 
     if (Object.keys(analysis.patterns).length > 0) {
@@ -128,10 +118,7 @@ function generateReport(analyses) {
     if (analysis.errors.length > 0) {
       log(`   Recent Errors:`, "red");
       analysis.errors.slice(-5).forEach((error) => {
-        log(
-          `     Line ${error.line}: ${error.content.substring(0, 80)}...`,
-          "red"
-        );
+        log(`     Line ${error.line}: ${error.content.substring(0, 80)}...`, "red");
       });
     }
   });
@@ -140,17 +127,10 @@ function generateReport(analyses) {
   log(`   Total Files: ${analyses.length}`, "blue");
   log(`   Total Lines: ${totalLines}`, "blue");
   log(`   Total Errors: ${totalErrors}`, totalErrors > 0 ? "red" : "green");
-  log(
-    `   Total Warnings: ${totalWarnings}`,
-    totalWarnings > 0 ? "yellow" : "green"
-  );
+  log(`   Total Warnings: ${totalWarnings}`, totalWarnings > 0 ? "yellow" : "green");
 
-  const errorRate =
-    totalLines > 0 ? ((totalErrors / totalLines) * 100).toFixed(2) : 0;
-  log(
-    `   Error Rate: ${errorRate}%`,
-    errorRate > 1 ? "red" : errorRate > 0.1 ? "yellow" : "green"
-  );
+  const errorRate = totalLines > 0 ? ((totalErrors / totalLines) * 100).toFixed(2) : 0;
+  log(`   Error Rate: ${errorRate}%`, errorRate > 1 ? "red" : errorRate > 0.1 ? "yellow" : "green");
 }
 
 function searchLogs(pattern, logDir = "logs") {
@@ -179,9 +159,7 @@ function searchLogs(pattern, logDir = "logs") {
 }
 
 function analyzeLogs(logDir = "logs", searchPattern = null) {
-  const resolvedLogDir = path.isAbsolute(logDir)
-    ? logDir
-    : path.join(REPO_ROOT, logDir);
+  const resolvedLogDir = path.isAbsolute(logDir) ? logDir : path.join(REPO_ROOT, logDir);
 
   log("🔍 Log Analyzer", "cyan");
   log("=".repeat(60), "cyan");
@@ -195,10 +173,7 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
     } else {
       log(`   Found ${results.length} matches:`, "green");
       results.slice(0, 20).forEach((result) => {
-        log(
-          `   ${result.file}:${result.line} - ${result.content.substring(0, 80)}...`,
-          "cyan"
-        );
+        log(`   ${result.file}:${result.line} - ${result.content.substring(0, 80)}...`, "cyan");
       });
       if (results.length > 20) {
         log(`   ... and ${results.length - 20} more`, "yellow");
@@ -236,7 +211,7 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
   fs.mkdirSync(reportDir, { recursive: true });
   const reportFile = path.join(
     reportDir,
-    `log-analysis-${new Date().toISOString().split("T")[0]}.json`,
+    `log-analysis-${new Date().toISOString().split("T")[0]}.json`
   );
   fs.writeFileSync(reportFile, JSON.stringify(report, null, 2));
   log(`\n📄 Report saved to: ${reportFile}`, "cyan");
@@ -245,13 +220,9 @@ function analyzeLogs(logDir = "logs", searchPattern = null) {
 // Main execution
 if (require.main === module) {
   const args = process.argv.slice(2);
-  const rawLogDir =
-    args.find((arg) => arg.startsWith("--dir="))?.split("=")[1] || "logs";
-  const logDir = path.isAbsolute(rawLogDir)
-    ? rawLogDir
-    : path.join(REPO_ROOT, rawLogDir);
-  const searchPattern =
-    args.find((arg) => arg.startsWith("--search="))?.split("=")[1] || null;
+  const rawLogDir = args.find((arg) => arg.startsWith("--dir="))?.split("=")[1] || "logs";
+  const logDir = path.isAbsolute(rawLogDir) ? rawLogDir : path.join(REPO_ROOT, rawLogDir);
+  const searchPattern = args.find((arg) => arg.startsWith("--search="))?.split("=")[1] || null;
 
   analyzeLogs(logDir, searchPattern);
 }

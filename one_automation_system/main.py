@@ -7,6 +7,7 @@ import asyncio
 import os
 import sys
 import logging
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -21,7 +22,9 @@ from services.email_service import EmailService
 from services.data_processor import DataProcessor
 from utils.logger import setup_logger
 
-# Load environment variables
+# Load env: repo automation/.env (start.sh từ root), sau đó cwd
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(_REPO_ROOT / 'automation' / '.env')
 load_dotenv()
 
 # Setup logging
@@ -83,16 +86,33 @@ async def startup_event():
     logger.info("🚀 Starting OneAutomation System...")
 
     try:
-        # Initialize Google Sheets service
         google_service = GoogleSheetsService()
         await google_service.initialize()
-        logger.info("✅ Google Sheets service initialized")
+        if google_service.is_connected():
+            key_display = google_service.credentials_path_used() or '(unknown)'
+            logger.info('✅ Google Sheets: connected — key %s', key_display)
+            if google_service.is_drive_ready():
+                logger.info('✅ Google Drive API v3: client ready (same service account)')
+            else:
+                logger.warning('⚠️ Google Drive API v3: client not available')
+        else:
+            logger.warning(
+                '⚠️ Google Sheets: not connected — kiểm tra automation/.env '
+                '(GOOGLE_SERVICE_ACCOUNT_FILE / KEY_PATH / ~/.secrets/google/)'
+            )
 
-        # Initialize Email service
+        tg = bool(os.getenv('TELEGRAM_BOT_TOKEN', '').strip())
+        chat = bool(os.getenv('TELEGRAM_CHAT_ID', '').strip())
+        if tg and chat:
+            logger.info('✅ Telegram: TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID đã set (gọi notifier khi cần)')
+        elif tg:
+            logger.warning('⚠️ Telegram: có TOKEN nhưng thiếu TELEGRAM_CHAT_ID')
+        else:
+            logger.warning('⚠️ Telegram: chưa cấu hình — set TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID trong automation/.env')
+
         email_service = EmailService()
         logger.info("✅ Email service initialized")
 
-        # Initialize Data processor
         data_processor = DataProcessor()
         logger.info("✅ Data processor initialized")
 
@@ -123,7 +143,11 @@ async def get_orders():
     global orders_cache
     try:
         if google_service and google_service.is_connected():
-            sheet_id = os.getenv("GOOGLE_SHEETS_ID") or os.getenv("SPREADSHEET_ID")
+            sheet_id = (
+                os.getenv('GOOGLE_SHEETS_ID')
+                or os.getenv('GOOGLE_SHEET_ID')
+                or os.getenv('SPREADSHEET_ID')
+            )
             if sheet_id:
                 try:
                     raw = await google_service.read_data(sheet_id, "Orders!A:Z")
@@ -150,8 +174,15 @@ async def health_check():
     try:
         services_status = {
             "google_sheets": google_service.is_connected() if google_service else False,
+            "google_drive": (
+                google_service.is_drive_ready() if google_service else False
+            ),
+            "telegram_configured": bool(
+                os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+                and os.getenv("TELEGRAM_CHAT_ID", "").strip()
+            ),
             "email": email_service.is_configured() if email_service else False,
-            "data_processor": data_processor is not None
+            "data_processor": data_processor is not None,
         }
         return {
             "status": "healthy",

@@ -1,5 +1,7 @@
 # 🚀 PHÂN TÍCH MIA LOGISTICS MANAGER (ONE PAGE SYSTEM)
 
+> **Lưu ý (2026-04-22):** Tài liệu lưu trữ / so sánh kiến trúc. Repo hiện tại **không** chứa thư mục `mia-logistics-manager/`. Luồng tương đương: `src/`, `one_automation_system/`, `automation/` — xem [START_HERE.md](./START_HERE.md).
+
 ## 🎯 **TÓM TẮT**
 
 **MIA Logistics Manager** chính là **One Page system** mà bạn muốn tích hợp! Đây là một **Frontend application hoàn chỉnh** với:

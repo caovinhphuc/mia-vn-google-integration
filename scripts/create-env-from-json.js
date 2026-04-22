@@ -1,14 +1,20 @@
 /**
- * 🔧 Script tạo file .env từ service account JSON
+ * Tạo / cập nhật khối biến Google trong `.env` từ file JSON service account.
  *
- * Script này sẽ đọc thông tin từ file JSON service account
- * và tạo file .env với thông tin thực tế
+ * Đường dẫn JSON (ưu tiên):
+ *   1. Tham số CLI: node scripts/create-env-from-json.js path/to/key.json
+ *   2. GOOGLE_SERVICE_ACCOUNT_JSON hoặc GOOGLE_APPLICATION_CREDENTIALS (file tồn tại)
+ *   3. config/google-credentials.json
+ *   4. automation/config/google-credentials.json | service_account.json
+ *
+ * Sheet ID (tuỳ chọn): tham số thứ 2 — mặc định placeholder your_spreadsheet_id
+ *
+ * Không nhúng token Telegram / SendGrid thật; điền thủ công theo .env.example.
  */
 
 const fs = require("fs");
 const path = require("path");
 
-// Colors for console output
 const colors = {
   reset: "\x1b[0m",
   bright: "\x1b[1m",
@@ -26,134 +32,147 @@ const log = {
   warning: (msg) => console.log(`${colors.yellow}⚠️  ${msg}${colors.reset}`),
   error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
   step: (msg) => console.log(`${colors.cyan}🔧 ${msg}${colors.reset}`),
-  header: (msg) =>
-    console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
+  header: (msg) => console.log(`\n${colors.bright}${colors.magenta}${msg}${colors.reset}\n`),
 };
 
-function createEnvFromJson() {
-  log.header("🔧 TẠO FILE .ENV TỪ SERVICE ACCOUNT JSON");
+const REPO_ROOT = path.join(__dirname, "..");
 
-  try {
-    // Đường dẫn đến file JSON
-    const jsonPath = path.join(
-      __dirname,
-      "..",
-      "src",
-      "config",
-      "mia-logistics-469406-239f2de9a184.json"
-    );
-    const envPath = path.join(__dirname, "..", ".env");
+function toPosixRel(fromRoot, absPath) {
+  const rel = path.relative(fromRoot, absPath);
+  if (rel.startsWith("..")) return absPath;
+  return rel.split(path.sep).join("/");
+}
 
-    // Kiểm tra file JSON tồn tại
-    if (!fs.existsSync(jsonPath)) {
-      log.error(`Không tìm thấy file JSON: ${jsonPath}`);
-      return false;
-    }
+function privateKeyForEnvLine(pk) {
+  return String(pk || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/\n/g, "\\n")
+    .replace(/"/g, '\\"');
+}
 
-    log.step("Đọc thông tin từ service account JSON...");
+function findServiceAccountJson(cliPath) {
+  const candidates = [
+    cliPath,
+    process.env.GOOGLE_SERVICE_ACCOUNT_JSON,
+    process.env.GOOGLE_APPLICATION_CREDENTIALS,
+    path.join(REPO_ROOT, "config", "google-credentials.json"),
+    path.join(REPO_ROOT, "automation", "config", "google-credentials.json"),
+    path.join(REPO_ROOT, "automation", "config", "service_account.json"),
+  ].filter(Boolean);
 
-    // Đọc file JSON
-    const jsonContent = fs.readFileSync(jsonPath, "utf8");
-    const serviceAccount = JSON.parse(jsonContent);
+  const seen = new Set();
+  for (const p of candidates) {
+    const abs = path.isAbsolute(p) ? path.normalize(p) : path.join(REPO_ROOT, p);
+    if (seen.has(abs)) continue;
+    seen.add(abs);
+    if (fs.existsSync(abs)) return abs;
+  }
+  return null;
+}
 
-    log.success("Đã đọc thông tin service account thành công");
-    log.info(`Project ID: ${serviceAccount.project_id}`);
-    log.info(`Client Email: ${serviceAccount.client_email}`);
+function buildEnvSnippet(serviceAccount, jsonAbsPath, spreadsheetId) {
+  const credRel = toPosixRel(REPO_ROOT, jsonAbsPath);
+  const pk = privateKeyForEnvLine(serviceAccount.private_key);
 
-    // Tạo nội dung .env
-    const envContent = `# Cập nhật .env.local - Tạo từ service account JSON
-REACT_APP_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
-REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
-
-# Service account (cho development) - THÔNG TIN THỰC TẾ
+  return `# --- Google (tạo bởi scripts/create-env-from-json.js) ---
+GOOGLE_APPLICATION_CREDENTIALS=${credRel}
+GOOGLE_SERVICE_ACCOUNT_KEY_PATH=${credRel}
 GOOGLE_SERVICE_ACCOUNT_EMAIL=${serviceAccount.client_email}
-GOOGLE_PRIVATE_KEY="${serviceAccount.private_key}"
-GOOGLE_SERVICE_ACCOUNT_KEY_PATH=${jsonPath}
-VITE_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
-
-# Telegram
-TELEGRAM_BOT_TOKEN=8434038911:AAEsXilwvPkpCNxt0pAZybgXag7xJnNpmN0
-TELEGRAM_WEBHOOK_URL=
-TELEGRAM_CHAT_ID=-4818209867
-
-# Email
-SENDGRID_API_KEY=6TJF5SH4EEAD5RTTWF4RUUUS
-SENDGRID_FROM_EMAIL=kho.1@mia.vn
-SENDGRID_FROM_NAME=MIA Logistics Manager
-EMAIL_FROM=kho.1@mia.vn
-# Hoặc SMTP
-SMTP_HOST=
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=
-SMTP_PASS=
-
-# Queue (Bull/Redis)
-REDIS_URL=redis://localhost:6379
-
-# Web Push (VAPID)
-WEB_PUSH_PUBLIC_KEY=
-WEB_PUSH_PRIVATE_KEY=
-WEB_PUSH_VAPID_SUBJECT=mailto:admin@mia.vn
-
-VITE_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/AKfycbxd3lMPfORirKOnPN52684-P4htWuw42VIogwBnb-oG/dev
-
-# Thông tin bổ sung từ JSON
+GOOGLE_PRIVATE_KEY="${pk}"
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=${spreadsheetId}
+REACT_APP_GOOGLE_SHEET_ID=${spreadsheetId}
+REACT_APP_GOOGLE_SHEETS_ID=${spreadsheetId}
+VITE_GOOGLE_SHEETS_SPREADSHEET_ID=${spreadsheetId}
 GOOGLE_PROJECT_ID=${serviceAccount.project_id}
-GOOGLE_PRIVATE_KEY_ID=${serviceAccount.private_key_id}
-GOOGLE_CLIENT_ID=${serviceAccount.client_id}
-GOOGLE_AUTH_URI=${serviceAccount.auth_uri}
-GOOGLE_TOKEN_URI=${serviceAccount.token_uri}
-GOOGLE_AUTH_PROVIDER_X509_CERT_URL=${serviceAccount.auth_provider_x509_cert_url}
-GOOGLE_CLIENT_X509_CERT_URL=${serviceAccount.client_x509_cert_url}
-GOOGLE_UNIVERSE_DOMAIN=${serviceAccount.universe_domain}
+GOOGLE_PRIVATE_KEY_ID=${serviceAccount.private_key_id || ""}
+GOOGLE_CLIENT_ID=${serviceAccount.client_id || ""}
+GOOGLE_AUTH_URI=${serviceAccount.auth_uri || ""}
+GOOGLE_TOKEN_URI=${serviceAccount.token_uri || ""}
+GOOGLE_AUTH_PROVIDER_X509_CERT_URL=${serviceAccount.auth_provider_x509_cert_url || ""}
+GOOGLE_CLIENT_X509_CERT_URL=${serviceAccount.client_x509_cert_url || ""}
+GOOGLE_UNIVERSE_DOMAIN=${serviceAccount.universe_domain || "googleapis.com"}
+# --- /Google ---
 `;
+}
 
-    log.step("Tạo file .env...");
+function createEnvFromJson() {
+  log.header("🔧 TẠO .ENV — KHỐI GOOGLE TỪ SERVICE ACCOUNT JSON");
 
-    // Ghi file .env
-    fs.writeFileSync(envPath, envContent);
+  const cliJson = process.argv[2];
+  const cliSheet = process.argv[3] || "your_spreadsheet_id";
 
-    log.success(`Đã tạo file .env thành công: ${envPath}`);
-
-    // Hiển thị thông tin quan trọng
-    log.header("📋 THÔNG TIN QUAN TRỌNG");
-    console.log(
-      `${colors.green}✅ Service Account Email: ${serviceAccount.client_email}${colors.reset}`
-    );
-    console.log(
-      `${colors.green}✅ Project ID: ${serviceAccount.project_id}${colors.reset}`
-    );
-    console.log(
-      `${colors.green}✅ Sheet ID: 18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As${colors.reset}`
-    );
-    console.log(
-      `${colors.green}✅ Telegram Bot: 8434038911:AAEsXilwvPkpCNxt0pAZybgXag7xJnNpmN0${colors.reset}`
-    );
-    console.log(
-      `${colors.green}✅ SendGrid API: 6TJF5SH4EEAD5RTTWF4RUUUS${colors.reset}`
-    );
-
-    log.header("🚀 BƯỚC TIẾP THEO");
-    console.log(`${colors.cyan}1. Test kết nối Google APIs:${colors.reset}`);
-    console.log(`   ${colors.yellow}npm run test:google${colors.reset}`);
-    console.log(
-      `\n${colors.cyan}2. Health check toàn bộ hệ thống:${colors.reset}`
-    );
-    console.log(`   ${colors.yellow}npm run health-check${colors.reset}`);
-    console.log(`\n${colors.cyan}3. Chạy ứng dụng:${colors.reset}`);
-    console.log(`   ${colors.yellow}npm start${colors.reset}`);
-
-    return true;
-  } catch (error) {
-    log.error(`Lỗi khi tạo file .env: ${error.message}`);
+  const jsonPath = findServiceAccountJson(cliJson);
+  if (!jsonPath) {
+    log.error("Không tìm thấy file JSON service account.");
+    log.info("Gợi ý: đặt key tại config/google-credentials.json hoặc chạy:");
+    log.info("  node scripts/create-env-from-json.js path/to/key.json [SPREADSHEET_ID]");
     return false;
   }
+
+  log.step(`Đọc: ${jsonPath}`);
+  let serviceAccount;
+  try {
+    serviceAccount = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+  } catch (e) {
+    log.error(`JSON không hợp lệ: ${e.message}`);
+    return false;
+  }
+
+  if (!serviceAccount.client_email || !serviceAccount.private_key) {
+    log.error("JSON thiếu client_email hoặc private_key.");
+    return false;
+  }
+
+  const envPath = path.join(REPO_ROOT, ".env");
+  const snippet = buildEnvSnippet(serviceAccount, jsonPath, cliSheet);
+
+  let merged = snippet;
+  if (fs.existsSync(envPath)) {
+    const existing = fs.readFileSync(envPath, "utf8");
+    const marker =
+      /# --- Google \(tạo bởi scripts\/create-env-from-json\.js\) ---[\s\S]*?# --- \/Google ---\n?/;
+    if (marker.test(existing)) {
+      merged = existing.replace(marker, snippet);
+      log.info("Đã thay khối Google có marker trong .env hiện có.");
+    } else {
+      merged = `${existing.trimEnd()}\n\n${snippet}`;
+      log.info("Đã nối khối Google vào cuối .env hiện có.");
+    }
+  } else {
+    merged = `${snippet}
+# --- Phần còn lại: sao chép từ .env.example và điền your_* ---
+BACKEND_PORT=3001
+REACT_APP_API_URL=http://localhost:3001
+REACT_APP_API_BASE_URL=http://localhost:3001/api
+REACT_APP_WS_URL=http://localhost:3001
+REACT_APP_AI_SERVICE_URL=http://localhost:8000
+
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+SENDGRID_API_KEY=your_sendgrid_api_key
+SENDGRID_FROM_EMAIL=your@email.com
+`;
+    log.warning("Chưa có .env — tạo mới tối thiểu + placeholder; bổ sung từ .env.example.");
+  }
+
+  fs.writeFileSync(envPath, merged.endsWith("\n") ? merged : `${merged}\n`);
+  log.success(`Đã ghi: ${envPath}`);
+
+  log.header("📋 ĐÃ GHI (không in private key / token)");
+  log.success(`client_email: ${serviceAccount.client_email}`);
+  log.success(`project_id: ${serviceAccount.project_id}`);
+  log.success(`credentials file (relative repo): ${toPosixRel(REPO_ROOT, jsonPath)}`);
+  log.success(`REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID: ${cliSheet}`);
+
+  log.header("🚀 BƯỚC TIẾP");
+  log.info("./scripts/check-env.sh");
+  log.info("npm run test:google-sheets  (hoặc npm run test:google)");
+  return true;
 }
 
-// Chạy script
 if (require.main === module) {
-  createEnvFromJson();
+  const ok = createEnvFromJson();
+  process.exit(ok ? 0 : 1);
 }
 
-module.exports = { createEnvFromJson };
+module.exports = { createEnvFromJson, findServiceAccountJson, buildEnvSnippet };

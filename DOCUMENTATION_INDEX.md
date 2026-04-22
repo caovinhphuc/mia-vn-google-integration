@@ -1,6 +1,6 @@
 # 📚 Documentation Index
 
-> **Cập nhật:** 2026-03-20 — đồng bộ với file **có thật** trong repo. Một số tên cũ (`START_HERE.md`, `AUTOMATION_SETUP.md`, …) từng xuất hiện trong index trước đây **không còn**; dùng cột “Thay thế” bên dưới.
+> **Cập nhật:** 2026-04-22 — [`AUTOMATION_SETUP.md`](./AUTOMATION_SETUP.md) đã có lại (mục lục automation). Một số dòng “không còn” dưới đây là lịch sử index cũ — kiểm tra bằng `ls` nếu nghi ngờ.
 
 ---
 
@@ -75,12 +75,12 @@
 
 ### 📊 Google Sheets / Automation
 
-| File                                                                                   | Mục đích            |
-| -------------------------------------------------------------------------------------- | ------------------- |
-| [`GOOGLE_SHEETS_SETUP_GUIDE.md`](./GOOGLE_SHEETS_SETUP_GUIDE.md)                       | Setup Sheets (root) |
-| [`automation/GOOGLE_SHEETS_SETUP_GUIDE.md`](./automation/GOOGLE_SHEETS_SETUP_GUIDE.md) | Góc nhìn automation |
-
-**Không còn:** `AUTOMATION_SETUP.md` (tên cũ) → **GOOGLE_SHEETS_SETUP_GUIDE + `automation/docs/`** (nếu có).
+| File                                                                                   | Mục đích                                                |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| [`AUTOMATION_SETUP.md`](./AUTOMATION_SETUP.md)                                         | **Entry** — port, venv, link tới `automation/` + Sheets |
+| [`GOOGLE_SHEETS_SETUP_GUIDE.md`](./GOOGLE_SHEETS_SETUP_GUIDE.md)                       | Setup Sheets (root)                                     |
+| [`automation/GOOGLE_SHEETS_SETUP_GUIDE.md`](./automation/GOOGLE_SHEETS_SETUP_GUIDE.md) | Góc nhìn automation                                     |
+| [`automation/INTEGRATIONS_SETUP.md`](./automation/INTEGRATIONS_SETUP.md)               | Sheets, Drive, Telegram, Email                          |
 
 ### 🚢 Deploy
 

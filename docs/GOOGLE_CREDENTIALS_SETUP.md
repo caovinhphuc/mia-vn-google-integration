@@ -1,118 +1,123 @@
-# Cấu hình Google Drive & Sheets - Dữ liệu thật
+# Cấu hình Google Drive & Sheets (Backend Node + .env)
 
-Hướng dẫn cấu hình để Backend đọc dữ liệu thật từ Google Drive và Google Sheets.
+Hướng dẫn để **backend** (`backend/src/server.js`, port **3001**) dùng **Service Account JSON** thật cho **Google Drive v3** và **Sheets v4**. Không có key → API trả **mock data** (log cảnh báo).
 
-## 1. Tổng quan
+**Python / automation / `one_automation_system`:** resolve key và Sheets rộng hơn — xem [automation/GOOGLE_SHEETS_SETUP_GUIDE.md](../automation/GOOGLE_SHEETS_SETUP_GUIDE.md).
 
-Backend cần **Google Service Account credentials** để gọi Google APIs. Nếu không có, sẽ dùng **mock data**.
+---
 
-| Thành phần    | Credentials                    | Fallback  |
-| ------------- | ------------------------------ | --------- |
-| Google Sheets | config/google-credentials.json | Mock data |
-| Google Drive  | Cùng file                      | Mock data |
+## 1. Bật API trên Google Cloud
 
-## 2. File credentials
+Trong project GCP của service account:
 
-### Vị trí tìm kiếm (theo thứ tự)
+1. **APIs & Services** → **Library**
+2. Bật **Google Drive API** và **Google Sheets API**
 
-1. `GOOGLE_APPLICATION_CREDENTIALS` (env) → path tương đối hoặc tuyệt đối
-2. `GOOGLE_SERVICE_ACCOUNT_KEY_PATH` (env)
-3. `config/google-credentials.json` ← **Khuyến nghị**
-4. `config/service_account.json`
-5. `mia-logistics-469406-eec521c603c0.json` (project root)
-6. `automation/config/service_account.json`
+Không bật Drive → lỗi khi gọi `drive.files.list` dù JSON đúng.
 
-### Cách lấy Service Account JSON
+---
 
-1. Vào [Google Cloud Console](https://console.cloud.google.com/)
-2. Chọn project (hoặc tạo mới)
-3. **APIs & Services** → **Credentials** → **Create Credentials** → **Service Account**
-4. Tạo service account, tải JSON key
-5. Đổi tên file thành `google-credentials.json` và copy vào `config/`:
+## 2. File JSON & thứ tự tìm (backend)
+
+Hàm `initGoogleDrive()` / `initGoogleSheets()` dùng **danh sách cố định** (file đầu tiên tồn tại trên disk được dùng):
+
+| Thứ tự | Nguồn                                    | Ghi chú                                                                                                                                                  |
+| ------ | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1      | `GOOGLE_APPLICATION_CREDENTIALS`         | Nếu path **tương đối** → ghép với **root repo** (`path.join(projectRoot, …)`)                                                                            |
+| 2      | `GOOGLE_SERVICE_ACCOUNT_KEY_PATH`        | Nên dùng **đường dẫn tuyệt đối** (code không ghép thêm root)                                                                                             |
+| 3      | `config/google-credentials.json`         | Khuyến nghị đặt file tại đây                                                                                                                             |
+| 4      | `config/service_account.json`            | Cách đặt tên thường gặp                                                                                                                                  |
+| 5      | `mia-logistics-*.json` ở root            | **Legacy** trong code — có thể bỏ qua                                                                                                                    |
+| 6      | `automation/config/service_account.json` | **Drive:** bước cuối. **Sheets:** sau `config/` và **trước** file legacy root — xem `initGoogleDrive` / `initGoogleSheets` trong `backend/src/server.js` |
+
+Không commit private key: thêm `config/*.json` vào `.gitignore` nếu chưa có.
+
+---
+
+## 3. Đặt file credentials
 
 ```bash
+# Từ root repo
+mkdir -p config
 cp ~/Downloads/your-project-xxxx.json config/google-credentials.json
+chmod 600 config/google-credentials.json
 ```
 
-## 3. Cấu hình .env
+Lấy JSON: Cloud Console → **Credentials** → Service account → **Keys** → JSON.
 
-Thêm vào `.env` (project root):
+---
+
+## 4. Biến môi trường (root `.env`)
+
+Backend load `.env` ở **root** (xem `backend/src/server.js` → `dotenv` path `../../.env`).
 
 ```env
-# Google credentials (relative to project root)
+# Một trong các cách trỏ tới JSON (ưu tiên dòng 1 hoặc 2)
 GOOGLE_APPLICATION_CREDENTIALS=./config/google-credentials.json
+# GOOGLE_SERVICE_ACCOUNT_KEY_PATH=/absolute/path/to/service-account.json
 
-# Drive folder ID - folder "mia-logistics"
-# https://drive.google.com/drive/folders/1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
-GOOGLE_DRIVE_FOLDER_ID=1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V
+# Drive: ID folder trong URL …/drive/folders/<FOLDER_ID>
+GOOGLE_DRIVE_FOLDER_ID=YOUR_DRIVE_FOLDER_ID
 
-# Spreadsheet ID — backend đọc (ưu tiên):
-GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
-REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
-# Legacy / frontend (googleConfig.js) — nên trùng ID với trên:
-# GOOGLE_SHEETS_ID=...
-# REACT_APP_GOOGLE_SHEET_ID=...
+# Sheets (backend đọc — ưu tiên theo DEFAULT_SPREADSHEET_ID trong code)
+GOOGLE_SHEETS_SPREADSHEET_ID=YOUR_SPREADSHEET_ID
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=YOUR_SPREADSHEET_ID
+# Tuỳ chọn frontend:
+# REACT_APP_GOOGLE_DRIVE_FOLDER_ID=YOUR_DRIVE_FOLDER_ID
 ```
 
-Chi tiết biến `.env` root vs backend: [`ENV_SETUP.md`](../ENV_SETUP.md).
+**Folder mặc định khi list file:** `DEFAULT_DRIVE_FOLDER_ID` = `GOOGLE_DRIVE_FOLDER_ID` → `REACT_APP_GOOGLE_DRIVE_FOLDER_ID` → fallback sang biến Sheet ID (xem `server.js`) → có thể `null` (list theo `root`).
 
-## 4. Backend load .env
+---
 
-Backend **tự động load** `.env` từ project root khi start:
+## 5. Share Drive / Sheet với Service Account
 
-```javascript
-// backend/src/server.js
-require("dotenv").config({
-  path: require("path").join(__dirname, "../../.env"),
-});
-```
+1. Mở file JSON đang dùng → copy **`client_email`** (`…@….iam.gserviceaccount.com`).
+2. **Google Drive:** mở folder cần đọc → **Share** → thêm `client_email` (**Viewer** hoặc **Editor** tùy nhu cầu).
+3. **Google Sheets:** **Share** spreadsheet với cùng `client_email` (thường **Editor** nếu backend ghi).
 
-→ Chạy `cd backend && npm start` vẫn đọc được `.env` ở root.
+Thiếu share → API trả 403 / list rỗng.
 
-## 5. Share folder với Service Account
+---
 
-**Bắt buộc** để đọc dữ liệu Drive:
-
-1. Mở file `config/google-credentials.json`
-2. Tìm field `client_email` (dạng `xxx@xxx.iam.gserviceaccount.com`)
-3. Mở [folder mia-logistics](https://drive.google.com/drive/folders/1OpCHA1Qnf3AHYZqzRjzeiMxODoAeV4_V)
-4. Chuột phải → **Share** → Thêm `client_email` → Chọn **Editor** hoặc **Viewer**
-
-## 6. Kiểm tra
+## 6. Kiểm tra sau khi chỉnh .env
 
 ```bash
-# Restart backend
 cd backend && npm start
 ```
 
-Log thành công:
+Log kỳ vọng (khi tìm được file key):
 
-```
-✅ Google Drive API initialized
-✅ Google Sheets API initialized with: .../config/google-credentials.json
-```
+- `✅ Google Drive API initialized`
+- `✅ Google Sheets API initialized with: …`
 
-Nếu vẫn thấy mock data:
+Nếu thấy:
 
-```
-⚠️ No Google Drive credentials file found, will use mock data
-```
+- `⚠️ No Google Drive credentials file found, will use mock data`
 
-→ Kiểm tra lại path, file tồn tại, và đã share folder.
+→ Kiểm tra path env, file có tồn tại, và **Google Drive API** đã bật.
 
-## 7. Test API
+---
+
+## 7. Gọi thử API (sau khi backend chạy)
 
 ```bash
-# List files trong Drive folder
-curl "http://localhost:3001/api/drive/files"
+# List file trong folder mặc định (.env GOOGLE_DRIVE_FOLDER_ID)
+curl -s "http://localhost:3001/api/drive/files"
 
-# Đọc Google Sheets
-curl "http://localhost:3001/api/sheets/read?range=A1:Z10"
+# Hoặc chỉ định folder
+curl -s "http://localhost:3001/api/drive/files?folderId=YOUR_DRIVE_FOLDER_ID"
+
+# Sheets (range tuỳ sheet thật)
+curl -s "http://localhost:3001/api/sheets/read?range=Sheet1%21A1%3AZ10"
 ```
 
 ---
 
-**Tài liệu liên quan:**
+## 8. Tài liệu liên quan
 
-- [GOOGLE_DRIVE_FOLDER_ID.md](../GOOGLE_DRIVE_FOLDER_ID.md) - Chi tiết folder ID
-- [ENV_SETUP.md](../ENV_SETUP.md) - Cài đặt môi trường
+- [GOOGLE_DRIVE_FOLDER_ID.md](../GOOGLE_DRIVE_FOLDER_ID.md) — lấy folder ID từ URL
+- [ENV_SETUP.md](../ENV_SETUP.md) — `.env` root / CRA
+- [automation/GOOGLE_SHEETS_SETUP_GUIDE.md](../automation/GOOGLE_SHEETS_SETUP_GUIDE.md) — Python, `~/.secrets`, health-check
+
+**Last updated:** 2026-04-22 — đồng bộ `server.js`, Drive API, bỏ ví dụ ID/link thật trong doc.

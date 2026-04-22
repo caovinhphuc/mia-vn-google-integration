@@ -1,10 +1,33 @@
 #!/usr/bin/env node
 /**
- * Script kiểm tra kết nối Frontend với Backend API cho Google APIs
+ * Kiểm tra Frontend → Backend API (Google Sheets / Drive)
  * Usage: node scripts/test_frontend_api_connection.js
+ *
+ * Sheets: gọi kèm ?sheetId= nếu resolve được ID từ .env (khớp backend sau khi merge GOOGLE_SHEETS_ID).
  */
 
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+
+const PROJECT_ROOT = path.join(__dirname, "..");
+
+function loadProjectEnv() {
+  const files = [
+    path.join(PROJECT_ROOT, ".env"),
+    path.join(PROJECT_ROOT, "backend/.env"),
+    path.join(PROJECT_ROOT, "automation/.env"),
+    path.join(PROJECT_ROOT, ".env.local"),
+  ];
+  for (let i = 0; i < files.length; i++) {
+    const p = files[i];
+    if (!fs.existsSync(p)) continue;
+    require("dotenv").config({ path: p, override: i > 0 });
+  }
+}
+
+loadProjectEnv();
+
 const colors = {
   reset: "\x1b[0m",
   green: "\x1b[32m",
@@ -15,12 +38,62 @@ const colors = {
   bright: "\x1b[1m",
 };
 
-// API Base URL — Google Sheets/Drive chạy trên Node backend (3001), không phải AI service (8000)
+function stripEnvQuotes(val) {
+  if (val == null || val === "") return "";
+  let s = String(val).trim();
+  if (s.length >= 2) {
+    const a = s[0];
+    const b = s[s.length - 1];
+    if ((a === '"' && b === '"') || (a === "'" && b === "'")) s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+function isPlaceholderSpreadsheetId(id) {
+  const s = String(id || "").trim();
+  const u = s.toUpperCase();
+  if (!s) return true;
+  if (u === "YOUR_SHEET_ID" || u === "YOUR_SPREADSHEET_ID") return true;
+  if (/^YOUR[_-]/i.test(s)) return true;
+  if (["PLACEHOLDER", "REPLACE_ME", "CHANGEME", "EXAMPLE_ID"].some((x) => u.includes(x)))
+    return true;
+  return false;
+}
+
+const SPREADSHEET_ID_ENV_KEYS = [
+  "GOOGLE_SHEETS_ID",
+  "GOOGLE_SHEET_ID",
+  "GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+  "REACT_APP_GOOGLE_SHEET_ID",
+  "REACT_APP_GOOGLE_SHEETS_ID",
+  "VITE_GOOGLE_SHEETS_SPREADSHEET_ID",
+];
+
+function resolveSpreadsheetIdForTest() {
+  for (const k of SPREADSHEET_ID_ENV_KEYS) {
+    const v = stripEnvQuotes(process.env[k]);
+    if (v && !isPlaceholderSpreadsheetId(v)) return { id: v, fromKey: k };
+  }
+  return { id: null, fromKey: null };
+}
+
+function maskSheetId(id) {
+  if (!id) return "(trống)";
+  const s = String(id);
+  if (s.length < 12) return s;
+  return `${s.slice(0, 8)}…${s.slice(-4)}`;
+}
+
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  process.env.VITE_API_BASE_URL ||
-  process.env.REACT_APP_API_URL?.replace(/\/?$/, "/api") ||
+  stripEnvQuotes(process.env.REACT_APP_API_BASE_URL) ||
+  stripEnvQuotes(process.env.VITE_API_BASE_URL) ||
+  (process.env.REACT_APP_API_URL &&
+    String(process.env.REACT_APP_API_URL).replace(/\/?$/, "/api")) ||
   "http://localhost:3001/api";
+
+const { id: resolvedSheetId, fromKey: resolvedSheetKey } = resolveSpreadsheetIdForTest();
+const sheetQuery = resolvedSheetId ? `sheetId=${encodeURIComponent(resolvedSheetId)}` : "";
 
 console.log(`${colors.bright}${colors.cyan}
 ╔════════════════════════════════════════════════════════════╗
@@ -28,9 +101,18 @@ console.log(`${colors.bright}${colors.cyan}
 ╚════════════════════════════════════════════════════════════╝
 ${colors.reset}`);
 
-console.log(`${colors.blue}Backend API URL: ${API_BASE_URL}${colors.reset}\n`);
+console.log(`${colors.blue}Backend API URL: ${API_BASE_URL}${colors.reset}`);
+if (resolvedSheetId) {
+  console.log(
+    `${colors.blue}Sheet ID (query): ${maskSheetId(resolvedSheetId)} từ ${resolvedSheetKey}${colors.reset}`
+  );
+} else {
+  console.log(
+    `${colors.yellow}⚠️  Không resolve được Sheet ID hợp lệ từ .env — gọi API dùng default của backend (restart backend sau khi sửa .env).${colors.reset}`
+  );
+}
+console.log("");
 
-// Test results
 const results = {
   backend: false,
   sheets: false,
@@ -38,42 +120,34 @@ const results = {
   errors: [],
 };
 
-/**
- * Test Backend API connection
- */
+function isNotFoundMessage(msg) {
+  if (!msg || typeof msg !== "string") return false;
+  return /not found|NOT_FOUND|Requested entity was not found/i.test(msg);
+}
+
 async function testBackendConnection() {
-  console.log(
-    `${colors.cyan}1. Kiểm tra Backend API Connection...${colors.reset}`
-  );
+  console.log(`${colors.cyan}1. Kiểm tra Backend API Connection...${colors.reset}`);
 
   try {
-    // Test root endpoint hoặc health check
-    // Backend chạy tại port 8000, health endpoint là /health (không có /api)
-    const baseUrl = API_BASE_URL.replace("/api", "");
-    const endpoints = [
-      `${baseUrl}/health`,
-      `${baseUrl}/api/health`,
-      `${baseUrl}`,
-    ];
+    const baseUrl = API_BASE_URL.replace(/\/api\/?$/, "");
+    const endpoints = [`${baseUrl}/health`, `${baseUrl}/api/health`, `${baseUrl}`];
 
     let connected = false;
     for (const endpoint of endpoints) {
       try {
         const response = await axios.get(endpoint, {
           timeout: 5000,
-          validateStatus: () => true, // Accept any status code
+          validateStatus: () => true,
         });
 
         if (response.status < 500) {
-          console.log(
-            `   ${colors.green}✅${colors.reset} Backend đang chạy tại: ${endpoint}`
-          );
+          console.log(`   ${colors.green}✅${colors.reset} Backend đang chạy tại: ${endpoint}`);
           console.log(`   Status: ${response.status}`);
           connected = true;
           break;
         }
       } catch (err) {
-        // Try next endpoint
+        /* next */
       }
     }
 
@@ -84,12 +158,10 @@ async function testBackendConnection() {
     results.backend = true;
     return true;
   } catch (error) {
-    console.log(
-      `   ${colors.red}❌${colors.reset} Không thể kết nối đến backend`
-    );
+    console.log(`   ${colors.red}❌${colors.reset} Không thể kết nối đến backend`);
     console.log(`   ${colors.red}   Lỗi: ${error.message}${colors.reset}`);
     console.log(
-      `   ${colors.yellow}   → Đảm bảo backend đang chạy tại: ${API_BASE_URL}${colors.reset}`
+      `   ${colors.yellow}   → Đảm bảo backend đang chạy (port 3001): npm run dev hoặc cd backend && npm start${colors.reset}`
     );
     results.errors.push({
       service: "Backend",
@@ -99,22 +171,18 @@ async function testBackendConnection() {
   }
 }
 
-/**
- * Test Google Sheets API endpoints
- */
 async function testSheetsAPI() {
-  console.log(
-    `\n${colors.cyan}2. Kiểm tra Google Sheets API...${colors.reset}`
-  );
+  console.log(`\n${colors.cyan}2. Kiểm tra Google Sheets API...${colors.reset}`);
+
+  const q = sheetQuery ? `?${sheetQuery}` : "";
+  const readQ = sheetQuery ? `?${sheetQuery}&range=A1:A1` : "?range=A1:A1";
 
   const endpoints = [
-    { name: "Metadata", url: `${API_BASE_URL}/sheets/metadata`, method: "GET" },
-    {
-      name: "Read",
-      url: `${API_BASE_URL}/sheets/read?range=A1:A1`,
-      method: "GET",
-    },
+    { name: "Metadata", url: `${API_BASE_URL}/sheets/metadata${q}`, method: "GET" },
+    { name: "Read", url: `${API_BASE_URL}/sheets/read${readQ}`, method: "GET" },
   ];
+
+  let allOk = true;
 
   for (const endpoint of endpoints) {
     try {
@@ -132,40 +200,43 @@ async function testSheetsAPI() {
         console.log(
           `   ${colors.green}✅${colors.reset} ${endpoint.name}: OK (Status ${response.status})`
         );
-        results.sheets = true;
       } else if (response.status === 401 || response.status === 403) {
+        allOk = false;
         console.log(
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Authentication issue (Status ${response.status})`
         );
         console.log(
-          `   ${colors.yellow}   → Kiểm tra Google credentials trong backend${colors.reset}`
+          `   ${colors.yellow}   → Kiểm tra Google credentials (JSON / PEM) trên backend${colors.reset}`
         );
       } else if (response.status === 404) {
+        allOk = false;
         console.log(
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Endpoint không tồn tại (Status ${response.status})`
         );
       } else {
+        allOk = false;
+        const errText = response.data?.error || response.data?.message || "";
         console.log(
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Status ${response.status}`
         );
-        if (response.data?.error) {
+        if (errText) {
+          console.log(`   ${colors.yellow}   Error: ${errText}${colors.reset}`);
+        }
+        if (isNotFoundMessage(errText)) {
           console.log(
-            `   ${colors.yellow}   Error: ${response.data.error}${colors.reset}`
+            `   ${colors.yellow}   → 404/Not found: sai Spreadsheet ID hoặc Sheet chưa share cho service account.${colors.reset}`
+          );
+          console.log(
+            `   ${colors.yellow}   → Đồng bộ GOOGLE_SHEETS_ID (hoặc REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID) rồi restart backend.${colors.reset}`
           );
         }
       }
     } catch (error) {
+      allOk = false;
       if (error.code === "ECONNREFUSED") {
-        console.log(
-          `   ${colors.red}❌${colors.reset} ${endpoint.name}: Không thể kết nối`
-        );
-        console.log(
-          `   ${colors.red}   → Backend không chạy hoặc sai URL${colors.reset}`
-        );
+        console.log(`   ${colors.red}❌${colors.reset} ${endpoint.name}: Không thể kết nối`);
       } else {
-        console.log(
-          `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: ${error.message}`
-        );
+        console.log(`   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: ${error.message}`);
       }
       results.errors.push({
         service: `Sheets ${endpoint.name}`,
@@ -173,11 +244,10 @@ async function testSheetsAPI() {
       });
     }
   }
+
+  results.sheets = allOk;
 }
 
-/**
- * Test Google Drive API endpoints
- */
 async function testDriveAPI() {
   console.log(`\n${colors.cyan}3. Kiểm tra Google Drive API...${colors.reset}`);
 
@@ -210,9 +280,6 @@ async function testDriveAPI() {
         console.log(
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Authentication issue (Status ${response.status})`
         );
-        console.log(
-          `   ${colors.yellow}   → Kiểm tra Google credentials trong backend${colors.reset}`
-        );
       } else if (response.status === 404) {
         console.log(
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Endpoint không tồn tại (Status ${response.status})`
@@ -222,23 +289,14 @@ async function testDriveAPI() {
           `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: Status ${response.status}`
         );
         if (response.data?.error) {
-          console.log(
-            `   ${colors.yellow}   Error: ${response.data.error}${colors.reset}`
-          );
+          console.log(`   ${colors.yellow}   Error: ${response.data.error}${colors.reset}`);
         }
       }
     } catch (error) {
       if (error.code === "ECONNREFUSED") {
-        console.log(
-          `   ${colors.red}❌${colors.reset} ${endpoint.name}: Không thể kết nối`
-        );
-        console.log(
-          `   ${colors.red}   → Backend không chạy hoặc sai URL${colors.reset}`
-        );
+        console.log(`   ${colors.red}❌${colors.reset} ${endpoint.name}: Không thể kết nối`);
       } else {
-        console.log(
-          `   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: ${error.message}`
-        );
+        console.log(`   ${colors.yellow}⚠️${colors.reset} ${endpoint.name}: ${error.message}`);
       }
       results.errors.push({
         service: `Drive ${endpoint.name}`,
@@ -248,17 +306,12 @@ async function testDriveAPI() {
   }
 }
 
-/**
- * Generate summary report
- */
 function generateSummary() {
   console.log(`\n${colors.bright}${colors.cyan}4. TÓM TẮT${colors.reset}`);
   console.log(`${colors.bright}${"─".repeat(80)}${colors.reset}`);
 
   const totalTests = 3;
-  const passedTests = [results.backend, results.sheets, results.drive].filter(
-    Boolean
-  ).length;
+  const passedTests = [results.backend, results.sheets, results.drive].filter(Boolean).length;
 
   console.log(`\n${colors.cyan}Kết quả kiểm tra:${colors.reset}`);
   console.log(
@@ -271,9 +324,7 @@ function generateSummary() {
     `   Google Drive API: ${results.drive ? `${colors.green}✅ OK${colors.reset}` : `${colors.yellow}⚠️  CHƯA XÁC NHẬN${colors.reset}`}`
   );
 
-  console.log(
-    `\n${colors.cyan}Tỷ lệ thành công: ${passedTests}/${totalTests}${colors.reset}`
-  );
+  console.log(`\n${colors.cyan}Tỷ lệ thành công: ${passedTests}/${totalTests}${colors.reset}`);
 
   if (results.errors.length > 0) {
     console.log(`\n${colors.red}❌ Các lỗi phát hiện:${colors.reset}`);
@@ -282,62 +333,33 @@ function generateSummary() {
     });
   }
 
-  // Recommendations
   console.log(`\n${colors.bright}${colors.cyan}5. KHUYẾN NGHỊ${colors.reset}`);
   console.log(`${colors.bright}${"─".repeat(80)}${colors.reset}`);
 
   if (!results.backend) {
     console.log(`\n${colors.red}⚠️  CẦN HÀNH ĐỘNG NGAY:${colors.reset}`);
-    console.log(`\n1. Khởi động Backend API server:`);
-    console.log(`   ${colors.blue}   cd backend && npm start${colors.reset}`);
+    console.log(`\n1. Khởi động Backend: cd backend && npm start`);
+    console.log(`\n2. Kiểm tra: ${colors.blue}${API_BASE_URL}${colors.reset}`);
+  } else if (!results.sheets || !results.drive) {
+    console.log(`\n${colors.yellow}⚠️  Một số API chưa hoạt động đúng:${colors.reset}`);
     console.log(
-      `   ${colors.blue}   hoặc: node backend/server.js${colors.reset}`
+      `\n1. Backend đã merge .env / backend/.env / automation/.env — restart backend sau khi đổi Sheet ID.`
     );
     console.log(
-      `\n2. Kiểm tra Backend đang chạy tại: ${colors.blue}${API_BASE_URL}${colors.reset}`
+      `2. ID Sheet: đoạn giữa /d/ và /edit trong URL; biến: GOOGLE_SHEETS_ID hoặc REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID.`
     );
-    console.log(`\n3. Cấu hình Environment Variables trong Backend:`);
-    console.log(`   - GOOGLE_SERVICE_ACCOUNT_EMAIL`);
-    console.log(`   - GOOGLE_PRIVATE_KEY`);
-    console.log(`   - GOOGLE_SHEETS_SPREADSHEET_ID`);
+    console.log(`3. Share Sheet với email service account (client_email trong JSON).`);
+    console.log(`4. Google Sheets API bật trên GCP project của key đó.`);
   } else {
-    if (!results.sheets || !results.drive) {
-      console.log(
-        `\n${colors.yellow}⚠️  Một số API chưa hoạt động đúng:${colors.reset}`
-      );
-      console.log(`\n1. Kiểm tra Google credentials trong Backend`);
-      console.log(`2. Đảm bảo Google APIs đã được enable:`);
-      console.log(`   - Google Sheets API`);
-      console.log(`   - Google Drive API`);
-      console.log(`3. Kiểm tra Service Account có quyền truy cập Sheets/Drive`);
-    } else {
-      console.log(
-        `\n${colors.green}✅ Tất cả API connections đang hoạt động tốt!${colors.reset}`
-      );
-      console.log(`\nFrontend có thể kết nối đến Backend API thành công.`);
-    }
+    console.log(`\n${colors.green}✅ Tất cả API connections đang hoạt động tốt!${colors.reset}`);
   }
 
-  // Environment configuration
-  console.log(
-    `\n${colors.cyan}6. CẤU HÌNH ENVIRONMENT VARIABLES${colors.reset}`
-  );
+  console.log(`\n${colors.cyan}6. CẤU HÌNH ENVIRONMENT VARIABLES${colors.reset}`);
   console.log(`${colors.bright}${"─".repeat(80)}${colors.reset}`);
-  console.log(
-    `\nĐảm bảo các biến sau được cấu hình trong Frontend (.env hoặc .env.local):`
-  );
-  console.log(
-    `\n${colors.blue}REACT_APP_API_BASE_URL=${API_BASE_URL}${colors.reset}`
-  );
-  console.log(`\nHoặc nếu dùng Vite:`);
-  console.log(
-    `\n${colors.blue}VITE_API_BASE_URL=${API_BASE_URL}${colors.reset}`
-  );
+  console.log(`\n${colors.blue}REACT_APP_API_BASE_URL=${API_BASE_URL}${colors.reset}`);
+  console.log(`\nHoặc Vite: ${colors.blue}VITE_API_BASE_URL=${API_BASE_URL}${colors.reset}`);
 }
 
-/**
- * Main function
- */
 async function main() {
   try {
     await testBackendConnection();
@@ -353,17 +375,13 @@ async function main() {
 
     generateSummary();
 
-    // Exit code
     const allPassed = results.backend && results.sheets && results.drive;
     process.exit(allPassed ? 0 : 1);
   } catch (error) {
-    console.error(
-      `\n${colors.red}❌ Lỗi không mong đợi: ${error.message}${colors.reset}`
-    );
+    console.error(`\n${colors.red}❌ Lỗi không mong đợi: ${error.message}${colors.reset}`);
     console.error(error.stack);
     process.exit(1);
   }
 }
 
-// Run tests
 main();

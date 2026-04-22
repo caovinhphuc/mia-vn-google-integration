@@ -12,9 +12,11 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# Read API key from .env
-API_KEY=$(grep "REACT_APP_GOOGLE_SHEETS_API_KEY" .env | cut -d '=' -f2)
-SHEET_ID=$(grep "REACT_APP_GOOGLE_SHEETS_ID" .env | cut -d '=' -f2)
+_env_line() { grep -E "^[[:space:]]*${1}=" .env 2>/dev/null | head -1 | cut -d= -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/^"//;s/"$//;s/^'"'"'//;s/'"'"'$//'; }
+API_KEY=$(_env_line REACT_APP_GOOGLE_SHEETS_API_KEY)
+SHEET_ID=$(_env_line REACT_APP_GOOGLE_SHEETS_ID)
+[ -z "$SHEET_ID" ] && SHEET_ID=$(_env_line REACT_APP_GOOGLE_SHEET_ID)
+[ -z "$SHEET_ID" ] && SHEET_ID=$(_env_line REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID)
 
 echo "📋 Checking configuration..."
 
@@ -29,7 +31,7 @@ fi
 # Check Sheet ID
 if [ -z "$SHEET_ID" ] || [ "$SHEET_ID" = "your_actual_sheet_id_here" ]; then
     echo "❌ Sheet ID chưa được cấu hình!"
-    echo "💡 Hãy cập nhật REACT_APP_GOOGLE_SHEETS_ID trong file .env"
+    echo "💡 Hãy cập nhật REACT_APP_GOOGLE_SHEETS_ID hoặc REACT_APP_GOOGLE_SHEET_ID trong file .env"
     echo "📖 Xem hướng dẫn: GOOGLE_SHEETS_SETUP_GUIDE.md"
     exit 1
 fi

@@ -97,20 +97,27 @@ def check_telegram():
 
 
 def check_email():
-    print("\n📧 4. EMAIL (SMTP)")
+    print("\n📧 4. EMAIL (SMTP / Gmail App Password)")
     print("-" * 50)
     user = (
         os.getenv("SMTP_USER")
         or os.getenv("EMAIL_ADDRESS")
         or os.getenv("EMAIL_USERNAME")
+        or os.getenv("GMAIL_USER")
     )
     pwd = (
-        os.getenv("SMTP_PASSWORD")
+        os.getenv("SMTP_PASS")
+        or os.getenv("SMTP_PASSWORD")
         or os.getenv("EMAIL_PASSWORD")
         or os.getenv("EMAIL_APP_PASSWORD")
+        or os.getenv("GMAIL_APP_PASSWORD")
     )
     if not user or not pwd:
-        print(f"   {FAIL} Thiếu SMTP_USER + SMTP_PASSWORD (hoặc EMAIL_ADDRESS + EMAIL_PASSWORD)")
+        print(f"   {FAIL} Thiếu user + password gửi mail.")
+        print(
+            "   Gmail App Password: SMTP_USER + SMTP_PASS, hoặc GMAIL_USER + GMAIL_APP_PASSWORD, "
+            "hoặc SMTP_PASSWORD / EMAIL_APP_PASSWORD"
+        )
         return False
     print(f"   {OK} Cấu hình sẵn sàng ({user[:3]}***)")
     print("   (Không gửi thật — test gửi: dùng notifier.send_email)")

@@ -16,3 +16,49 @@ VITE_OAS_API_KEY="your-oas-api-key"
 VITE_ENABLE_ANALYTICS="true"
 VITE_ENABLE_NOTIFICATIONS="true"
 VITE_DEMO_MODE="true"
+
+
+
+
+# =============================================================================
+# AUTOMATION INTEGRATIONS - Mẫu .env
+# Copy: cp .env.example .env rồi điền giá trị thật
+# Kiểm tra: python verify_integrations.py
+# =============================================================================
+
+# --- ONE (Selenium) ---
+ONE_USERNAME=your_username
+ONE_PASSWORD=your_password
+HEADLESS=true
+
+# --- GOOGLE SHEETS ---
+GOOGLE_SHEET_ID=your_spreadsheet_id_from_url
+GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id_from_url
+# Đường dẫn JSON service account (đã share sheet với email trong file)
+GOOGLE_SERVICE_ACCOUNT_FILE=config/service_account.json
+
+# --- GOOGLE DRIVE (optional - upload export, list files) ---
+GOOGLE_DRIVE_FOLDER_ID=
+# Dùng chung GOOGLE_SERVICE_ACCOUNT_FILE; cần scope drive
+
+# --- TELEGRAM ---
+TELEGRAM_BOT_TOKEN=your_bot_token_from_BotFather
+TELEGRAM_CHAT_ID=your_chat_id
+
+# --- EMAIL (SMTP) ---
+# Cách 1: SMTP_USER + SMTP_PASSWORD
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+
+# Cách 2 (tương thích notifier): EMAIL_ADDRESS + EMAIL_PASSWORD
+# EMAIL_ADDRESS=your_email@gmail.com
+# EMAIL_PASSWORD=your_app_password
+
+# --- React/Frontend (nếu cần) ---
+REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=
+VITE_GOOGLE_SHEETS_SPREADSHEET_ID=
+
+# --- Debug ---
+DEBUG_NOTIFIER=0

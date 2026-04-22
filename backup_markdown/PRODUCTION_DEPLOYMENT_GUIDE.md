@@ -200,7 +200,7 @@ df -h
 ./deploy.sh test
 
 # Manual test commands
-node complete_system_test.js     # Complete integration test
+node scripts/tests/complete_system_test.js     # Complete integration test
 node integration_test.js         # API integration test  
 node advanced_integration.js     # Advanced scenarios
 node frontend_connection_test.js # Frontend connectivity

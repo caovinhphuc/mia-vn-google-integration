@@ -308,7 +308,19 @@ Google Sheets integration tests.
 node scripts/tests/test_google_sheets.js
 ```
 
-### 7. WebSocket Test (`scripts/tests/ws-test.js`)
+### 7. Google Drive Test (`scripts/tests/test_google_drive.js`)
+
+Gọi **backend** `GET /api/drive/files` (port **3001**). In rõ **mock** vs **danh sách file thật** (khi đã cấu hình credentials — xem `docs/GOOGLE_CREDENTIALS_SETUP.md`).
+
+```bash
+npm run test:google-drive
+# hoặc
+node scripts/tests/test_google_drive.js
+```
+
+Tuỳ chọn: `STRICT_DRIVE_REAL=1` → exit 1 nếu backend vẫn trả mock.
+
+### 8. WebSocket Test (`scripts/tests/ws-test.js`)
 
 WebSocket connection và real-time communication test.
 

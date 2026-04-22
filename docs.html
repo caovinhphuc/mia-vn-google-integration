@@ -550,7 +550,7 @@
 <a href="https://img.shields.io/badge/license-MIT-green.svg" target="_blank">![License</a>](LICENSE)
 <a href="https://img.shields.io/badge/React-18.2.0-blue.svg" target="_blank">![React</a>](https://reactjs.org/)
 <a href="https://img.shields.io/badge/Node.js-18+-green.svg" target="_blank">![Node.js</a>](https://nodejs.org/)
-<a href="https://img.shields.io/badge/Python-3.9+-yellow.svg" target="_blank">![Python</a>](https://python.org/)
+<a href="https://img.shields.io/badge/Python-3.11%20(recommended" target="_blank">![Python</a>-3776AB.svg)](https://python.org/)
 <a href="https://img.shields.io/badge/FastAPI-0.100+-teal.svg" target="_blank">![FastAPI</a>](https://fastapi.tiangolo.com/)
 <a href="https://img.shields.io/badge/status-active-success.svg" target="_blank">![Status</a>]()</p>
 <p><strong>🤖 AI-Powered Automation Platform với Tích Hợp Google Sheets</strong></p>
@@ -637,7 +637,7 @@
 <table><tr><td>Component</td><td>Version</td><td>Ghi chú</td></tr>
 <tr><td>------------</td><td>-----------------</td><td>-------------------------------------------------</td></tr>
 <tr><td><strong>Node.js</strong></td><td><strong>20</strong> (<code>.nvmrc</code>)</td><td>Runtime cho Frontend & Backend; có thể thử 18 LTS</td></tr>
-<tr><td><strong>Python</strong></td><td>3.9+</td><td>Runtime cho Automation & AI Service</td></tr>
+<tr><td><strong>Python</strong></td><td><strong>3.11</strong> (<code>.python-version</code>, CI); 3.10–3.13 cho venv cục bộ; <strong>không khuyến nghị 3.14+</strong> khi tạo venv</td><td>Runtime cho Automation & AI Service — xem <a href="PYTHON_VENV_GUIDE.md" target="_blank">PYTHON_VENV_GUIDE.md</a></td></tr>
 <tr><td><strong>npm/yarn</strong></td><td>Latest</td><td>Package manager</td></tr>
 <tr><td><strong>Git</strong></td><td>Latest</td><td>Version control</td></tr>
 <h3>⚡ Khởi chạy nhanh</h3>
@@ -706,9 +706,8 @@ python main.py
 <tr><td>🎨 <strong>Frontend</strong></td><td><http://localhost:3000></td><td>Giao diện chính</td></tr>
 <tr><td>📊 <strong>Dashboard</strong></td><td><http://localhost:3000/dashboard></td><td>Live Dashboard</td></tr>
 <tr><td>🧠 <strong>AI Analytics</strong></td><td><http://localhost:3000/ai-analytics></td><td>AI Analytics</td></tr>
-<tr><td>🛒 <strong>Retail</strong></td><td><http://localhost:3000/retail></td><td>Retail Dashboard</td></tr>
-<tr><td>📋 <strong>Google Sheets</strong></td><td><http://localhost:3000/google-sheets></td><td>Google Sheets UI</td></tr>
-<tr><td>📁 <strong>Google Drive</strong></td></tr></table> <http://localhost:3000/goog</p>
+<tr><td>🛒 <strong>Retail</strong></td><td><http://localhost:3000/retail></td><td>Retail Dashboard</td></tr></table>
+| 📋 <em></em>Google Shee</p>
 <p>... (truncated, see full file for complete content)</p>
                 </div>
                 <div class="section-footer">
@@ -1084,7 +1083,7 @@ git push origin main</code></pre>
 <hr>
 <h2>📝 Environment Variables</h2>
 <h3>Frontend (.env)</h3>
-<pre><code class="language-bash">PORT=3000
+<pre><code class="language-bash"># Không đặt PORT= trừ khi muốn ép cổng CRA; mặc định 3000
 REACT_APP_API_URL=http://localhost:3001
 REACT_APP_API_BASE_URL=http://localhost:3001/api
 REACT_APP_AI_SERVICE_URL=http://localhost:8000
@@ -1092,9 +1091,10 @@ GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID=your_sheet_id
 GOOGLE_DRIVE_FOLDER_ID=your_folder_id</code></pre>
 <p>Backend đọc <code>.env</code> <strong>ở root repo</strong> (không bắt buộc <code>backend/.env</code>). Xem <a href="./ENV_SETUP.md" target="_blank">ENV_SETUP.md</a>.</p>
-<h3>Backend (tuỳ chọn)</h3>
-<pre><code class="language-bash">PORT=3001
-NODE_ENV=development</code></pre>
+<h3>Backend (cổng API)</h3>
+<pre><code class="language-bash">BACKEND_PORT=3001
+NODE_ENV=development
+<h1>Trên PaaS thường chỉ có PORT do platform inject — server: PORT <table><tr><td>BACKEND_PORT</td></tr></table> 3001</code></pre></h1>
 <hr>
 <h2>🎯 Recommended Workflow</h2>
 <h3>Development</h3>
@@ -1487,34 +1487,30 @@ npm run deploy:vercel</code></pre>
 cd automation &amp;&amp; ./start.sh</code></pre>
 <hr>
 <h4><code>automation/setup.sh</code></h4>
-<p><strong>Mục đích</strong>: Setup automation
+<p><strong>Mục đích</strong>: Setup automation (lần sau: giữ <code>venv/</code>, chỉ pip; backup chỉ khi đổi major.minor Python hoặc <code>--force</code>)
 <strong>Chạy từ</strong>: Root directory hoặc <code>automation/</code>
 <strong>Cách dùng</strong>:</p>
 <pre><code class="language-bash">./automation/setup.sh
 <h1>hoặc</h1>
-cd automation &amp;&amp; ./setup.sh</code></pre>
+cd automation &amp;&amp; ./setup.sh
+npm run setup:automation
+<h1>Backup venv cũ + tạo lại</h1>
+./automation/setup.sh --force
+npm run setup:automation:force</code></pre>
 <hr>
 <h3>🧠 AI Service</h3>
 <h4><code>ai-service/setup_venv.sh</code></h4>
-<p><strong>Mục đích</strong>: Setup Python virtual environment
+<p><strong>Mục đích</strong>: Setup Python virtual environment (lần sau: chỉ cập nhật pip deps, không backup trừ khi <code>--force</code>)
 <strong>Chạy từ</strong>: Root directory hoặc <code>ai-service/</code>
 <strong>Cách dùng</strong>:</p>
-<pre><code class="language-bash">./ai-service/setup_venv.sh
+<p>```bash
+./ai-service/setup_venv.sh
 <h1>hoặc</h1>
-cd ai-service &amp;&amp; ./setup_venv.sh</code></pre>
-<hr>
-<h3>🛒 MIA Logistics Manager</h3>
-<h4><code>mia-logistics-manager/start-mia.sh</code></h4>
-<p><strong>Mục đích</strong>: Start MIA Logistics Manager
-<strong>Chạy từ</strong>: Root directory hoặc <code>mia-logistics-manager/</code>
-<strong>Cách dùng</strong>:</p>
-<pre><code class="language-bash">./mia-logistics-manager/start-mia.sh
-<h1>hoặc</h1>
-cd mia-logistics-manager &amp;&amp; ./start-mia.sh</code></pre>
-<hr>
-<h3>📊 Google Sheets Project</h3>
-<h4><code>google-sheets-project/start.sh</code></h4>
-<p><strong>Mục đích</strong>: S</p>
+cd ai-service && ./setup_venv.sh
+<h1>hoặc từ root (npm)</h1>
+npm run setup:ai-service
+<h1>Tạo lại venv + backup bản cũ (đổi Python / sửa venv hỏng)</h1>
+./ai-service/setup</p>
 <p>... (truncated, see full file for complete content)</p>
                 </div>
                 <div class="section-footer">
@@ -2701,7 +2697,7 @@ import Card from &quot;./components/ui/Card&quot;;</code></pre></p>
             </div>
 
             <div class="last-updated">
-                <p><strong>📅 Last Updated:</strong> lúc 03:15 24 tháng 3, 2026</p>
+                <p><strong>📅 Last Updated:</strong> lúc 02:30 23 tháng 4, 2026</p>
                 <p>🔄 <strong>Auto-generated</strong> from Markdown documentation files</p>
                 <p>📝 <strong>Regenerate:</strong> <code>node scripts/utils/generate-complete-docs.js</code></p>
             </div>
