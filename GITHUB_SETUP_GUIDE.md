@@ -27,7 +27,7 @@ cat .gitignore
 cat LICENSE
 
 # Kiểm tra README.md
-cat README.md | head -50
+cat README.md | head -100
 ```
 
 ---
